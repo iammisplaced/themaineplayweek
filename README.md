@@ -43,9 +43,10 @@ Open <http://localhost:8080>.
 4. Use search boxes to find and select theatre/film.
 5. Use `+ Add Theatre` and `+ Add Film` modals for new entries.
 6. `+ Add Film` creates that film across all theatres so it is available everywhere.
-7. Use `Refresh TMDb` to pull movie metadata for the selected film (needs film `tmdbId` + local TMDb key input).
-8. Add showings with date + comma-separated times.
-9. Click `Save All Changes` to push to Supabase.
+7. Set `Ticket Link (selected theatre + film)` for the current theatre/film pair.
+8. Use `Refresh TMDb` to pull movie metadata for the selected film (needs film `tmdbId` + local TMDb key input).
+9. Add showings with date + comma-separated times.
+10. Click `Save All Changes` to push to Supabase.
 
 ## Fallback behavior
 - On load, app tries Supabase first.
@@ -91,3 +92,6 @@ This keeps the app usable during transition/deployment issues.
 ```
 
 Showtimes in the past (date+time) are hidden automatically.
+
+## Schema update note
+Ticket links are theatre-specific. Re-run `supabase/schema.sql` so `public.theatre_films` exists.

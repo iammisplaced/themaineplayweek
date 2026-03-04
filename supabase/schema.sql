@@ -14,9 +14,17 @@ create table if not exists public.films (
   title text not null,
   year integer,
   tmdb_id bigint,
-  ticket_link text not null,
+  ticket_link text not null default '',
   tmdb_json jsonb,
   created_at timestamptz not null default now()
+);
+
+create table if not exists public.theatre_films (
+  theatre_id bigint not null references public.theatres(id) on delete cascade,
+  film_id bigint not null references public.films(id) on delete cascade,
+  ticket_link text not null default '',
+  created_at timestamptz not null default now(),
+  primary key (theatre_id, film_id)
 );
 
 create table if not exists public.showings (
@@ -30,29 +38,46 @@ create table if not exists public.showings (
 
 alter table public.theatres enable row level security;
 alter table public.films enable row level security;
+alter table public.theatre_films enable row level security;
 alter table public.showings enable row level security;
 
 -- Public read access for site visitors.
+drop policy if exists "Public read theatres" on public.theatres;
 create policy "Public read theatres" on public.theatres
 for select using (true);
 
+drop policy if exists "Public read films" on public.films;
 create policy "Public read films" on public.films
 for select using (true);
 
+drop policy if exists "Public read theatre_films" on public.theatre_films;
+create policy "Public read theatre_films" on public.theatre_films
+for select using (true);
+
+drop policy if exists "Public read showings" on public.showings;
 create policy "Public read showings" on public.showings
 for select using (true);
 
 -- Authenticated users can manage data (admin usage).
+drop policy if exists "Auth write theatres" on public.theatres;
 create policy "Auth write theatres" on public.theatres
 for all to authenticated
 using (true)
 with check (true);
 
+drop policy if exists "Auth write films" on public.films;
 create policy "Auth write films" on public.films
 for all to authenticated
 using (true)
 with check (true);
 
+drop policy if exists "Auth write theatre_films" on public.theatre_films;
+create policy "Auth write theatre_films" on public.theatre_films
+for all to authenticated
+using (true)
+with check (true);
+
+drop policy if exists "Auth write showings" on public.showings;
 create policy "Auth write showings" on public.showings
 for all to authenticated
 using (true)

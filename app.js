@@ -54,6 +54,8 @@ const elements = {
   tmdbApiKeyInput: document.getElementById("tmdbApiKeyInput"),
   adminFilmSearch: document.getElementById("adminFilmSearch"),
   adminFilmResults: document.getElementById("adminFilmResults"),
+  selectedTicketLinkInput: document.getElementById("selectedTicketLinkInput"),
+  saveSelectedTicketLink: document.getElementById("saveSelectedTicketLink"),
   addFilm: document.getElementById("addFilm"),
   addFilmModal: document.getElementById("addFilmModal"),
   addFilmForm: document.getElementById("addFilmForm"),
@@ -229,6 +231,15 @@ function bindEvents() {
     const film = getSelectedFilm();
     state.admin.filmQuery = film ? buildFilmGroupKey(film.title, film.year) : "";
     syncAdminEditor();
+  });
+
+  elements.saveSelectedTicketLink.addEventListener("click", () => {
+    if (!requireAdminAuth()) return;
+    const film = getSelectedFilm();
+    if (!film) return;
+    film.ticketLink = elements.selectedTicketLinkInput.value.trim();
+    syncAdminEditor();
+    elements.adminMessage.textContent = "Saved ticket link for selected theatre + film.";
   });
 
   elements.addTheatre.addEventListener("click", () => {
@@ -509,6 +520,11 @@ async function loadDataFromSupabase() {
     .order("title");
   if (filmsResult.error) throw filmsResult.error;
 
+  const theatreFilmsResult = await state.supabase
+    .from("theatre_films")
+    .select("theatre_id,film_id,ticket_link");
+  if (theatreFilmsResult.error) throw theatreFilmsResult.error;
+
   const showingsResult = await state.supabase
     .from("showings")
     .select("id,theatre_id,film_id,show_date,times")
@@ -517,6 +533,7 @@ async function loadDataFromSupabase() {
 
   const theatres = theatresResult.data || [];
   const films = filmsResult.data || [];
+  const theatreFilms = theatreFilmsResult.data || [];
   const showings = showingsResult.data || [];
 
   const theatreById = new Map();
@@ -540,26 +557,31 @@ async function loadDataFromSupabase() {
       title: filmRow.title,
       year: filmRow.year,
       tmdbId: filmRow.tmdb_id,
-      ticketLink: filmRow.ticket_link,
+      ticketLink: filmRow.ticket_link || "",
       tmdb: filmRow.tmdb_json || undefined,
       _dbId: filmRow.id,
     });
   });
 
-  theatreGroups.forEach((theatre) => {
-    filmById.forEach((filmTemplate) => {
-      const filmCopy = {
-        title: filmTemplate.title,
-        year: filmTemplate.year,
-        tmdbId: filmTemplate.tmdbId,
-        ticketLink: filmTemplate.ticketLink,
-        tmdb: filmTemplate.tmdb,
-        showings: [],
-        _dbId: filmTemplate._dbId,
-      };
-      theatre._filmMap.set(String(filmTemplate._dbId), filmCopy);
-      theatre.films.push(filmCopy);
-    });
+  const effectiveTheatreFilms = theatreFilms.length
+    ? theatreFilms
+    : buildFallbackTheatreFilmLinks(showings, filmById);
+
+  effectiveTheatreFilms.forEach((linkRow) => {
+    const theatre = theatreById.get(linkRow.theatre_id);
+    const filmTemplate = filmById.get(linkRow.film_id);
+    if (!theatre || !filmTemplate) return;
+    const filmCopy = {
+      title: filmTemplate.title,
+      year: filmTemplate.year,
+      tmdbId: filmTemplate.tmdbId,
+      ticketLink: linkRow.ticket_link || filmTemplate.ticketLink || "",
+      tmdb: filmTemplate.tmdb,
+      showings: [],
+      _dbId: filmTemplate._dbId,
+    };
+    theatre._filmMap.set(String(filmTemplate._dbId), filmCopy);
+    theatre.films.push(filmCopy);
   });
 
   showings.forEach((showingRow) => {
@@ -584,6 +606,23 @@ async function loadDataFromSupabase() {
   });
 
   return { theatreGroups };
+}
+
+function buildFallbackTheatreFilmLinks(showings, filmById) {
+  const seen = new Set();
+  const rows = [];
+  showings.forEach((showing) => {
+    const key = `${showing.theatre_id}::${showing.film_id}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    const film = filmById.get(showing.film_id);
+    rows.push({
+      theatre_id: showing.theatre_id,
+      film_id: showing.film_id,
+      ticket_link: film?.ticketLink || "",
+    });
+  });
+  return rows;
 }
 
 function validateData(data) {
@@ -661,6 +700,7 @@ function syncAdminEditor() {
 
   renderTheatreOptions();
   renderFilmOptions();
+  fillSelectedTicketLink();
   renderShowingsList();
   elements.adminJson.value = JSON.stringify(stripInternalFields(state.data), null, 2);
 }
@@ -758,6 +798,14 @@ function renderFilmOptions() {
   elements.showingDateInput.disabled = !hasFilm;
   elements.showingTimesInput.disabled = !hasFilm;
   elements.addShowing.disabled = !hasFilm;
+}
+
+function fillSelectedTicketLink() {
+  const film = getSelectedFilm();
+  const disabled = !film;
+  elements.selectedTicketLinkInput.disabled = disabled;
+  elements.saveSelectedTicketLink.disabled = disabled;
+  elements.selectedTicketLinkInput.value = film?.ticketLink || "";
 }
 
 function renderShowingsList() {
@@ -879,6 +927,9 @@ async function saveDataToSupabase() {
   const deleteShowings = await supabase.from("showings").delete().not("id", "is", null);
   if (deleteShowings.error) throw deleteShowings.error;
 
+  const deleteTheatreFilms = await supabase.from("theatre_films").delete().not("theatre_id", "is", null);
+  if (deleteTheatreFilms.error) throw deleteTheatreFilms.error;
+
   const deleteTheatres = await supabase.from("theatres").delete().not("id", "is", null);
   if (deleteTheatres.error) throw deleteTheatres.error;
 
@@ -917,7 +968,7 @@ async function saveDataToSupabase() {
         title: film.title,
         year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
         tmdb_id: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
-        ticket_link: film.ticketLink,
+        ticket_link: "",
         tmdb_json: film.tmdb || null,
       })
       .select("id")
@@ -927,11 +978,17 @@ async function saveDataToSupabase() {
   }
 
   const showingRows = [];
+  const theatreFilmRows = [];
   for (const theatre of state.data.theatreGroups) {
     const theatreId = theatreIdMap.get(theatre);
     for (const film of theatre.films) {
       const filmKey = buildFilmUniqKey(film);
       const filmId = filmIdByKey.get(filmKey);
+      theatreFilmRows.push({
+        theatre_id: theatreId,
+        film_id: filmId,
+        ticket_link: film.ticketLink,
+      });
       for (const showing of film.showings) {
         showingRows.push({
           theatre_id: theatreId,
@@ -941,6 +998,11 @@ async function saveDataToSupabase() {
         });
       }
     }
+  }
+
+  if (theatreFilmRows.length) {
+    const insertTheatreFilms = await supabase.from("theatre_films").insert(theatreFilmRows);
+    if (insertTheatreFilms.error) throw insertTheatreFilms.error;
   }
 
   if (showingRows.length) {
@@ -954,7 +1016,6 @@ function buildFilmUniqKey(film) {
     film.title || "",
     Number.isInteger(Number(film.year)) ? Number(film.year) : "",
     Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : "",
-    film.ticketLink || "",
   ].join("::");
 }
 

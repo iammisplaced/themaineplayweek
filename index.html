@@ -60,6 +60,11 @@
             <label for="adminFilmSearch">Film</label>
             <input id="adminFilmSearch" type="text" placeholder="Search films..." />
             <ul id="adminFilmResults" class="admin-search-results"></ul>
+            <label for="selectedTicketLinkInput">Ticket Link (selected theatre + film)</label>
+            <input id="selectedTicketLinkInput" type="url" placeholder="https://tickets.example.com/..." />
+            <div class="admin-inline-actions">
+              <button id="saveSelectedTicketLink">Save Ticket Link</button>
+            </div>
             <label for="tmdbApiKeyInput">TMDb API Key (local)</label>
             <input id="tmdbApiKeyInput" type="password" placeholder="Used only in this browser" />
             <div class="admin-inline-actions">
