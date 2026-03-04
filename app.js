@@ -62,7 +62,8 @@ const elements = {
   modalFilmTitleInput: document.getElementById("modalFilmTitleInput"),
   modalFilmYearInput: document.getElementById("modalFilmYearInput"),
   modalFilmTmdbIdInput: document.getElementById("modalFilmTmdbIdInput"),
-  modalFilmTicketLinkInput: document.getElementById("modalFilmTicketLinkInput"),
+  cancelAddFilm: document.getElementById("cancelAddFilm"),
+  cancelAddTheatre: document.getElementById("cancelAddTheatre"),
   deleteFilm: document.getElementById("deleteFilm"),
   refreshTmdb: document.getElementById("refreshTmdb"),
   showingDateInput: document.getElementById("showingDateInput"),
@@ -257,6 +258,14 @@ function bindEvents() {
     elements.addFilmModal.showModal();
   });
 
+  elements.cancelAddFilm.addEventListener("click", () => {
+    elements.addFilmModal.close();
+  });
+
+  elements.cancelAddTheatre.addEventListener("click", () => {
+    elements.addTheatreModal.close();
+  });
+
   elements.addTheatreForm.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!requireAdminAuth()) return;
@@ -296,10 +305,9 @@ function bindEvents() {
     const title = elements.modalFilmTitleInput.value.trim();
     const yearValue = elements.modalFilmYearInput.value.trim();
     const tmdbIdValue = elements.modalFilmTmdbIdInput.value.trim();
-    const ticketLink = elements.modalFilmTicketLinkInput.value.trim();
 
-    if (!title || !ticketLink) {
-      elements.adminMessage.textContent = "Film title and ticket link are required.";
+    if (!title) {
+      elements.adminMessage.textContent = "Film title is required.";
       return;
     }
     if (!yearValue && !tmdbIdValue) {
@@ -309,7 +317,7 @@ function bindEvents() {
 
     const film = {
       title,
-      ticketLink,
+      ticketLink: "",
       showings: [],
     };
     if (yearValue) film.year = Number(yearValue);
@@ -352,6 +360,7 @@ function bindEvents() {
     try {
       const details = await fetchTmdbMovieById(state.admin.tmdbApiKey, Number(film.tmdbId));
       film.tmdb = buildTmdbRecord(details);
+      syncFilmMetadataAcrossTheatres(film);
       syncAdminEditor();
       elements.adminMessage.textContent = "TMDb details refreshed.";
     } catch (error) {
@@ -397,7 +406,7 @@ function bindEvents() {
       await persistData();
       elements.adminMessage.textContent = "All changes saved to Supabase.";
     } catch (error) {
-      elements.adminMessage.textContent = `Save failed: ${error.message}`;
+      elements.adminMessage.textContent = `Save failed: ${error.message}. Run latest supabase/schema.sql and try again.`;
     }
   });
 
@@ -563,25 +572,33 @@ async function loadDataFromSupabase() {
     });
   });
 
+  // Global film catalog: every theatre sees every film.
+  theatreGroups.forEach((theatre) => {
+    filmById.forEach((filmTemplate) => {
+      const filmCopy = {
+        title: filmTemplate.title,
+        year: filmTemplate.year,
+        tmdbId: filmTemplate.tmdbId,
+        ticketLink: filmTemplate.ticketLink || "",
+        tmdb: filmTemplate.tmdb,
+        showings: [],
+        _dbId: filmTemplate._dbId,
+      };
+      theatre._filmMap.set(String(filmTemplate._dbId), filmCopy);
+      theatre.films.push(filmCopy);
+    });
+  });
+
+  // Theatre-specific ticket link overrides.
   const effectiveTheatreFilms = theatreFilms.length
     ? theatreFilms
     : buildFallbackTheatreFilmLinks(showings, filmById);
 
   effectiveTheatreFilms.forEach((linkRow) => {
     const theatre = theatreById.get(linkRow.theatre_id);
-    const filmTemplate = filmById.get(linkRow.film_id);
-    if (!theatre || !filmTemplate) return;
-    const filmCopy = {
-      title: filmTemplate.title,
-      year: filmTemplate.year,
-      tmdbId: filmTemplate.tmdbId,
-      ticketLink: linkRow.ticket_link || filmTemplate.ticketLink || "",
-      tmdb: filmTemplate.tmdb,
-      showings: [],
-      _dbId: filmTemplate._dbId,
-    };
-    theatre._filmMap.set(String(filmTemplate._dbId), filmCopy);
-    theatre.films.push(filmCopy);
+    const film = theatre?._filmMap.get(String(linkRow.film_id));
+    if (!theatre || !film) return;
+    film.ticketLink = linkRow.ticket_link || film.ticketLink || "";
   });
 
   showings.forEach((showingRow) => {
@@ -655,8 +672,8 @@ function validateData(data) {
       if (!hasValidYear && !hasValidTmdbId) {
         throw new Error(`Film "${film.title}" at "${theatre.name}" needs a valid year or tmdbId.`);
       }
-      if (typeof film?.ticketLink !== "string" || !film.ticketLink.trim()) {
-        throw new Error(`Film "${film.title}" at "${theatre.name}" is missing ticketLink.`);
+      if (typeof film?.ticketLink !== "string") {
+        throw new Error(`Film "${film.title}" at "${theatre.name}" has invalid ticketLink.`);
       }
       if (!Array.isArray(film?.showings)) {
         throw new Error(`Film "${film.title}" at "${theatre.name}" must include a showings array.`);
@@ -884,6 +901,17 @@ function removeFilmFromAllTheatres(targetFilm) {
   });
 }
 
+function syncFilmMetadataAcrossTheatres(sourceFilm) {
+  state.data.theatreGroups.forEach((theatre) => {
+    (theatre.films || []).forEach((film) => {
+      if (!filmsMatch(film, sourceFilm)) return;
+      film.tmdb = sourceFilm.tmdb;
+      if (sourceFilm.tmdbId) film.tmdbId = sourceFilm.tmdbId;
+      if (sourceFilm.year) film.year = sourceFilm.year;
+    });
+  });
+}
+
 function filmsMatch(a, b) {
   const aTmdb = Number(a?.tmdbId);
   const bTmdb = Number(b?.tmdbId);
@@ -923,6 +951,7 @@ async function persistData() {
 
 async function saveDataToSupabase() {
   const supabase = state.supabase;
+  await verifySupabaseSchema(supabase);
 
   const deleteShowings = await supabase.from("showings").delete().not("id", "is", null);
   if (deleteShowings.error) throw deleteShowings.error;
@@ -1008,6 +1037,19 @@ async function saveDataToSupabase() {
   if (showingRows.length) {
     const insertShowings = await supabase.from("showings").insert(showingRows);
     if (insertShowings.error) throw insertShowings.error;
+  }
+}
+
+async function verifySupabaseSchema(supabase) {
+  const checks = await Promise.all([
+    supabase.from("theatres").select("id").limit(1),
+    supabase.from("films").select("id").limit(1),
+    supabase.from("showings").select("id").limit(1),
+    supabase.from("theatre_films").select("theatre_id").limit(1),
+  ]);
+  const failed = checks.find((result) => result.error);
+  if (failed?.error) {
+    throw new Error(`Supabase schema missing/incompatible (${failed.error.message})`);
   }
 }
 
