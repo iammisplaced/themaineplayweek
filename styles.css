@@ -223,6 +223,23 @@ button:not(.ghost-btn):hover,
   font-weight: 700;
 }
 
+.show-schedule-collapse {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  background: #fffaf3;
+}
+
+.show-schedule-collapse + .show-schedule-collapse {
+  margin-top: 0.35rem;
+}
+
+.show-schedule-summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent-2);
+}
+
 .admin-panel {
   margin-top: 1.5rem;
   border: 1px solid var(--border);

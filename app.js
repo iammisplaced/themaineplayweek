@@ -1207,7 +1207,22 @@ function render() {
     return;
   }
 
-  entries.sort(([a], [b]) => a.localeCompare(b));
+  if (state.view === "films") {
+    entries.sort(([, groupA], [, groupB]) => {
+      const titleA = groupA?.filmInfo?.film || "";
+      const titleB = groupB?.filmInfo?.film || "";
+      const normalizedCompare = normalizeSortTitle(titleA).localeCompare(normalizeSortTitle(titleB));
+      if (normalizedCompare !== 0) return normalizedCompare;
+
+      const yearA = Number(groupA?.filmInfo?.year || 0);
+      const yearB = Number(groupB?.filmInfo?.year || 0);
+      if (yearA !== yearB) return yearA - yearB;
+
+      return titleA.localeCompare(titleB);
+    });
+  } else {
+    entries.sort(([a], [b]) => a.localeCompare(b));
+  }
 
   for (const [groupName, group] of entries) {
     const card = elements.groupTemplate.content.firstElementChild.cloneNode(true);
@@ -1301,6 +1316,14 @@ function render() {
 
     elements.results.appendChild(card);
   }
+}
+
+function normalizeSortTitle(value) {
+  return String(value || "")
+    .trim()
+    .replace(/^[^A-Za-z0-9]+/, "")
+    .replace(/^the\s+/i, "")
+    .toLowerCase();
 }
 
 function buildGroups(theatres, view) {
@@ -1414,16 +1437,30 @@ function renderSchedule(container, dates) {
   const dateEntries = Object.entries(dates);
   dateEntries.sort(([a], [b]) => a.localeCompare(b));
 
-  dateEntries.forEach(([date, times]) => {
-    const row = document.createElement("div");
-    row.className = "show-schedule-row";
-    const label = document.createElement("span");
-    label.className = "show-schedule-day";
-    label.textContent = `${formatDisplayDate(date)}: `;
-    row.appendChild(label);
-    row.appendChild(document.createTextNode(times.join(", ")));
-    container.appendChild(row);
+  const visibleEntries = dateEntries.slice(0, 2);
+  const hiddenEntries = dateEntries.slice(2);
+
+  visibleEntries.forEach(([date, times]) => {
+    container.appendChild(createScheduleRow(date, times));
   });
+
+  if (hiddenEntries.length) {
+    const details = document.createElement("details");
+    details.className = "show-schedule-collapse";
+
+    const summary = document.createElement("summary");
+    summary.className = "show-schedule-summary";
+    summary.textContent = `More dates (${hiddenEntries.length})`;
+    details.appendChild(summary);
+
+    const extra = document.createElement("div");
+    hiddenEntries.forEach(([date, times]) => {
+      extra.appendChild(createScheduleRow(date, times));
+    });
+    details.appendChild(extra);
+
+    container.appendChild(details);
+  }
 }
 
 function renderTheatreSchedule(container, theatres) {
@@ -1431,15 +1468,32 @@ function renderTheatreSchedule(container, theatres) {
   const entries = Object.entries(theatres);
   entries.sort(([a], [b]) => a.localeCompare(b));
   entries.forEach(([theatreLabel, times]) => {
-    const row = document.createElement("div");
-    row.className = "show-schedule-row";
-    const label = document.createElement("span");
-    label.className = "show-schedule-day";
-    label.textContent = `${theatreLabel}: `;
-    row.appendChild(label);
-    row.appendChild(document.createTextNode(times.join(", ")));
-    container.appendChild(row);
+    const details = document.createElement("details");
+    details.className = "show-schedule-collapse";
+
+    const summary = document.createElement("summary");
+    summary.className = "show-schedule-summary";
+    summary.textContent = theatreLabel;
+    details.appendChild(summary);
+
+    const content = document.createElement("div");
+    content.className = "show-schedule-row";
+    content.textContent = times.join(", ");
+    details.appendChild(content);
+
+    container.appendChild(details);
   });
+}
+
+function createScheduleRow(date, times) {
+  const row = document.createElement("div");
+  row.className = "show-schedule-row";
+  const label = document.createElement("span");
+  label.className = "show-schedule-day";
+  label.textContent = `${formatDisplayDate(date)}: `;
+  row.appendChild(label);
+  row.appendChild(document.createTextNode(times.join(", ")));
+  return row;
 }
 
 function buildFilmFacts(show) {
