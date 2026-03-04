@@ -426,6 +426,7 @@ function bindEvents() {
     if (!requireAdminAuth()) return;
     try {
       validateData(state.data);
+      prunePastShowtimes(state.data);
       await persistData();
       elements.adminMessage.textContent = "All changes saved to Supabase.";
     } catch (error) {
@@ -915,6 +916,24 @@ function addDaysIso(dateIso, daysToAdd) {
   const m = String(next.getMonth() + 1).padStart(2, "0");
   const d = String(next.getDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
+}
+
+function prunePastShowtimes(data) {
+  const now = new Date();
+  data.theatreGroups.forEach((theatre) => {
+    (theatre.films || []).forEach((film) => {
+      film.showings = (film.showings || [])
+        .map((showing) => {
+          const remainingTimes = (showing.times || []).filter((time) => {
+            const dt = getShowDateTime(showing.date, time);
+            return dt && dt >= now;
+          });
+          return { ...showing, times: remainingTimes };
+        })
+        .filter((showing) => showing.times.length > 0)
+        .sort((a, b) => a.date.localeCompare(b.date));
+    });
+  });
 }
 
 function normalizeOutboundUrl(value) {
