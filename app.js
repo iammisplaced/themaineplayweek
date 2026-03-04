@@ -214,13 +214,22 @@ function bindEvents() {
   elements.adminTheatreResults.addEventListener("click", (event) => {
     const button = event.target.closest("button[data-index]");
     if (!button) return;
+    const previouslySelectedFilm = getSelectedFilm();
     state.admin.theatreIndex = Number(button.dataset.index) || 0;
-    state.admin.filmIndex = 0;
     state.admin.theatreHighlight = 0;
     state.admin.filmHighlight = 0;
     const theatre = getSelectedTheatre();
+    if (previouslySelectedFilm && theatre) {
+      state.admin.filmIndex = findFilmIndex(theatre.films || [], previouslySelectedFilm);
+      const currentFilm = getSelectedFilm();
+      state.admin.filmQuery = currentFilm
+        ? buildFilmGroupKey(currentFilm.title, currentFilm.year)
+        : "";
+    } else {
+      state.admin.filmIndex = 0;
+      state.admin.filmQuery = "";
+    }
     state.admin.theatreQuery = theatre?.name || "";
-    state.admin.filmQuery = "";
     syncAdminEditor();
   });
 
@@ -238,7 +247,7 @@ function bindEvents() {
     if (!requireAdminAuth()) return;
     const film = getSelectedFilm();
     if (!film) return;
-    film.ticketLink = elements.selectedTicketLinkInput.value.trim();
+    film.ticketLink = normalizeOutboundUrl(elements.selectedTicketLinkInput.value.trim());
     syncAdminEditor();
     elements.adminMessage.textContent = "Saved ticket link for selected theatre + film.";
   });
@@ -283,7 +292,7 @@ function bindEvents() {
       name,
       city,
       address,
-      website,
+      website: normalizeOutboundUrl(website),
       films: [],
     });
     state.admin.theatreIndex = state.data.theatreGroups.length - 1;
@@ -877,6 +886,14 @@ function parseTimesInput(input) {
     .filter(Boolean);
 }
 
+function normalizeOutboundUrl(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  if (/^[a-z][a-z0-9+.-]*:/i.test(raw)) return raw;
+  if (raw.startsWith("//")) return `https:${raw}`;
+  return `https://${raw}`;
+}
+
 function addFilmToAllTheatres(baseFilm) {
   state.data.theatreGroups.forEach((theatre) => {
     if (!Array.isArray(theatre.films)) theatre.films = [];
@@ -1144,8 +1161,13 @@ function render() {
 
   for (const [groupName, group] of entries) {
     const card = elements.groupTemplate.content.firstElementChild.cloneNode(true);
-    card.querySelector(".group-title").textContent =
-      state.view === "days" ? formatDisplayDate(groupName) : groupName;
+    if (state.view === "days") {
+      card.querySelector(".group-title").textContent = formatDisplayDate(groupName);
+    } else if (state.view === "films" && group.filmInfo) {
+      card.querySelector(".group-title").textContent = group.filmInfo.film;
+    } else {
+      card.querySelector(".group-title").textContent = groupName;
+    }
     const subtitle = card.querySelector(".group-subtitle");
     const groupLink = card.querySelector(".group-link");
     const groupFilmSummary = card.querySelector(".group-film-summary");
@@ -1157,8 +1179,11 @@ function render() {
     if (group.theatreInfo) {
       subtitle.textContent = `${group.theatreInfo.address}`;
       subtitle.classList.remove("hidden");
-      groupLink.href = group.theatreInfo.website;
-      groupLink.classList.remove("hidden");
+      const theatreWebsite = normalizeOutboundUrl(group.theatreInfo.website);
+      if (theatreWebsite) {
+        groupLink.href = theatreWebsite;
+        groupLink.classList.remove("hidden");
+      }
     }
     if (state.view === "films" && group.filmInfo) {
       const factsText = buildFilmFacts(group.filmInfo);
@@ -1192,7 +1217,7 @@ function render() {
       const row = item.querySelector(".show-row");
       const poster = item.querySelector(".show-poster");
       const link = item.querySelector(".show-link");
-      const filmLabel = show.year ? `${show.film} (${show.year})` : show.film;
+      const filmLabel = show.film;
 
       if (state.view === "theatres") {
         main.textContent = filmLabel;
@@ -1208,9 +1233,12 @@ function render() {
         renderSchedule(schedule, show.dates);
       }
 
-      if (state.view !== "days" && show.ticketLink) {
-        link.href = show.ticketLink;
-        link.classList.remove("hidden");
+      if (state.view !== "days") {
+        const ticketUrl = normalizeOutboundUrl(show.ticketLink);
+        if (ticketUrl) {
+          link.href = ticketUrl;
+          link.classList.remove("hidden");
+        }
       }
       if (state.view !== "films" && show.posterUrl) {
         row.classList.add("has-poster");
@@ -1366,6 +1394,7 @@ function renderTheatreSchedule(container, theatres) {
 
 function buildFilmFacts(show) {
   const lines = [];
+  if (Number.isInteger(Number(show.year))) lines.push(`Year: ${Number(show.year)}`);
   if (show.director) lines.push(`Director: ${show.director}`);
   if (Array.isArray(show.stars) && show.stars.length) lines.push(`Starring: ${show.stars.join(", ")}`);
   if (Array.isArray(show.genres) && show.genres.length) lines.push(`Genre: ${show.genres.join(", ")}`);
