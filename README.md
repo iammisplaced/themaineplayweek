@@ -45,7 +45,7 @@ Open <http://localhost:8080>.
 6. `+ Add Film` creates that film across all theatres so it is available everywhere.
 7. Set `Ticket Link (selected theatre + film)` for the current theatre/film pair (ticket links are not entered in Add Film modal).
 8. Use `Refresh TMDb` to pull movie metadata for the selected film (needs film `tmdbId` + local TMDb key input).
-9. Add showings with date + comma-separated times.
+9. Add showings with date + comma-separated times (optionally set number of days to auto-extend across consecutive dates).
 10. Click `Save All Changes` to push to Supabase.
 
 ## Fallback behavior

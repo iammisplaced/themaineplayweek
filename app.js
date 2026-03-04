@@ -67,6 +67,7 @@ const elements = {
   deleteFilm: document.getElementById("deleteFilm"),
   refreshTmdb: document.getElementById("refreshTmdb"),
   showingDateInput: document.getElementById("showingDateInput"),
+  showingSpanDaysInput: document.getElementById("showingSpanDaysInput"),
   showingTimesInput: document.getElementById("showingTimesInput"),
   addShowing: document.getElementById("addShowing"),
   showingsList: document.getElementById("showingsList"),
@@ -382,17 +383,30 @@ function bindEvents() {
     const film = getSelectedFilm();
     if (!film) return;
     const date = elements.showingDateInput.value;
+    const spanDays = clampSpanDays(elements.showingSpanDaysInput.value);
     const times = parseTimesInput(elements.showingTimesInput.value);
     if (!date || !times.length) {
       elements.adminMessage.textContent = "Add a date and at least one time.";
       return;
     }
-    film.showings.push({ date, times });
+
+    for (let offset = 0; offset < spanDays; offset += 1) {
+      const targetDate = addDaysIso(date, offset);
+      const existing = film.showings.find((showing) => showing.date === targetDate);
+      if (existing) {
+        existing.times = Array.from(new Set([...existing.times, ...times])).sort(compareTimes);
+      } else {
+        film.showings.push({ date: targetDate, times: [...times].sort(compareTimes) });
+      }
+    }
+
     film.showings.sort((a, b) => a.date.localeCompare(b.date));
     elements.showingDateInput.value = "";
     elements.showingTimesInput.value = "";
+    elements.showingSpanDaysInput.value = "1";
     syncAdminEditor();
-    elements.adminMessage.textContent = "Added showing.";
+    elements.adminMessage.textContent =
+      spanDays > 1 ? `Added showings across ${spanDays} days.` : "Added showing.";
   });
 
   elements.showingsList.addEventListener("click", (event) => {
@@ -884,6 +898,23 @@ function parseTimesInput(input) {
     .split(",")
     .map((entry) => entry.trim())
     .filter(Boolean);
+}
+
+function clampSpanDays(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return 1;
+  return Math.min(30, Math.max(1, Math.floor(parsed)));
+}
+
+function addDaysIso(dateIso, daysToAdd) {
+  const base = parseIsoDate(dateIso);
+  if (!base) return dateIso;
+  const next = new Date(base);
+  next.setDate(next.getDate() + daysToAdd);
+  const y = next.getFullYear();
+  const m = String(next.getMonth() + 1).padStart(2, "0");
+  const d = String(next.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 function normalizeOutboundUrl(value) {
