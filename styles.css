@@ -300,6 +300,45 @@ textarea {
   gap: 0.5rem;
 }
 
+.admin-search-results {
+  list-style: none;
+  margin: 0.45rem 0 0;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  max-height: 170px;
+  overflow: auto;
+}
+
+.admin-search-results:empty {
+  display: none;
+}
+
+.admin-search-results button {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  text-align: left;
+  padding: 0.48rem 0.6rem;
+}
+
+.admin-search-results li:last-child button {
+  border-bottom: 0;
+}
+
+.admin-search-results button.selected {
+  background: #fdece7;
+  font-weight: 600;
+}
+
+.admin-search-results button.active {
+  outline: 2px solid var(--accent-2);
+  outline-offset: -2px;
+}
+
 .admin-list li {
   border: 1px dashed var(--border);
   border-radius: 10px;

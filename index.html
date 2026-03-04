@@ -54,10 +54,12 @@
         <div class="admin-grid">
           <section class="admin-card admin-card-wide">
             <h3>Quick Admin</h3>
-            <label for="adminTheatreSelect">Theatre</label>
-            <select id="adminTheatreSelect"></select>
-            <label for="adminFilmSelect">Film</label>
-            <select id="adminFilmSelect"></select>
+            <label for="adminTheatreSearch">Theatre</label>
+            <input id="adminTheatreSearch" type="text" placeholder="Search theatres..." />
+            <ul id="adminTheatreResults" class="admin-search-results"></ul>
+            <label for="adminFilmSearch">Film</label>
+            <input id="adminFilmSearch" type="text" placeholder="Search films..." />
+            <ul id="adminFilmResults" class="admin-search-results"></ul>
             <label for="tmdbApiKeyInput">TMDb API Key (local)</label>
             <input id="tmdbApiKeyInput" type="password" placeholder="Used only in this browser" />
             <div class="admin-inline-actions">

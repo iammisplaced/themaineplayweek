@@ -16,6 +16,12 @@ const state = {
   admin: {
     theatreIndex: 0,
     filmIndex: 0,
+    theatreQuery: "",
+    filmQuery: "",
+    theatreHighlight: 0,
+    filmHighlight: 0,
+    theatreSearching: false,
+    filmSearching: false,
     tmdbApiKey: "",
     auth: {
       authenticated: false,
@@ -36,7 +42,8 @@ const elements = {
   adminEmailInput: document.getElementById("adminEmailInput"),
   adminLoginButton: document.getElementById("adminLoginButton"),
   adminLogoutButton: document.getElementById("adminLogoutButton"),
-  adminTheatreSelect: document.getElementById("adminTheatreSelect"),
+  adminTheatreSearch: document.getElementById("adminTheatreSearch"),
+  adminTheatreResults: document.getElementById("adminTheatreResults"),
   addTheatre: document.getElementById("addTheatre"),
   addTheatreModal: document.getElementById("addTheatreModal"),
   addTheatreForm: document.getElementById("addTheatreForm"),
@@ -45,7 +52,8 @@ const elements = {
   modalTheatreAddressInput: document.getElementById("modalTheatreAddressInput"),
   modalTheatreWebsiteInput: document.getElementById("modalTheatreWebsiteInput"),
   tmdbApiKeyInput: document.getElementById("tmdbApiKeyInput"),
-  adminFilmSelect: document.getElementById("adminFilmSelect"),
+  adminFilmSearch: document.getElementById("adminFilmSearch"),
+  adminFilmResults: document.getElementById("adminFilmResults"),
   addFilm: document.getElementById("addFilm"),
   addFilmModal: document.getElementById("addFilmModal"),
   addFilmForm: document.getElementById("addFilmForm"),
@@ -156,14 +164,70 @@ function bindEvents() {
     localStorage.setItem(TMDB_KEY_STORAGE_KEY, state.admin.tmdbApiKey);
   });
 
-  elements.adminTheatreSelect.addEventListener("change", () => {
-    state.admin.theatreIndex = Number(elements.adminTheatreSelect.value) || 0;
+  elements.adminTheatreSearch.addEventListener("input", () => {
+    state.admin.theatreQuery = elements.adminTheatreSearch.value;
+    state.admin.theatreHighlight = 0;
+    renderTheatreOptions();
+  });
+
+  elements.adminFilmSearch.addEventListener("input", () => {
+    state.admin.filmQuery = elements.adminFilmSearch.value;
+    state.admin.filmHighlight = 0;
+    renderFilmOptions();
+  });
+
+  elements.adminTheatreSearch.addEventListener("focus", () => {
+    state.admin.theatreSearching = true;
+    renderTheatreOptions();
+  });
+
+  elements.adminFilmSearch.addEventListener("focus", () => {
+    state.admin.filmSearching = true;
+    renderFilmOptions();
+  });
+
+  elements.adminTheatreSearch.addEventListener("blur", () => {
+    setTimeout(() => {
+      state.admin.theatreSearching = false;
+      renderTheatreOptions();
+    }, 120);
+  });
+
+  elements.adminFilmSearch.addEventListener("blur", () => {
+    setTimeout(() => {
+      state.admin.filmSearching = false;
+      renderFilmOptions();
+    }, 120);
+  });
+
+  elements.adminTheatreSearch.addEventListener("keydown", (event) => {
+    handleSearchKeydown("theatre", event);
+  });
+
+  elements.adminFilmSearch.addEventListener("keydown", (event) => {
+    handleSearchKeydown("film", event);
+  });
+
+  elements.adminTheatreResults.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-index]");
+    if (!button) return;
+    state.admin.theatreIndex = Number(button.dataset.index) || 0;
     state.admin.filmIndex = 0;
+    state.admin.theatreHighlight = 0;
+    state.admin.filmHighlight = 0;
+    const theatre = getSelectedTheatre();
+    state.admin.theatreQuery = theatre?.name || "";
+    state.admin.filmQuery = "";
     syncAdminEditor();
   });
 
-  elements.adminFilmSelect.addEventListener("change", () => {
-    state.admin.filmIndex = Number(elements.adminFilmSelect.value) || 0;
+  elements.adminFilmResults.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-index]");
+    if (!button) return;
+    state.admin.filmIndex = Number(button.dataset.index) || 0;
+    state.admin.filmHighlight = 0;
+    const film = getSelectedFilm();
+    state.admin.filmQuery = film ? buildFilmGroupKey(film.title, film.year) : "";
     syncAdminEditor();
   });
 
@@ -204,6 +268,8 @@ function bindEvents() {
     });
     state.admin.theatreIndex = state.data.theatreGroups.length - 1;
     state.admin.filmIndex = 0;
+    state.admin.theatreQuery = name;
+    state.admin.filmQuery = "";
     elements.addTheatreModal.close();
     syncAdminEditor();
     elements.adminMessage.textContent = "Added theatre.";
@@ -238,21 +304,25 @@ function bindEvents() {
     if (yearValue) film.year = Number(yearValue);
     if (tmdbIdValue) film.tmdbId = Number(tmdbIdValue);
 
-    theatre.films.push(film);
-    state.admin.filmIndex = theatre.films.length - 1;
+    addFilmToAllTheatres(film);
+    const updatedTheatre = getSelectedTheatre();
+    state.admin.filmIndex = findFilmIndex(updatedTheatre?.films || [], film);
+    state.admin.filmQuery = buildFilmGroupKey(film.title, film.year);
     elements.addFilmModal.close();
     syncAdminEditor();
-    elements.adminMessage.textContent = "Added film.";
+    elements.adminMessage.textContent = "Added film to all theatres.";
   });
 
   elements.deleteFilm.addEventListener("click", () => {
     if (!requireAdminAuth()) return;
     const theatre = getSelectedTheatre();
     if (!theatre || !theatre.films.length) return;
-    theatre.films.splice(state.admin.filmIndex, 1);
+    const film = theatre.films[state.admin.filmIndex];
+    removeFilmFromAllTheatres(film);
     state.admin.filmIndex = Math.max(0, state.admin.filmIndex - 1);
+    state.admin.filmQuery = "";
     syncAdminEditor();
-    elements.adminMessage.textContent = "Deleted film.";
+    elements.adminMessage.textContent = "Deleted film from all theatres.";
   });
 
   elements.refreshTmdb.addEventListener("click", async () => {
@@ -476,14 +546,9 @@ async function loadDataFromSupabase() {
     });
   });
 
-  showings.forEach((showingRow) => {
-    const theatre = theatreById.get(showingRow.theatre_id);
-    const filmTemplate = filmById.get(showingRow.film_id);
-    if (!theatre || !filmTemplate) return;
-
-    const filmKey = String(filmTemplate._dbId);
-    if (!theatre._filmMap.has(filmKey)) {
-      theatre._filmMap.set(filmKey, {
+  theatreGroups.forEach((theatre) => {
+    filmById.forEach((filmTemplate) => {
+      const filmCopy = {
         title: filmTemplate.title,
         year: filmTemplate.year,
         tmdbId: filmTemplate.tmdbId,
@@ -491,17 +556,27 @@ async function loadDataFromSupabase() {
         tmdb: filmTemplate.tmdb,
         showings: [],
         _dbId: filmTemplate._dbId,
-      });
-      theatre.films.push(theatre._filmMap.get(filmKey));
-    }
+      };
+      theatre._filmMap.set(String(filmTemplate._dbId), filmCopy);
+      theatre.films.push(filmCopy);
+    });
+  });
 
-    theatre._filmMap.get(filmKey).showings.push({
+  showings.forEach((showingRow) => {
+    const theatre = theatreById.get(showingRow.theatre_id);
+    if (!theatre) return;
+
+    const filmKey = String(showingRow.film_id);
+    const film = theatre._filmMap.get(filmKey);
+    if (!film) return;
+    film.showings.push({
       date: showingRow.show_date,
       times: Array.isArray(showingRow.times) ? showingRow.times : [],
     });
   });
 
   theatreGroups.forEach((theatre) => {
+    sortFilms(theatre.films);
     theatre.films.forEach((film) => {
       film.showings.sort((a, b) => a.date.localeCompare(b.date));
     });
@@ -593,6 +668,12 @@ function syncAdminEditor() {
 function initializeAdminState() {
   state.admin.theatreIndex = 0;
   state.admin.filmIndex = 0;
+  state.admin.theatreQuery = "";
+  state.admin.filmQuery = "";
+  state.admin.theatreHighlight = 0;
+  state.admin.filmHighlight = 0;
+  state.admin.theatreSearching = false;
+  state.admin.filmSearching = false;
 }
 
 function loadAdminSettings() {
@@ -608,44 +689,69 @@ function updateAdminAuthUI() {
 
 function renderTheatreOptions() {
   const theatres = state.data.theatreGroups;
-  elements.adminTheatreSelect.innerHTML = "";
+  elements.adminTheatreSearch.value = state.admin.theatreQuery;
+  elements.adminTheatreSearch.disabled = !theatres.length;
+  elements.adminTheatreResults.innerHTML = "";
+  if (!theatres.length) return;
+  if (!state.admin.theatreSearching) return;
+
+  const query = state.admin.theatreQuery.trim().toLowerCase();
+  let visibleCount = 0;
   theatres.forEach((theatre, index) => {
-    const option = document.createElement("option");
-    option.value = String(index);
-    option.textContent = theatre.name || `Theatre ${index + 1}`;
-    elements.adminTheatreSelect.appendChild(option);
+    const label = theatre.name || `Theatre ${index + 1}`;
+    if (query && !label.toLowerCase().includes(query)) return;
+    const highlightIndex = state.admin.theatreHighlight;
+    const li = document.createElement("li");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.index = String(index);
+    button.textContent = label;
+    if (index === state.admin.theatreIndex) button.classList.add("selected");
+    if (visibleCount === highlightIndex) button.classList.add("active");
+    li.appendChild(button);
+    elements.adminTheatreResults.appendChild(li);
+    visibleCount += 1;
   });
-  if (!theatres.length) {
-    const option = document.createElement("option");
-    option.value = "0";
-    option.textContent = "No theatres yet";
-    elements.adminTheatreSelect.appendChild(option);
+  if (visibleCount > 0) {
+    state.admin.theatreHighlight = Math.min(state.admin.theatreHighlight, visibleCount - 1);
+  } else {
+    state.admin.theatreHighlight = 0;
   }
-  elements.adminTheatreSelect.value = String(state.admin.theatreIndex);
 }
 
 function renderFilmOptions() {
   const theatre = getSelectedTheatre();
   const films = theatre?.films || [];
   state.admin.filmIndex = clampIndex(state.admin.filmIndex, films.length);
-
-  elements.adminFilmSelect.innerHTML = "";
-  films.forEach((film, index) => {
-    const option = document.createElement("option");
-    option.value = String(index);
-    option.textContent = film.year ? `${film.title} (${film.year})` : film.title;
-    elements.adminFilmSelect.appendChild(option);
-  });
-  if (!films.length) {
-    const option = document.createElement("option");
-    option.value = "0";
-    option.textContent = "No films yet";
-    elements.adminFilmSelect.appendChild(option);
+  elements.adminFilmSearch.value = state.admin.filmQuery;
+  elements.adminFilmSearch.disabled = !theatre || !films.length;
+  elements.adminFilmResults.innerHTML = "";
+  const hasFilm = films.length > 0;
+  if (hasFilm && state.admin.filmSearching) {
+    const query = state.admin.filmQuery.trim().toLowerCase();
+    let visibleCount = 0;
+    films.forEach((film, index) => {
+      const label = buildFilmGroupKey(film.title, film.year);
+      if (query && !label.toLowerCase().includes(query)) return;
+      const highlightIndex = state.admin.filmHighlight;
+      const li = document.createElement("li");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.index = String(index);
+      button.textContent = label;
+      if (index === state.admin.filmIndex) button.classList.add("selected");
+      if (visibleCount === highlightIndex) button.classList.add("active");
+      li.appendChild(button);
+      elements.adminFilmResults.appendChild(li);
+      visibleCount += 1;
+    });
+    if (visibleCount > 0) {
+      state.admin.filmHighlight = Math.min(state.admin.filmHighlight, visibleCount - 1);
+    } else {
+      state.admin.filmHighlight = 0;
+    }
   }
 
-  const hasFilm = films.length > 0;
-  elements.adminFilmSelect.value = String(state.admin.filmIndex);
-  elements.adminFilmSelect.disabled = !theatre || !hasFilm;
   elements.addFilm.disabled = !theatre;
   elements.deleteFilm.disabled = !hasFilm;
   elements.refreshTmdb.disabled = !hasFilm;
@@ -704,6 +810,54 @@ function parseTimesInput(input) {
     .split(",")
     .map((entry) => entry.trim())
     .filter(Boolean);
+}
+
+function addFilmToAllTheatres(baseFilm) {
+  state.data.theatreGroups.forEach((theatre) => {
+    if (!Array.isArray(theatre.films)) theatre.films = [];
+    const exists = theatre.films.some((film) => filmsMatch(film, baseFilm));
+    if (!exists) {
+      theatre.films.push({
+        title: baseFilm.title,
+        year: baseFilm.year,
+        tmdbId: baseFilm.tmdbId,
+        ticketLink: baseFilm.ticketLink,
+        tmdb: baseFilm.tmdb,
+        showings: [],
+      });
+    }
+    sortFilms(theatre.films);
+  });
+}
+
+function removeFilmFromAllTheatres(targetFilm) {
+  state.data.theatreGroups.forEach((theatre) => {
+    theatre.films = (theatre.films || []).filter((film) => !filmsMatch(film, targetFilm));
+  });
+}
+
+function filmsMatch(a, b) {
+  const aTmdb = Number(a?.tmdbId);
+  const bTmdb = Number(b?.tmdbId);
+  if (Number.isInteger(aTmdb) && aTmdb > 0 && Number.isInteger(bTmdb) && bTmdb > 0) {
+    return aTmdb === bTmdb;
+  }
+  return normalizeFilmTitle(a?.title) === normalizeFilmTitle(b?.title) && Number(a?.year || 0) === Number(b?.year || 0);
+}
+
+function normalizeFilmTitle(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase();
+}
+
+function findFilmIndex(films, targetFilm) {
+  const idx = films.findIndex((film) => filmsMatch(film, targetFilm));
+  return idx >= 0 ? idx : 0;
+}
+
+function sortFilms(films) {
+  films.sort((a, b) => buildFilmGroupKey(a.title, a.year).localeCompare(buildFilmGroupKey(b.title, b.year)));
 }
 
 async function persistData() {
@@ -817,6 +971,60 @@ function requireAdminAuth() {
   if (state.admin.auth.authenticated) return true;
   elements.adminMessage.textContent = "Sign in first to edit admin data.";
   return false;
+}
+
+function handleSearchKeydown(kind, event) {
+  const isTheatre = kind === "theatre";
+  const resultsEl = isTheatre ? elements.adminTheatreResults : elements.adminFilmResults;
+  const buttons = Array.from(resultsEl.querySelectorAll("button[data-index]"));
+  if (!buttons.length) return;
+
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    if (isTheatre) {
+      state.admin.theatreHighlight = Math.min(state.admin.theatreHighlight + 1, buttons.length - 1);
+      renderTheatreOptions();
+    } else {
+      state.admin.filmHighlight = Math.min(state.admin.filmHighlight + 1, buttons.length - 1);
+      renderFilmOptions();
+    }
+    return;
+  }
+
+  if (event.key === "ArrowUp") {
+    event.preventDefault();
+    if (isTheatre) {
+      state.admin.theatreHighlight = Math.max(state.admin.theatreHighlight - 1, 0);
+      renderTheatreOptions();
+    } else {
+      state.admin.filmHighlight = Math.max(state.admin.filmHighlight - 1, 0);
+      renderFilmOptions();
+    }
+    return;
+  }
+
+  if (event.key === "Enter") {
+    event.preventDefault();
+    const index = isTheatre ? state.admin.theatreHighlight : state.admin.filmHighlight;
+    const button = buttons[index] || buttons[0];
+    button?.click();
+    return;
+  }
+
+  if (event.key === "Escape") {
+    event.preventDefault();
+    if (isTheatre) {
+      state.admin.theatreQuery = "";
+      state.admin.theatreHighlight = 0;
+      elements.adminTheatreSearch.value = "";
+      renderTheatreOptions();
+    } else {
+      state.admin.filmQuery = "";
+      state.admin.filmHighlight = 0;
+      elements.adminFilmSearch.value = "";
+      renderFilmOptions();
+    }
+  }
 }
 
 function render() {
