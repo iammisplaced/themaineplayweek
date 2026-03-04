@@ -96,3 +96,5 @@ Showtimes in the past (date+time) are hidden automatically.
 
 ## Schema update note
 Ticket links are theatre-specific. Re-run `supabase/schema.sql` so `public.theatre_films` exists.
+
+If you see `DELETE requires a WHERE clause`, re-run `supabase/schema.sql` to install the updated `replace_showtimes_data` function.

@@ -109,10 +109,10 @@ begin
     raise exception 'Payload is required';
   end if;
 
-  delete from public.showings;
-  delete from public.theatre_films;
-  delete from public.theatres;
-  delete from public.films;
+  delete from public.showings where true;
+  delete from public.theatre_films where true;
+  delete from public.theatres where true;
+  delete from public.films where true;
 
   for theatre_item in
     select value from jsonb_array_elements(coalesce(payload->'theatres', '[]'::jsonb))
