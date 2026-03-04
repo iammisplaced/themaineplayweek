@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Showtimes Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div>
+        <p class="eyebrow">Cinema Dashboard</p>
+        <h1>Showtimes</h1>
+      </div>
+      <button id="adminToggle" class="ghost-btn" aria-expanded="false">Admin</button>
+    </header>
+
+    <main>
+      <section class="controls" aria-label="View controls">
+        <div class="tabs" role="tablist" aria-label="Showtimes view type">
+          <button class="tab active" role="tab" data-view="films" aria-selected="true">Films</button>
+          <button class="tab" role="tab" data-view="theatres" aria-selected="false">Theatres</button>
+          <button class="tab" role="tab" data-view="days" aria-selected="false">Dates</button>
+        </div>
+      </section>
+
+      <section id="results" class="results" aria-live="polite"></section>
+
+      <section id="adminPanel" class="admin-panel hidden" aria-label="Admin panel">
+        <h2>Admin</h2>
+        <p>Sign in with Supabase magic link to edit live data.</p>
+
+        <section id="adminAuthGate" class="admin-auth-gate hidden">
+          <h3>Admin Login</h3>
+          <p class="admin-help">Enter your email to receive a magic link.</p>
+          <label for="adminEmailInput">Email</label>
+          <input id="adminEmailInput" type="email" />
+          <div class="admin-inline-actions">
+            <button id="adminLoginButton">Send Magic Link</button>
+          </div>
+        </section>
+
+        <div id="adminControls" class="hidden">
+          <div class="admin-inline-actions">
+            <button id="adminLogoutButton" class="ghost-btn">Log Out</button>
+          </div>
+
+        <div class="admin-grid">
+          <section class="admin-card admin-card-wide">
+            <h3>Quick Admin</h3>
+            <label for="adminTheatreSelect">Theatre</label>
+            <select id="adminTheatreSelect"></select>
+            <label for="adminFilmSelect">Film</label>
+            <select id="adminFilmSelect"></select>
+            <label for="tmdbApiKeyInput">TMDb API Key (local)</label>
+            <input id="tmdbApiKeyInput" type="password" placeholder="Used only in this browser" />
+            <div class="admin-inline-actions">
+              <button id="addTheatre" class="ghost-btn">+ Add Theatre</button>
+              <button id="addFilm" class="ghost-btn">+ Add Film</button>
+              <button id="deleteFilm" class="ghost-btn">Delete Film</button>
+              <button id="refreshTmdb" class="ghost-btn">Refresh TMDb</button>
+            </div>
+          </section>
+
+          <section class="admin-card admin-card-wide">
+            <h3>Showings</h3>
+            <p class="admin-help">Tip: keep times as <code>h:mm AM/PM</code> and separate multiple times with commas.</p>
+            <label for="showingDateInput">Date</label>
+            <input id="showingDateInput" type="date" />
+            <label for="showingTimesInput">Times (comma separated)</label>
+            <input id="showingTimesInput" type="text" placeholder="1:30 PM, 6:50 PM" />
+            <div class="admin-inline-actions">
+              <button id="addShowing">+ Add Showing</button>
+            </div>
+            <ul id="showingsList" class="admin-list"></ul>
+          </section>
+        </div>
+
+        <details class="admin-advanced">
+          <summary>Advanced: Edit Raw JSON</summary>
+          <label for="adminJson">Showtimes JSON</label>
+          <textarea id="adminJson" rows="16" spellcheck="false"></textarea>
+          <button id="applyJson">Apply Raw JSON Changes</button>
+        </details>
+
+        <dialog id="addFilmModal" class="admin-modal">
+          <form id="addFilmForm" method="dialog" class="admin-modal-body">
+            <h3>Add Film</h3>
+            <label for="modalFilmTitleInput">Title</label>
+            <input id="modalFilmTitleInput" type="text" required />
+            <label for="modalFilmYearInput">Year (optional if TMDb ID used)</label>
+            <input id="modalFilmYearInput" type="number" />
+            <label for="modalFilmTmdbIdInput">TMDb ID (optional if year used)</label>
+            <input id="modalFilmTmdbIdInput" type="number" />
+            <label for="modalFilmTicketLinkInput">Ticket Link</label>
+            <input id="modalFilmTicketLinkInput" type="url" required />
+            <div class="admin-inline-actions">
+              <button id="confirmAddFilm" value="confirm">Add Film</button>
+              <button id="cancelAddFilm" class="ghost-btn" value="cancel">Cancel</button>
+            </div>
+          </form>
+        </dialog>
+
+        <dialog id="addTheatreModal" class="admin-modal">
+          <form id="addTheatreForm" method="dialog" class="admin-modal-body">
+            <h3>Add Theatre</h3>
+            <label for="modalTheatreNameInput">Name</label>
+            <input id="modalTheatreNameInput" type="text" required />
+            <label for="modalTheatreCityInput">City</label>
+            <input id="modalTheatreCityInput" type="text" required />
+            <label for="modalTheatreAddressInput">Address</label>
+            <input id="modalTheatreAddressInput" type="text" required />
+            <label for="modalTheatreWebsiteInput">Website</label>
+            <input id="modalTheatreWebsiteInput" type="url" required />
+            <div class="admin-inline-actions">
+              <button id="confirmAddTheatre" value="confirm">Add Theatre</button>
+              <button id="cancelAddTheatre" class="ghost-btn" value="cancel">Cancel</button>
+            </div>
+          </form>
+        </dialog>
+
+        <div class="admin-actions">
+          <button id="saveAllAdmin">Save All Changes</button>
+          <button id="downloadJson" class="ghost-btn">Download JSON</button>
+          <label class="upload-label">
+            Import JSON
+            <input id="uploadJson" type="file" accept="application/json" />
+          </label>
+          <button id="resetJson" class="ghost-btn">Reset to Source File</button>
+        </div>
+        <p id="adminMessage" class="admin-message" role="status"></p>
+        </div>
+      </section>
+    </main>
+
+    <template id="groupTemplate">
+      <article class="group-card">
+        <h3 class="group-title"></h3>
+        <p class="group-subtitle hidden"></p>
+        <a class="group-link hidden" target="_blank" rel="noopener noreferrer">Visit theatre website</a>
+        <div class="group-film-summary hidden">
+          <img class="group-film-poster hidden" alt="" />
+          <div>
+            <p class="group-film-facts hidden"></p>
+          </div>
+        </div>
+        <ul class="show-list"></ul>
+      </article>
+    </template>
+
+    <template id="showItemTemplate">
+      <li class="show-item">
+        <div class="show-row">
+          <img class="show-poster hidden" alt="" />
+          <div>
+            <div class="show-main"></div>
+            <div class="show-meta"></div>
+            <div class="show-schedule"></div>
+          </div>
+        </div>
+        <a class="show-link hidden" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </li>
+    </template>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

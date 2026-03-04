@@ -1,0 +1,376 @@
+:root {
+  --bg: #f3efe5;
+  --panel: #fffef9;
+  --ink: #1d1f1f;
+  --muted: #5e6464;
+  --accent: #c54828;
+  --accent-2: #2d5f58;
+  --border: #d6d1c8;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 2rem 1rem 3rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  background:
+    radial-gradient(circle at top right, #e7d9c2 0%, transparent 45%),
+    radial-gradient(circle at 20% 20%, #dbe6df 0%, transparent 35%),
+    var(--bg);
+  color: var(--ink);
+}
+
+main,
+.site-header {
+  width: min(1024px, 100%);
+  margin-inline: auto;
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent-2);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  font-size: 0.75rem;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+}
+
+.controls {
+  margin-bottom: 1rem;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tab,
+button,
+.upload-label {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.5rem 0.95rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tab.active,
+button:not(.ghost-btn):hover,
+.upload-label:hover {
+  border-color: var(--accent);
+  background: #fdece7;
+}
+
+.ghost-btn {
+  background: transparent;
+}
+
+.results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.group-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem;
+  box-shadow: 0 7px 18px rgba(29, 31, 31, 0.06);
+}
+
+.group-title {
+  margin-bottom: 0.35rem;
+  color: var(--accent-2);
+  font-size: 1rem;
+}
+
+.group-subtitle {
+  margin: 0 0 0.35rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.group-link,
+.show-link {
+  display: inline-block;
+  color: var(--accent-2);
+  margin-bottom: 0.55rem;
+  font-size: 0.88rem;
+}
+
+.group-film-summary {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 0.65rem;
+  align-items: start;
+  margin-bottom: 0.65rem;
+}
+
+.group-film-poster {
+  width: 72px;
+  height: 108px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #f7f4ec;
+}
+
+.group-film-facts {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  white-space: pre-line;
+}
+
+.show-link {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  color: var(--accent);
+  background: #fff7f3;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.show-link:hover {
+  background: #fdece7;
+}
+
+.show-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.show-item {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 0.5rem 0.6rem;
+  background: #fff;
+}
+
+.show-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.show-row.has-poster {
+  grid-template-columns: 44px 1fr;
+}
+
+.show-poster {
+  width: 44px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: #f7f4ec;
+}
+
+.show-main {
+  font-weight: 600;
+}
+
+.show-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.15rem;
+}
+
+.show-schedule {
+  margin-top: 0.2rem;
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.show-schedule-row + .show-schedule-row {
+  margin-top: 0.2rem;
+}
+
+.show-schedule-day {
+  font-weight: 700;
+}
+
+.admin-panel {
+  margin-top: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 1rem;
+}
+
+.admin-panel label {
+  display: block;
+  margin-top: 0.8rem;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.admin-grid {
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.admin-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.8rem;
+  background: #fffefc;
+}
+
+.admin-card h3 {
+  margin-bottom: 0.2rem;
+}
+
+.admin-auth-gate {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem;
+  background: #fffefc;
+  margin-bottom: 0.9rem;
+}
+
+.admin-card-wide {
+  grid-column: 1 / -1;
+}
+
+.admin-inline-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.55rem;
+}
+
+.admin-help {
+  margin: 0.15rem 0 0.25rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.admin-list {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.admin-list li {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 0.5rem 0.6rem;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-advanced {
+  margin-top: 1rem;
+}
+
+.admin-advanced summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent-2);
+}
+
+.admin-modal {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0;
+  width: min(460px, calc(100vw - 2rem));
+}
+
+.admin-modal::backdrop {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.admin-modal-body {
+  margin: 0;
+  padding: 1rem;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.upload-label input {
+  display: none;
+}
+
+.admin-message {
+  min-height: 1.4rem;
+  margin-top: 0.6rem;
+  color: var(--accent);
+}
+
+.hidden {
+  display: none;
+}
+
+.empty-state {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  background: #fff;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding-top: 1.2rem;
+  }
+
+  .site-header {
+    align-items: center;
+  }
+}

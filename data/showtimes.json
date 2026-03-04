@@ -1,0 +1,357 @@
+{
+  "theatreGroups": [
+    {
+      "name": "Downtown Cinema",
+      "city": "Raleigh",
+      "address": "120 Fayetteville St, Raleigh, NC 27601",
+      "website": "https://downtowncinema.example.com",
+      "films": [
+        {
+          "title": "Midnight Harbor",
+          "year": 2025,
+          "tmdbId": 1159831,
+          "ticketLink": "https://tickets.example.com/downtown-cinema/midnight-harbor",
+          "showings": [
+            {
+              "date": "2026-03-03",
+              "times": [
+                "5:30 PM"
+              ]
+            },
+            {
+              "date": "2026-03-06",
+              "times": [
+                "9:20 PM"
+              ]
+            }
+          ],
+          "tmdb": {
+            "id": 1159831,
+            "title": "The Bride!",
+            "releaseDate": "2026-03-04",
+            "posterPath": "/lV8YHwGkYZsm6EfIqnhaSz2avKt.jpg",
+            "posterUrl": "https://image.tmdb.org/t/p/w342/lV8YHwGkYZsm6EfIqnhaSz2avKt.jpg",
+            "director": "Maggie Gyllenhaal",
+            "stars": [
+              "Jessie Buckley",
+              "Christian Bale",
+              "Jake Gyllenhaal"
+            ],
+            "genres": [
+              "Science Fiction",
+              "Horror",
+              "Comedy"
+            ],
+            "matchedAt": "2026-03-04T15:34:22.192Z"
+          }
+        },
+        {
+          "title": "Red Valley",
+          "year": 2024,
+          "tmdbId": 1327819,
+          "ticketLink": "https://tickets.example.com/downtown-cinema/red-valley",
+          "showings": [
+            {
+              "date": "2026-03-07",
+              "times": [
+                "4:40 PM"
+              ]
+            },
+            {
+              "date": "2026-03-08",
+              "times": [
+                "8:00 PM"
+              ]
+            }
+          ],
+          "tmdb": {
+            "id": 1327819,
+            "title": "Hoppers",
+            "releaseDate": "2026-02-28",
+            "posterPath": "/d7WizU73PscO3dQor0Ogfx9xy8N.jpg",
+            "posterUrl": "https://image.tmdb.org/t/p/w342/d7WizU73PscO3dQor0Ogfx9xy8N.jpg",
+            "director": "Daniel Chong",
+            "stars": [
+              "Piper Curda",
+              "Bobby Moynihan",
+              "Jon Hamm"
+            ],
+            "genres": [
+              "Animation",
+              "Family",
+              "Comedy",
+              "Science Fiction"
+            ],
+            "matchedAt": "2026-03-04T15:34:22.388Z"
+          }
+        },
+        {
+          "title": "Wild Orbit",
+          "year": 2026,
+          "tmdbId": 1422562,
+          "ticketLink": "https://tickets.example.com/downtown-cinema/wild-orbit",
+          "showings": [
+            {
+              "date": "2026-03-08",
+              "times": [
+                "2:00 PM"
+              ]
+            }
+          ],
+          "tmdb": {
+            "id": 1422562,
+            "title": "The Moment",
+            "releaseDate": "2026-01-30",
+            "posterPath": "/dYgCgTqqMnWdsnP2XirdcFB28ch.jpg",
+            "posterUrl": "https://image.tmdb.org/t/p/w342/dYgCgTqqMnWdsnP2XirdcFB28ch.jpg",
+            "director": "Aidan Zamiri",
+            "stars": [
+              "Charli xcx",
+              "Alexander Skarsgård",
+              "Rosanna Arquette"
+            ],
+            "genres": [
+              "Music",
+              "Comedy"
+            ],
+            "matchedAt": "2026-03-04T15:34:22.574Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lakeview Screens",
+      "city": "Cary",
+      "address": "88 Lakeview Blvd, Cary, NC 27511",
+      "website": "https://lakeviewscreens.example.com",
+      "films": [
+        {
+          "title": "Midnight Harbor",
+          "year": 2025,
+          "tmdbId": 1159831,
+          "ticketLink": "https://tickets.example.com/lakeview-screens/midnight-harbor",
+          "showings": [
+            {
+              "date": "2026-03-06",
+              "times": [
+                "6:45 PM"
+              ]
+            },
+            {
+              "date": "2026-03-09",
+              "times": [
+                "3:10 PM"
+              ]
+            }
+          ],
+          "tmdb": {
+            "id": 1159831,
+            "title": "The Bride!",
+            "releaseDate": "2026-03-04",
+            "posterPath": "/lV8YHwGkYZsm6EfIqnhaSz2avKt.jpg",
+            "posterUrl": "https://image.tmdb.org/t/p/w342/lV8YHwGkYZsm6EfIqnhaSz2avKt.jpg",
+            "director": "Maggie Gyllenhaal",
+            "stars": [
+              "Jessie Buckley",
+              "Christian Bale",
+              "Jake Gyllenhaal"
+            ],
+            "genres": [
+              "Science Fiction",
+              "Horror",
+              "Comedy"
+            ],
+            "matchedAt": "2026-03-04T15:34:22.574Z"
+          }
+        },
+        {
+          "title": "Paper Moons",
+          "year": 2023,
+          "tmdbId": 1159559,
+          "ticketLink": "https://tickets.example.com/lakeview-screens/paper-moons",
+          "showings": [
+            {
+              "date": "2026-03-09",
+              "times": [
+                "1:30 PM",
+                "6:50 PM"
+              ]
+            }
+          ],
+          "tmdb": {
+            "id": 1159559,
+            "title": "Scream 7",
+            "releaseDate": "2026-02-25",
+            "posterPath": "/jjyuk0edLiW8vOSnlfwWCCLpbh5.jpg",
+            "posterUrl": "https://image.tmdb.org/t/p/w342/jjyuk0edLiW8vOSnlfwWCCLpbh5.jpg",
+            "director": "Kevin Williamson",
+            "stars": [
+              "Neve Campbell",
+              "Courteney Cox",
+              "Isabel May"
+            ],
+            "genres": [
+              "Horror",
+              "Mystery",
+              "Crime"
+            ],
+            "matchedAt": "2026-03-04T15:34:22.627Z"
+          }
+        },
+        {
+          "title": "Red Valley",
+          "year": 2024,
+          "tmdbId": 1327819,
+          "ticketLink": "https://tickets.example.com/lakeview-screens/red-valley",
+          "showings": [
+            {
+              "date": "2026-03-10",
+              "times": [
+                "7:15 PM"
+              ]
+            }
+          ],
+          "tmdb": {
+            "id": 1327819,
+            "title": "Hoppers",
+            "releaseDate": "2026-02-28",
+            "posterPath": "/d7WizU73PscO3dQor0Ogfx9xy8N.jpg",
+            "posterUrl": "https://image.tmdb.org/t/p/w342/d7WizU73PscO3dQor0Ogfx9xy8N.jpg",
+            "director": "Daniel Chong",
+            "stars": [
+              "Piper Curda",
+              "Bobby Moynihan",
+              "Jon Hamm"
+            ],
+            "genres": [
+              "Animation",
+              "Family",
+              "Comedy",
+              "Science Fiction"
+            ],
+            "matchedAt": "2026-03-04T15:34:22.627Z"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Grand Oak Theatre",
+      "city": "Durham",
+      "address": "431 Grand Oak Ave, Durham, NC 27701",
+      "website": "https://grandoaktheatre.example.com",
+      "films": [
+        {
+          "title": "Paper Moons",
+          "year": 2023,
+          "tmdbId": 1159559,
+          "ticketLink": "https://tickets.example.com/grand-oak-theatre/paper-moons",
+          "showings": [
+            {
+              "date": "2026-03-06",
+              "times": [
+                "4:15 PM"
+              ]
+            },
+            {
+              "date": "2026-03-07",
+              "times": [
+                "1:05 PM"
+              ]
+            }
+          ],
+          "tmdb": {
+            "id": 1159559,
+            "title": "Scream 7",
+            "releaseDate": "2026-02-25",
+            "posterPath": "/jjyuk0edLiW8vOSnlfwWCCLpbh5.jpg",
+            "posterUrl": "https://image.tmdb.org/t/p/w342/jjyuk0edLiW8vOSnlfwWCCLpbh5.jpg",
+            "director": "Kevin Williamson",
+            "stars": [
+              "Neve Campbell",
+              "Courteney Cox",
+              "Isabel May"
+            ],
+            "genres": [
+              "Horror",
+              "Mystery",
+              "Crime"
+            ],
+            "matchedAt": "2026-03-04T15:34:22.627Z"
+          }
+        },
+        {
+          "title": "Wild Orbit",
+          "year": 2026,
+          "tmdbId": 1422562,
+          "ticketLink": "https://tickets.example.com/grand-oak-theatre/wild-orbit",
+          "showings": [
+            {
+              "date": "2026-03-07",
+              "times": [
+                "9:10 PM"
+              ]
+            },
+            {
+              "date": "2026-03-08",
+              "times": [
+                "5:25 PM"
+              ]
+            }
+          ],
+          "tmdb": {
+            "id": 1422562,
+            "title": "The Moment",
+            "releaseDate": "2026-01-30",
+            "posterPath": "/dYgCgTqqMnWdsnP2XirdcFB28ch.jpg",
+            "posterUrl": "https://image.tmdb.org/t/p/w342/dYgCgTqqMnWdsnP2XirdcFB28ch.jpg",
+            "director": "Aidan Zamiri",
+            "stars": [
+              "Charli xcx",
+              "Alexander Skarsgård",
+              "Rosanna Arquette"
+            ],
+            "genres": [
+              "Music",
+              "Comedy"
+            ],
+            "matchedAt": "2026-03-04T15:34:22.627Z"
+          }
+        },
+        {
+          "title": "Red Valley",
+          "year": 2024,
+          "tmdbId": 1327819,
+          "ticketLink": "https://tickets.example.com/grand-oak-theatre/red-valley",
+          "showings": [
+            {
+              "date": "2026-03-10",
+              "times": [
+                "6:00 PM"
+              ]
+            }
+          ],
+          "tmdb": {
+            "id": 1327819,
+            "title": "Hoppers",
+            "releaseDate": "2026-02-28",
+            "posterPath": "/d7WizU73PscO3dQor0Ogfx9xy8N.jpg",
+            "posterUrl": "https://image.tmdb.org/t/p/w342/d7WizU73PscO3dQor0Ogfx9xy8N.jpg",
+            "director": "Daniel Chong",
+            "stars": [
+              "Piper Curda",
+              "Bobby Moynihan",
+              "Jon Hamm"
+            ],
+            "genres": [
+              "Animation",
+              "Family",
+              "Comedy",
+              "Science Fiction"
+            ],
+            "matchedAt": "2026-03-04T15:34:22.627Z"
+          }
+        }
+      ]
+    }
+  ]
+}
