@@ -1052,7 +1052,7 @@ function render() {
     const shows = group.shows;
 
     if (group.theatreInfo) {
-      subtitle.textContent = `${group.theatreInfo.city} · ${group.theatreInfo.address}`;
+      subtitle.textContent = `${group.theatreInfo.address}`;
       subtitle.classList.remove("hidden");
       groupLink.href = group.theatreInfo.website;
       groupLink.classList.remove("hidden");
