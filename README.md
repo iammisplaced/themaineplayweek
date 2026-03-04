@@ -30,6 +30,7 @@ Open <http://localhost:8080>.
 - enable Magic Link
 - set site URL to your deployed URL (or local URL while testing)
 3. Add at least one admin user in Supabase Auth (or allow self-serve signup if desired).
+4. If you already set this up earlier, re-run `supabase/schema.sql` to install the latest transactional save function (`replace_showtimes_data`).
 
 ## Current Supabase config in app
 `app.js` is configured with:

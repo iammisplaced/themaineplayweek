@@ -22,6 +22,8 @@ const state = {
     filmHighlight: 0,
     theatreSearching: false,
     filmSearching: false,
+    isSaving: false,
+    isRefreshingTmdb: false,
     tmdbApiKey: "",
     auth: {
       authenticated: false,
@@ -356,6 +358,10 @@ function bindEvents() {
 
   elements.refreshTmdb.addEventListener("click", async () => {
     if (!requireAdminAuth()) return;
+    if (state.admin.isSaving) {
+      elements.adminMessage.textContent = "Save in progress. Try TMDb refresh in a moment.";
+      return;
+    }
     const film = getSelectedFilm();
     if (!film) return;
     if (!state.admin.tmdbApiKey) {
@@ -368,6 +374,8 @@ function bindEvents() {
     }
 
     try {
+      state.admin.isRefreshingTmdb = true;
+      syncAdminEditor();
       const details = await fetchTmdbMovieById(state.admin.tmdbApiKey, Number(film.tmdbId));
       film.tmdb = buildTmdbRecord(details);
       syncFilmMetadataAcrossTheatres(film);
@@ -375,6 +383,9 @@ function bindEvents() {
       elements.adminMessage.textContent = "TMDb details refreshed.";
     } catch (error) {
       elements.adminMessage.textContent = `TMDb refresh failed: ${error.message}`;
+    } finally {
+      state.admin.isRefreshingTmdb = false;
+      syncAdminEditor();
     }
   });
 
@@ -424,13 +435,22 @@ function bindEvents() {
 
   elements.saveAllAdmin.addEventListener("click", async () => {
     if (!requireAdminAuth()) return;
+    if (state.admin.isRefreshingTmdb) {
+      elements.adminMessage.textContent = "TMDb refresh in progress. Wait for it to finish before saving.";
+      return;
+    }
     try {
+      state.admin.isSaving = true;
+      syncAdminEditor();
       validateData(state.data);
       prunePastShowtimes(state.data);
       await persistData();
       elements.adminMessage.textContent = "All changes saved to Supabase.";
     } catch (error) {
       elements.adminMessage.textContent = `Save failed: ${error.message}. Run latest supabase/schema.sql and try again.`;
+    } finally {
+      state.admin.isSaving = false;
+      syncAdminEditor();
     }
   });
 
@@ -835,17 +855,20 @@ function renderFilmOptions() {
 
   elements.addFilm.disabled = !theatre;
   elements.deleteFilm.disabled = !hasFilm;
-  elements.refreshTmdb.disabled = !hasFilm;
+  elements.refreshTmdb.disabled = !hasFilm || state.admin.isSaving || state.admin.isRefreshingTmdb;
   elements.showingDateInput.disabled = !hasFilm;
   elements.showingTimesInput.disabled = !hasFilm;
   elements.addShowing.disabled = !hasFilm;
+  elements.saveAllAdmin.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
+  elements.saveSelectedTicketLink.disabled = !hasFilm || state.admin.isSaving || state.admin.isRefreshingTmdb;
 }
 
 function fillSelectedTicketLink() {
   const film = getSelectedFilm();
   const disabled = !film;
   elements.selectedTicketLinkInput.disabled = disabled;
-  elements.saveSelectedTicketLink.disabled = disabled;
+  elements.saveSelectedTicketLink.disabled =
+    disabled || state.admin.isSaving || state.admin.isRefreshingTmdb;
   elements.selectedTicketLinkInput.value = film?.ticketLink || "";
 }
 
@@ -1019,92 +1042,9 @@ async function persistData() {
 async function saveDataToSupabase() {
   const supabase = state.supabase;
   await verifySupabaseSchema(supabase);
-
-  const deleteShowings = await supabase.from("showings").delete().not("id", "is", null);
-  if (deleteShowings.error) throw deleteShowings.error;
-
-  const deleteTheatreFilms = await supabase.from("theatre_films").delete().not("theatre_id", "is", null);
-  if (deleteTheatreFilms.error) throw deleteTheatreFilms.error;
-
-  const deleteTheatres = await supabase.from("theatres").delete().not("id", "is", null);
-  if (deleteTheatres.error) throw deleteTheatres.error;
-
-  const deleteFilms = await supabase.from("films").delete().not("id", "is", null);
-  if (deleteFilms.error) throw deleteFilms.error;
-
-  const theatreIdMap = new Map();
-  for (const theatre of state.data.theatreGroups) {
-    const result = await supabase
-      .from("theatres")
-      .insert({
-        name: theatre.name,
-        city: theatre.city,
-        address: theatre.address,
-        website: theatre.website,
-      })
-      .select("id")
-      .single();
-    if (result.error) throw result.error;
-    theatreIdMap.set(theatre, result.data.id);
-  }
-
-  const uniqueFilms = new Map();
-  for (const theatre of state.data.theatreGroups) {
-    for (const film of theatre.films) {
-      const key = buildFilmUniqKey(film);
-      if (!uniqueFilms.has(key)) uniqueFilms.set(key, film);
-    }
-  }
-
-  const filmIdByKey = new Map();
-  for (const [key, film] of uniqueFilms.entries()) {
-    const result = await supabase
-      .from("films")
-      .insert({
-        title: film.title,
-        year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
-        tmdb_id: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
-        ticket_link: "",
-        tmdb_json: film.tmdb || null,
-      })
-      .select("id")
-      .single();
-    if (result.error) throw result.error;
-    filmIdByKey.set(key, result.data.id);
-  }
-
-  const showingRows = [];
-  const theatreFilmRows = [];
-  for (const theatre of state.data.theatreGroups) {
-    const theatreId = theatreIdMap.get(theatre);
-    for (const film of theatre.films) {
-      const filmKey = buildFilmUniqKey(film);
-      const filmId = filmIdByKey.get(filmKey);
-      theatreFilmRows.push({
-        theatre_id: theatreId,
-        film_id: filmId,
-        ticket_link: film.ticketLink,
-      });
-      for (const showing of film.showings) {
-        showingRows.push({
-          theatre_id: theatreId,
-          film_id: filmId,
-          show_date: showing.date,
-          times: Array.from(new Set(showing.times)).sort(compareTimes),
-        });
-      }
-    }
-  }
-
-  if (theatreFilmRows.length) {
-    const insertTheatreFilms = await supabase.from("theatre_films").insert(theatreFilmRows);
-    if (insertTheatreFilms.error) throw insertTheatreFilms.error;
-  }
-
-  if (showingRows.length) {
-    const insertShowings = await supabase.from("showings").insert(showingRows);
-    if (insertShowings.error) throw insertShowings.error;
-  }
+  const payload = buildReplacePayload(state.data);
+  const rpc = await supabase.rpc("replace_showtimes_data", { payload });
+  if (rpc.error) throw rpc.error;
 }
 
 async function verifySupabaseSchema(supabase) {
@@ -1126,6 +1066,66 @@ function buildFilmUniqKey(film) {
     Number.isInteger(Number(film.year)) ? Number(film.year) : "",
     Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : "",
   ].join("::");
+}
+
+function buildReplacePayload(data) {
+  const theatres = [];
+  const films = [];
+  const theatreFilms = [];
+  const showings = [];
+
+  const filmKeyByUniq = new Map();
+  let theatreCounter = 0;
+  let filmCounter = 0;
+
+  data.theatreGroups.forEach((theatre) => {
+    const theatreKey = `t_${theatreCounter++}`;
+    theatres.push({
+      key: theatreKey,
+      name: theatre.name,
+      city: theatre.city,
+      address: theatre.address,
+      website: theatre.website,
+    });
+
+    (theatre.films || []).forEach((film) => {
+      const uniq = buildFilmUniqKey(film);
+      let filmKey = filmKeyByUniq.get(uniq);
+      if (!filmKey) {
+        filmKey = `f_${filmCounter++}`;
+        filmKeyByUniq.set(uniq, filmKey);
+        films.push({
+          key: filmKey,
+          title: film.title,
+          year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
+          tmdb_id: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
+          tmdb_json: film.tmdb || null,
+        });
+      }
+
+      theatreFilms.push({
+        theatre_key: theatreKey,
+        film_key: filmKey,
+        ticket_link: film.ticketLink || "",
+      });
+
+      (film.showings || []).forEach((showing) => {
+        showings.push({
+          theatre_key: theatreKey,
+          film_key: filmKey,
+          show_date: showing.date,
+          times: Array.from(new Set(showing.times || [])).sort(compareTimes),
+        });
+      });
+    });
+  });
+
+  return {
+    theatres,
+    films,
+    theatre_films: theatreFilms,
+    showings,
+  };
 }
 
 function stripInternalFields(data) {

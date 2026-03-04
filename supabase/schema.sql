@@ -82,3 +82,101 @@ create policy "Auth write showings" on public.showings
 for all to authenticated
 using (true)
 with check (true);
+
+create or replace function public.replace_showtimes_data(payload jsonb)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  theatre_item jsonb;
+  film_item jsonb;
+  theatre_film_item jsonb;
+  showing_item jsonb;
+  theatre_id_map jsonb := '{}'::jsonb;
+  film_id_map jsonb := '{}'::jsonb;
+  theatre_id bigint;
+  film_id bigint;
+  theatre_key text;
+  film_key text;
+begin
+  if auth.role() <> 'authenticated' then
+    raise exception 'Not authorized';
+  end if;
+
+  if payload is null then
+    raise exception 'Payload is required';
+  end if;
+
+  delete from public.showings;
+  delete from public.theatre_films;
+  delete from public.theatres;
+  delete from public.films;
+
+  for theatre_item in
+    select value from jsonb_array_elements(coalesce(payload->'theatres', '[]'::jsonb))
+  loop
+    insert into public.theatres (name, city, address, website)
+    values (
+      coalesce(theatre_item->>'name', ''),
+      coalesce(theatre_item->>'city', ''),
+      coalesce(theatre_item->>'address', ''),
+      coalesce(theatre_item->>'website', '')
+    )
+    returning id into theatre_id;
+
+    theatre_key := theatre_item->>'key';
+    theatre_id_map := theatre_id_map || jsonb_build_object(theatre_key, theatre_id);
+  end loop;
+
+  for film_item in
+    select value from jsonb_array_elements(coalesce(payload->'films', '[]'::jsonb))
+  loop
+    insert into public.films (title, year, tmdb_id, ticket_link, tmdb_json)
+    values (
+      coalesce(film_item->>'title', ''),
+      nullif(film_item->>'year', '')::integer,
+      nullif(film_item->>'tmdb_id', '')::bigint,
+      '',
+      film_item->'tmdb_json'
+    )
+    returning id into film_id;
+
+    film_key := film_item->>'key';
+    film_id_map := film_id_map || jsonb_build_object(film_key, film_id);
+  end loop;
+
+  for theatre_film_item in
+    select value from jsonb_array_elements(coalesce(payload->'theatre_films', '[]'::jsonb))
+  loop
+    theatre_id := nullif(theatre_id_map->>(theatre_film_item->>'theatre_key'), '')::bigint;
+    film_id := nullif(film_id_map->>(theatre_film_item->>'film_key'), '')::bigint;
+
+    if theatre_id is not null and film_id is not null then
+      insert into public.theatre_films (theatre_id, film_id, ticket_link)
+      values (theatre_id, film_id, coalesce(theatre_film_item->>'ticket_link', ''));
+    end if;
+  end loop;
+
+  for showing_item in
+    select value from jsonb_array_elements(coalesce(payload->'showings', '[]'::jsonb))
+  loop
+    theatre_id := nullif(theatre_id_map->>(showing_item->>'theatre_key'), '')::bigint;
+    film_id := nullif(film_id_map->>(showing_item->>'film_key'), '')::bigint;
+
+    if theatre_id is not null and film_id is not null then
+      insert into public.showings (theatre_id, film_id, show_date, times)
+      values (
+        theatre_id,
+        film_id,
+        (showing_item->>'show_date')::date,
+        array(select jsonb_array_elements_text(coalesce(showing_item->'times', '[]'::jsonb)))
+      );
+    end if;
+  end loop;
+end;
+$$;
+
+revoke all on function public.replace_showtimes_data(jsonb) from public;
+grant execute on function public.replace_showtimes_data(jsonb) to authenticated;
