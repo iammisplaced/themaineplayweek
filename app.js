@@ -1364,10 +1364,6 @@ function render() {
 
   if (state.view === "films") {
     entries.sort(([, groupA], [, groupB]) => {
-      const earliestA = getEarliestGroupShowtime(groupA);
-      const earliestB = getEarliestGroupShowtime(groupB);
-      if (earliestA !== earliestB) return earliestA - earliestB;
-
       const titleA = groupA?.filmInfo?.film || "";
       const titleB = groupB?.filmInfo?.film || "";
       const normalizedCompare = normalizeSortTitle(titleA).localeCompare(normalizeSortTitle(titleB));
@@ -1443,9 +1439,6 @@ function render() {
 
     shows.sort((a, b) => {
       if (state.view === "theatres") {
-        const earliestA = getEarliestShowtimeForRow(a);
-        const earliestB = getEarliestShowtimeForRow(b);
-        if (earliestA !== earliestB) return earliestA - earliestB;
         return buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
       }
       if (state.view === "days") {
@@ -1566,28 +1559,6 @@ function normalizeSortTitle(value) {
     .replace(/^[^A-Za-z0-9]+/, "")
     .replace(/^the\s+/i, "")
     .toLowerCase();
-}
-
-function getEarliestGroupShowtime(group) {
-  let earliest = Number.POSITIVE_INFINITY;
-  (group?.shows || []).forEach((show) => {
-    const rowEarliest = getEarliestShowtimeForRow(show);
-    if (rowEarliest < earliest) earliest = rowEarliest;
-  });
-  return earliest;
-}
-
-function getEarliestShowtimeForRow(show) {
-  let earliest = Number.POSITIVE_INFINITY;
-  Object.entries(show?.dates || {}).forEach(([date, times]) => {
-    (times || []).forEach((time) => {
-      const dateTime = getShowDateTime(date, time);
-      if (!dateTime) return;
-      const timestamp = dateTime.getTime();
-      if (timestamp < earliest) earliest = timestamp;
-    });
-  });
-  return earliest;
 }
 
 function buildGroups(theatres, view) {
