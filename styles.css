@@ -399,6 +399,10 @@ button:not(.ghost-btn):hover,
   background: #fffaf3;
 }
 
+.show-schedule-row + .show-schedule-collapse {
+  margin-top: 0.35rem;
+}
+
 .show-schedule-collapse + .show-schedule-collapse {
   margin-top: 0.35rem;
 }
@@ -418,17 +422,46 @@ button:not(.ghost-btn):hover,
 }
 
 .admin-panel {
-  margin-top: 1.5rem;
+  position: fixed;
+  top: max(0.45rem, var(--page-top-space));
+  right: 0.65rem;
+  width: min(560px, calc(100vw - 1.3rem));
+  max-height: calc(100vh - max(0.9rem, calc(var(--page-top-space) * 2)));
+  overflow: auto;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: #fff;
+  background: rgba(255, 255, 255, 0.98);
   padding: 1rem;
+  box-shadow: 0 22px 44px rgba(29, 31, 31, 0.24);
+  transform: translateX(calc(100% + 1rem));
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 220ms ease, opacity 180ms ease;
+  z-index: 95;
+}
+
+.admin-panel.open {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .admin-toggle-row {
   margin-top: 1.2rem;
   display: flex;
   justify-content: center;
+}
+
+.site-meta {
+  margin-top: 1.4rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.site-meta p {
+  margin: 0;
 }
 
 .admin-panel label {
@@ -670,5 +703,15 @@ body.no-scroll {
   .brand-logo:focus-visible,
   .brand-logo.is-armed {
     width: min(220px, 78vw);
+  }
+
+  .admin-panel {
+    top: 0.35rem;
+    right: 0.35rem;
+    width: calc(100vw - 0.7rem);
+    max-height: calc(100vh - 0.7rem);
+    border-radius: 12px;
+    padding: 0.85rem;
+    transform: translateX(calc(100% + 0.6rem));
   }
 }

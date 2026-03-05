@@ -182,7 +182,7 @@ function bindEvents() {
   });
 
   elements.adminToggle.addEventListener("click", () => {
-    const open = elements.adminPanel.classList.toggle("hidden") === false;
+    const open = elements.adminPanel.classList.toggle("open");
     elements.adminToggle.setAttribute("aria-expanded", String(open));
     elements.adminMessage.textContent = "";
     if (open) {
