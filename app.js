@@ -14,6 +14,10 @@ const state = {
   data: { theatreGroups: [] },
   view: "films",
   source: "json",
+  publicSearch: {
+    films: "",
+    theatres: "",
+  },
   supabase: null,
   admin: {
     theatreIndex: 0,
@@ -37,6 +41,8 @@ const state = {
 const elements = {
   brandLogo: document.querySelector(".brand-logo"),
   controls: document.querySelector(".controls"),
+  publicSearchWrap: document.getElementById("publicSearchWrap"),
+  publicSearchInput: document.getElementById("publicSearchInput"),
   results: document.getElementById("results"),
   posterLightbox: document.getElementById("posterLightbox"),
   posterLightboxImage: document.getElementById("posterLightboxImage"),
@@ -105,6 +111,7 @@ async function init() {
   initializeAdminState();
   loadAdminSettings();
   syncAdminEditor();
+  syncPublicSearchUI();
   render();
 }
 
@@ -177,8 +184,19 @@ function bindEvents() {
         button.classList.toggle("active", selected);
         button.setAttribute("aria-selected", String(selected));
       });
+      syncPublicSearchUI();
       render();
     });
+  });
+
+  elements.publicSearchInput?.addEventListener("input", () => {
+    const value = elements.publicSearchInput.value || "";
+    if (state.view === "films") {
+      state.publicSearch.films = value;
+    } else if (state.view === "theatres") {
+      state.publicSearch.theatres = value;
+    }
+    render();
   });
 
   elements.adminToggle.addEventListener("click", () => {
@@ -1323,7 +1341,22 @@ function render() {
   elements.results.innerHTML = "";
   const cards = [];
 
-  const entries = Object.entries(grouped);
+  let entries = Object.entries(grouped);
+  const searchQuery = getPublicSearchQueryForView(state.view);
+  if (searchQuery) {
+    if (state.view === "films") {
+      entries = entries.filter(([, group]) => normalizeSearchText(group?.filmInfo?.film).includes(searchQuery));
+    } else if (state.view === "theatres") {
+      entries = entries.filter(([groupName, group]) => {
+        const theatreName = group?.theatreInfo?.name || groupName;
+        const theatreCity = group?.theatreInfo?.city || "";
+        return (
+          normalizeSearchText(theatreName).includes(searchQuery) ||
+          normalizeSearchText(theatreCity).includes(searchQuery)
+        );
+      });
+    }
+  }
   if (!entries.length) {
     elements.results.innerHTML = '<div class="empty-state">No showtimes found.</div>';
     return;
@@ -1495,6 +1528,36 @@ function getMasonryColumnCount() {
   const width = elements.results.clientWidth;
   if (!width) return 1;
   return Math.max(1, Math.floor((width + MASONRY_GAP_PX) / (MASONRY_MIN_COLUMN_WIDTH + MASONRY_GAP_PX)));
+}
+
+function syncPublicSearchUI() {
+  if (!elements.publicSearchWrap || !elements.publicSearchInput) return;
+  if (state.view === "films") {
+    elements.publicSearchWrap.classList.remove("hidden");
+    elements.publicSearchInput.placeholder = "Search films...";
+    elements.publicSearchInput.value = state.publicSearch.films;
+    return;
+  }
+  if (state.view === "theatres") {
+    elements.publicSearchWrap.classList.remove("hidden");
+    elements.publicSearchInput.placeholder = "Search theatres or town...";
+    elements.publicSearchInput.value = state.publicSearch.theatres;
+    return;
+  }
+  elements.publicSearchWrap.classList.add("hidden");
+  elements.publicSearchInput.value = "";
+}
+
+function getPublicSearchQueryForView(view) {
+  if (view === "films") return normalizeSearchText(state.publicSearch.films);
+  if (view === "theatres") return normalizeSearchText(state.publicSearch.theatres);
+  return "";
+}
+
+function normalizeSearchText(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase();
 }
 
 function normalizeSortTitle(value) {
