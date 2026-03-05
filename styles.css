@@ -9,6 +9,7 @@
   --radius: 14px;
   --sticky-logo-size: clamp(48px, 6vw, 62px);
   --controls-stick-progress: 0;
+  --page-top-space: 2rem;
 }
 
 * {
@@ -17,7 +18,7 @@
 
 body {
   margin: 0;
-  padding: 2rem 1rem 3rem;
+  padding: var(--page-top-space) 1rem 3rem;
   font-family: "IBM Plex Sans", sans-serif;
   background:
     radial-gradient(circle at top right, #e7d9c2 0%, transparent 45%),
@@ -50,19 +51,60 @@ main,
 }
 
 .brand-logo {
-  width: var(--sticky-logo-size);
-  height: auto;
-  object-fit: contain;
+  box-sizing: border-box;
+  width: calc(var(--sticky-logo-size) + 0.64rem);
+  height: calc(var(--sticky-logo-size) + 0.64rem);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.48rem;
+  overflow: hidden;
+  white-space: nowrap;
   padding: 0.32rem;
   border-radius: 999px;
   border: 1px solid rgba(214, 209, 200, calc(1 * var(--controls-stick-progress)));
   background: rgba(255, 254, 249, calc(0.96 * var(--controls-stick-progress)));
-  box-shadow: 0 8px 18px rgba(29, 31, 31, calc(0.08 * var(--controls-stick-progress)));
-  transition: background 140ms linear, border-color 140ms linear, box-shadow 140ms linear;
+  box-shadow: 0 10px 20px rgba(29, 31, 31, calc(0.12 * var(--controls-stick-progress)));
+  text-decoration: none;
+  color: var(--accent-2);
+  transition: background 140ms linear, border-color 140ms linear, box-shadow 140ms linear, width 320ms ease;
   position: fixed;
-  top: 0.5rem;
+  top: var(--page-top-space);
   right: max(1rem, calc((100vw - 1024px) / 2));
   z-index: 40;
+}
+
+.brand-logo:hover,
+.brand-logo:focus-visible {
+  width: clamp(188px, 22vw, 228px);
+}
+
+.brand-logo:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+.brand-logo-mark {
+  width: var(--sticky-logo-size);
+  height: var(--sticky-logo-size);
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.brand-logo-text {
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateX(8px);
+  transition: opacity 220ms ease, transform 320ms ease;
+  pointer-events: none;
+}
+
+.brand-logo:hover .brand-logo-text,
+.brand-logo:focus-visible .brand-logo-text {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 h1,
@@ -89,7 +131,7 @@ h1 {
 
 .controls {
   position: sticky;
-  top: 0;
+  top: var(--page-top-space);
   z-index: 30;
   margin-bottom: 1rem;
   min-height: calc(var(--sticky-logo-size) + 0.95rem);
@@ -109,7 +151,7 @@ h1 {
   border: 1px solid rgba(214, 209, 200, calc(1 * var(--controls-stick-progress)));
   border-radius: 999px;
   background: rgba(255, 254, 249, calc(0.96 * var(--controls-stick-progress)));
-  box-shadow: 0 8px 18px rgba(29, 31, 31, calc(0.08 * var(--controls-stick-progress)));
+  box-shadow: 0 10px 20px rgba(29, 31, 31, calc(0.12 * var(--controls-stick-progress)));
   transition: background 140ms linear, border-color 140ms linear, box-shadow 140ms linear;
 }
 
@@ -559,6 +601,11 @@ textarea {
 }
 
 @media (max-width: 640px) {
+  :root {
+    --sticky-logo-size: 44px;
+    --page-top-space: 1.2rem;
+  }
+
   body {
     padding-top: 1.2rem;
   }
@@ -578,8 +625,12 @@ textarea {
   }
 
   .brand-logo {
-    width: 44px;
-    top: 0.4rem;
+    top: var(--page-top-space);
     right: 1rem;
+  }
+
+  .brand-logo:hover,
+  .brand-logo:focus-visible {
+    width: min(220px, 78vw);
   }
 }
