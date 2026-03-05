@@ -312,7 +312,20 @@ function bindEvents() {
     if (!requireAdminAuth()) return;
     const film = getSelectedFilm();
     if (!film) return;
-    film.ticketLink = normalizeOutboundUrl(elements.selectedTicketLinkInput.value.trim());
+    const rawValue = elements.selectedTicketLinkInput.value.trim();
+    const normalizedValue = normalizeOutboundUrl(rawValue);
+    const existingValue = normalizeOutboundUrl(film.ticketLink || "");
+    if (!rawValue && existingValue) {
+      const confirmed = window.confirm(
+        "This will clear the existing ticket link for this theatre + film. Continue?"
+      );
+      if (!confirmed) {
+        elements.selectedTicketLinkInput.value = film.ticketLink || "";
+        elements.adminMessage.textContent = "Ticket link clear cancelled.";
+        return;
+      }
+    }
+    film.ticketLink = normalizedValue;
     syncAdminEditor();
     elements.adminMessage.textContent = "Saved ticket link for selected theatre + film.";
   });
