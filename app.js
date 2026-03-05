@@ -1433,6 +1433,7 @@ function render() {
     if (state.view === "days") {
       groupTitle.textContent = formatDisplayDate(groupName);
     } else if (state.view === "films" && group.filmInfo) {
+      card.classList.add("film-card");
       groupTitle.textContent = group.filmInfo.film;
       groupTitle.classList.add("group-title-film");
     } else {

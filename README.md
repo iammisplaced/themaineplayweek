@@ -15,6 +15,14 @@ Data now supports Supabase as the primary backend, with JSON/local fallback.
 - `supabase/schema.sql` - Supabase tables + RLS policies
 - `scripts/enrich-tmdb.mjs` - TMDb metadata enrichment script (local/offline workflow)
 
+## Revert note (film card newspaper style)
+- The "torn newspaper" film card treatment touches:
+  - `styles.css` (`.group-card.film-card` block and related pseudo-elements)
+  - `app.js` (adds `film-card` class in `render()` for films view cards)
+- Fast rollback target (last commit before newspaper styling): `57c0f2a`
+- To restore pre-newspaper look quickly:
+  - `git checkout 57c0f2a -- app.js styles.css`
+
 ## Run locally
 
 ```bash
