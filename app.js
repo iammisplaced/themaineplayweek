@@ -1439,6 +1439,9 @@ function render() {
 
     shows.sort((a, b) => {
       if (state.view === "theatres") {
+        const earliestA = getRowEarliestShowtimeTimestamp(a);
+        const earliestB = getRowEarliestShowtimeTimestamp(b);
+        if (earliestA !== earliestB) return earliestA - earliestB;
         return buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
       }
       if (state.view === "days") {
@@ -1459,7 +1462,7 @@ function render() {
 
       if (state.view === "theatres") {
         main.textContent = filmLabel;
-        meta.textContent = `${show.city}`;
+        meta.textContent = "";
         renderSchedule(schedule, show.dates);
       } else if (state.view === "days") {
         main.textContent = filmLabel;
@@ -1559,6 +1562,19 @@ function normalizeSortTitle(value) {
     .replace(/^[^A-Za-z0-9]+/, "")
     .replace(/^the\s+/i, "")
     .toLowerCase();
+}
+
+function getRowEarliestShowtimeTimestamp(row) {
+  let earliest = Number.POSITIVE_INFINITY;
+  Object.entries(row?.dates || {}).forEach(([date, times]) => {
+    (times || []).forEach((time) => {
+      const dateTime = getShowDateTime(date, time);
+      if (!dateTime) return;
+      const value = dateTime.getTime();
+      if (value < earliest) earliest = value;
+    });
+  });
+  return earliest;
 }
 
 function buildGroups(theatres, view) {
