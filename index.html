@@ -14,11 +14,15 @@
   </head>
   <body>
     <header class="site-header">
-      <div>
-        <p class="eyebrow">The Maine Playweek</p>
-        <h1>Maine Showtimes</h1>
+      <div class="brand-wordmark-wrap">
+        <img
+          class="brand-wordmark"
+          src="TMP Wordmark Three Line Dark.png"
+          alt="The Maine Playweek"
+        />
+        <h1 class="visually-hidden">Maine Showtimes</h1>
       </div>
-      <button id="adminToggle" class="ghost-btn" aria-expanded="false">Admin</button>
+      <img class="brand-logo" src="TMP logo dark.png" alt="" aria-hidden="true" />
     </header>
 
     <main>
@@ -31,6 +35,10 @@
       </section>
 
       <section id="results" class="results" aria-live="polite"></section>
+
+      <section class="admin-toggle-row" aria-label="Admin access">
+        <button id="adminToggle" class="ghost-btn" aria-expanded="false">Admin</button>
+      </section>
 
       <section id="adminPanel" class="admin-panel hidden" aria-label="Admin panel">
         <h2>Admin</h2>
