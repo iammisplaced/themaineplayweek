@@ -488,6 +488,8 @@ button:not(.ghost-btn):hover,
   margin-top: 1.2rem;
   display: flex;
   justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
 }
 
 .site-meta {

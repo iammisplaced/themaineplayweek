@@ -1,0 +1,359 @@
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqZnNqb3JhdHNmcWN5eWpzZXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2Mzc5MDgsImV4cCI6MjA4ODIxMzkwOH0.dmcQ_ffwmm4JIKTjSUNNYLGQ9w_v1mR6VRMZimVnLNg";
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const state = {
+  query: "",
+  films: [],
+  userEmail: "",
+};
+
+const elements = {
+  authGate: document.getElementById("authGate"),
+  catalogApp: document.getElementById("catalogApp"),
+  emailInput: document.getElementById("emailInput"),
+  sendMagicLink: document.getElementById("sendMagicLink"),
+  logout: document.getElementById("logout"),
+  refreshCatalog: document.getElementById("refreshCatalog"),
+  filmSearch: document.getElementById("filmSearch"),
+  summary: document.getElementById("summary"),
+  catalogList: document.getElementById("catalogList"),
+  authStatus: document.getElementById("authStatus"),
+  status: document.getElementById("status"),
+};
+
+await init();
+
+async function init() {
+  bindEvents();
+
+  supabase.auth.onAuthStateChange(async (_event, session) => {
+    state.userEmail = session?.user?.email || "";
+    updateAuthUI(Boolean(session?.user));
+    await loadCatalog();
+  });
+
+  const { data } = await supabase.auth.getSession();
+  const authed = Boolean(data.session?.user);
+  state.userEmail = data.session?.user?.email || "";
+  updateAuthUI(authed);
+  await loadCatalog();
+}
+
+function bindEvents() {
+  elements.sendMagicLink.addEventListener("click", async () => {
+    const email = elements.emailInput.value.trim();
+    if (!email) {
+      setStatus("Enter your email first.");
+      return;
+    }
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: window.location.origin + window.location.pathname,
+      },
+    });
+    if (error) {
+      setStatus(`Magic link failed: ${error.message}`);
+      return;
+    }
+    setStatus("Magic link sent. Check your email.");
+  });
+
+  elements.logout.addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    setStatus("Logged out.");
+  });
+
+  elements.refreshCatalog.addEventListener("click", async () => {
+    await loadCatalog();
+  });
+
+  elements.filmSearch.addEventListener("input", () => {
+    state.query = normalize(elements.filmSearch.value);
+    renderCatalog();
+  });
+}
+
+function updateAuthUI(authed) {
+  elements.authGate.classList.toggle("hidden", authed);
+  elements.catalogApp.classList.remove("hidden");
+  elements.authStatus.textContent = authed
+    ? `Signed in as ${state.userEmail}`
+    : "Viewing read-only catalog (not signed in).";
+  elements.logout.disabled = !authed;
+}
+
+async function loadCatalog() {
+  try {
+    setStatus("Loading film catalog...");
+
+    setStatus("Loading films table...");
+    const filmsResult = await runWithTimeout(
+      supabase.from("films").select("id,title,year,tmdb_id,tmdb_json").order("title"),
+      "films"
+    );
+    if (filmsResult.error) {
+      setStatus(`Load failed (films): ${filmsResult.error.message}`);
+      return;
+    }
+
+    const warnings = [];
+
+    setStatus("Loading theatres table...");
+    const theatresResult = await runWithTimeout(
+      supabase.from("theatres").select("id,name,city").order("name"),
+      "theatres"
+    );
+    if (theatresResult.error) warnings.push(`theatres: ${theatresResult.error.message}`);
+
+    setStatus("Loading theatre-film links...");
+    const theatreFilmsResult = await runWithTimeout(
+      supabase.from("theatre_films").select("theatre_id,film_id,ticket_link"),
+      "theatre_films"
+    );
+    if (theatreFilmsResult.error) warnings.push(`theatre_films: ${theatreFilmsResult.error.message}`);
+
+    setStatus("Loading showings table...");
+    const showingsResult = await runWithTimeout(
+      supabase.from("showings").select("theatre_id,film_id,show_date,times").order("show_date"),
+      "showings"
+    );
+    if (showingsResult.error) warnings.push(`showings: ${showingsResult.error.message}`);
+
+    state.films = buildCatalogRows(
+      filmsResult.data || [],
+      theatresResult.data || [],
+      theatreFilmsResult.data || [],
+      showingsResult.data || []
+    );
+
+    renderSummary();
+    renderCatalog();
+    if (warnings.length) {
+      setStatus(`Loaded ${state.films.length} films with warnings: ${warnings.join(" | ")}`);
+    } else {
+      setStatus(`Loaded ${state.films.length} films.`);
+    }
+  } catch (error) {
+    setStatus(`Load error: ${error.message}`);
+  }
+}
+
+function runWithTimeout(promise, label, timeoutMs = 12000) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      setTimeout(() => {
+        reject(new Error(`${label} query timed out after ${timeoutMs / 1000}s`));
+      }, timeoutMs);
+    }),
+  ]);
+}
+
+function buildCatalogRows(films, theatres, theatreFilms, showings) {
+  const theatreById = new Map(theatres.map((row) => [String(row.id), row]));
+  const theatreFilmsByFilmId = new Map();
+  const showingsByFilmId = new Map();
+
+  theatreFilms.forEach((row) => {
+    const key = String(row.film_id);
+    if (!theatreFilmsByFilmId.has(key)) theatreFilmsByFilmId.set(key, []);
+    theatreFilmsByFilmId.get(key).push(row);
+  });
+
+  showings.forEach((row) => {
+    const key = String(row.film_id);
+    if (!showingsByFilmId.has(key)) showingsByFilmId.set(key, []);
+    showingsByFilmId.get(key).push(row);
+  });
+
+  return films.map((film) => {
+    const linkRows = theatreFilmsByFilmId.get(String(film.id)) || [];
+    const showingRows = showingsByFilmId.get(String(film.id)) || [];
+
+    const now = new Date();
+    let futureTimes = 0;
+    let totalTimes = 0;
+
+    showingRows.forEach((showing) => {
+      (showing.times || []).forEach((time) => {
+        totalTimes += 1;
+        const dateTime = getShowDateTime(showing.show_date, time);
+        if (dateTime && dateTime >= now) {
+          futureTimes += 1;
+        }
+      });
+    });
+
+    const links = linkRows.map((row) => {
+      const theatre = theatreById.get(String(row.theatre_id));
+      return {
+        theatreName: theatre?.name || `Theatre ${row.theatre_id}`,
+        theatreCity: theatre?.city || "",
+        ticketLink: String(row.ticket_link || "").trim(),
+      };
+    });
+
+    links.sort((a, b) => `${a.theatreName} ${a.theatreCity}`.localeCompare(`${b.theatreName} ${b.theatreCity}`));
+
+    return {
+      id: film.id,
+      title: film.title,
+      year: film.year,
+      tmdbId: film.tmdb_id,
+      tmdb: film.tmdb_json || {},
+      totalTimes,
+      futureTimes,
+      links,
+      showings: showingRows,
+      raw: {
+        film,
+        theatre_films: linkRows,
+        showings: showingRows,
+      },
+    };
+  });
+}
+
+function renderSummary() {
+  const total = state.films.length;
+  const withFuture = state.films.filter((film) => film.futureTimes > 0).length;
+  const withoutFuture = total - withFuture;
+  const withAnyTicketLinks = state.films.filter((film) => film.links.some((entry) => entry.ticketLink)).length;
+
+  elements.summary.innerHTML = `
+    <strong>${total}</strong> films total
+    <br />
+    <strong>${withFuture}</strong> with upcoming showtimes, <strong>${withoutFuture}</strong> without upcoming showtimes
+    <br />
+    <strong>${withAnyTicketLinks}</strong> with at least one ticket link
+  `;
+}
+
+function renderCatalog() {
+  const filtered = state.films.filter((film) => normalize(film.title).includes(state.query));
+  elements.catalogList.innerHTML = "";
+
+  if (!filtered.length) {
+    elements.catalogList.innerHTML = '<section class="panel">No films match your search.</section>';
+    return;
+  }
+
+  const table = document.createElement("table");
+  table.className = "catalog-table";
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Year</th>
+        <th>TMDb</th>
+        <th>Status</th>
+        <th>Upcoming</th>
+        <th>Total</th>
+        <th>Ticket Links</th>
+        <th>Director</th>
+        <th>Starring</th>
+        <th>Genre</th>
+        <th>DB Rows</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  `;
+
+  const tbody = table.querySelector("tbody");
+  filtered.forEach((film) => {
+    const tmdb = film.tmdb || {};
+    const director = String(tmdb.director || "").trim();
+    const stars = Array.isArray(tmdb.stars) ? tmdb.stars.filter(Boolean) : [];
+    const genres = Array.isArray(tmdb.genres) ? tmdb.genres.filter(Boolean) : [];
+    const statusClass = film.futureTimes > 0 ? "badge badge-on" : "badge badge-off";
+    const statusText = film.futureTimes > 0 ? "Showing" : "No upcoming";
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td><strong>${escapeHtml(film.title || "")}</strong></td>
+      <td>${Number.isInteger(Number(film.year)) ? Number(film.year) : ""}</td>
+      <td>${Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : ""}</td>
+      <td><span class="${statusClass}">${statusText}</span></td>
+      <td>${film.futureTimes}</td>
+      <td>${film.totalTimes}</td>
+      <td>${film.links.filter((entry) => entry.ticketLink).length}/${film.links.length}</td>
+      <td>${escapeHtml(director)}</td>
+      <td>${escapeHtml(stars.join(", "))}</td>
+      <td>${escapeHtml(genres.join(", "))}</td>
+      <td>
+        <details>
+          <summary>View</summary>
+          <pre>${escapeHtml(JSON.stringify(film.raw, null, 2))}</pre>
+        </details>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+
+  const wrap = document.createElement("div");
+  wrap.className = "table-wrap panel";
+  wrap.appendChild(table);
+  elements.catalogList.appendChild(wrap);
+}
+
+function normalize(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase();
+}
+
+function setStatus(message) {
+  elements.status.textContent = message;
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function getShowDateTime(dateIso, time12Hour) {
+  const hhmm = to24HourTime(time12Hour);
+  if (!hhmm) return null;
+  const date = parseIsoDate(dateIso);
+  if (!date) return null;
+  const [hours, minutes] = hhmm.split(":").map(Number);
+  const next = new Date(date);
+  next.setHours(hours, minutes, 0, 0);
+  return next;
+}
+
+function to24HourTime(time12Hour) {
+  const value = String(time12Hour || "").trim().toUpperCase();
+  const match = value.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/);
+  if (!match) return "";
+  let hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  const period = match[3];
+  if (hours === 12) hours = 0;
+  if (period === "PM") hours += 12;
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+}
+
+function parseIsoDate(dateIso) {
+  const match = String(dateIso || "").trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(year, month - 1, day);
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+    return null;
+  }
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
