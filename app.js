@@ -886,11 +886,11 @@ function renderTheatreOptions() {
   if (!theatres.length) return;
   if (!state.admin.theatreSearching) return;
 
-  const query = state.admin.theatreQuery.trim().toLowerCase();
+  const query = normalizeSearchText(state.admin.theatreQuery);
   let visibleCount = 0;
   theatres.forEach((theatre, index) => {
     const label = theatre.name || `Theatre ${index + 1}`;
-    if (query && !label.toLowerCase().includes(query)) return;
+    if (query && !normalizeSearchText(label).includes(query)) return;
     const highlightIndex = state.admin.theatreHighlight;
     const li = document.createElement("li");
     const button = document.createElement("button");
@@ -919,11 +919,11 @@ function renderFilmOptions() {
   elements.adminFilmResults.innerHTML = "";
   const hasFilm = films.length > 0;
   if (hasFilm && state.admin.filmSearching) {
-    const query = state.admin.filmQuery.trim().toLowerCase();
+    const query = normalizeSearchText(state.admin.filmQuery);
     let visibleCount = 0;
     films.forEach((film, index) => {
       const label = buildFilmGroupKey(film.title, film.year);
-      if (query && !label.toLowerCase().includes(query)) return;
+      if (query && !normalizeSearchText(label).includes(query)) return;
       const highlightIndex = state.admin.filmHighlight;
       const li = document.createElement("li");
       const button = document.createElement("button");
@@ -1102,9 +1102,7 @@ function filmsMatch(a, b) {
 }
 
 function normalizeFilmTitle(value) {
-  return String(value || "")
-    .trim()
-    .toLowerCase();
+  return normalizeSearchText(value);
 }
 
 function findFilmIndex(films, targetFilm) {
@@ -1601,9 +1599,15 @@ function getPublicSearchQueryForView(view) {
 }
 
 function normalizeSearchText(value) {
-  return String(value || "")
+  return stripDiacritics(value)
     .trim()
     .toLowerCase();
+}
+
+function stripDiacritics(value) {
+  const text = String(value || "");
+  if (typeof text.normalize !== "function") return text;
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function normalizeSortTitle(value) {

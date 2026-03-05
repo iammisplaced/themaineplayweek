@@ -303,9 +303,15 @@ function renderCatalog() {
 }
 
 function normalize(value) {
-  return String(value || "")
+  return stripDiacritics(value)
     .trim()
     .toLowerCase();
+}
+
+function stripDiacritics(value) {
+  const text = String(value || "");
+  if (typeof text.normalize !== "function") return text;
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function setStatus(message) {
