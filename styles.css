@@ -39,7 +39,7 @@ main,
 }
 
 .brand-wordmark-wrap {
-  max-width: min(300px, 58vw);
+  max-width: min(270px, 52vw);
 }
 
 .brand-wordmark {
@@ -696,7 +696,7 @@ body.no-scroll {
   }
 
   .brand-wordmark-wrap {
-    max-width: min(240px, 56vw);
+    max-width: min(220px, 52vw);
   }
 
   .controls {
