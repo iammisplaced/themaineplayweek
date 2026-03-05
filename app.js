@@ -86,6 +86,7 @@ const elements = {
 };
 
 let resizeRenderTimeout = null;
+let lastViewportWidth = window.innerWidth;
 
 await init();
 
@@ -114,6 +115,10 @@ function initializeSupabase() {
 
 function bindEvents() {
   window.addEventListener("resize", () => {
+    const currentWidth = window.innerWidth;
+    if (currentWidth === lastViewportWidth) return;
+    lastViewportWidth = currentWidth;
+
     clearTimeout(resizeRenderTimeout);
     resizeRenderTimeout = setTimeout(() => {
       render();
