@@ -5,6 +5,7 @@ const STORAGE_KEY = "showtimes-local-edit";
 const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
 const MASONRY_MIN_COLUMN_WIDTH = 280;
 const MASONRY_GAP_PX = 16;
+const SUBSTACK_ARCHIVE_URL = "https://themaineplayweek.substack.com/api/v1/archive?sort=new";
 
 const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
 const SUPABASE_ANON_KEY =
@@ -42,6 +43,12 @@ const elements = {
   controls: document.querySelector(".controls"),
   publicSearchWrap: document.getElementById("publicSearchWrap"),
   publicSearchInput: document.getElementById("publicSearchInput"),
+  latestPost: document.getElementById("latestPost"),
+  latestPostLink: document.getElementById("latestPostLink"),
+  latestPostImage: document.getElementById("latestPostImage"),
+  latestPostTitle: document.getElementById("latestPostTitle"),
+  latestPostSubtitle: document.getElementById("latestPostSubtitle"),
+  latestPostByline: document.getElementById("latestPostByline"),
   results: document.getElementById("results"),
   posterLightbox: document.getElementById("posterLightbox"),
   posterLightboxImage: document.getElementById("posterLightboxImage"),
@@ -102,6 +109,7 @@ await init();
 async function init() {
   initializeSupabase();
   bindEvents();
+  void loadLatestSubstackPost();
   await refreshAuthState();
   await loadData();
   initializeAdminState();
@@ -109,6 +117,116 @@ async function init() {
   syncAdminEditor();
   syncPublicSearchUI();
   render();
+}
+
+async function loadLatestSubstackPost() {
+  if (!elements.latestPost) return;
+  setLatestPostFallback();
+
+  try {
+    const post = await fetchLatestSubstackPost();
+    if (!post) throw new Error("No posts returned");
+
+    const title = String(post.title || "Latest post on Substack");
+    const link = String(post.canonical_url || "https://themaineplayweek.substack.com");
+    const subtitle = buildSubtitle(post.subtitle || post.description || "");
+    const byline = buildSubstackByline(post);
+    const imageUrl = normalizeSubstackImageUrl(post.cover_image);
+
+    elements.latestPostTitle.textContent = title;
+    elements.latestPostSubtitle.textContent = subtitle || "Read the latest post from The Maine Playweek.";
+    elements.latestPostByline.textContent = byline || "The Maine Playweek";
+    elements.latestPostLink.href = link;
+
+    if (imageUrl) {
+      elements.latestPostImage.src = imageUrl;
+      elements.latestPostImage.alt = `Featured image for ${title}`;
+      elements.latestPostImage.classList.remove("hidden");
+    } else {
+      elements.latestPostImage.classList.add("hidden");
+      elements.latestPostImage.removeAttribute("src");
+      elements.latestPostImage.alt = "";
+    }
+
+    elements.latestPost.classList.remove("hidden");
+  } catch {
+    // Keep fallback content when feed access is blocked.
+  }
+}
+
+function setLatestPostFallback() {
+  elements.latestPostTitle.textContent = "Latest from Substack";
+  elements.latestPostSubtitle.textContent = "Read our newest writing on The Maine Playweek Substack.";
+  elements.latestPostByline.textContent = "themaineplayweek.substack.com";
+  elements.latestPostLink.href = "https://themaineplayweek.substack.com";
+  elements.latestPostImage.classList.add("hidden");
+  elements.latestPostImage.removeAttribute("src");
+  elements.latestPost.classList.remove("hidden");
+}
+
+async function fetchLatestSubstackPost() {
+  const candidates = [
+    `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(SUBSTACK_ARCHIVE_URL)}`,
+    SUBSTACK_ARCHIVE_URL,
+  ];
+
+  let lastError = null;
+  for (const url of candidates) {
+    try {
+      const response = await fetchWithTimeout(url, 4500);
+      if (!response.ok) throw new Error(`Archive request failed (${response.status})`);
+      const posts = await response.json();
+      if (!Array.isArray(posts) || !posts.length) throw new Error("Archive returned no posts");
+      return posts[0];
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError || new Error("Unable to fetch latest Substack post");
+}
+
+async function fetchWithTimeout(url, timeoutMs) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+function buildSubtitle(descriptionHtml) {
+  const plain = stripHtml(descriptionHtml).replace(/\s+/g, " ").trim();
+  if (!plain) return "";
+  return plain.length > 180 ? `${plain.slice(0, 177).trimEnd()}...` : plain;
+}
+
+function buildSubstackByline(post) {
+  const author = "The Maine Playweek";
+  const dateRaw = String(post.post_date || "");
+  if (!dateRaw) return author;
+  const date = new Date(dateRaw);
+  if (Number.isNaN(date.getTime())) return author;
+  const formattedDate = date.toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  return `${author} · ${formattedDate}`;
+}
+
+function normalizeSubstackImageUrl(value) {
+  const url = String(value || "").trim();
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  return "";
+}
+
+function stripHtml(value) {
+  if (!value) return "";
+  const doc = new DOMParser().parseFromString(value, "text/html");
+  return doc.body?.textContent || "";
 }
 
 function initializeSupabase() {
