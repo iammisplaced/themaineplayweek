@@ -35,6 +35,7 @@ const state = {
 };
 
 const elements = {
+  controls: document.querySelector(".controls"),
   results: document.getElementById("results"),
   tabs: Array.from(document.querySelectorAll(".tab")),
   groupTemplate: document.getElementById("groupTemplate"),
@@ -91,6 +92,7 @@ await init();
 async function init() {
   initializeSupabase();
   bindEvents();
+  updateStickyControlsState();
   await refreshAuthState();
   await loadData();
   initializeAdminState();
@@ -117,6 +119,7 @@ function bindEvents() {
       render();
     }, 120);
   });
+  window.addEventListener("scroll", updateStickyControlsState, { passive: true });
 
   elements.tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -519,6 +522,17 @@ function bindEvents() {
     render();
     elements.adminMessage.textContent = "Reset from source data.";
   });
+}
+
+function updateStickyControlsState() {
+  const stickyTop = (elements.controls?.getBoundingClientRect().top || 0) + window.scrollY;
+  let progress = 1;
+  if (stickyTop > 0) {
+    const startFadeAt = stickyTop * 0.75;
+    const fadeDistance = Math.max(1, stickyTop - startFadeAt);
+    progress = Math.min(1, Math.max(0, (window.scrollY - startFadeAt) / fadeDistance));
+  }
+  document.documentElement.style.setProperty("--controls-stick-progress", progress.toFixed(3));
 }
 
 async function refreshAuthState() {
