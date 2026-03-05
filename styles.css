@@ -135,6 +135,9 @@ h1 {
 .controls-substack {
   grid-column: 3;
   justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid var(--border);
   background: var(--panel);
   color: var(--ink);
@@ -145,6 +148,10 @@ h1 {
   text-decoration: none;
   box-shadow: 0 10px 20px rgba(29, 31, 31, 0.12);
   transition: background 140ms linear, border-color 140ms linear;
+}
+
+.controls-substack-icon {
+  display: none;
 }
 
 .controls-substack:hover {
@@ -699,8 +706,35 @@ body.no-scroll {
     flex-wrap: wrap;
   }
 
+  .tabs {
+    order: 1;
+    flex: 0 0 auto;
+  }
+
   .public-search {
+    order: 3;
+    flex-basis: 100%;
     width: 100%;
+  }
+
+  .controls-substack {
+    order: 2;
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 999px;
+  }
+
+  .controls-substack-label {
+    display: none;
+  }
+
+  .controls-substack-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
   }
 
   .brand-logo {

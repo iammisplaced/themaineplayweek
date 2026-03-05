@@ -1862,7 +1862,7 @@ function formatDisplayDate(dateIso) {
   const dayDiff = getDayDifferenceFromToday(date);
   if (dayDiff === 0) return "Today";
   if (dayDiff === 1) return "Tomorrow";
-  if (dayDiff > 1 && dayDiff <= 7) {
+  if (dayDiff > 1 && dayDiff <= 6) {
     return new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(date);
   }
   const showYear = date.getFullYear() !== new Date().getFullYear();
@@ -1871,6 +1871,14 @@ function formatDisplayDate(dateIso) {
     day: "numeric",
     ...(showYear ? { year: "numeric" } : {}),
   }).format(date);
+}
+
+function getDayDifferenceFromToday(targetDate) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const targetDay = Date.UTC(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+  const todayDay = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
+  return Math.round((targetDay - todayDay) / 86400000);
 }
 
 function getShowDateTime(dateIso, time12Hour) {
@@ -1915,14 +1923,6 @@ function parseIsoDate(dateIso) {
   }
   date.setHours(0, 0, 0, 0);
   return date;
-}
-
-function getDayDifferenceFromToday(targetDate) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const targetDay = Date.UTC(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-  const todayDay = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
-  return Math.round((targetDay - todayDay) / 86400000);
 }
 
 async function fetchTmdbMovieById(apiKey, tmdbId) {
