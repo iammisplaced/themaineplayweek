@@ -7,8 +7,6 @@
   --accent-2: #2d5f58;
   --border: #d6d1c8;
   --radius: 14px;
-  --sticky-logo-size: clamp(48px, 6vw, 62px);
-  --controls-stick-progress: 0;
   --page-top-space: 2rem;
 }
 
@@ -51,69 +49,9 @@ main,
 }
 
 .brand-logo {
-  box-sizing: border-box;
-  width: calc(var(--sticky-logo-size) + 0.64rem);
-  height: calc(var(--sticky-logo-size) + 0.64rem);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.48rem;
-  overflow: hidden;
-  white-space: nowrap;
-  padding: 0.32rem;
-  border-radius: 999px;
-  border: 1px solid rgba(214, 209, 200, calc(1 * var(--controls-stick-progress)));
-  background: rgba(255, 254, 249, calc(0.96 * var(--controls-stick-progress)));
-  box-shadow: 0 10px 20px rgba(29, 31, 31, calc(0.12 * var(--controls-stick-progress)));
-  text-decoration: none;
-  color: var(--accent-2);
-  transition: background 140ms linear, border-color 140ms linear, box-shadow 140ms linear, width 320ms ease;
-  position: fixed;
-  top: var(--page-top-space);
-  right: max(1rem, calc((100vw - 1024px) / 2));
-  z-index: 40;
-}
-
-.brand-logo:hover,
-.brand-logo:focus-visible,
-.brand-logo.is-armed {
-  width: clamp(188px, 22vw, 228px);
-  justify-content: flex-end;
-}
-
-.brand-logo:focus-visible {
-  outline: 2px solid var(--accent-2);
-  outline-offset: 2px;
-}
-
-.brand-logo-mark {
-  width: var(--sticky-logo-size);
-  height: var(--sticky-logo-size);
+  width: clamp(48px, 6vw, 62px);
+  height: auto;
   object-fit: contain;
-  object-position: center;
-  flex: 0 0 auto;
-  transform: translateX(-3px);
-}
-
-.brand-logo-text {
-  font-size: 0.92rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  max-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateX(8px);
-  transition: max-width 320ms ease, opacity 220ms ease, transform 320ms ease;
-  pointer-events: none;
-}
-
-.brand-logo:hover .brand-logo-text,
-.brand-logo:focus-visible .brand-logo-text,
-.brand-logo.is-armed .brand-logo-text {
-  max-width: 180px;
-  opacity: 1;
-  transform: translateX(0);
 }
 
 h1,
@@ -143,7 +81,6 @@ h1 {
   top: var(--page-top-space);
   z-index: 30;
   margin-bottom: 1rem;
-  min-height: calc(var(--sticky-logo-size) + 0.95rem);
   padding: 0.45rem 0 0.5rem;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -195,6 +132,26 @@ h1 {
   background: #fff;
 }
 
+.controls-substack {
+  grid-column: 3;
+  justify-self: end;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.5rem 0.95rem;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 20px rgba(29, 31, 31, 0.12);
+  transition: background 140ms linear, border-color 140ms linear;
+}
+
+.controls-substack:hover {
+  border-color: var(--accent);
+  background: #fdece7;
+}
+
 .tab,
 button,
 .upload-label {
@@ -205,6 +162,7 @@ button,
   padding: 0.5rem 0.95rem;
   font: inherit;
   cursor: pointer;
+  transition: background 140ms linear, border-color 140ms linear, transform 140ms ease;
 }
 
 .tab.active,
@@ -212,6 +170,13 @@ button:not(.ghost-btn):hover,
 .upload-label:hover {
   border-color: var(--accent);
   background: #fdece7;
+}
+
+.tab:hover,
+.tab:focus-visible,
+.controls-substack:hover,
+.controls-substack:focus-visible {
+  transform: translateY(-0.5px);
 }
 
 .ghost-btn {
@@ -712,7 +677,6 @@ body.no-scroll {
 
 @media (max-width: 640px) {
   :root {
-    --sticky-logo-size: 44px;
     --page-top-space: 0.55rem;
   }
 
@@ -731,7 +695,6 @@ body.no-scroll {
   .controls {
     gap: 0.55rem;
     padding-top: 0.35rem;
-    min-height: calc(44px + 0.8rem);
     display: flex;
     flex-wrap: wrap;
   }
@@ -741,14 +704,7 @@ body.no-scroll {
   }
 
   .brand-logo {
-    top: var(--page-top-space);
-    right: 1rem;
-  }
-
-  .brand-logo:hover,
-  .brand-logo:focus-visible,
-  .brand-logo.is-armed {
-    width: min(220px, 78vw);
+    width: 44px;
   }
 
   .admin-panel {

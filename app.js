@@ -39,7 +39,6 @@ const state = {
 };
 
 const elements = {
-  brandLogo: document.querySelector(".brand-logo"),
   controls: document.querySelector(".controls"),
   publicSearchWrap: document.getElementById("publicSearchWrap"),
   publicSearchInput: document.getElementById("publicSearchInput"),
@@ -97,15 +96,12 @@ const elements = {
 
 let resizeRenderTimeout = null;
 let lastViewportWidth = window.innerWidth;
-let mobileLogoTapArmed = false;
-let mobileLogoArmTimeout = null;
 
 await init();
 
 async function init() {
   initializeSupabase();
   bindEvents();
-  updateStickyControlsState();
   await refreshAuthState();
   await loadData();
   initializeAdminState();
@@ -136,21 +132,6 @@ function bindEvents() {
     resizeRenderTimeout = setTimeout(() => {
       render();
     }, 120);
-  });
-  window.addEventListener("scroll", updateStickyControlsState, { passive: true });
-  window.addEventListener("scroll", disarmMobileLogoTapTarget, { passive: true });
-
-  elements.brandLogo?.addEventListener("click", (event) => {
-    const isCoarsePointer = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
-    if (!isCoarsePointer) return;
-
-    if (!mobileLogoTapArmed) {
-      event.preventDefault();
-      armMobileLogoTapTarget();
-      return;
-    }
-
-    disarmMobileLogoTapTarget();
   });
 
   elements.results.addEventListener("click", (event) => {
@@ -603,23 +584,6 @@ function bindEvents() {
   });
 }
 
-function armMobileLogoTapTarget() {
-  if (!elements.brandLogo) return;
-  mobileLogoTapArmed = true;
-  elements.brandLogo.classList.add("is-armed");
-  clearTimeout(mobileLogoArmTimeout);
-  mobileLogoArmTimeout = setTimeout(() => {
-    disarmMobileLogoTapTarget();
-  }, 3200);
-}
-
-function disarmMobileLogoTapTarget() {
-  if (!elements.brandLogo) return;
-  mobileLogoTapArmed = false;
-  elements.brandLogo.classList.remove("is-armed");
-  clearTimeout(mobileLogoArmTimeout);
-}
-
 function openPosterLightbox(src, altText) {
   if (!elements.posterLightbox || !elements.posterLightboxImage) return;
   elements.posterLightboxImage.src = src;
@@ -634,17 +598,6 @@ function closePosterLightbox() {
   elements.posterLightbox.classList.add("hidden");
   elements.posterLightboxImage.removeAttribute("src");
   document.body.classList.remove("no-scroll");
-}
-
-function updateStickyControlsState() {
-  const stickyTop = (elements.controls?.getBoundingClientRect().top || 0) + window.scrollY;
-  let progress = 1;
-  if (stickyTop > 0) {
-    const startFadeAt = stickyTop * 0.75;
-    const fadeDistance = Math.max(1, stickyTop - startFadeAt);
-    progress = Math.min(1, Math.max(0, (window.scrollY - startFadeAt) / fadeDistance));
-  }
-  document.documentElement.style.setProperty("--controls-stick-progress", progress.toFixed(3));
 }
 
 async function refreshAuthState() {
