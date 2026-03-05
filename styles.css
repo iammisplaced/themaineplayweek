@@ -75,7 +75,8 @@ main,
 }
 
 .brand-logo:hover,
-.brand-logo:focus-visible {
+.brand-logo:focus-visible,
+.brand-logo.is-armed {
   width: clamp(188px, 22vw, 228px);
 }
 
@@ -102,7 +103,8 @@ main,
 }
 
 .brand-logo:hover .brand-logo-text,
-.brand-logo:focus-visible .brand-logo-text {
+.brand-logo:focus-visible .brand-logo-text,
+.brand-logo.is-armed .brand-logo-text {
   opacity: 1;
   transform: translateX(0);
 }
@@ -603,7 +605,7 @@ textarea {
 @media (max-width: 640px) {
   :root {
     --sticky-logo-size: 44px;
-    --page-top-space: 1.2rem;
+    --page-top-space: 0.55rem;
   }
 
   body {
@@ -630,7 +632,8 @@ textarea {
   }
 
   .brand-logo:hover,
-  .brand-logo:focus-visible {
+  .brand-logo:focus-visible,
+  .brand-logo.is-armed {
     width: min(220px, 78vw);
   }
 }

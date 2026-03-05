@@ -35,6 +35,7 @@ const state = {
 };
 
 const elements = {
+  brandLogo: document.querySelector(".brand-logo"),
   controls: document.querySelector(".controls"),
   results: document.getElementById("results"),
   tabs: Array.from(document.querySelectorAll(".tab")),
@@ -87,6 +88,8 @@ const elements = {
 
 let resizeRenderTimeout = null;
 let lastViewportWidth = window.innerWidth;
+let mobileLogoTapArmed = false;
+let mobileLogoArmTimeout = null;
 
 await init();
 
@@ -125,6 +128,20 @@ function bindEvents() {
     }, 120);
   });
   window.addEventListener("scroll", updateStickyControlsState, { passive: true });
+  window.addEventListener("scroll", disarmMobileLogoTapTarget, { passive: true });
+
+  elements.brandLogo?.addEventListener("click", (event) => {
+    const isCoarsePointer = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    if (!isCoarsePointer) return;
+
+    if (!mobileLogoTapArmed) {
+      event.preventDefault();
+      armMobileLogoTapTarget();
+      return;
+    }
+
+    disarmMobileLogoTapTarget();
+  });
 
   elements.tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -527,6 +544,23 @@ function bindEvents() {
     render();
     elements.adminMessage.textContent = "Reset from source data.";
   });
+}
+
+function armMobileLogoTapTarget() {
+  if (!elements.brandLogo) return;
+  mobileLogoTapArmed = true;
+  elements.brandLogo.classList.add("is-armed");
+  clearTimeout(mobileLogoArmTimeout);
+  mobileLogoArmTimeout = setTimeout(() => {
+    disarmMobileLogoTapTarget();
+  }, 3200);
+}
+
+function disarmMobileLogoTapTarget() {
+  if (!elements.brandLogo) return;
+  mobileLogoTapArmed = false;
+  elements.brandLogo.classList.remove("is-armed");
+  clearTimeout(mobileLogoArmTimeout);
 }
 
 function updateStickyControlsState() {
