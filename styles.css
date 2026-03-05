@@ -254,6 +254,7 @@ button:not(.ghost-btn):hover,
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.75),
     0 8px 18px rgba(29, 31, 31, 0.18);
+  cursor: zoom-in;
 }
 
 .group-film-facts {
@@ -342,6 +343,7 @@ button:not(.ghost-btn):hover,
   border-radius: 5px;
   border: 1px solid var(--border);
   background: #f7f4ec;
+  cursor: zoom-in;
 }
 
 .show-row.has-poster .show-poster {
@@ -589,6 +591,39 @@ textarea {
   min-height: 1.4rem;
   margin-top: 0.6rem;
   color: var(--accent);
+}
+
+.poster-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.86);
+  padding: 1rem;
+}
+
+.poster-lightbox-image {
+  width: min(92vw, 480px);
+  max-height: calc(100vh - 4rem);
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+  background: rgba(20, 20, 20, 0.45);
+}
+
+.poster-lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: rgba(0, 0, 0, 0.38);
+  color: #fff;
+}
+
+body.no-scroll {
+  overflow: hidden;
 }
 
 .hidden {

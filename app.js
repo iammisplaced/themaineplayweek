@@ -38,6 +38,9 @@ const elements = {
   brandLogo: document.querySelector(".brand-logo"),
   controls: document.querySelector(".controls"),
   results: document.getElementById("results"),
+  posterLightbox: document.getElementById("posterLightbox"),
+  posterLightboxImage: document.getElementById("posterLightboxImage"),
+  posterLightboxClose: document.getElementById("posterLightboxClose"),
   tabs: Array.from(document.querySelectorAll(".tab")),
   groupTemplate: document.getElementById("groupTemplate"),
   showItemTemplate: document.getElementById("showItemTemplate"),
@@ -141,6 +144,29 @@ function bindEvents() {
     }
 
     disarmMobileLogoTapTarget();
+  });
+
+  elements.results.addEventListener("click", (event) => {
+    const poster = event.target.closest(".group-film-poster, .show-poster");
+    if (!poster || poster.classList.contains("hidden")) return;
+    const src = poster.getAttribute("src");
+    if (!src) return;
+    openPosterLightbox(src, poster.getAttribute("alt") || "Poster preview");
+  });
+
+  elements.posterLightboxClose?.addEventListener("click", () => {
+    closePosterLightbox();
+  });
+
+  elements.posterLightbox?.addEventListener("click", (event) => {
+    if (event.target === elements.posterLightbox) {
+      closePosterLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    closePosterLightbox();
   });
 
   elements.tabs.forEach((tab) => {
@@ -561,6 +587,22 @@ function disarmMobileLogoTapTarget() {
   mobileLogoTapArmed = false;
   elements.brandLogo.classList.remove("is-armed");
   clearTimeout(mobileLogoArmTimeout);
+}
+
+function openPosterLightbox(src, altText) {
+  if (!elements.posterLightbox || !elements.posterLightboxImage) return;
+  elements.posterLightboxImage.src = src;
+  elements.posterLightboxImage.alt = altText;
+  elements.posterLightbox.classList.remove("hidden");
+  document.body.classList.add("no-scroll");
+}
+
+function closePosterLightbox() {
+  if (!elements.posterLightbox || !elements.posterLightboxImage) return;
+  if (elements.posterLightbox.classList.contains("hidden")) return;
+  elements.posterLightbox.classList.add("hidden");
+  elements.posterLightboxImage.removeAttribute("src");
+  document.body.classList.remove("no-scroll");
 }
 
 function updateStickyControlsState() {
