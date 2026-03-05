@@ -95,6 +95,19 @@ button:not(.ghost-btn):hover,
   gap: 1rem;
 }
 
+.results.results-masonry {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.masonry-column {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
 .group-card {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -107,6 +120,12 @@ button:not(.ghost-btn):hover,
   margin-bottom: 0.35rem;
   color: var(--accent-2);
   font-size: 1rem;
+}
+
+.group-title-film {
+  font-size: 1.28rem;
+  font-style: italic;
+  line-height: 1.2;
 }
 
 .group-subtitle {
@@ -125,27 +144,56 @@ button:not(.ghost-btn):hover,
 
 .group-film-summary {
   display: grid;
-  grid-template-columns: 72px 1fr;
-  gap: 0.65rem;
+  grid-template-columns: minmax(0, 1fr) 92px;
+  gap: 0.55rem;
   align-items: start;
   margin-bottom: 0.65rem;
 }
 
 .group-film-poster {
-  width: 72px;
-  height: 108px;
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  width: 92px;
+  height: 138px;
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: #f7f4ec;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.75),
+    0 8px 18px rgba(29, 31, 31, 0.18);
 }
 
 .group-film-facts {
+  grid-column: 1;
+  grid-row: 1;
   margin: 0;
   color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.4;
-  white-space: pre-line;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.film-fact {
+  display: grid;
+  gap: 0.08rem;
+}
+
+.film-fact-label {
+  font-size: 0.68rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  font-variant-caps: all-small-caps;
+  text-transform: lowercase;
+  color: var(--accent-2);
+}
+
+.film-fact-value {
+  color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.35;
 }
 
 .show-link {
@@ -187,16 +235,31 @@ button:not(.ghost-btn):hover,
 }
 
 .show-row.has-poster {
-  grid-template-columns: 44px 1fr;
+  grid-template-columns: minmax(0, 1fr) 56px;
+  column-gap: 0.55rem;
+}
+
+.show-row.has-poster > div {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .show-poster {
-  width: 44px;
-  height: 66px;
+  width: 56px;
+  height: 84px;
   object-fit: cover;
   border-radius: 5px;
   border: 1px solid var(--border);
   background: #f7f4ec;
+}
+
+.show-row.has-poster .show-poster {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.72),
+    0 6px 14px rgba(29, 31, 31, 0.14);
 }
 
 .show-main {
@@ -220,7 +283,20 @@ button:not(.ghost-btn):hover,
 }
 
 .show-schedule-day {
-  font-weight: 700;
+  display: block;
+  margin-bottom: 0.04rem;
+  font-size: 0.76rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  font-variant-caps: all-small-caps;
+  text-transform: lowercase;
+  color: var(--accent-2);
+}
+
+.show-schedule-times {
+  color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.35;
 }
 
 .show-schedule-collapse {
@@ -232,6 +308,14 @@ button:not(.ghost-btn):hover,
 
 .show-schedule-collapse + .show-schedule-collapse {
   margin-top: 0.35rem;
+}
+
+.results[data-view="days"] .show-main {
+  margin-bottom: 0.35rem;
+}
+
+.results[data-view="days"] .show-schedule-collapse + .show-schedule-collapse {
+  margin-top: 0.55rem;
 }
 
 .show-schedule-summary {

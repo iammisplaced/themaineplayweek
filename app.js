@@ -3,6 +3,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const DATA_URL = "./data/showtimes.json";
 const STORAGE_KEY = "showtimes-local-edit";
 const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
+const MASONRY_MIN_COLUMN_WIDTH = 280;
+const MASONRY_GAP_PX = 16;
 
 const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
 const SUPABASE_ANON_KEY =
@@ -82,6 +84,8 @@ const elements = {
   adminMessage: document.getElementById("adminMessage"),
 };
 
+let resizeRenderTimeout = null;
+
 await init();
 
 async function init() {
@@ -107,6 +111,13 @@ function initializeSupabase() {
 }
 
 function bindEvents() {
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeRenderTimeout);
+    resizeRenderTimeout = setTimeout(() => {
+      render();
+    }, 120);
+  });
+
   elements.tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       state.view = tab.dataset.view;
@@ -1199,7 +1210,10 @@ function handleSearchKeydown(kind, event) {
 
 function render() {
   const grouped = buildGroups(state.data.theatreGroups, state.view);
+  elements.results.classList.add("results-masonry");
+  elements.results.dataset.view = state.view;
   elements.results.innerHTML = "";
+  const cards = [];
 
   const entries = Object.entries(grouped);
   if (!entries.length) {
@@ -1209,6 +1223,10 @@ function render() {
 
   if (state.view === "films") {
     entries.sort(([, groupA], [, groupB]) => {
+      const earliestA = getEarliestGroupShowtime(groupA);
+      const earliestB = getEarliestGroupShowtime(groupB);
+      if (earliestA !== earliestB) return earliestA - earliestB;
+
       const titleA = groupA?.filmInfo?.film || "";
       const titleB = groupB?.filmInfo?.film || "";
       const normalizedCompare = normalizeSortTitle(titleA).localeCompare(normalizeSortTitle(titleB));
@@ -1226,12 +1244,14 @@ function render() {
 
   for (const [groupName, group] of entries) {
     const card = elements.groupTemplate.content.firstElementChild.cloneNode(true);
+    const groupTitle = card.querySelector(".group-title");
     if (state.view === "days") {
-      card.querySelector(".group-title").textContent = formatDisplayDate(groupName);
+      groupTitle.textContent = formatDisplayDate(groupName);
     } else if (state.view === "films" && group.filmInfo) {
-      card.querySelector(".group-title").textContent = group.filmInfo.film;
+      groupTitle.textContent = group.filmInfo.film;
+      groupTitle.classList.add("group-title-film");
     } else {
-      card.querySelector(".group-title").textContent = groupName;
+      groupTitle.textContent = groupName;
     }
     const subtitle = card.querySelector(".group-subtitle");
     const groupLink = card.querySelector(".group-link");
@@ -1251,14 +1271,30 @@ function render() {
       }
     }
     if (state.view === "films" && group.filmInfo) {
-      const factsText = buildFilmFacts(group.filmInfo);
+      const facts = buildFilmFacts(group.filmInfo);
       if (group.filmInfo.posterUrl) {
         groupFilmPoster.src = group.filmInfo.posterUrl;
         groupFilmPoster.alt = `Poster for ${group.filmInfo.film}`;
         groupFilmPoster.classList.remove("hidden");
       }
-      if (factsText) {
-        groupFilmFacts.textContent = factsText;
+      if (facts.length) {
+        groupFilmFacts.innerHTML = "";
+        facts.forEach((fact) => {
+          const row = document.createElement("div");
+          row.className = "film-fact";
+
+          const label = document.createElement("span");
+          label.className = "film-fact-label";
+          label.textContent = fact.label;
+
+          const value = document.createElement("span");
+          value.className = "film-fact-value";
+          value.textContent = fact.value;
+
+          row.appendChild(label);
+          row.appendChild(value);
+          groupFilmFacts.appendChild(row);
+        });
         groupFilmFacts.classList.remove("hidden");
       }
       groupFilmSummary.classList.remove("hidden");
@@ -1314,8 +1350,40 @@ function render() {
       list.appendChild(item);
     }
 
-    elements.results.appendChild(card);
+    cards.push(card);
   }
+
+  renderResultCards(cards);
+}
+
+function renderResultCards(cards) {
+  if (!cards.length) return;
+
+  const columnCount = getMasonryColumnCount();
+  if (columnCount <= 1) {
+    cards.forEach((card) => elements.results.appendChild(card));
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  const columns = Array.from({ length: columnCount }, () => {
+    const column = document.createElement("div");
+    column.className = "masonry-column";
+    fragment.appendChild(column);
+    return column;
+  });
+
+  cards.forEach((card, index) => {
+    columns[index % columnCount].appendChild(card);
+  });
+
+  elements.results.appendChild(fragment);
+}
+
+function getMasonryColumnCount() {
+  const width = elements.results.clientWidth;
+  if (!width) return 1;
+  return Math.max(1, Math.floor((width + MASONRY_GAP_PX) / (MASONRY_MIN_COLUMN_WIDTH + MASONRY_GAP_PX)));
 }
 
 function normalizeSortTitle(value) {
@@ -1324,6 +1392,21 @@ function normalizeSortTitle(value) {
     .replace(/^[^A-Za-z0-9]+/, "")
     .replace(/^the\s+/i, "")
     .toLowerCase();
+}
+
+function getEarliestGroupShowtime(group) {
+  let earliest = Number.POSITIVE_INFINITY;
+  (group?.shows || []).forEach((show) => {
+    Object.entries(show.dates || {}).forEach(([date, times]) => {
+      (times || []).forEach((time) => {
+        const dateTime = getShowDateTime(date, time);
+        if (!dateTime) return;
+        const timestamp = dateTime.getTime();
+        if (timestamp < earliest) earliest = timestamp;
+      });
+    });
+  });
+  return earliest;
 }
 
 function buildGroups(theatres, view) {
@@ -1488,21 +1571,35 @@ function renderTheatreSchedule(container, theatres) {
 function createScheduleRow(date, times) {
   const row = document.createElement("div");
   row.className = "show-schedule-row";
+
   const label = document.createElement("span");
   label.className = "show-schedule-day";
-  label.textContent = `${formatDisplayDate(date)}: `;
+  label.textContent = formatDisplayDate(date);
+
+  const value = document.createElement("span");
+  value.className = "show-schedule-times";
+  value.textContent = times.join(", ");
+
   row.appendChild(label);
-  row.appendChild(document.createTextNode(times.join(", ")));
+  row.appendChild(value);
   return row;
 }
 
 function buildFilmFacts(show) {
-  const lines = [];
-  if (Number.isInteger(Number(show.year))) lines.push(`Year: ${Number(show.year)}`);
-  if (show.director) lines.push(`Director: ${show.director}`);
-  if (Array.isArray(show.stars) && show.stars.length) lines.push(`Starring: ${show.stars.join(", ")}`);
-  if (Array.isArray(show.genres) && show.genres.length) lines.push(`Genre: ${show.genres.join(", ")}`);
-  return lines.join("\n");
+  const facts = [];
+  if (Number.isInteger(Number(show.year))) {
+    facts.push({ label: "Year", value: String(Number(show.year)) });
+  }
+  if (show.director) {
+    facts.push({ label: "Director", value: show.director });
+  }
+  if (Array.isArray(show.stars) && show.stars.length) {
+    facts.push({ label: "Stars", value: show.stars.join(", ") });
+  }
+  if (Array.isArray(show.genres) && show.genres.length) {
+    facts.push({ label: "Genre", value: show.genres.join(", ") });
+  }
+  return facts;
 }
 
 function extractFilmMetadata(film) {
