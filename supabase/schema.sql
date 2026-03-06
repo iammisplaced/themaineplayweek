@@ -83,7 +83,11 @@ for all to authenticated
 using (true)
 with check (true);
 
-create or replace function public.replace_showtimes_data(payload jsonb)
+drop function if exists public.replace_showtimes_data(jsonb);
+create or replace function public.replace_showtimes_data(
+  payload jsonb,
+  allow_ticket_link_clear boolean default false
+)
 returns void
 language plpgsql
 security definer
@@ -100,6 +104,7 @@ declare
   film_id bigint;
   theatre_key text;
   film_key text;
+  risky_ticket_link_clears integer := 0;
 begin
   if auth.role() <> 'authenticated' then
     raise exception 'Not authorized';
@@ -107,6 +112,81 @@ begin
 
   if payload is null then
     raise exception 'Payload is required';
+  end if;
+
+  if not coalesce(allow_ticket_link_clear, false) then
+    with payload_theatres as (
+      select
+        value->>'key' as theatre_key,
+        nullif(value->>'db_id', '')::bigint as theatre_db_id,
+        lower(trim(value->>'name')) as theatre_name_key,
+        lower(trim(value->>'city')) as theatre_city_key
+      from jsonb_array_elements(coalesce(payload->'theatres', '[]'::jsonb))
+    ),
+    payload_films as (
+      select
+        value->>'key' as film_key,
+        nullif(value->>'db_id', '')::bigint as film_db_id,
+        case
+          when nullif(value->>'tmdb_id', '') is not null then 'tmdb:' || (nullif(value->>'tmdb_id', '')::bigint)::text
+          else lower(trim(value->>'title')) || '::' || coalesce(value->>'year', '')
+        end as film_identity_key
+      from jsonb_array_elements(coalesce(payload->'films', '[]'::jsonb))
+    ),
+    payload_links as (
+      select
+        coalesce(nullif(link_item->>'theatre_db_id', '')::bigint, pt.theatre_db_id) as theatre_db_id,
+        coalesce(nullif(link_item->>'film_db_id', '')::bigint, pf.film_db_id) as film_db_id,
+        pt.theatre_name_key,
+        pt.theatre_city_key,
+        pf.film_identity_key,
+        nullif(trim(coalesce(link_item->>'ticket_link', '')), '') as ticket_link
+      from jsonb_array_elements(coalesce(payload->'theatre_films', '[]'::jsonb)) link_item
+      join payload_theatres pt
+        on pt.theatre_key = link_item->>'theatre_key'
+      join payload_films pf
+        on pf.film_key = link_item->>'film_key'
+    ),
+    existing_links as (
+      select
+        tf.theatre_id,
+        tf.film_id,
+        lower(trim(t.name)) as theatre_name_key,
+        lower(trim(t.city)) as theatre_city_key,
+        case
+          when f.tmdb_id is not null then 'tmdb:' || f.tmdb_id::text
+          else lower(trim(f.title)) || '::' || coalesce(f.year::text, '')
+        end as film_identity_key,
+        nullif(trim(tf.ticket_link), '') as ticket_link
+      from public.theatre_films tf
+      join public.theatres t
+        on t.id = tf.theatre_id
+      join public.films f
+        on f.id = tf.film_id
+      where nullif(trim(tf.ticket_link), '') is not null
+    ),
+    risky as (
+      select 1
+      from existing_links existing
+      left join payload_links incoming
+        on (
+          incoming.theatre_db_id is not null
+          and incoming.film_db_id is not null
+          and incoming.theatre_db_id = existing.theatre_id
+          and incoming.film_db_id = existing.film_id
+        ) or (
+          (incoming.theatre_db_id is null or incoming.film_db_id is null)
+          and incoming.theatre_name_key = existing.theatre_name_key
+          and incoming.theatre_city_key = existing.theatre_city_key
+          and incoming.film_identity_key = existing.film_identity_key
+        )
+      where incoming.ticket_link is null
+    )
+    select count(*) into risky_ticket_link_clears from risky;
+
+    if risky_ticket_link_clears > 0 then
+      raise exception 'Blocked save: payload would clear % existing ticket link(s).', risky_ticket_link_clears;
+    end if;
   end if;
 
   delete from public.showings where true;
@@ -138,7 +218,7 @@ begin
       coalesce(film_item->>'title', ''),
       nullif(film_item->>'year', '')::integer,
       nullif(film_item->>'tmdb_id', '')::bigint,
-      '',
+      coalesce(film_item->>'ticket_link', ''),
       film_item->'tmdb_json'
     )
     returning id into film_id;
@@ -178,5 +258,5 @@ begin
 end;
 $$;
 
-revoke all on function public.replace_showtimes_data(jsonb) from public;
-grant execute on function public.replace_showtimes_data(jsonb) to authenticated;
+revoke all on function public.replace_showtimes_data(jsonb, boolean) from public;
+grant execute on function public.replace_showtimes_data(jsonb, boolean) to authenticated;

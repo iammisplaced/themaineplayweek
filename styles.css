@@ -159,6 +159,14 @@ h1 {
   background: #fdece7;
 }
 
+.theatre-sort-status {
+  width: min(1024px, 100%);
+  margin: -0.45rem auto 0.8rem;
+  color: var(--accent-2);
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
 .latest-post {
   margin: 0.35rem 0 1rem;
 }
@@ -388,9 +396,10 @@ button:not(.ghost-btn):hover,
 }
 
 .group-title-film {
-  font-size: 1.28rem;
+  font-size: 1.42rem;
   font-style: italic;
   line-height: 1.2;
+  text-align: center;
 }
 
 .film-expand-toggle {
@@ -477,7 +486,7 @@ button:not(.ghost-btn):hover,
 }
 
 .group-card.film-card.film-card-collapsed .group-title-film {
-  font-size: 0.94rem;
+  font-size: 1.02rem;
   line-height: 1.1;
   margin-bottom: 0.14rem;
   min-height: calc(2 * 1.1em);
@@ -608,6 +617,10 @@ button:not(.ghost-btn):hover,
   color: var(--muted);
   font-size: 0.9rem;
   margin-top: 0.15rem;
+}
+
+.show-meta .film-expand-toggle {
+  margin: 0.35rem 0 0;
 }
 
 .show-schedule {

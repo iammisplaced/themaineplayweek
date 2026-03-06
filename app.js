@@ -9,6 +9,8 @@ const FILMS_MASONRY_MIN_COLUMN_WIDTH = 170;
 const MASONRY_GAP_PX = 16;
 const FILM_LAYOUT_ANIMATION_MS = 320;
 const SUBSTACK_ARCHIVE_URL = "https://themaineplayweek.substack.com/api/v1/archive?sort=new";
+const THEATRE_GEO_CACHE_KEY = "theatre-geocode-cache-v1";
+const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 
 const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
 const SUPABASE_ANON_KEY =
@@ -18,7 +20,12 @@ const state = {
   data: { theatreGroups: [] },
   view: "films",
   source: "json",
+  loadedFromSupabaseThisSession: false,
   expandedFilmGroups: new Set(),
+  theatreDistanceByKey: new Map(),
+  theatreDistanceStatus: "idle",
+  theatreDistanceError: "",
+  userCoords: null,
   publicSearch: {
     films: "",
     theatres: "",
@@ -47,6 +54,7 @@ const elements = {
   controls: document.querySelector(".controls"),
   publicSearchWrap: document.getElementById("publicSearchWrap"),
   publicSearchInput: document.getElementById("publicSearchInput"),
+  theatreSortStatus: document.getElementById("theatreSortStatus"),
   latestPost: document.getElementById("latestPost"),
   latestPostLink: document.getElementById("latestPostLink"),
   latestPostImage: document.getElementById("latestPostImage"),
@@ -123,6 +131,7 @@ async function init() {
   loadAdminSettings();
   syncAdminEditor();
   syncPublicSearchUI();
+  updateTheatreSortStatus();
   render();
 }
 
@@ -264,10 +273,23 @@ function bindEvents() {
     if (filmExpandToggle) {
       const key = filmExpandToggle.dataset.filmKey || filmExpandToggle.closest(".group-card")?.dataset.filmKey;
       if (!key) return;
+      const scrollTopBefore = getPageScrollTop();
+      const shouldAnimateFilmCards = state.view === "films" && Boolean(filmExpandToggle.closest(".group-card"));
+      if (!shouldAnimateFilmCards) {
+        if (state.expandedFilmGroups.has(key)) {
+          state.expandedFilmGroups.delete(key);
+        } else {
+          state.expandedFilmGroups.add(key);
+        }
+        render();
+        requestAnimationFrame(() => {
+          setPageScrollTop(scrollTopBefore);
+        });
+        return;
+      }
       const previousRects = captureFilmCardRects();
       const cardBefore = filmExpandToggle.closest(".group-card");
       const cardTopBefore = cardBefore?.getBoundingClientRect().top ?? 0;
-      const scrollYBefore = window.scrollY;
       if (state.expandedFilmGroups.has(key)) {
         state.expandedFilmGroups.delete(key);
       } else {
@@ -279,11 +301,11 @@ function bindEvents() {
           (card) => card.dataset.filmKey === key
         );
         if (!cardAfter) {
-          window.scrollTo(0, scrollYBefore);
+          setPageScrollTop(scrollTopBefore);
           return;
         }
         const cardTopAfter = cardAfter.getBoundingClientRect().top;
-        window.scrollBy(0, cardTopAfter - cardTopBefore);
+        setPageScrollTop(scrollTopBefore + (cardTopAfter - cardTopBefore));
         animateFilmCardLayout(previousRects);
       });
       return;
@@ -320,6 +342,10 @@ function bindEvents() {
         button.setAttribute("aria-selected", String(selected));
       });
       syncPublicSearchUI();
+      if (state.view === "theatres") {
+        void ensureTheatreDistanceSort();
+      }
+      updateTheatreSortStatus();
       render();
     });
   });
@@ -786,6 +812,7 @@ async function loadData() {
         validateData(fromDb);
         state.data = fromDb;
         state.source = "supabase";
+        state.loadedFromSupabaseThisSession = true;
         return;
       }
     } catch {
@@ -800,6 +827,7 @@ async function loadData() {
       validateData(parsed);
       state.data = parsed;
       state.source = "local";
+      state.loadedFromSupabaseThisSession = false;
       return;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
@@ -815,6 +843,7 @@ async function loadData() {
   validateData(json);
   state.data = json;
   state.source = "json";
+  state.loadedFromSupabaseThisSession = false;
 }
 
 async function loadDataFromSupabase() {
@@ -1297,6 +1326,11 @@ async function persistData() {
 
 async function saveDataToSupabase() {
   const supabase = state.supabase;
+  if (state.source !== "supabase" || !state.loadedFromSupabaseThisSession) {
+    throw new Error(
+      "Blocked save: current admin data was not loaded from Supabase. Use Reset from source to reload live data before saving."
+    );
+  }
   await verifySupabaseSchema(supabase);
   const payload = buildReplacePayload(state.data);
   const riskyTicketLinkChanges = await findTicketLinkClearRisks(supabase, payload);
@@ -1304,14 +1338,11 @@ async function saveDataToSupabase() {
     const preview = riskyTicketLinkChanges.samples.length
       ? `\n\nExamples:\n- ${riskyTicketLinkChanges.samples.join("\n- ")}`
       : "";
-    const confirmed = window.confirm(
-      `Warning: this save will clear ${riskyTicketLinkChanges.count} existing ticket link(s) in Supabase.${preview}\n\nContinue anyway?`
+    throw new Error(
+      `Blocked save: this update would clear ${riskyTicketLinkChanges.count} existing ticket link(s) in Supabase.${preview}\n\nExplicit clears are currently disabled for safety.`
     );
-    if (!confirmed) {
-      throw new Error("Save cancelled to prevent clearing existing ticket links.");
-    }
   }
-  const rpc = await supabase.rpc("replace_showtimes_data", { payload });
+  const rpc = await supabase.rpc("replace_showtimes_data", { payload, allow_ticket_link_clear: false });
   if (rpc.error) throw rpc.error;
 }
 
@@ -1428,6 +1459,7 @@ function buildReplacePayload(data) {
   const showings = [];
 
   const filmKeyByUniq = new Map();
+  const filmPayloadIndexByKey = new Map();
   let theatreCounter = 0;
   let filmCounter = 0;
 
@@ -1435,6 +1467,7 @@ function buildReplacePayload(data) {
     const theatreKey = `t_${theatreCounter++}`;
     theatres.push({
       key: theatreKey,
+      db_id: Number.isInteger(Number(theatre._dbId)) ? Number(theatre._dbId) : null,
       name: theatre.name,
       city: theatre.city,
       address: theatre.address,
@@ -1447,18 +1480,36 @@ function buildReplacePayload(data) {
       if (!filmKey) {
         filmKey = `f_${filmCounter++}`;
         filmKeyByUniq.set(uniq, filmKey);
+        const filmTicketLink = String(film.ticketLink || "").trim();
         films.push({
           key: filmKey,
+          db_id: Number.isInteger(Number(film._dbId)) ? Number(film._dbId) : null,
           title: film.title,
           year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
           tmdb_id: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
+          ticket_link: filmTicketLink,
           tmdb_json: film.tmdb || null,
         });
+        filmPayloadIndexByKey.set(filmKey, films.length - 1);
+      } else {
+        const filmTicketLink = String(film.ticketLink || "").trim();
+        if (filmTicketLink) {
+          const existingFilmIndex = filmPayloadIndexByKey.get(filmKey);
+          if (typeof existingFilmIndex === "number" && !films[existingFilmIndex].ticket_link) {
+            films[existingFilmIndex].ticket_link = filmTicketLink;
+          }
+          if (typeof existingFilmIndex === "number" && !films[existingFilmIndex].db_id) {
+            const filmDbId = Number.isInteger(Number(film._dbId)) ? Number(film._dbId) : null;
+            if (filmDbId) films[existingFilmIndex].db_id = filmDbId;
+          }
+        }
       }
 
       theatreFilms.push({
         theatre_key: theatreKey,
         film_key: filmKey,
+        theatre_db_id: Number.isInteger(Number(theatre._dbId)) ? Number(theatre._dbId) : null,
+        film_db_id: Number.isInteger(Number(film._dbId)) ? Number(film._dbId) : null,
         ticket_link: film.ticketLink || "",
       });
 
@@ -1551,6 +1602,7 @@ function handleSearchKeydown(kind, event) {
 }
 
 function render() {
+  updateTheatreSortStatus();
   const grouped = buildGroups(state.data.theatreGroups, state.view);
   elements.results.classList.add("results-masonry");
   elements.results.dataset.view = state.view;
@@ -1591,6 +1643,21 @@ function render() {
 
       return titleA.localeCompare(titleB);
     });
+  } else if (state.view === "theatres") {
+    entries.sort(([, groupA], [, groupB]) => {
+      const keyA = buildTheatreDistanceKey(groupA?.theatreInfo);
+      const keyB = buildTheatreDistanceKey(groupB?.theatreInfo);
+      const distanceA = state.theatreDistanceByKey.get(keyA);
+      const distanceB = state.theatreDistanceByKey.get(keyB);
+      const hasDistanceA = Number.isFinite(distanceA);
+      const hasDistanceB = Number.isFinite(distanceB);
+      if (hasDistanceA && hasDistanceB && distanceA !== distanceB) return distanceA - distanceB;
+      if (hasDistanceA !== hasDistanceB) return hasDistanceA ? -1 : 1;
+
+      const labelA = `${groupA?.theatreInfo?.name || ""} ${groupA?.theatreInfo?.city || ""}`;
+      const labelB = `${groupB?.theatreInfo?.name || ""} ${groupB?.theatreInfo?.city || ""}`;
+      return labelA.localeCompare(labelB);
+    });
   } else {
     entries.sort(([a], [b]) => a.localeCompare(b));
   }
@@ -1598,12 +1665,13 @@ function render() {
   for (const [groupName, group] of entries) {
     const card = elements.groupTemplate.content.firstElementChild.cloneNode(true);
     const groupTitle = card.querySelector(".group-title");
-    if (state.view === "days") {
-      groupTitle.textContent = formatDisplayDate(groupName);
-    } else if (state.view === "films" && group.filmInfo) {
+    const isFilmsView = state.view === "films" && Boolean(group.filmInfo);
+    if (isFilmsView) {
       card.classList.add("film-card");
       groupTitle.textContent = group.filmInfo.film;
       groupTitle.classList.add("group-title-film");
+    } else if (state.view === "days") {
+      groupTitle.textContent = formatDisplayDate(groupName);
     } else {
       groupTitle.textContent = groupName;
     }
@@ -1617,7 +1685,7 @@ function render() {
     const shows = group.shows;
     let filmGroupExpanded = true;
 
-    if (group.theatreInfo) {
+    if (group.theatreInfo && state.view === "theatres") {
       subtitle.textContent = `${group.theatreInfo.address}`;
       subtitle.classList.remove("hidden");
       const theatreWebsite = normalizeOutboundUrl(group.theatreInfo.website);
@@ -1625,9 +1693,12 @@ function render() {
         groupLink.href = theatreWebsite;
         groupLink.classList.remove("hidden");
       }
+    } else if (group.dayInfo && state.view === "days") {
+      subtitle.textContent = formatDisplayDate(group.dayInfo.date);
+      subtitle.classList.remove("hidden");
     }
-    if (state.view === "films" && group.filmInfo) {
-      const filmGroupKey = buildFilmGroupKey(group.filmInfo.film, group.filmInfo.year);
+    if (isFilmsView) {
+      const filmGroupKey = buildExpandCardKey(state.view, group);
       filmGroupExpanded = state.expandedFilmGroups.has(filmGroupKey);
       card.dataset.filmKey = filmGroupKey;
       card.classList.toggle("film-card-collapsed", !filmGroupExpanded);
@@ -1640,15 +1711,17 @@ function render() {
       }
 
       const facts = buildFilmFacts(group.filmInfo);
-      groupFilmPoster.onerror = () => {
-        groupFilmPoster.onerror = null;
-        groupFilmPoster.src = NO_POSTER_IMAGE_URL;
-      };
-      groupFilmPoster.src = group.filmInfo.posterUrl || NO_POSTER_IMAGE_URL;
-      groupFilmPoster.alt = group.filmInfo.posterUrl
-        ? `Poster for ${group.filmInfo.film}`
-        : `No poster available for ${group.filmInfo.film}`;
-      groupFilmPoster.classList.remove("hidden");
+      if (groupFilmPoster) {
+        groupFilmPoster.onerror = () => {
+          groupFilmPoster.onerror = null;
+          groupFilmPoster.src = NO_POSTER_IMAGE_URL;
+        };
+        groupFilmPoster.src = group.filmInfo.posterUrl || NO_POSTER_IMAGE_URL;
+        groupFilmPoster.alt = group.filmInfo.posterUrl
+          ? `Poster for ${group.filmInfo.film}`
+          : `No poster available for ${group.filmInfo.film}`;
+        groupFilmPoster.classList.remove("hidden");
+      }
       if (facts.length) {
         groupFilmFacts.innerHTML = "";
         facts.forEach((fact) => {
@@ -1679,7 +1752,7 @@ function render() {
       }
     }
 
-    if (state.view !== "films" || filmGroupExpanded) {
+    if (!isFilmsView || filmGroupExpanded) {
       shows.sort((a, b) => {
         if (state.view === "theatres") {
           const earliestA = getRowEarliestShowtimeTimestamp(a);
@@ -1703,32 +1776,59 @@ function render() {
         const link = item.querySelector(".show-link");
         const filmLabel = show.film;
 
-        if (state.view === "theatres") {
+        if (state.view === "theatres" || state.view === "days") {
+          const rowExpandKey = buildExpandRowKey(state.view, group, show);
+          const rowExpanded = state.expandedFilmGroups.has(rowExpandKey);
+          const rowToggle = document.createElement("button");
+          rowToggle.type = "button";
+          rowToggle.className = "film-expand-toggle";
+          rowToggle.dataset.filmKey = rowExpandKey;
+          rowToggle.textContent = rowExpanded ? "Collapse" : "Expand";
+          rowToggle.setAttribute("aria-expanded", String(rowExpanded));
+
+          row.classList.add("has-poster");
+          poster.onerror = () => {
+            poster.onerror = null;
+            poster.src = NO_POSTER_IMAGE_URL;
+          };
+          poster.src = show.posterUrl || NO_POSTER_IMAGE_URL;
+          poster.alt = show.posterUrl
+            ? `Poster for ${show.film}`
+            : `No poster available for ${show.film}`;
+          poster.classList.remove("hidden");
+
           main.textContent = filmLabel;
           meta.textContent = "";
-          renderSchedule(schedule, show.dates);
-        } else if (state.view === "days") {
-          main.textContent = filmLabel;
-          meta.textContent = "";
-          renderTheatreSchedule(schedule, show.theatres);
+          meta.appendChild(rowToggle);
+
+          if (state.view === "theatres") {
+            renderSchedule(schedule, show.dates);
+          } else {
+            renderTheatreSchedule(schedule, show.theatres);
+          }
+
+          if (!rowExpanded) {
+            schedule.classList.add("hidden");
+          } else {
+            schedule.classList.remove("hidden");
+          }
+
+          const ticketUrl = normalizeOutboundUrl(show.ticketLink);
+          if (state.view === "theatres" && rowExpanded && ticketUrl) {
+            link.href = ticketUrl;
+            link.classList.remove("hidden");
+          } else {
+            link.classList.add("hidden");
+          }
         } else {
           main.textContent = `${show.theatre}`;
           meta.textContent = `${show.city}`;
           renderSchedule(schedule, show.dates);
-        }
-
-        if (state.view !== "days") {
           const ticketUrl = normalizeOutboundUrl(show.ticketLink);
           if (ticketUrl) {
             link.href = ticketUrl;
             link.classList.remove("hidden");
           }
-        }
-        if (state.view !== "films" && show.posterUrl) {
-          row.classList.add("has-poster");
-          poster.src = show.posterUrl;
-          poster.alt = `Poster for ${show.film}`;
-          poster.classList.remove("hidden");
         }
         list.appendChild(item);
       }
@@ -1826,16 +1926,19 @@ function syncPublicSearchUI() {
     elements.publicSearchWrap.classList.remove("hidden");
     elements.publicSearchInput.placeholder = "Search films...";
     elements.publicSearchInput.value = state.publicSearch.films;
+    updateTheatreSortStatus();
     return;
   }
   if (state.view === "theatres") {
     elements.publicSearchWrap.classList.remove("hidden");
     elements.publicSearchInput.placeholder = "Search theatres or town...";
     elements.publicSearchInput.value = state.publicSearch.theatres;
+    updateTheatreSortStatus();
     return;
   }
   elements.publicSearchWrap.classList.add("hidden");
   elements.publicSearchInput.value = "";
+  updateTheatreSortStatus();
 }
 
 function getPublicSearchQueryForView(view) {
@@ -1848,6 +1951,256 @@ function normalizeSearchText(value) {
   return stripDiacritics(value)
     .trim()
     .toLowerCase();
+}
+
+function getPageScrollTop() {
+  return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+}
+
+function setPageScrollTop(value) {
+  const top = Math.max(0, Number(value) || 0);
+  window.scrollTo(0, top);
+}
+
+async function ensureTheatreDistanceSort() {
+  if (state.theatreDistanceStatus === "loading" || state.theatreDistanceStatus === "ready") return;
+  if (state.theatreDistanceByKey.size) {
+    state.theatreDistanceStatus = "ready";
+    updateTheatreSortStatus();
+    return;
+  }
+  if (!("geolocation" in navigator)) {
+    state.theatreDistanceStatus = "unavailable";
+    state.theatreDistanceError = "geolocation-not-supported";
+    updateTheatreSortStatus();
+    return;
+  }
+
+  state.theatreDistanceStatus = "loading";
+  state.theatreDistanceError = "";
+  updateTheatreSortStatus();
+  try {
+    const position = await getCurrentPosition({
+      enableHighAccuracy: false,
+      timeout: 7000,
+      maximumAge: 5 * 60 * 1000,
+    });
+    state.userCoords = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+    };
+
+    const cache = readTheatreGeoCache();
+    const now = Date.now();
+    const theatres = state.data.theatreGroups || [];
+    for (const theatre of theatres) {
+      const distanceKey = buildTheatreDistanceKey(theatre);
+      if (!distanceKey) continue;
+      const cacheEntry = cache[distanceKey];
+      let coords = null;
+      if (cacheEntry && now - Number(cacheEntry.updatedAt || 0) < THEATRE_GEO_CACHE_TTL_MS) {
+        coords = { lat: Number(cacheEntry.lat), lng: Number(cacheEntry.lng) };
+      } else {
+        coords = await geocodeTheatre(theatre);
+        if (coords) {
+          cache[distanceKey] = {
+            lat: coords.lat,
+            lng: coords.lng,
+            updatedAt: now,
+          };
+        }
+      }
+      if (!coords) continue;
+      const miles = haversineMiles(state.userCoords.lat, state.userCoords.lng, coords.lat, coords.lng);
+      if (Number.isFinite(miles)) {
+        state.theatreDistanceByKey.set(distanceKey, miles);
+      }
+    }
+    writeTheatreGeoCache(cache);
+    state.theatreDistanceStatus = "ready";
+    state.theatreDistanceError = "";
+  } catch (error) {
+    state.theatreDistanceStatus = "unavailable";
+    const code = Number(error?.code);
+    if (code === 1) {
+      state.theatreDistanceError = "location-permission-denied";
+    } else if (code === 2) {
+      state.theatreDistanceError = "location-unavailable";
+    } else if (code === 3) {
+      state.theatreDistanceError = "location-timeout";
+    } else {
+      state.theatreDistanceError = "location-request-failed";
+    }
+  }
+
+  updateTheatreSortStatus();
+  if (state.view === "theatres") render();
+}
+
+function getCurrentPosition(options) {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+  });
+}
+
+function buildTheatreDistanceKey(theatre) {
+  if (!theatre) return "";
+  return [
+    normalizeSearchText(theatre.name),
+    normalizeSearchText(theatre.city),
+    normalizeSearchText(theatre.address),
+  ].join("::");
+}
+
+function buildTheatreGeocodeQueries(theatre) {
+  const name = String(theatre?.name || "").trim();
+  const address = String(theatre?.address || "").trim();
+  const city = String(theatre?.city || "").trim();
+  const statePart = "Maine";
+  const countryPart = "USA";
+  const queries = [
+    [address, city, statePart, countryPart].filter(Boolean).join(", "),
+    [name, address, city, statePart, countryPart].filter(Boolean).join(", "),
+    [name, city, statePart, countryPart].filter(Boolean).join(", "),
+    [city, statePart, countryPart].filter(Boolean).join(", "),
+  ];
+  return Array.from(new Set(queries.filter(Boolean)));
+}
+
+async function geocodeTheatre(theatre) {
+  const queries = buildTheatreGeocodeQueries(theatre);
+  for (const query of queries) {
+    const viaNominatim = await geocodeWithNominatimJsonp(query);
+    if (viaNominatim) return viaNominatim;
+    const viaPhoton = await geocodeWithPhoton(query);
+    if (viaPhoton) return viaPhoton;
+  }
+  return null;
+}
+
+async function geocodeWithNominatimJsonp(query) {
+  if (!query) return null;
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(query)}`;
+    const json = await geocodeTheatreJsonp(url);
+    const first = Array.isArray(json) ? json[0] : null;
+    if (!first) return null;
+    const lat = Number(first.lat);
+    const lng = Number(first.lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    return { lat, lng };
+  } catch {
+    return null;
+  }
+}
+
+async function geocodeWithPhoton(query) {
+  if (!query) return null;
+  try {
+    const url = `https://photon.komoot.io/api/?limit=1&q=${encodeURIComponent(query)}`;
+    const response = await fetch(url, { headers: { Accept: "application/json" } });
+    if (!response.ok) return null;
+    const json = await response.json();
+    const feature = Array.isArray(json?.features) ? json.features[0] : null;
+    const coordinates = feature?.geometry?.coordinates;
+    if (!Array.isArray(coordinates) || coordinates.length < 2) return null;
+    const lng = Number(coordinates[0]);
+    const lat = Number(coordinates[1]);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    return { lat, lng };
+  } catch {
+    return null;
+  }
+}
+
+function geocodeTheatreJsonp(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName = `__theatreGeoCb_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+    const script = document.createElement("script");
+    const timeout = window.setTimeout(() => {
+      cleanup();
+      reject(new Error("Geocode JSONP timeout"));
+    }, 10000);
+
+    function cleanup() {
+      window.clearTimeout(timeout);
+      delete window[callbackName];
+      script.remove();
+    }
+
+    window[callbackName] = (payload) => {
+      cleanup();
+      resolve(payload);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("Geocode JSONP failed"));
+    };
+    script.src = `${url}&json_callback=${callbackName}`;
+    document.head.appendChild(script);
+  });
+}
+
+function haversineMiles(lat1, lng1, lat2, lng2) {
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return 3958.7613 * c;
+}
+
+function readTheatreGeoCache() {
+  try {
+    const raw = localStorage.getItem(THEATRE_GEO_CACHE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeTheatreGeoCache(cache) {
+  try {
+    localStorage.setItem(THEATRE_GEO_CACHE_KEY, JSON.stringify(cache || {}));
+  } catch {
+    // Ignore storage failures (private mode/quota).
+  }
+}
+
+function updateTheatreSortStatus() {
+  const el = elements.theatreSortStatus;
+  if (!el) return;
+  if (state.view !== "theatres") {
+    el.classList.add("hidden");
+    el.textContent = "";
+    return;
+  }
+
+  el.classList.remove("hidden");
+  const distanceCount = state.theatreDistanceByKey.size;
+  if (state.theatreDistanceStatus === "loading") {
+    el.textContent = "Theatre sort: trying location-based order...";
+    return;
+  }
+  if (state.theatreDistanceStatus === "ready") {
+    if (distanceCount > 0) {
+      el.textContent = `Theatre sort: nearest first (${distanceCount} theatres distance-ranked).`;
+    } else {
+      el.textContent = "Theatre sort: location found, but no theatre distances resolved. Showing alphabetical order.";
+    }
+    return;
+  }
+  if (state.theatreDistanceStatus === "unavailable") {
+    const reason = state.theatreDistanceError ? ` (${state.theatreDistanceError})` : "";
+    el.textContent = `Theatre sort: location unavailable${reason}. Showing alphabetical order.`;
+    return;
+  }
+  el.textContent = "Theatre sort: alphabetical (location not requested yet).";
 }
 
 function stripDiacritics(value) {
@@ -1925,11 +2278,40 @@ function buildGroups(theatres, view) {
       });
       if (!Object.keys(row.dates).length) return;
 
+      if (view === "films") {
+        const key = `film::${buildFilmGroupKey(row.film, row.year)}`;
+        if (!grouped[key]) {
+          grouped[key] = {
+            theatreInfo: null,
+            dayInfo: null,
+            filmInfo: row,
+            shows: [],
+          };
+        }
+        grouped[key].shows.push(row);
+        return;
+      }
+
+      if (view === "theatres") {
+        const key = `${theatre.name} · ${theatre.city}`;
+        if (!grouped[key]) {
+          grouped[key] = {
+            theatreInfo,
+            dayInfo: null,
+            filmInfo: null,
+            shows: [],
+          };
+        }
+        grouped[key].shows.push(row);
+        return;
+      }
+
       if (view === "days") {
         Object.entries(row.dates).forEach(([date, times]) => {
           if (!grouped[date]) {
             grouped[date] = {
               theatreInfo: null,
+              dayInfo: { date },
               filmInfo: null,
               shows: [],
               byFilm: {},
@@ -1956,16 +2338,6 @@ function buildGroups(theatres, view) {
         });
         return;
       }
-
-      const key = view === "theatres" ? theatre.name : buildFilmGroupKey(row.film, row.year);
-      if (!grouped[key]) {
-        grouped[key] = {
-          theatreInfo: view === "theatres" ? theatreInfo : null,
-          filmInfo: view === "films" ? row : null,
-          shows: [],
-        };
-      }
-      grouped[key].shows.push(row);
     });
   });
 
@@ -1981,6 +2353,47 @@ function buildGroups(theatres, view) {
   }
 
   return grouped;
+}
+
+function buildExpandCardKey(view, group) {
+  const filmKey = buildFilmGroupKey(group?.filmInfo?.film || "", group?.filmInfo?.year);
+  if (view === "films") return `films::${filmKey}`;
+  if (view === "theatres") {
+    return [
+      "theatres",
+      group?.theatreInfo?.name || "",
+      group?.theatreInfo?.city || "",
+      filmKey,
+    ].join("::");
+  }
+  if (view === "days") {
+    return [
+      "days",
+      group?.dayInfo?.date || "",
+      filmKey,
+    ].join("::");
+  }
+  return `${view}::${filmKey}`;
+}
+
+function buildExpandRowKey(view, group, show) {
+  const filmKey = buildFilmGroupKey(show?.film || "", show?.year);
+  if (view === "theatres") {
+    return [
+      "theatres-row",
+      group?.theatreInfo?.name || "",
+      group?.theatreInfo?.city || "",
+      filmKey,
+    ].join("::");
+  }
+  if (view === "days") {
+    return [
+      "days-row",
+      group?.dayInfo?.date || "",
+      filmKey,
+    ].join("::");
+  }
+  return `${view}-row::${filmKey}`;
 }
 
 function renderSchedule(container, dates) {
