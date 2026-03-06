@@ -78,7 +78,7 @@
 
       <section id="adminPanel" class="admin-panel" aria-label="Admin panel">
         <h2>Admin</h2>
-        <p>Sign in with Supabase magic link to edit live data.</p>
+        <p id="adminIntroText">Sign in with Supabase magic link to edit live data.</p>
 
         <section id="adminAuthGate" class="admin-auth-gate hidden">
           <h3>Admin Login</h3>
@@ -88,12 +88,13 @@
           <div class="admin-inline-actions">
             <button id="adminLoginButton">Send Magic Link</button>
           </div>
+          <p id="adminAuthMessage" class="admin-message" role="status"></p>
         </section>
 
         <div id="adminControls" class="hidden">
-          <div class="admin-inline-actions">
+          <div class="admin-inline-actions admin-top-actions">
             <button id="adminLogoutButton" class="ghost-btn">Log Out</button>
-            <a href="admin-films.html" class="ghost-btn">Open Film Catalog</a>
+            <button id="openFilmCatalogButton" class="ghost-btn" type="button">Open Film Catalog</button>
           </div>
 
         <div class="admin-grid">

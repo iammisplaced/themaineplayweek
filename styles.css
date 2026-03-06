@@ -766,6 +766,10 @@ textarea {
   margin-top: 0.55rem;
 }
 
+.admin-top-actions {
+  padding-bottom: 0.55rem;
+}
+
 .admin-help {
   margin: 0.15rem 0 0.25rem;
   color: var(--muted);
@@ -871,6 +875,14 @@ textarea {
   min-height: 1.4rem;
   margin-top: 0.6rem;
   color: var(--accent);
+}
+
+.admin-message.admin-message-success {
+  color: #1d5c4b;
+  background: #e7f4ef;
+  border: 1px solid #b8ddcf;
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
 }
 
 .poster-lightbox {

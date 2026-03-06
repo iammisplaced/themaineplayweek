@@ -62,10 +62,13 @@ const elements = {
   showItemTemplate: document.getElementById("showItemTemplate"),
   adminToggle: document.getElementById("adminToggle"),
   adminPanel: document.getElementById("adminPanel"),
+  adminIntroText: document.getElementById("adminIntroText"),
   adminAuthGate: document.getElementById("adminAuthGate"),
+  adminAuthMessage: document.getElementById("adminAuthMessage"),
   adminControls: document.getElementById("adminControls"),
   adminEmailInput: document.getElementById("adminEmailInput"),
   adminLoginButton: document.getElementById("adminLoginButton"),
+  openFilmCatalogButton: document.getElementById("openFilmCatalogButton"),
   adminLogoutButton: document.getElementById("adminLogoutButton"),
   adminTheatreSearch: document.getElementById("adminTheatreSearch"),
   adminTheatreResults: document.getElementById("adminTheatreResults"),
@@ -335,6 +338,10 @@ function bindEvents() {
     const open = elements.adminPanel.classList.toggle("open");
     elements.adminToggle.setAttribute("aria-expanded", String(open));
     elements.adminMessage.textContent = "";
+    if (elements.adminAuthMessage) {
+      elements.adminAuthMessage.classList.remove("admin-message-success");
+      elements.adminAuthMessage.textContent = "";
+    }
     if (open) {
       loadAdminSettings();
       syncAdminEditor();
@@ -343,13 +350,16 @@ function bindEvents() {
   });
 
   elements.adminLoginButton.addEventListener("click", async () => {
+    const authMessage = elements.adminAuthMessage || elements.adminMessage;
     if (!state.supabase) {
-      elements.adminMessage.textContent = "Supabase is not configured.";
+      authMessage.classList.remove("admin-message-success");
+      authMessage.textContent = "Supabase is not configured.";
       return;
     }
     const email = elements.adminEmailInput.value.trim();
     if (!email) {
-      elements.adminMessage.textContent = "Enter your email first.";
+      authMessage.classList.remove("admin-message-success");
+      authMessage.textContent = "Enter your email first.";
       return;
     }
 
@@ -361,11 +371,13 @@ function bindEvents() {
     });
 
     if (error) {
-      elements.adminMessage.textContent = `Magic link failed: ${error.message}`;
+      authMessage.classList.remove("admin-message-success");
+      authMessage.textContent = `Magic link failed: ${error.message}`;
       return;
     }
 
-    elements.adminMessage.textContent = "Magic link sent. Check your email.";
+    authMessage.classList.add("admin-message-success");
+    authMessage.textContent = `Magic link sent to ${email}. Check your inbox for the sign-in link.`;
   });
 
   elements.adminLogoutButton.addEventListener("click", async () => {
@@ -375,6 +387,10 @@ function bindEvents() {
     state.admin.auth.email = "";
     updateAdminAuthUI();
     elements.adminMessage.textContent = "Logged out.";
+  });
+
+  elements.openFilmCatalogButton?.addEventListener("click", () => {
+    window.location.href = "admin-films.html";
   });
 
   elements.tmdbApiKeyInput.addEventListener("input", () => {
@@ -1027,6 +1043,7 @@ function updateAdminAuthUI() {
   const locked = !state.admin.auth.authenticated;
   elements.adminAuthGate.classList.toggle("hidden", !locked);
   elements.adminControls.classList.toggle("hidden", locked);
+  elements.adminIntroText?.classList.toggle("hidden", !locked);
 }
 
 function renderTheatreOptions() {
