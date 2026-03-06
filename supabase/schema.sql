@@ -147,6 +147,18 @@ begin
       join payload_films pf
         on pf.film_key = link_item->>'film_key'
     ),
+    payload_non_empty_by_id as (
+      select distinct theatre_db_id, film_db_id
+      from payload_links
+      where theatre_db_id is not null
+        and film_db_id is not null
+        and ticket_link is not null
+    ),
+    payload_non_empty_by_text as (
+      select distinct theatre_name_key, theatre_city_key, film_identity_key
+      from payload_links
+      where ticket_link is not null
+    ),
     existing_links as (
       select
         tf.theatre_id,
@@ -156,8 +168,7 @@ begin
         case
           when f.tmdb_id is not null then 'tmdb:' || f.tmdb_id::text
           else lower(trim(f.title)) || '::' || coalesce(f.year::text, '')
-        end as film_identity_key,
-        nullif(trim(tf.ticket_link), '') as ticket_link
+        end as film_identity_key
       from public.theatre_films tf
       join public.theatres t
         on t.id = tf.theatre_id
@@ -168,19 +179,15 @@ begin
     risky as (
       select 1
       from existing_links existing
-      left join payload_links incoming
-        on (
-          incoming.theatre_db_id is not null
-          and incoming.film_db_id is not null
-          and incoming.theatre_db_id = existing.theatre_id
-          and incoming.film_db_id = existing.film_id
-        ) or (
-          (incoming.theatre_db_id is null or incoming.film_db_id is null)
-          and incoming.theatre_name_key = existing.theatre_name_key
-          and incoming.theatre_city_key = existing.theatre_city_key
-          and incoming.film_identity_key = existing.film_identity_key
-        )
-      where incoming.ticket_link is null
+      left join payload_non_empty_by_id pid
+        on pid.theatre_db_id = existing.theatre_id
+       and pid.film_db_id = existing.film_id
+      left join payload_non_empty_by_text ptxt
+        on ptxt.theatre_name_key = existing.theatre_name_key
+       and ptxt.theatre_city_key = existing.theatre_city_key
+       and ptxt.film_identity_key = existing.film_identity_key
+      where pid.theatre_db_id is null
+        and ptxt.theatre_name_key is null
     )
     select count(*) into risky_ticket_link_clears from risky;
 

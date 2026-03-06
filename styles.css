@@ -8,6 +8,7 @@
   --border: #d6d1c8;
   --radius: 14px;
   --page-top-space: 2rem;
+  --center-control-width: 420px;
 }
 
 * {
@@ -83,7 +84,7 @@ h1 {
   margin-bottom: 1rem;
   padding: 0.45rem 0 0.5rem;
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr minmax(0, var(--center-control-width)) 1fr;
   align-items: center;
   gap: 0.75rem;
 }
@@ -104,7 +105,8 @@ h1 {
 }
 
 .public-search {
-  width: min(360px, 100%);
+  width: 100%;
+  max-width: 100%;
   justify-self: center;
   grid-column: 2;
   padding: 0.32rem;
@@ -113,6 +115,60 @@ h1 {
   background: var(--panel);
   box-shadow: 0 10px 20px rgba(29, 31, 31, 0.12);
   transition: background 140ms linear, border-color 140ms linear, box-shadow 140ms linear;
+}
+
+.day-picker {
+  width: 100%;
+  max-width: 100%;
+  justify-self: center;
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.32rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--panel);
+  box-shadow: 0 10px 20px rgba(29, 31, 31, 0.12);
+}
+
+.day-picker-main {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.day-picker-input {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  padding: 0.5rem 0.95rem;
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.day-picker-input:focus-visible {
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.day-picker-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.day-picker-nav {
+  padding: 0.5rem 0.95rem;
+  font-size: 0.92rem;
+}
+
+.day-picker-nav:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .public-search input {
@@ -271,12 +327,14 @@ button:not(.ghost-btn):hover,
   align-items: start;
 }
 
-.results.results-masonry[data-view="films"] {
+.results.results-masonry[data-view="films"],
+.results.results-masonry[data-view="days"] {
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 0.75rem;
 }
 
-.results.results-masonry[data-view="films"] .group-card.film-card:not(.film-card-collapsed) {
+.results.results-masonry[data-view="films"] .group-card.film-card:not(.film-card-collapsed),
+.results.results-masonry[data-view="days"] .group-card.film-card:not(.film-card-collapsed) {
   grid-column: span 2;
 }
 
@@ -517,7 +575,8 @@ button:not(.ghost-btn):hover,
 }
 
 @media (max-width: 700px) {
-  .results.results-masonry[data-view="films"] .group-card.film-card:not(.film-card-collapsed) {
+  .results.results-masonry[data-view="films"] .group-card.film-card:not(.film-card-collapsed),
+  .results.results-masonry[data-view="days"] .group-card.film-card:not(.film-card-collapsed) {
     grid-column: 1 / -1;
   }
 }
@@ -972,6 +1031,12 @@ body.no-scroll {
   }
 
   .public-search {
+    order: 3;
+    flex-basis: 100%;
+    width: 100%;
+  }
+
+  .day-picker {
     order: 3;
     flex-basis: 100%;
     width: 100%;
