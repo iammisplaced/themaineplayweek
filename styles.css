@@ -26,6 +26,68 @@ body {
   color: var(--ink);
 }
 
+body.app-loading {
+  overflow: hidden;
+}
+
+.app-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 20% 20%, #e9ddc7 0%, transparent 42%),
+    radial-gradient(circle at 80% 20%, #d9e7dd 0%, transparent 36%),
+    rgba(243, 239, 229, 0.98);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 220ms ease, visibility 220ms ease;
+}
+
+.app-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.app-loader-mark {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+}
+
+.app-loader-title {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.1rem, 2.4vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.app-loader-spinner {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  border: 3px solid #d9cdb7;
+  border-top-color: var(--accent);
+  animation: app-loader-spin 850ms linear infinite;
+}
+
+.app-loader-text {
+  margin: 0;
+  color: var(--accent-2);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+@keyframes app-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 main,
 .site-header {
   width: min(1024px, 100%);

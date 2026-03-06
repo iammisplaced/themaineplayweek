@@ -52,6 +52,7 @@ const state = {
 };
 
 const elements = {
+  appLoader: document.getElementById("appLoader"),
   controls: document.querySelector(".controls"),
   publicSearchWrap: document.getElementById("publicSearchWrap"),
   publicSearchInput: document.getElementById("publicSearchInput"),
@@ -123,8 +124,40 @@ const elements = {
 
 let resizeRenderTimeout = null;
 let lastViewportWidth = window.innerWidth;
+let appBootComplete = false;
+let pageLoadComplete = document.readyState === "complete";
 
-await init();
+setLoadingState(true);
+
+if (!pageLoadComplete) {
+  window.addEventListener(
+    "load",
+    () => {
+      pageLoadComplete = true;
+      syncLoadingState();
+    },
+    { once: true }
+  );
+}
+
+try {
+  await init();
+} finally {
+  appBootComplete = true;
+  syncLoadingState();
+}
+
+function syncLoadingState() {
+  const shouldShowLoader = !(appBootComplete && pageLoadComplete);
+  setLoadingState(shouldShowLoader);
+}
+
+function setLoadingState(isLoading) {
+  if (!elements.appLoader) return;
+  document.body.classList.toggle("app-loading", isLoading);
+  elements.appLoader.classList.toggle("is-hidden", !isLoading);
+  elements.appLoader.setAttribute("aria-hidden", String(!isLoading));
+}
 
 async function init() {
   initializeSupabase();
