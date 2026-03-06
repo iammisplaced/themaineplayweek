@@ -3,8 +3,11 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const DATA_URL = "./data/showtimes.json";
 const STORAGE_KEY = "showtimes-local-edit";
 const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
+const NO_POSTER_IMAGE_URL = "./noposter.webp";
 const MASONRY_MIN_COLUMN_WIDTH = 280;
+const FILMS_MASONRY_MIN_COLUMN_WIDTH = 170;
 const MASONRY_GAP_PX = 16;
+const FILM_LAYOUT_ANIMATION_MS = 320;
 const SUBSTACK_ARCHIVE_URL = "https://themaineplayweek.substack.com/api/v1/archive?sort=new";
 
 const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
@@ -15,6 +18,7 @@ const state = {
   data: { theatreGroups: [] },
   view: "films",
   source: "json",
+  expandedFilmGroups: new Set(),
   publicSearch: {
     films: "",
     theatres: "",
@@ -253,6 +257,35 @@ function bindEvents() {
   });
 
   elements.results.addEventListener("click", (event) => {
+    const filmExpandToggle = event.target.closest(".film-expand-toggle");
+    if (filmExpandToggle) {
+      const key = filmExpandToggle.dataset.filmKey || filmExpandToggle.closest(".group-card")?.dataset.filmKey;
+      if (!key) return;
+      const previousRects = captureFilmCardRects();
+      const cardBefore = filmExpandToggle.closest(".group-card");
+      const cardTopBefore = cardBefore?.getBoundingClientRect().top ?? 0;
+      const scrollYBefore = window.scrollY;
+      if (state.expandedFilmGroups.has(key)) {
+        state.expandedFilmGroups.delete(key);
+      } else {
+        state.expandedFilmGroups.add(key);
+      }
+      render();
+      requestAnimationFrame(() => {
+        const cardAfter = Array.from(elements.results.querySelectorAll(".group-card")).find(
+          (card) => card.dataset.filmKey === key
+        );
+        if (!cardAfter) {
+          window.scrollTo(0, scrollYBefore);
+          return;
+        }
+        const cardTopAfter = cardAfter.getBoundingClientRect().top;
+        window.scrollBy(0, cardTopAfter - cardTopBefore);
+        animateFilmCardLayout(previousRects);
+      });
+      return;
+    }
+
     const poster = event.target.closest(".group-film-poster, .show-poster");
     if (!poster || poster.classList.contains("hidden")) return;
     const src = poster.getAttribute("src");
@@ -1559,11 +1592,13 @@ function render() {
     }
     const subtitle = card.querySelector(".group-subtitle");
     const groupLink = card.querySelector(".group-link");
+    const filmExpandToggle = card.querySelector(".film-expand-toggle");
     const groupFilmSummary = card.querySelector(".group-film-summary");
     const groupFilmPoster = card.querySelector(".group-film-poster");
     const groupFilmFacts = card.querySelector(".group-film-facts");
     const list = card.querySelector(".show-list");
     const shows = group.shows;
+    let filmGroupExpanded = true;
 
     if (group.theatreInfo) {
       subtitle.textContent = `${group.theatreInfo.address}`;
@@ -1575,12 +1610,28 @@ function render() {
       }
     }
     if (state.view === "films" && group.filmInfo) {
-      const facts = buildFilmFacts(group.filmInfo);
-      if (group.filmInfo.posterUrl) {
-        groupFilmPoster.src = group.filmInfo.posterUrl;
-        groupFilmPoster.alt = `Poster for ${group.filmInfo.film}`;
-        groupFilmPoster.classList.remove("hidden");
+      const filmGroupKey = buildFilmGroupKey(group.filmInfo.film, group.filmInfo.year);
+      filmGroupExpanded = state.expandedFilmGroups.has(filmGroupKey);
+      card.dataset.filmKey = filmGroupKey;
+      card.classList.toggle("film-card-collapsed", !filmGroupExpanded);
+
+      if (filmExpandToggle) {
+        filmExpandToggle.dataset.filmKey = filmGroupKey;
+        filmExpandToggle.textContent = filmGroupExpanded ? "Collapse" : "Expand";
+        filmExpandToggle.setAttribute("aria-expanded", String(filmGroupExpanded));
+        filmExpandToggle.classList.remove("hidden");
       }
+
+      const facts = buildFilmFacts(group.filmInfo);
+      groupFilmPoster.onerror = () => {
+        groupFilmPoster.onerror = null;
+        groupFilmPoster.src = NO_POSTER_IMAGE_URL;
+      };
+      groupFilmPoster.src = group.filmInfo.posterUrl || NO_POSTER_IMAGE_URL;
+      groupFilmPoster.alt = group.filmInfo.posterUrl
+        ? `Poster for ${group.filmInfo.film}`
+        : `No poster available for ${group.filmInfo.film}`;
+      groupFilmPoster.classList.remove("hidden");
       if (facts.length) {
         groupFilmFacts.innerHTML = "";
         facts.forEach((fact) => {
@@ -1599,62 +1650,71 @@ function render() {
           row.appendChild(value);
           groupFilmFacts.appendChild(row);
         });
-        groupFilmFacts.classList.remove("hidden");
-      }
-      groupFilmSummary.classList.remove("hidden");
-    }
-
-    shows.sort((a, b) => {
-      if (state.view === "theatres") {
-        const earliestA = getRowEarliestShowtimeTimestamp(a);
-        const earliestB = getRowEarliestShowtimeTimestamp(b);
-        if (earliestA !== earliestB) return earliestA - earliestB;
-        return buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
-      }
-      if (state.view === "days") {
-        return buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
-      }
-      return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
-    });
-
-    for (const show of shows) {
-      const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
-      const main = item.querySelector(".show-main");
-      const meta = item.querySelector(".show-meta");
-      const schedule = item.querySelector(".show-schedule");
-      const row = item.querySelector(".show-row");
-      const poster = item.querySelector(".show-poster");
-      const link = item.querySelector(".show-link");
-      const filmLabel = show.film;
-
-      if (state.view === "theatres") {
-        main.textContent = filmLabel;
-        meta.textContent = "";
-        renderSchedule(schedule, show.dates);
-      } else if (state.view === "days") {
-        main.textContent = filmLabel;
-        meta.textContent = "";
-        renderTheatreSchedule(schedule, show.theatres);
-      } else {
-        main.textContent = `${show.theatre}`;
-        meta.textContent = `${show.city}`;
-        renderSchedule(schedule, show.dates);
-      }
-
-      if (state.view !== "days") {
-        const ticketUrl = normalizeOutboundUrl(show.ticketLink);
-        if (ticketUrl) {
-          link.href = ticketUrl;
-          link.classList.remove("hidden");
+        if (filmGroupExpanded) {
+          groupFilmFacts.classList.remove("hidden");
+        } else {
+          groupFilmFacts.classList.add("hidden");
         }
       }
-      if (state.view !== "films" && show.posterUrl) {
-        row.classList.add("has-poster");
-        poster.src = show.posterUrl;
-        poster.alt = `Poster for ${show.film}`;
-        poster.classList.remove("hidden");
+      groupFilmSummary.classList.remove("hidden");
+      if (!filmGroupExpanded) {
+        list.classList.add("hidden");
       }
-      list.appendChild(item);
+    }
+
+    if (state.view !== "films" || filmGroupExpanded) {
+      shows.sort((a, b) => {
+        if (state.view === "theatres") {
+          const earliestA = getRowEarliestShowtimeTimestamp(a);
+          const earliestB = getRowEarliestShowtimeTimestamp(b);
+          if (earliestA !== earliestB) return earliestA - earliestB;
+          return buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
+        }
+        if (state.view === "days") {
+          return buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
+        }
+        return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
+      });
+
+      for (const show of shows) {
+        const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
+        const main = item.querySelector(".show-main");
+        const meta = item.querySelector(".show-meta");
+        const schedule = item.querySelector(".show-schedule");
+        const row = item.querySelector(".show-row");
+        const poster = item.querySelector(".show-poster");
+        const link = item.querySelector(".show-link");
+        const filmLabel = show.film;
+
+        if (state.view === "theatres") {
+          main.textContent = filmLabel;
+          meta.textContent = "";
+          renderSchedule(schedule, show.dates);
+        } else if (state.view === "days") {
+          main.textContent = filmLabel;
+          meta.textContent = "";
+          renderTheatreSchedule(schedule, show.theatres);
+        } else {
+          main.textContent = `${show.theatre}`;
+          meta.textContent = `${show.city}`;
+          renderSchedule(schedule, show.dates);
+        }
+
+        if (state.view !== "days") {
+          const ticketUrl = normalizeOutboundUrl(show.ticketLink);
+          if (ticketUrl) {
+            link.href = ticketUrl;
+            link.classList.remove("hidden");
+          }
+        }
+        if (state.view !== "films" && show.posterUrl) {
+          row.classList.add("has-poster");
+          poster.src = show.posterUrl;
+          poster.alt = `Poster for ${show.film}`;
+          poster.classList.remove("hidden");
+        }
+        list.appendChild(item);
+      }
     }
 
     cards.push(card);
@@ -1665,6 +1725,11 @@ function render() {
 
 function renderResultCards(cards) {
   if (!cards.length) return;
+
+  if (state.view === "films") {
+    cards.forEach((card) => elements.results.appendChild(card));
+    return;
+  }
 
   const columnCount = getMasonryColumnCount();
   if (columnCount <= 1) {
@@ -1690,7 +1755,52 @@ function renderResultCards(cards) {
 function getMasonryColumnCount() {
   const width = elements.results.clientWidth;
   if (!width) return 1;
-  return Math.max(1, Math.floor((width + MASONRY_GAP_PX) / (MASONRY_MIN_COLUMN_WIDTH + MASONRY_GAP_PX)));
+  const minColumnWidth = state.view === "films" ? FILMS_MASONRY_MIN_COLUMN_WIDTH : MASONRY_MIN_COLUMN_WIDTH;
+  return Math.max(1, Math.floor((width + MASONRY_GAP_PX) / (minColumnWidth + MASONRY_GAP_PX)));
+}
+
+function captureFilmCardRects() {
+  const rects = new Map();
+  if (state.view !== "films") return rects;
+  elements.results.querySelectorAll(".group-card[data-film-key]").forEach((card) => {
+    const key = card.dataset.filmKey;
+    if (!key) return;
+    rects.set(key, card.getBoundingClientRect());
+  });
+  return rects;
+}
+
+function animateFilmCardLayout(previousRects) {
+  if (state.view !== "films") return;
+  if (!previousRects || !previousRects.size) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  elements.results.querySelectorAll(".group-card[data-film-key]").forEach((card) => {
+    const key = card.dataset.filmKey;
+    if (!key) return;
+    const before = previousRects.get(key);
+    if (!before) return;
+    const after = card.getBoundingClientRect();
+    const deltaX = before.left - after.left;
+    const deltaY = before.top - after.top;
+    const scaleX = before.width / Math.max(after.width, 1);
+    const scaleY = before.height / Math.max(after.height, 1);
+    const moved =
+      Math.abs(deltaX) > 0.5 || Math.abs(deltaY) > 0.5 || Math.abs(scaleX - 1) > 0.01 || Math.abs(scaleY - 1) > 0.01;
+    if (!moved) return;
+
+    card.getAnimations().forEach((animation) => animation.cancel());
+    card.animate(
+      [
+        { transformOrigin: "top left", transform: `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})` },
+        { transformOrigin: "top left", transform: "translate(0, 0) scale(1, 1)" },
+      ],
+      {
+        duration: FILM_LAYOUT_ANIMATION_MS,
+        easing: "cubic-bezier(0.2, 0, 0, 1)",
+      }
+    );
+  });
 }
 
 function syncPublicSearchUI() {

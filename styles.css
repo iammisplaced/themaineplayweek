@@ -263,6 +263,15 @@ button:not(.ghost-btn):hover,
   align-items: start;
 }
 
+.results.results-masonry[data-view="films"] {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
+}
+
+.results.results-masonry[data-view="films"] .group-card.film-card:not(.film-card-collapsed) {
+  grid-column: span 2;
+}
+
 .masonry-column {
   display: grid;
   gap: 1rem;
@@ -279,6 +288,8 @@ button:not(.ghost-btn):hover,
 
 .group-card.film-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
   border: 0;
   border-radius: 2px;
   background:
@@ -292,6 +303,24 @@ button:not(.ghost-btn):hover,
     0 1px 0 rgba(255, 255, 255, 0.8) inset,
     0 0 0 1px rgba(116, 93, 62, 0.12) inset,
     0 10px 20px rgba(44, 36, 26, 0.11);
+}
+
+.group-card.film-card .group-title {
+  order: 1;
+}
+
+.group-card.film-card .group-film-summary {
+  order: 2;
+}
+
+.group-card.film-card .show-list {
+  order: 3;
+}
+
+.group-card.film-card .film-expand-toggle {
+  order: 4;
+  margin-top: 0.6rem;
+  align-self: flex-start;
 }
 
 .group-card.film-card::before,
@@ -364,6 +393,29 @@ button:not(.ghost-btn):hover,
   line-height: 1.2;
 }
 
+.film-expand-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #f8f2ea;
+  color: var(--accent-2);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.22rem 0.62rem;
+  cursor: pointer;
+}
+
+.film-expand-toggle:hover,
+.film-expand-toggle:focus-visible {
+  background: #f1e5d8;
+  border-color: #c8beb1;
+}
+
 .group-subtitle {
   margin: 0 0 0.35rem;
   color: var(--muted);
@@ -411,6 +463,54 @@ button:not(.ghost-btn):hover,
   line-height: 1.4;
   display: grid;
   gap: 0.45rem;
+}
+
+.group-card.film-card.film-card-collapsed .group-film-summary {
+  margin-bottom: 0;
+  display: block;
+  text-align: center;
+}
+
+.group-card.film-card.film-card-collapsed .show-list,
+.group-card.film-card.film-card-collapsed .group-film-facts {
+  display: none;
+}
+
+.group-card.film-card.film-card-collapsed .group-title-film {
+  font-size: 0.94rem;
+  line-height: 1.1;
+  margin-bottom: 0.14rem;
+  min-height: calc(2 * 1.1em);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.group-card.film-card.film-card-collapsed .group-film-poster {
+  grid-column: auto;
+  grid-row: auto;
+  justify-self: center;
+  width: 138px;
+  height: 206px;
+  margin-top: 0.28rem;
+  margin-inline: auto;
+}
+
+.group-card.film-card.film-card-collapsed {
+  padding: 0.58rem;
+}
+
+.group-card.film-card.film-card-collapsed .film-expand-toggle {
+  font-size: 0.66rem;
+  padding: 0.16rem 0.5rem;
+  margin: 0.42rem auto 0;
+}
+
+@media (max-width: 700px) {
+  .results.results-masonry[data-view="films"] .group-card.film-card:not(.film-card-collapsed) {
+    grid-column: span 1;
+  }
 }
 
 .film-fact {
