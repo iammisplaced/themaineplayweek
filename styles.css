@@ -474,14 +474,14 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
 
 .results.results-masonry {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
   align-items: start;
 }
 
 .results.results-masonry[data-view="films"],
 .results.results-masonry[data-view="days"] {
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
   gap: 0.75rem;
 }
 
@@ -1146,11 +1146,15 @@ body.no-scroll {
   display: none;
 }
 
-.empty-state {
-  border: 1px dashed var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-  background: var(--surface-soft);
+.no-results-message {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 100%;
+  margin: 0.6rem 0 0.2rem;
+  color: var(--muted);
+  font-style: italic;
+  font-size: clamp(1.02rem, 1.6vw, 1.14rem);
+  text-align: center;
 }
 
 input,

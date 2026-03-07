@@ -424,26 +424,8 @@ function bindEvents() {
   });
 
   elements.dayPickerInput?.addEventListener("change", () => {
-    const availableDates = getAvailableUpcomingDates(state.data.theatreGroups);
-    if (!availableDates.length) {
-      state.selectedDay = "";
-      render();
-      return;
-    }
     const requested = String(elements.dayPickerInput.value || "").trim();
-    if (!requested) {
-      state.selectedDay = ensureSelectedDay(availableDates);
-      render();
-      return;
-    }
-    if (availableDates.includes(requested)) {
-      state.selectedDay = requested;
-      render();
-      return;
-    }
-
-    const nextMatch = availableDates.find((date) => date >= requested) || availableDates[availableDates.length - 1];
-    state.selectedDay = nextMatch;
+    state.selectedDay = requested || toIsoDate(new Date());
     render();
   });
 
@@ -1807,12 +1789,11 @@ function render() {
   let grouped = {};
   let activeDay = "";
   if (state.view === "days") {
-    const availableDates = getAvailableUpcomingDates(state.data.theatreGroups);
-    activeDay = ensureSelectedDay(availableDates);
-    syncDayPickerUI(availableDates, activeDay);
+    activeDay = ensureSelectedDay();
+    syncDayPickerUI(activeDay);
     grouped = activeDay ? buildSingleDayGroups(state.data.theatreGroups, activeDay) : {};
   } else {
-    syncDayPickerUI([], "");
+    syncDayPickerUI("");
     grouped = buildGroups(state.data.theatreGroups, state.view);
   }
 
@@ -1839,14 +1820,12 @@ function render() {
     }
   }
   if (!entries.length) {
-    if (state.view === "days") {
-      const message = activeDay
-        ? `No showtimes found for ${formatLongDisplayDate(activeDay)}.`
-        : "No upcoming showtimes found.";
-      elements.results.innerHTML = `<div class="empty-state">${message}</div>`;
-    } else {
-      elements.results.innerHTML = '<div class="empty-state">No showtimes found.</div>';
-    }
+    const message = state.view === "films"
+      ? "No films found..."
+      : state.view === "theatres"
+        ? "No theatres found..."
+        : "No showtimes for this day...";
+    elements.results.innerHTML = `<p class="no-results-message">${message}</p>`;
     return;
   }
 
@@ -2444,57 +2423,20 @@ function getRowEarliestShowtimeTimestamp(row) {
   return earliest;
 }
 
-function getAvailableUpcomingDates(theatres) {
-  const upcomingDates = new Set();
-  const now = new Date();
-  theatres.forEach((theatre) => {
-    (theatre.films || []).forEach((film) => {
-      (film.showings || []).forEach((showing) => {
-        (showing.times || []).forEach((time) => {
-          const showDateTime = getShowDateTime(showing.date, time);
-          if (!showDateTime || showDateTime < now) return;
-          upcomingDates.add(showing.date);
-        });
-      });
-    });
-  });
-  return Array.from(upcomingDates).sort((a, b) => a.localeCompare(b));
-}
-
-function ensureSelectedDay(availableDates) {
-  if (!Array.isArray(availableDates) || !availableDates.length) {
-    state.selectedDay = "";
-    return "";
-  }
-  if (availableDates.includes(state.selectedDay)) return state.selectedDay;
-
-  const todayIso = toIsoDate(new Date());
-  state.selectedDay = availableDates.includes(todayIso) ? todayIso : availableDates[0];
+function ensureSelectedDay() {
+  if (parseIsoDate(state.selectedDay)) return state.selectedDay;
+  state.selectedDay = toIsoDate(new Date());
   return state.selectedDay;
 }
 
 function shiftSelectedDay(direction) {
   if (state.view !== "days") return;
-  const availableDates = getAvailableUpcomingDates(state.data.theatreGroups);
-  const activeDay = ensureSelectedDay(availableDates);
-  if (!activeDay) {
-    render();
-    return;
-  }
-
-  const currentIndex = availableDates.indexOf(activeDay);
-  if (currentIndex < 0) {
-    render();
-    return;
-  }
-  const nextIndex = currentIndex + direction;
-  if (nextIndex < 0 || nextIndex >= availableDates.length) return;
-
-  state.selectedDay = availableDates[nextIndex];
+  const activeDay = ensureSelectedDay();
+  state.selectedDay = addDaysIso(activeDay, direction);
   render();
 }
 
-function syncDayPickerUI(availableDates, activeDay) {
+function syncDayPickerUI(activeDay) {
   if (!elements.dayPickerWrap || !elements.dayPickerInput) return;
 
   if (state.view !== "days") {
@@ -2503,22 +2445,20 @@ function syncDayPickerUI(availableDates, activeDay) {
   }
 
   elements.dayPickerWrap.classList.remove("hidden");
-  const hasDates = Array.isArray(availableDates) && availableDates.length > 0;
-  elements.dayPickerInput.disabled = !hasDates;
-  elements.dayPrevButton.disabled = true;
-  elements.dayNextButton.disabled = true;
+  elements.dayPickerInput.disabled = false;
+  elements.dayPrevButton.disabled = false;
+  elements.dayNextButton.disabled = false;
 
-  if (!hasDates || !activeDay) {
+  if (!activeDay) {
     elements.dayPickerInput.value = "";
-    elements.dayPickerInput.title = "No upcoming showtimes";
+    elements.dayPickerInput.title = "Select a date";
+    elements.dayPrevButton.disabled = true;
+    elements.dayNextButton.disabled = true;
     return;
   }
 
-  const currentIndex = availableDates.indexOf(activeDay);
   elements.dayPickerInput.value = activeDay;
   elements.dayPickerInput.title = formatLongDisplayDate(activeDay);
-  elements.dayPrevButton.disabled = currentIndex <= 0;
-  elements.dayNextButton.disabled = currentIndex >= availableDates.length - 1;
 }
 
 function buildSingleDayGroups(theatres, selectedDate) {
