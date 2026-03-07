@@ -68,7 +68,6 @@ const elements = {
   themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
   brandWordmark: document.getElementById("brandWordmark"),
-  controls: document.querySelector(".controls"),
   publicSearchWrap: document.getElementById("publicSearchWrap"),
   publicSearchInput: document.getElementById("publicSearchInput"),
   dayPickerWrap: document.getElementById("dayPickerWrap"),
@@ -2140,18 +2139,14 @@ function syncPublicSearchUI() {
     elements.publicSearchWrap.classList.remove("hidden");
     elements.publicSearchInput.placeholder = "Search films...";
     elements.publicSearchInput.value = state.publicSearch.films;
-    updateTheatreSortStatus();
-    return;
-  }
-  if (state.view === "theatres") {
+  } else if (state.view === "theatres") {
     elements.publicSearchWrap.classList.remove("hidden");
     elements.publicSearchInput.placeholder = "Search theatres or town...";
     elements.publicSearchInput.value = state.publicSearch.theatres;
-    updateTheatreSortStatus();
-    return;
+  } else {
+    elements.publicSearchWrap.classList.add("hidden");
+    elements.publicSearchInput.value = "";
   }
-  elements.publicSearchWrap.classList.add("hidden");
-  elements.publicSearchInput.value = "";
   updateTheatreSortStatus();
 }
 
@@ -2777,28 +2772,6 @@ function renderSchedule(container, dates) {
 
     container.appendChild(details);
   }
-}
-
-function renderTheatreSchedule(container, theatres) {
-  container.innerHTML = "";
-  const entries = Object.entries(theatres);
-  entries.sort(([a], [b]) => a.localeCompare(b));
-  entries.forEach(([theatreLabel, times]) => {
-    const details = document.createElement("details");
-    details.className = "show-schedule-collapse";
-
-    const summary = document.createElement("summary");
-    summary.className = "show-schedule-summary";
-    summary.textContent = theatreLabel;
-    details.appendChild(summary);
-
-    const content = document.createElement("div");
-    content.className = "show-schedule-row";
-    content.textContent = times.join(", ");
-    details.appendChild(content);
-
-    container.appendChild(details);
-  });
 }
 
 function createScheduleRow(date, times) {
