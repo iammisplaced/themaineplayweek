@@ -2157,7 +2157,7 @@ function syncPublicSearchUI() {
 
 function syncLatestPostVisibility() {
   if (!elements.latestPost) return;
-  elements.latestPost.classList.toggle("hidden", state.view !== "films");
+  elements.latestPost.classList.toggle("hidden", state.view !== "days");
 }
 
 function getPublicSearchQueryForView(view) {
