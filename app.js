@@ -3,6 +3,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const DATA_URL = "./data/showtimes.json";
 const STORAGE_KEY = "showtimes-local-edit";
 const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
+const THEME_STORAGE_KEY = "tmp-theme";
+const VIEW_STORAGE_KEY = "tmp-view";
 const NO_POSTER_IMAGE_URL = "./noposter.webp";
 const MASONRY_MIN_COLUMN_WIDTH = 280;
 const FILMS_MASONRY_MIN_COLUMN_WIDTH = 170;
@@ -15,6 +17,14 @@ const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqZnNqb3JhdHNmcWN5eWpzZXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2Mzc5MDgsImV4cCI6MjA4ODIxMzkwOH0.dmcQ_ffwmm4JIKTjSUNNYLGQ9w_v1mR6VRMZimVnLNg";
+const LOGO_SPIN_ANIMATION_MS = 420;
+const LIGHT_THEME = "light";
+const DARK_THEME = "dark";
+const THEME_COLOR_MAP = {
+  [LIGHT_THEME]: "#ECE5E0",
+  [DARK_THEME]: "#121816",
+};
+const VALID_VIEWS = new Set(["films", "theatres", "days"]);
 
 const state = {
   data: { theatreGroups: [] },
@@ -31,6 +41,7 @@ const state = {
     theatres: "",
   },
   selectedDay: "",
+  theme: LIGHT_THEME,
   supabase: null,
   admin: {
     theatreIndex: 0,
@@ -53,6 +64,10 @@ const state = {
 
 const elements = {
   appLoader: document.getElementById("appLoader"),
+  themeColorMeta: document.querySelector('meta[name="theme-color"]'),
+  themeToggle: document.getElementById("themeToggle"),
+  brandLogo: document.getElementById("brandLogo"),
+  brandWordmark: document.getElementById("brandWordmark"),
   controls: document.querySelector(".controls"),
   publicSearchWrap: document.getElementById("publicSearchWrap"),
   publicSearchInput: document.getElementById("publicSearchInput"),
@@ -123,6 +138,7 @@ const elements = {
 };
 
 let resizeRenderTimeout = null;
+let logoSpinResetTimeout = null;
 let lastViewportWidth = window.innerWidth;
 let appBootComplete = false;
 let pageLoadComplete = document.readyState === "complete";
@@ -160,6 +176,8 @@ function setLoadingState(isLoading) {
 }
 
 async function init() {
+  initializeTheme();
+  initializeViewPreference();
   initializeSupabase();
   bindEvents();
   void loadLatestSubstackPost();
@@ -169,6 +187,9 @@ async function init() {
   loadAdminSettings();
   syncAdminEditor();
   syncPublicSearchUI();
+  if (state.view === "theatres") {
+    void ensureTheatreDistanceSort();
+  }
   updateTheatreSortStatus();
   render();
 }
@@ -295,6 +316,12 @@ function initializeSupabase() {
 }
 
 function bindEvents() {
+  elements.themeToggle?.addEventListener("click", () => {
+    animateThemeToggle();
+    const nextTheme = state.theme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+    applyTheme(nextTheme, { persist: true });
+  });
+
   window.addEventListener("resize", () => {
     const currentWidth = window.innerWidth;
     if (currentWidth === lastViewportWidth) return;
@@ -374,18 +401,8 @@ function bindEvents() {
 
   elements.tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
-      state.view = tab.dataset.view;
-      elements.tabs.forEach((button) => {
-        const selected = button === tab;
-        button.classList.toggle("active", selected);
-        button.setAttribute("aria-selected", String(selected));
-      });
-      syncPublicSearchUI();
-      if (state.view === "theatres") {
-        void ensureTheatreDistanceSort();
-      }
-      updateTheatreSortStatus();
-      render();
+      const view = tab.dataset.view;
+      setView(view, { persist: true });
     });
   });
 
@@ -846,6 +863,98 @@ function bindEvents() {
     render();
     elements.adminMessage.textContent = "Reset from source data.";
   });
+}
+
+function initializeTheme() {
+  const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
+  const initialTheme =
+    storedTheme === LIGHT_THEME || storedTheme === DARK_THEME
+      ? storedTheme
+      : prefersDark
+        ? DARK_THEME
+        : LIGHT_THEME;
+  applyTheme(initialTheme, { persist: false });
+}
+
+function initializeViewPreference() {
+  const storedView = String(localStorage.getItem(VIEW_STORAGE_KEY) || "").trim();
+  if (VALID_VIEWS.has(storedView)) {
+    state.view = storedView;
+  }
+  syncViewTabSelection();
+}
+
+function syncViewTabSelection() {
+  elements.tabs.forEach((button) => {
+    const selected = button.dataset.view === state.view;
+    button.classList.toggle("active", selected);
+    button.setAttribute("aria-selected", String(selected));
+  });
+}
+
+function setView(view, options = {}) {
+  if (!VALID_VIEWS.has(view)) return;
+  const { persist = true } = options;
+  state.view = view;
+  syncViewTabSelection();
+  if (persist) {
+    localStorage.setItem(VIEW_STORAGE_KEY, view);
+  }
+  syncPublicSearchUI();
+  if (state.view === "theatres") {
+    void ensureTheatreDistanceSort();
+  }
+  updateTheatreSortStatus();
+  render();
+}
+
+function applyTheme(theme, options = {}) {
+  const { persist = true } = options;
+  const normalizedTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
+  state.theme = normalizedTheme;
+
+  document.documentElement.setAttribute("data-theme", normalizedTheme);
+
+  if (elements.brandLogo) {
+    elements.brandLogo.src = normalizedTheme === DARK_THEME ? "TMP logo light.png" : "TMP logo dark.png";
+  }
+
+  if (elements.brandWordmark) {
+    elements.brandWordmark.src =
+      normalizedTheme === DARK_THEME ? "TMP Wordmark Three Line Light.png" : "TMP Wordmark Three Line Dark.png";
+  }
+
+  if (elements.themeToggle) {
+    const isDark = normalizedTheme === DARK_THEME;
+    const nextThemeLabel = isDark ? "light" : "dark";
+    elements.themeToggle.setAttribute("aria-label", `Switch to ${nextThemeLabel} mode`);
+    elements.themeToggle.setAttribute("title", `Switch to ${nextThemeLabel} mode`);
+  }
+
+  if (elements.themeColorMeta) {
+    elements.themeColorMeta.setAttribute("content", THEME_COLOR_MAP[normalizedTheme] || THEME_COLOR_MAP[LIGHT_THEME]);
+  }
+
+  if (persist) {
+    localStorage.setItem(THEME_STORAGE_KEY, normalizedTheme);
+  }
+}
+
+function animateThemeToggle() {
+  if (!elements.brandLogo) return;
+  if (logoSpinResetTimeout) {
+    clearTimeout(logoSpinResetTimeout);
+    logoSpinResetTimeout = null;
+  }
+  elements.brandLogo.classList.remove("is-animating");
+  // Force reflow so repeated clicks retrigger the animation.
+  void elements.brandLogo.offsetWidth;
+  elements.brandLogo.classList.add("is-animating");
+  logoSpinResetTimeout = setTimeout(() => {
+    elements.brandLogo?.classList.remove("is-animating");
+    logoSpinResetTimeout = null;
+  }, LOGO_SPIN_ANIMATION_MS);
 }
 
 function openPosterLightbox(src, altText) {
