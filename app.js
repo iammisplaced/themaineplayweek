@@ -3,24 +3,24 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const DATA_URL = "./data/showtimes.json";
 const STORAGE_KEY = "showtimes-local-edit";
 const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
-const PROMO_SETTINGS_STORAGE_KEY = "tmp-promo-settings";
 const THEME_STORAGE_KEY = "tmp-theme";
 const VIEW_STORAGE_KEY = "tmp-view";
 const NO_POSTER_IMAGE_URL = "./noposter.webp";
+const PROMO_STORAGE_BUCKET = "promo-images";
 const MASONRY_MIN_COLUMN_WIDTH = 280;
 const FILMS_MASONRY_MIN_COLUMN_WIDTH = 170;
 const MASONRY_GAP_PX = 16;
 const PROMOTED_CARDS = Object.freeze([
   {
     title: "The Golden Statue Collection",
-    imageSrc: "./golden_statue_promo.gif",
+    imagePath: "defaults/golden_statue_promo.gif",
     imageAlt: "The Golden Statue Collection",
     buttonLabel: "Shop Now",
     buttonUrl: "https://shop.themaineplayweek.com",
   },
   {
     title: "TMP Newspaper Tee",
-    imageSrc: "./newspaper_promo.gif",
+    imagePath: "defaults/newspaper_promo.gif",
     imageAlt: "TMP Newspaper Tee",
     buttonLabel: "Shop Now",
     buttonUrl: "https://themaineplayweek.printful.me/product/unisex-garment-dyed-heavyweight-t-shirt",
@@ -559,13 +559,12 @@ function bindEvents() {
       promo.buttonUrl = String(control.value || "").trim();
     }
 
-    savePromotedCardsSettings();
     renderPromoSettingsEditor();
     render();
     elements.adminMessage.textContent = "Promo settings updated.";
   });
 
-  elements.promoSettingsList?.addEventListener("click", (event) => {
+  elements.promoSettingsList?.addEventListener("click", async (event) => {
     if (!requireAdminAuth()) return;
     const removeButton = event.target.closest("button[data-remove-promo-index]");
     if (!removeButton) return;
@@ -575,8 +574,14 @@ function bindEvents() {
     const label = String(promo?.title || promo?.imageName || "this promo").trim();
     const confirmed = window.confirm(`Delete ${label}?`);
     if (!confirmed) return;
+    if (promo?.imagePath) {
+      try {
+        await deletePromoImageFromStorage(promo.imagePath);
+      } catch {
+        // Non-blocking: allow metadata delete even if storage cleanup fails.
+      }
+    }
     state.promotedCards.splice(promoIndex, 1);
-    savePromotedCardsSettings();
     renderPromoSettingsEditor();
     render();
     elements.adminMessage.textContent = "Promo removed.";
@@ -600,24 +605,26 @@ function bindEvents() {
       elements.adminMessage.textContent = "Choose an image for the promo first.";
       return;
     }
+    if (!state.supabase) {
+      elements.adminMessage.textContent = "Supabase is required for promo image uploads.";
+      return;
+    }
     try {
-      const imageSrc = await readFileAsDataUrl(file);
+      const imagePath = await uploadPromoImageToStorage(file);
       const title = String(elements.modalPromoTitleInput?.value || "").trim();
       const buttonUrl = String(elements.modalPromoButtonUrlInput?.value || "").trim();
 
       state.promotedCards.push({
-        id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        id: `tmp-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         enabled: true,
         title,
-        imageSrc,
+        imagePath,
         imageAlt: title || file.name,
         imageName: file.name,
         buttonLabel: "Shop Now",
         buttonUrl,
-        isDefault: false,
       });
 
-      savePromotedCardsSettings();
       renderPromoSettingsEditor();
       render();
       elements.addPromoModal?.close();
@@ -1103,7 +1110,7 @@ async function refreshAuthState() {
 }
 
 async function loadData() {
-  state.promotedCards = loadPromotedCardsSettings();
+  state.promotedCards = cloneDefaultPromotedCards();
 
   if (state.supabase) {
     try {
@@ -1111,7 +1118,7 @@ async function loadData() {
       if (fromDb.theatreGroups.length) {
         validateData({ theatreGroups: fromDb.theatreGroups });
         state.data = { theatreGroups: fromDb.theatreGroups };
-        state.promotedCards = fromDb.promotedCards.length ? fromDb.promotedCards : cloneDefaultPromotedCards();
+        state.promotedCards = fromDb.promotedCards;
         state.source = "supabase";
         state.loadedFromSupabaseThisSession = true;
         return;
@@ -1173,7 +1180,7 @@ async function loadDataFromSupabase() {
   const promos = await fetchAllRowsFromSupabase(() =>
     state.supabase
       .from("promos")
-      .select("id,title,button_url,image_src,image_alt,image_name,button_label,enabled,sort_order")
+      .select("id,title,button_url,image_path,image_alt,image_name,button_label,enabled,sort_order")
       .order("sort_order", { ascending: true })
       .order("id", { ascending: true })
   );
@@ -1375,9 +1382,6 @@ function initializeAdminState() {
 function loadAdminSettings() {
   state.admin.tmdbApiKey = localStorage.getItem(TMDB_KEY_STORAGE_KEY) || "";
   elements.tmdbApiKeyInput.value = state.admin.tmdbApiKey;
-  if (state.source !== "supabase") {
-    state.promotedCards = loadPromotedCardsSettings();
-  }
   renderPromoSettingsEditor();
 }
 
@@ -1533,7 +1537,7 @@ function renderPromoSettingsEditor() {
 
     const heading = document.createElement("p");
     heading.className = "promo-settings-heading";
-    heading.textContent = promo.imageName || promo.imageSrc.replace("./", "");
+    heading.textContent = promo.imageName || promo.imagePath || "promo-image";
 
     const enabledWrap = document.createElement("label");
     enabledWrap.className = "promo-settings-toggle";
@@ -1762,7 +1766,6 @@ function sortFilms(films) {
 
 async function persistData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(stripInternalFields(state.data)));
-  savePromotedCardsSettings();
   if (!state.supabase || !state.admin.auth.authenticated) {
     syncAdminEditor();
     render();
@@ -1772,7 +1775,7 @@ async function persistData() {
   const refreshed = await loadDataFromSupabase();
   validateData({ theatreGroups: refreshed.theatreGroups });
   state.data = { theatreGroups: refreshed.theatreGroups };
-  state.promotedCards = refreshed.promotedCards.length ? refreshed.promotedCards : cloneDefaultPromotedCards();
+  state.promotedCards = refreshed.promotedCards;
   state.source = "supabase";
   state.loadedFromSupabaseThisSession = true;
   syncAdminEditor();
@@ -2395,10 +2398,12 @@ function buildPromotedAdCards() {
 function getVisiblePromotedCards() {
   return (state.promotedCards || []).reduce((visible, promo) => {
     if (!promo || !promo.enabled) return visible;
-    const hasImage = typeof promo.imageSrc === "string" && promo.imageSrc.trim();
+    const imageSrc = resolvePromoImageSrc(promo);
+    const hasImage = typeof imageSrc === "string" && imageSrc.trim();
     if (!hasImage) return visible;
     visible.push({
       ...promo,
+      imageSrc,
       buttonUrl: normalizeOutboundUrl(String(promo.buttonUrl || "")),
     });
     return visible;
@@ -2567,92 +2572,15 @@ function getCardGridSpan(card, columns) {
 
 function cloneDefaultPromotedCards() {
   return PROMOTED_CARDS.map((promo) => ({
-    id: promo.imageSrc,
+    id: promo.imagePath,
     enabled: true,
     title: promo.title || "",
-    imageSrc: promo.imageSrc,
+    imagePath: promo.imagePath,
     imageAlt: promo.imageAlt || "",
-    imageName: promo.imageSrc.replace("./", ""),
+    imageName: promo.imagePath.split("/").pop() || promo.imagePath,
     buttonLabel: promo.buttonLabel || "Shop Now",
     buttonUrl: promo.buttonUrl || "",
-    isDefault: true,
   }));
-}
-
-function loadPromotedCardsSettings() {
-  const defaults = cloneDefaultPromotedCards();
-  const raw = localStorage.getItem(PROMO_SETTINGS_STORAGE_KEY);
-  if (!raw) return defaults;
-  try {
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return defaults;
-    const byId = new Map(parsed.map((entry) => [String(entry?.id || ""), entry]));
-    const mergedDefaults = defaults
-      .filter((promo) => !Boolean(byId.get(String(promo.id))?.deleted))
-      .map((promo) => {
-      const stored = byId.get(String(promo.id)) || {};
-      return {
-        ...promo,
-        enabled: typeof stored.enabled === "boolean" ? stored.enabled : promo.enabled,
-        title: typeof stored.title === "string" ? stored.title : promo.title,
-        buttonUrl: typeof stored.buttonUrl === "string" ? stored.buttonUrl : promo.buttonUrl,
-      };
-      });
-
-    const defaultIds = new Set(defaults.map((promo) => String(promo.id)));
-    const customPromos = parsed
-      .filter((entry) => {
-        const id = String(entry?.id || "");
-        return id && !defaultIds.has(id) && !entry?.deleted;
-      })
-      .map((entry) => ({
-        id: String(entry.id),
-        enabled: typeof entry.enabled === "boolean" ? entry.enabled : true,
-        title: typeof entry.title === "string" ? entry.title : "",
-        imageSrc: typeof entry.imageSrc === "string" ? entry.imageSrc : "",
-        imageAlt: typeof entry.imageAlt === "string" ? entry.imageAlt : "",
-        imageName: typeof entry.imageName === "string" ? entry.imageName : "custom-promo",
-        buttonLabel: typeof entry.buttonLabel === "string" ? entry.buttonLabel : "Shop Now",
-        buttonUrl: typeof entry.buttonUrl === "string" ? entry.buttonUrl : "",
-        isDefault: false,
-      }))
-      .filter((promo) => promo.imageSrc);
-
-    return [...mergedDefaults, ...customPromos];
-  } catch {
-    return defaults;
-  }
-}
-
-function savePromotedCardsSettings() {
-  const payload = (state.promotedCards || []).map((promo) => ({
-    id: promo.id,
-    deleted: false,
-    enabled: Boolean(promo.enabled),
-    title: String(promo.title || ""),
-    imageSrc: String(promo.imageSrc || ""),
-    imageAlt: String(promo.imageAlt || ""),
-    imageName: String(promo.imageName || ""),
-    buttonLabel: String(promo.buttonLabel || "Shop Now"),
-    buttonUrl: String(promo.buttonUrl || ""),
-    isDefault: Boolean(promo.isDefault),
-  }));
-  const activeIds = new Set((state.promotedCards || []).map((promo) => String(promo.id)));
-  PROMOTED_CARDS.forEach((promo) => {
-    const id = String(promo.imageSrc);
-    if (activeIds.has(id)) return;
-    payload.push({ id, deleted: true });
-  });
-  localStorage.setItem(PROMO_SETTINGS_STORAGE_KEY, JSON.stringify(payload));
-}
-
-function readFileAsDataUrl(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result || ""));
-    reader.onerror = () => reject(new Error("Could not read image file."));
-    reader.readAsDataURL(file);
-  });
 }
 
 function buildPromotedCardsFromSupabaseRows(rows) {
@@ -2662,29 +2590,64 @@ function buildPromotedCardsFromSupabaseRows(rows) {
       id: `db-${row.id}`,
       enabled: typeof row.enabled === "boolean" ? row.enabled : true,
       title: String(row.title || ""),
-      imageSrc: String(row.image_src || ""),
+      imagePath: String(row.image_path || ""),
       imageAlt: String(row.image_alt || ""),
       imageName: String(row.image_name || ""),
       buttonLabel: String(row.button_label || "Shop Now"),
       buttonUrl: String(row.button_url || ""),
-      isDefault: false,
     }))
-    .filter((promo) => promo.imageSrc);
+    .filter((promo) => promo.imagePath);
 }
 
 function buildPromosReplacePayload(promotedCards) {
   return (promotedCards || [])
-    .filter((promo) => promo && String(promo.imageSrc || "").trim())
+    .filter((promo) => promo && String(promo.imagePath || "").trim())
     .map((promo, index) => ({
       title: String(promo.title || ""),
       button_url: String(promo.buttonUrl || ""),
-      image_src: String(promo.imageSrc || ""),
+      image_path: String(promo.imagePath || ""),
       image_alt: String(promo.imageAlt || ""),
       image_name: String(promo.imageName || ""),
       button_label: String(promo.buttonLabel || "Shop Now"),
       enabled: Boolean(promo.enabled),
       sort_order: index,
     }));
+}
+
+function resolvePromoImageSrc(promo) {
+  const path = String(promo?.imagePath || "").trim();
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path)) return path;
+  return state.supabase?.storage?.from(PROMO_STORAGE_BUCKET).getPublicUrl(path)?.data?.publicUrl || "";
+}
+
+async function uploadPromoImageToStorage(file) {
+  if (!state.supabase) {
+    throw new Error("Supabase is not configured.");
+  }
+  const extension = getFileExtension(file.name) || "webp";
+  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}.${extension}`;
+  const path = `uploads/${fileName}`;
+  const result = await state.supabase.storage
+    .from(PROMO_STORAGE_BUCKET)
+    .upload(path, file, { upsert: false, contentType: file.type || undefined });
+  if (result.error) throw result.error;
+  return path;
+}
+
+async function deletePromoImageFromStorage(path) {
+  if (!state.supabase) return;
+  const normalized = String(path || "").trim();
+  if (!normalized || normalized.startsWith("defaults/") || /^https?:\/\//i.test(normalized)) return;
+  const result = await state.supabase.storage.from(PROMO_STORAGE_BUCKET).remove([normalized]);
+  if (result.error) throw result.error;
+}
+
+function getFileExtension(fileName) {
+  const value = String(fileName || "").trim();
+  const idx = value.lastIndexOf(".");
+  if (idx < 0) return "";
+  return value.slice(idx + 1).toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
 function renderResultCards(cards) {

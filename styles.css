@@ -752,7 +752,7 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   margin: 0;
   font-size: 1.02rem;
   line-height: 1.2;
-  text-align: left;
+  text-align: center;
 }
 
 .promo-card-image {
@@ -768,7 +768,7 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  align-self: flex-start;
+  align-self: center;
   border: 1px solid var(--accent);
   border-radius: 999px;
   padding: 0.24rem 0.72rem;
