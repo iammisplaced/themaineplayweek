@@ -555,7 +555,7 @@ function bindEvents() {
       state.admin.filmIndex = 0;
       state.admin.filmQuery = "";
     }
-    state.admin.theatreQuery = theatre?.name || "";
+    state.admin.theatreQuery = getAdminTheatreLabelByIndex(state.admin.theatreIndex);
     syncAdminEditor();
   });
 
@@ -636,7 +636,7 @@ function bindEvents() {
     });
     state.admin.theatreIndex = state.data.theatreGroups.length - 1;
     state.admin.filmIndex = 0;
-    state.admin.theatreQuery = name;
+    state.admin.theatreQuery = getAdminTheatreLabelByIndex(state.admin.theatreIndex);
     state.admin.filmQuery = "";
     elements.addTheatreModal.close();
     syncAdminEditor();
@@ -1241,10 +1241,12 @@ function renderTheatreOptions() {
   if (!state.admin.theatreSearching) return;
 
   const query = normalizeSearchText(state.admin.theatreQuery);
+  const duplicateCountByNameCity = buildAdminDuplicateCountByNameCity(theatres);
   let visibleCount = 0;
   theatres.forEach((theatre, index) => {
-    const label = theatre.name || `Theatre ${index + 1}`;
-    if (query && !normalizeSearchText(label).includes(query)) return;
+    const label = buildAdminTheatreLabel(theatre, index, duplicateCountByNameCity);
+    const searchable = buildAdminTheatreSearchText(theatre, label);
+    if (query && !searchable.includes(query)) return;
     const highlightIndex = state.admin.theatreHighlight;
     const li = document.createElement("li");
     const button = document.createElement("button");
@@ -1346,6 +1348,53 @@ function renderShowingsList() {
 
 function getSelectedTheatre() {
   return state.data.theatreGroups[state.admin.theatreIndex] || null;
+}
+
+function buildAdminDuplicateCountByNameCity(theatres) {
+  const counts = new Map();
+  (theatres || []).forEach((theatre) => {
+    const key = buildAdminTheatreNameCityKey(theatre);
+    counts.set(key, (counts.get(key) || 0) + 1);
+  });
+  return counts;
+}
+
+function getAdminTheatreLabelByIndex(index) {
+  const theatres = state.data.theatreGroups || [];
+  const theatre = theatres[index];
+  if (!theatre) return "";
+  const duplicateCountByNameCity = buildAdminDuplicateCountByNameCity(theatres);
+  return buildAdminTheatreLabel(theatre, index, duplicateCountByNameCity);
+}
+
+function buildAdminTheatreNameCityKey(theatre) {
+  return [
+    normalizeSearchText(theatre?.name || ""),
+    normalizeSearchText(theatre?.city || ""),
+  ].join("::");
+}
+
+function buildAdminTheatreLabel(theatre, index, duplicateCountByNameCity) {
+  const name = String(theatre?.name || "").trim() || `Theatre ${index + 1}`;
+  const city = String(theatre?.city || "").trim();
+  const address = String(theatre?.address || "").trim();
+  const key = buildAdminTheatreNameCityKey(theatre);
+  const hasDuplicateNameCity = (duplicateCountByNameCity?.get(key) || 0) > 1;
+  const suffix = city ? ` · ${city}` : "";
+  if (!hasDuplicateNameCity || !address) return `${name}${suffix}`;
+  return `${name}${suffix} - ${address}`;
+}
+
+function buildAdminTheatreSearchText(theatre, label) {
+  return normalizeSearchText(
+    [
+      label || "",
+      theatre?.name || "",
+      theatre?.city || "",
+      theatre?.address || "",
+      theatre?.website || "",
+    ].join(" ")
+  );
 }
 
 function getSelectedFilm() {
