@@ -9,6 +9,22 @@ const NO_POSTER_IMAGE_URL = "./noposter.webp";
 const MASONRY_MIN_COLUMN_WIDTH = 280;
 const FILMS_MASONRY_MIN_COLUMN_WIDTH = 170;
 const MASONRY_GAP_PX = 16;
+const PROMOTED_CARDS = Object.freeze([
+  {
+    title: "The Golden Statue Collection",
+    imageSrc: "./myimage.gif",
+    imageAlt: "The Golden Statue Collection",
+    buttonLabel: "Shop Now",
+    buttonUrl: "https://shop.themaineplayweek.com",
+  },
+  {
+    title: "TMP Newspaper Tee",
+    imageSrc: "./animation.gif",
+    imageAlt: "TMP Newspaper Tee",
+    buttonLabel: "Shop Now",
+    buttonUrl: "https://themaineplayweek.printful.me/product/unisex-garment-dyed-heavyweight-t-shirt",
+  },
+]);
 const THEATRE_COLLAPSED_FILM_COUNT = 5;
 const FILM_LAYOUT_ANIMATION_MS = 320;
 const FILM_SORT_WEIGHTS = Object.freeze({
@@ -2114,7 +2130,149 @@ function render() {
     cards.push(card);
   }
 
+  if (state.view === "films" || state.view === "days") {
+    insertPromotedCards(cards, buildPromotedAdCards());
+  }
+
   renderResultCards(cards);
+}
+
+function buildPromotedAdCards() {
+  return PROMOTED_CARDS.map((card) => {
+    const article = document.createElement("article");
+    article.className = "group-card ad-card";
+
+    const title = document.createElement("h3");
+    title.className = "group-title ad-card-title";
+    title.textContent = card.title;
+
+    const image = document.createElement("img");
+    image.className = "ad-card-image";
+    image.src = card.imageSrc;
+    image.alt = card.imageAlt;
+    image.loading = "lazy";
+    image.decoding = "async";
+
+    const cta = document.createElement("a");
+    cta.className = "ad-card-cta";
+    cta.href = card.buttonUrl;
+    cta.target = "_blank";
+    cta.rel = "noopener noreferrer";
+    cta.textContent = card.buttonLabel;
+
+    article.appendChild(title);
+    article.appendChild(image);
+    article.appendChild(cta);
+    return article;
+  });
+}
+
+function insertPromotedCards(cards, adCards) {
+  if (!Array.isArray(cards) || !cards.length || !Array.isArray(adCards) || !adCards.length) return;
+
+  const total = cards.length;
+  if (total < 5) {
+    adCards.forEach((adCard) => cards.push(adCard));
+    return;
+  }
+
+  const columns = Math.max(1, getMasonryColumnCount());
+  const desiredPositions = [0.42, 0.74];
+  let previousSlot = -1;
+  adCards.forEach((adCard, index) => {
+    const currentTotal = cards.length;
+    const minStart = currentTotal >= 14 ? 6 : currentTotal >= 10 ? 4 : 3;
+    const minGap = currentTotal >= 18 ? 8 : currentTotal >= 12 ? 6 : 4;
+    const desiredRatio = desiredPositions[index] || 0.7;
+    const rawTarget = Math.floor(currentTotal * desiredRatio);
+
+    const minIndex = previousSlot < 0
+      ? minStart
+      : Math.min(currentTotal - 1, previousSlot + minGap);
+    const maxIndex = Math.max(minIndex, currentTotal - Math.max(columns, 3));
+    const target = clampNumber(rawTarget, minIndex, maxIndex);
+    const insertIndex = findAdInsertionIndex(cards, target, minIndex, maxIndex, columns);
+
+    cards.splice(insertIndex, 0, adCard);
+    previousSlot = insertIndex;
+  });
+}
+
+function clampNumber(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function findAdInsertionIndex(cards, targetIndex, minIndex, maxIndex, columns) {
+  const states = getGridInsertionStates(cards, columns);
+  const target = clampNumber(targetIndex, minIndex, maxIndex);
+
+  for (let index = target; index <= maxIndex; index += 1) {
+    if (isPreferredAdSlot(states[index], columns)) return index;
+  }
+  for (let index = target - 1; index >= minIndex; index -= 1) {
+    if (isPreferredAdSlot(states[index], columns)) return index;
+  }
+
+  // Global fallback: still require a clean row-start slot to avoid dangling one-column gaps.
+  for (let index = maxIndex + 1; index < states.length; index += 1) {
+    if (isPreferredAdSlot(states[index], columns)) return index;
+  }
+  for (let index = minIndex - 1; index >= 0; index -= 1) {
+    if (isPreferredAdSlot(states[index], columns)) return index;
+  }
+
+  return target;
+}
+
+function isPreferredAdSlot(stateAtIndex, columns) {
+  if (!stateAtIndex) return false;
+  if (columns <= 1) return true;
+  return stateAtIndex.colUsed === 0;
+}
+
+function isAcceptableAdSlot(stateAtIndex, columns) {
+  if (!stateAtIndex) return false;
+  if (columns <= 1) return true;
+  return stateAtIndex.colUsed === 0;
+}
+
+function getGridInsertionStates(cards, columns) {
+  const states = [{ row: 0, colUsed: 0 }];
+  if (columns <= 1) {
+    for (let i = 0; i < cards.length; i += 1) {
+      states.push({ row: i + 1, colUsed: 0 });
+    }
+    return states;
+  }
+
+  let row = 0;
+  let colUsed = 0;
+
+  cards.forEach((card) => {
+    const span = getCardGridSpan(card, columns);
+    if (colUsed > 0 && colUsed + span > columns) {
+      row += 1;
+      colUsed = 0;
+    }
+
+    colUsed += span;
+    if (colUsed >= columns) {
+      row += 1;
+      colUsed = 0;
+    }
+    states.push({ row, colUsed });
+  });
+
+  return states;
+}
+
+function getCardGridSpan(card, columns) {
+  if (columns <= 1) return 1;
+  const isExpandedFilmCard =
+    card.classList.contains("film-card") && !card.classList.contains("film-card-collapsed");
+  const isAdCard = card.classList.contains("ad-card");
+  if (isExpandedFilmCard || isAdCard) return 2;
+  return 1;
 }
 
 function renderResultCards(cards) {
