@@ -1052,6 +1052,33 @@ textarea {
   padding-bottom: 0.55rem;
 }
 
+.admin-section-tabs {
+  display: inline-flex;
+  gap: 0.45rem;
+  margin-bottom: 0.7rem;
+}
+
+.admin-section-tab {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.34rem 0.82rem;
+  background: var(--panel);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-section-tab.active {
+  border-color: var(--accent);
+  background: var(--hover-soft);
+}
+
+.admin-section-panel + .admin-section-panel {
+  margin-top: 0;
+}
+
 .admin-help {
   margin: 0.15rem 0 0.25rem;
   color: var(--muted);
@@ -1114,6 +1141,53 @@ textarea {
   justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
+}
+
+.promo-settings-list {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.7rem;
+}
+
+.promo-settings-item {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem 0.7rem;
+  background: var(--surface-soft);
+}
+
+.promo-settings-heading {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.promo-settings-item label {
+  margin-top: 0.55rem;
+}
+
+.promo-settings-fields-wrap {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.promo-settings-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.5rem;
+  font-weight: 600;
+}
+
+.promo-settings-toggle input {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.promo-remove-btn {
+  margin-top: 0.6rem;
 }
 
 .admin-advanced {

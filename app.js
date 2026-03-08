@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const DATA_URL = "./data/showtimes.json";
 const STORAGE_KEY = "showtimes-local-edit";
 const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
+const PROMO_SETTINGS_STORAGE_KEY = "tmp-promo-settings";
 const THEME_STORAGE_KEY = "tmp-theme";
 const VIEW_STORAGE_KEY = "tmp-view";
 const NO_POSTER_IMAGE_URL = "./noposter.webp";
@@ -12,14 +13,14 @@ const MASONRY_GAP_PX = 16;
 const PROMOTED_CARDS = Object.freeze([
   {
     title: "The Golden Statue Collection",
-    imageSrc: "./myimage.gif",
+    imageSrc: "./golden_statue_promo.gif",
     imageAlt: "The Golden Statue Collection",
     buttonLabel: "Shop Now",
     buttonUrl: "https://shop.themaineplayweek.com",
   },
   {
     title: "TMP Newspaper Tee",
-    imageSrc: "./animation.gif",
+    imageSrc: "./newspaper_promo.gif",
     imageAlt: "TMP Newspaper Tee",
     buttonLabel: "Shop Now",
     buttonUrl: "https://themaineplayweek.printful.me/product/unisex-garment-dyed-heavyweight-t-shirt",
@@ -70,7 +71,9 @@ const state = {
   selectedDay: "",
   theme: LIGHT_THEME,
   supabase: null,
+  promotedCards: cloneDefaultPromotedCards(),
   admin: {
+    section: "movies",
     theatreIndex: 0,
     filmIndex: 0,
     theatreQuery: "",
@@ -121,6 +124,9 @@ const elements = {
   adminAuthGate: document.getElementById("adminAuthGate"),
   adminAuthMessage: document.getElementById("adminAuthMessage"),
   adminControls: document.getElementById("adminControls"),
+  adminSectionTabs: Array.from(document.querySelectorAll(".admin-section-tab")),
+  adminMoviesPanel: document.getElementById("adminMoviesPanel"),
+  adminPromosPanel: document.getElementById("adminPromosPanel"),
   adminEmailInput: document.getElementById("adminEmailInput"),
   adminLoginButton: document.getElementById("adminLoginButton"),
   openFilmCatalogButton: document.getElementById("openFilmCatalogButton"),
@@ -139,6 +145,13 @@ const elements = {
   adminFilmResults: document.getElementById("adminFilmResults"),
   selectedTicketLinkInput: document.getElementById("selectedTicketLinkInput"),
   saveSelectedTicketLink: document.getElementById("saveSelectedTicketLink"),
+  openAddPromoModalButton: document.getElementById("openAddPromoModalButton"),
+  addPromoModal: document.getElementById("addPromoModal"),
+  addPromoForm: document.getElementById("addPromoForm"),
+  modalPromoImageInput: document.getElementById("modalPromoImageInput"),
+  modalPromoTitleInput: document.getElementById("modalPromoTitleInput"),
+  modalPromoButtonUrlInput: document.getElementById("modalPromoButtonUrlInput"),
+  cancelAddPromo: document.getElementById("cancelAddPromo"),
   addFilm: document.getElementById("addFilm"),
   addFilmModal: document.getElementById("addFilmModal"),
   addFilmForm: document.getElementById("addFilmForm"),
@@ -154,6 +167,7 @@ const elements = {
   showingTimesInput: document.getElementById("showingTimesInput"),
   addShowing: document.getElementById("addShowing"),
   showingsList: document.getElementById("showingsList"),
+  promoSettingsList: document.getElementById("promoSettingsList"),
   saveAllAdmin: document.getElementById("saveAllAdmin"),
   adminJson: document.getElementById("adminJson"),
   applyJson: document.getElementById("applyJson"),
@@ -467,8 +481,15 @@ function bindEvents() {
     if (open) {
       loadAdminSettings();
       syncAdminEditor();
+      syncAdminSectionUI();
       updateAdminAuthUI();
     }
+  });
+
+  elements.adminSectionTabs.forEach((button) => {
+    button.addEventListener("click", () => {
+      setAdminSection(button.dataset.adminSection);
+    });
   });
 
   elements.adminLoginButton.addEventListener("click", async () => {
@@ -518,6 +539,91 @@ function bindEvents() {
   elements.tmdbApiKeyInput.addEventListener("input", () => {
     state.admin.tmdbApiKey = elements.tmdbApiKeyInput.value.trim();
     localStorage.setItem(TMDB_KEY_STORAGE_KEY, state.admin.tmdbApiKey);
+  });
+
+  elements.promoSettingsList?.addEventListener("change", (event) => {
+    if (!requireAdminAuth()) return;
+    const control = event.target.closest("[data-promo-index]");
+    if (!control) return;
+    const promoIndex = Number(control.dataset.promoIndex);
+    if (Number.isNaN(promoIndex) || promoIndex < 0 || promoIndex >= state.promotedCards.length) return;
+    const promo = state.promotedCards[promoIndex];
+    if (!promo) return;
+
+    if (control.dataset.field === "enabled") {
+      promo.enabled = control.checked;
+    } else if (control.dataset.field === "title") {
+      promo.title = String(control.value || "");
+    } else if (control.dataset.field === "buttonUrl") {
+      promo.buttonUrl = String(control.value || "").trim();
+    }
+
+    savePromotedCardsSettings();
+    renderPromoSettingsEditor();
+    render();
+    elements.adminMessage.textContent = "Promo settings updated.";
+  });
+
+  elements.promoSettingsList?.addEventListener("click", (event) => {
+    if (!requireAdminAuth()) return;
+    const removeButton = event.target.closest("button[data-remove-promo-index]");
+    if (!removeButton) return;
+    const promoIndex = Number(removeButton.dataset.removePromoIndex);
+    if (Number.isNaN(promoIndex) || promoIndex < 0 || promoIndex >= state.promotedCards.length) return;
+    const promo = state.promotedCards[promoIndex];
+    const label = String(promo?.title || promo?.imageName || "this promo").trim();
+    const confirmed = window.confirm(`Delete ${label}?`);
+    if (!confirmed) return;
+    state.promotedCards.splice(promoIndex, 1);
+    savePromotedCardsSettings();
+    renderPromoSettingsEditor();
+    render();
+    elements.adminMessage.textContent = "Promo removed.";
+  });
+
+  elements.openAddPromoModalButton?.addEventListener("click", () => {
+    if (!requireAdminAuth()) return;
+    elements.addPromoForm?.reset();
+    elements.addPromoModal?.showModal();
+  });
+
+  elements.cancelAddPromo?.addEventListener("click", () => {
+    elements.addPromoModal?.close();
+  });
+
+  elements.addPromoForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!requireAdminAuth()) return;
+    const file = elements.modalPromoImageInput?.files?.[0];
+    if (!file) {
+      elements.adminMessage.textContent = "Choose an image for the promo first.";
+      return;
+    }
+    try {
+      const imageSrc = await readFileAsDataUrl(file);
+      const title = String(elements.modalPromoTitleInput?.value || "").trim();
+      const buttonUrl = String(elements.modalPromoButtonUrlInput?.value || "").trim();
+
+      state.promotedCards.push({
+        id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        enabled: true,
+        title,
+        imageSrc,
+        imageAlt: title || file.name,
+        imageName: file.name,
+        buttonLabel: "Shop Now",
+        buttonUrl,
+        isDefault: false,
+      });
+
+      savePromotedCardsSettings();
+      renderPromoSettingsEditor();
+      render();
+      elements.addPromoModal?.close();
+      elements.adminMessage.textContent = "Promo added.";
+    } catch (error) {
+      elements.adminMessage.textContent = `Promo upload failed: ${error.message}`;
+    }
   });
 
   elements.adminTheatreSearch.addEventListener("input", () => {
@@ -993,12 +1099,15 @@ async function refreshAuthState() {
 }
 
 async function loadData() {
+  state.promotedCards = loadPromotedCardsSettings();
+
   if (state.supabase) {
     try {
       const fromDb = await loadDataFromSupabase();
       if (fromDb.theatreGroups.length) {
-        validateData(fromDb);
-        state.data = fromDb;
+        validateData({ theatreGroups: fromDb.theatreGroups });
+        state.data = { theatreGroups: fromDb.theatreGroups };
+        state.promotedCards = fromDb.promotedCards.length ? fromDb.promotedCards : cloneDefaultPromotedCards();
         state.source = "supabase";
         state.loadedFromSupabaseThisSession = true;
         return;
@@ -1055,6 +1164,13 @@ async function loadDataFromSupabase() {
     state.supabase
       .from("showings")
       .select("id,theatre_id,film_id,show_date,times")
+      .order("id", { ascending: true })
+  );
+  const promos = await fetchAllRowsFromSupabase(() =>
+    state.supabase
+      .from("promos")
+      .select("id,title,button_url,image_src,image_alt,image_name,button_label,enabled,sort_order")
+      .order("sort_order", { ascending: true })
       .order("id", { ascending: true })
   );
 
@@ -1136,7 +1252,10 @@ async function loadDataFromSupabase() {
     delete theatre._filmMap;
   });
 
-  return { theatreGroups };
+  return {
+    theatreGroups,
+    promotedCards: buildPromotedCardsFromSupabaseRows(promos),
+  };
 }
 
 function buildFallbackTheatreFilmLinks(showings, filmById) {
@@ -1233,10 +1352,12 @@ function syncAdminEditor() {
   renderFilmOptions();
   fillSelectedTicketLink();
   renderShowingsList();
+  renderPromoSettingsEditor();
   elements.adminJson.value = JSON.stringify(stripInternalFields(state.data), null, 2);
 }
 
 function initializeAdminState() {
+  state.admin.section = "movies";
   state.admin.theatreIndex = 0;
   state.admin.filmIndex = 0;
   state.admin.theatreQuery = "";
@@ -1250,6 +1371,10 @@ function initializeAdminState() {
 function loadAdminSettings() {
   state.admin.tmdbApiKey = localStorage.getItem(TMDB_KEY_STORAGE_KEY) || "";
   elements.tmdbApiKeyInput.value = state.admin.tmdbApiKey;
+  if (state.source !== "supabase") {
+    state.promotedCards = loadPromotedCardsSettings();
+  }
+  renderPromoSettingsEditor();
 }
 
 function updateAdminAuthUI() {
@@ -1257,6 +1382,23 @@ function updateAdminAuthUI() {
   elements.adminAuthGate.classList.toggle("hidden", !locked);
   elements.adminControls.classList.toggle("hidden", locked);
   elements.adminIntroText?.classList.toggle("hidden", !locked);
+}
+
+function setAdminSection(section) {
+  const normalized = section === "promos" ? "promos" : "movies";
+  state.admin.section = normalized;
+  syncAdminSectionUI();
+}
+
+function syncAdminSectionUI() {
+  const section = state.admin.section === "promos" ? "promos" : "movies";
+  elements.adminSectionTabs.forEach((button) => {
+    const selected = button.dataset.adminSection === section;
+    button.classList.toggle("active", selected);
+    button.setAttribute("aria-selected", String(selected));
+  });
+  elements.adminMoviesPanel?.classList.toggle("hidden", section !== "movies");
+  elements.adminPromosPanel?.classList.toggle("hidden", section !== "promos");
 }
 
 function renderTheatreOptions() {
@@ -1371,6 +1513,73 @@ function renderShowingsList() {
       li.appendChild(button);
       elements.showingsList.appendChild(li);
     });
+}
+
+function renderPromoSettingsEditor() {
+  if (!elements.promoSettingsList) return;
+  elements.promoSettingsList.innerHTML = "";
+
+  const promos = state.promotedCards || [];
+  promos.forEach((promo, index) => {
+    const item = document.createElement("article");
+    item.className = "promo-settings-item";
+
+    const heading = document.createElement("p");
+    heading.className = "promo-settings-heading";
+    heading.textContent = promo.imageName || promo.imageSrc.replace("./", "");
+
+    const enabledWrap = document.createElement("label");
+    enabledWrap.className = "promo-settings-toggle";
+    const enabledInput = document.createElement("input");
+    enabledInput.type = "checkbox";
+    enabledInput.dataset.promoIndex = String(index);
+    enabledInput.dataset.field = "enabled";
+    enabledInput.checked = Boolean(promo.enabled);
+    enabledWrap.appendChild(enabledInput);
+    enabledWrap.append(document.createTextNode(" Enabled"));
+
+    const fieldsWrap = document.createElement("div");
+    fieldsWrap.className = "promo-settings-fields-wrap";
+
+    const titleLabel = document.createElement("label");
+    titleLabel.className = "promo-settings-fields";
+    titleLabel.textContent = "Title (optional)";
+    const titleInput = document.createElement("input");
+    titleInput.type = "text";
+    titleInput.value = String(promo.title || "");
+    titleInput.placeholder = "Optional";
+    titleInput.dataset.promoIndex = String(index);
+    titleInput.dataset.field = "title";
+    titleLabel.appendChild(titleInput);
+
+    const buttonLabel = document.createElement("label");
+    buttonLabel.className = "promo-settings-fields";
+    buttonLabel.textContent = "Button URL";
+    const buttonInput = document.createElement("input");
+    buttonInput.type = "url";
+    buttonInput.value = String(promo.buttonUrl || "");
+    buttonInput.placeholder = "https://example.com";
+    buttonInput.dataset.promoIndex = String(index);
+    buttonInput.dataset.field = "buttonUrl";
+    buttonLabel.appendChild(buttonInput);
+
+    fieldsWrap.appendChild(titleLabel);
+    fieldsWrap.appendChild(buttonLabel);
+
+    const isEnabled = Boolean(promo.enabled);
+    fieldsWrap.classList.toggle("hidden", !isEnabled);
+
+    item.appendChild(heading);
+    item.appendChild(enabledWrap);
+    item.appendChild(fieldsWrap);
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "ghost-btn promo-remove-btn";
+    removeButton.dataset.removePromoIndex = String(index);
+    removeButton.textContent = "Delete Promo";
+    item.appendChild(removeButton);
+    elements.promoSettingsList.appendChild(item);
+  });
 }
 
 function getSelectedTheatre() {
@@ -1546,6 +1755,7 @@ function sortFilms(films) {
 
 async function persistData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(stripInternalFields(state.data)));
+  savePromotedCardsSettings();
   if (!state.supabase || !state.admin.auth.authenticated) {
     syncAdminEditor();
     render();
@@ -1553,8 +1763,9 @@ async function persistData() {
   }
   await saveDataToSupabase();
   const refreshed = await loadDataFromSupabase();
-  validateData(refreshed);
-  state.data = refreshed;
+  validateData({ theatreGroups: refreshed.theatreGroups });
+  state.data = { theatreGroups: refreshed.theatreGroups };
+  state.promotedCards = refreshed.promotedCards.length ? refreshed.promotedCards : cloneDefaultPromotedCards();
   state.source = "supabase";
   state.loadedFromSupabaseThisSession = true;
   syncAdminEditor();
@@ -1569,7 +1780,7 @@ async function saveDataToSupabase() {
     );
   }
   await verifySupabaseSchema(supabase);
-  const payload = buildReplacePayload(state.data);
+  const payload = buildReplacePayload(state.data, state.promotedCards);
   const riskyTicketLinkChanges = await findTicketLinkClearRisks(supabase, payload);
   if (riskyTicketLinkChanges.count > 0) {
     const preview = riskyTicketLinkChanges.samples.length
@@ -1589,6 +1800,7 @@ async function verifySupabaseSchema(supabase) {
     supabase.from("films").select("id").limit(1),
     supabase.from("showings").select("id").limit(1),
     supabase.from("theatre_films").select("theatre_id").limit(1),
+    supabase.from("promos").select("id").limit(1),
   ]);
   const failed = checks.find((result) => result.error);
   if (failed?.error) {
@@ -1711,7 +1923,7 @@ function buildFilmIdentityKey(filmTitle, filmYear, filmTmdbId) {
   return `${normalizeFilmTitle(filmTitle)}::${Number.isInteger(Number(filmYear)) ? Number(filmYear) : ""}`;
 }
 
-function buildReplacePayload(data) {
+function buildReplacePayload(data, promotedCards) {
   const theatres = [];
   const films = [];
   const theatreFilms = [];
@@ -1788,6 +2000,7 @@ function buildReplacePayload(data) {
     films,
     theatre_films: theatreFilms,
     showings,
+    promos: buildPromosReplacePayload(promotedCards),
   };
 }
 
@@ -2138,13 +2351,10 @@ function render() {
 }
 
 function buildPromotedAdCards() {
-  return PROMOTED_CARDS.map((card) => {
+  const visiblePromos = getVisiblePromotedCards();
+  return visiblePromos.map((card) => {
     const article = document.createElement("article");
     article.className = "group-card promo-card";
-
-    const title = document.createElement("h3");
-    title.className = "group-title promo-card-title";
-    title.textContent = card.title;
 
     const image = document.createElement("img");
     image.className = "promo-card-image";
@@ -2160,11 +2370,32 @@ function buildPromotedAdCards() {
     cta.rel = "noopener noreferrer";
     cta.textContent = card.buttonLabel;
 
-    article.appendChild(title);
+    const titleValue = String(card.title || "").trim();
+    if (titleValue) {
+      const title = document.createElement("h3");
+      title.className = "group-title promo-card-title";
+      title.textContent = titleValue;
+      article.appendChild(title);
+    }
     article.appendChild(image);
-    article.appendChild(cta);
+    if (card.buttonUrl) {
+      article.appendChild(cta);
+    }
     return article;
   });
+}
+
+function getVisiblePromotedCards() {
+  return (state.promotedCards || []).reduce((visible, promo) => {
+    if (!promo || !promo.enabled) return visible;
+    const hasImage = typeof promo.imageSrc === "string" && promo.imageSrc.trim();
+    if (!hasImage) return visible;
+    visible.push({
+      ...promo,
+      buttonUrl: normalizeOutboundUrl(String(promo.buttonUrl || "")),
+    });
+    return visible;
+  }, []);
 }
 
 function insertPromotedCards(cards, adCards) {
@@ -2325,6 +2556,128 @@ function getCardGridSpan(card, columns) {
   const isPromoCard = card.classList.contains("promo-card");
   if (isExpandedFilmCard || isPromoCard) return 2;
   return 1;
+}
+
+function cloneDefaultPromotedCards() {
+  return PROMOTED_CARDS.map((promo) => ({
+    id: promo.imageSrc,
+    enabled: true,
+    title: promo.title || "",
+    imageSrc: promo.imageSrc,
+    imageAlt: promo.imageAlt || "",
+    imageName: promo.imageSrc.replace("./", ""),
+    buttonLabel: promo.buttonLabel || "Shop Now",
+    buttonUrl: promo.buttonUrl || "",
+    isDefault: true,
+  }));
+}
+
+function loadPromotedCardsSettings() {
+  const defaults = cloneDefaultPromotedCards();
+  const raw = localStorage.getItem(PROMO_SETTINGS_STORAGE_KEY);
+  if (!raw) return defaults;
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return defaults;
+    const byId = new Map(parsed.map((entry) => [String(entry?.id || ""), entry]));
+    const mergedDefaults = defaults
+      .filter((promo) => !Boolean(byId.get(String(promo.id))?.deleted))
+      .map((promo) => {
+      const stored = byId.get(String(promo.id)) || {};
+      return {
+        ...promo,
+        enabled: typeof stored.enabled === "boolean" ? stored.enabled : promo.enabled,
+        title: typeof stored.title === "string" ? stored.title : promo.title,
+        buttonUrl: typeof stored.buttonUrl === "string" ? stored.buttonUrl : promo.buttonUrl,
+      };
+      });
+
+    const defaultIds = new Set(defaults.map((promo) => String(promo.id)));
+    const customPromos = parsed
+      .filter((entry) => {
+        const id = String(entry?.id || "");
+        return id && !defaultIds.has(id) && !entry?.deleted;
+      })
+      .map((entry) => ({
+        id: String(entry.id),
+        enabled: typeof entry.enabled === "boolean" ? entry.enabled : true,
+        title: typeof entry.title === "string" ? entry.title : "",
+        imageSrc: typeof entry.imageSrc === "string" ? entry.imageSrc : "",
+        imageAlt: typeof entry.imageAlt === "string" ? entry.imageAlt : "",
+        imageName: typeof entry.imageName === "string" ? entry.imageName : "custom-promo",
+        buttonLabel: typeof entry.buttonLabel === "string" ? entry.buttonLabel : "Shop Now",
+        buttonUrl: typeof entry.buttonUrl === "string" ? entry.buttonUrl : "",
+        isDefault: false,
+      }))
+      .filter((promo) => promo.imageSrc);
+
+    return [...mergedDefaults, ...customPromos];
+  } catch {
+    return defaults;
+  }
+}
+
+function savePromotedCardsSettings() {
+  const payload = (state.promotedCards || []).map((promo) => ({
+    id: promo.id,
+    deleted: false,
+    enabled: Boolean(promo.enabled),
+    title: String(promo.title || ""),
+    imageSrc: String(promo.imageSrc || ""),
+    imageAlt: String(promo.imageAlt || ""),
+    imageName: String(promo.imageName || ""),
+    buttonLabel: String(promo.buttonLabel || "Shop Now"),
+    buttonUrl: String(promo.buttonUrl || ""),
+    isDefault: Boolean(promo.isDefault),
+  }));
+  const activeIds = new Set((state.promotedCards || []).map((promo) => String(promo.id)));
+  PROMOTED_CARDS.forEach((promo) => {
+    const id = String(promo.imageSrc);
+    if (activeIds.has(id)) return;
+    payload.push({ id, deleted: true });
+  });
+  localStorage.setItem(PROMO_SETTINGS_STORAGE_KEY, JSON.stringify(payload));
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(new Error("Could not read image file."));
+    reader.readAsDataURL(file);
+  });
+}
+
+function buildPromotedCardsFromSupabaseRows(rows) {
+  if (!Array.isArray(rows)) return [];
+  return rows
+    .map((row) => ({
+      id: `db-${row.id}`,
+      enabled: typeof row.enabled === "boolean" ? row.enabled : true,
+      title: String(row.title || ""),
+      imageSrc: String(row.image_src || ""),
+      imageAlt: String(row.image_alt || ""),
+      imageName: String(row.image_name || ""),
+      buttonLabel: String(row.button_label || "Shop Now"),
+      buttonUrl: String(row.button_url || ""),
+      isDefault: false,
+    }))
+    .filter((promo) => promo.imageSrc);
+}
+
+function buildPromosReplacePayload(promotedCards) {
+  return (promotedCards || [])
+    .filter((promo) => promo && String(promo.imageSrc || "").trim())
+    .map((promo, index) => ({
+      title: String(promo.title || ""),
+      button_url: String(promo.buttonUrl || ""),
+      image_src: String(promo.imageSrc || ""),
+      image_alt: String(promo.imageAlt || ""),
+      image_name: String(promo.imageName || ""),
+      button_label: String(promo.buttonLabel || "Shop Now"),
+      enabled: Boolean(promo.enabled),
+      sort_order: index,
+    }));
 }
 
 function renderResultCards(cards) {

@@ -121,53 +121,105 @@
             <button id="adminLogoutButton" class="ghost-btn">Log Out</button>
             <button id="openFilmCatalogButton" class="ghost-btn" type="button">Open Film Catalog</button>
           </div>
+          <div class="admin-section-tabs" role="tablist" aria-label="Admin editing section">
+            <button
+              id="adminMoviesTab"
+              class="admin-section-tab active"
+              type="button"
+              role="tab"
+              data-admin-section="movies"
+              aria-selected="true"
+            >
+              Movies
+            </button>
+            <button
+              id="adminPromosTab"
+              class="admin-section-tab"
+              type="button"
+              role="tab"
+              data-admin-section="promos"
+              aria-selected="false"
+            >
+              Promos
+            </button>
+          </div>
 
-        <div class="admin-grid">
-          <section class="admin-card admin-card-wide">
-            <h3>Quick Admin</h3>
-            <label for="adminTheatreSearch">Theatre</label>
-            <input id="adminTheatreSearch" type="text" placeholder="Search theatre, city, or address..." />
-            <ul id="adminTheatreResults" class="admin-search-results"></ul>
-            <label for="adminFilmSearch">Film</label>
-            <input id="adminFilmSearch" type="text" placeholder="Search films..." />
-            <ul id="adminFilmResults" class="admin-search-results"></ul>
-            <label for="selectedTicketLinkInput">Ticket Link (selected theatre + film)</label>
-            <input id="selectedTicketLinkInput" type="url" placeholder="https://tickets.example.com/..." />
-            <div class="admin-inline-actions">
-              <button id="saveSelectedTicketLink">Save Ticket Link</button>
+          <section id="adminMoviesPanel" class="admin-section-panel" role="tabpanel" aria-labelledby="adminMoviesTab">
+            <div class="admin-grid">
+              <section class="admin-card admin-card-wide">
+                <h3>Quick Admin</h3>
+                <label for="adminTheatreSearch">Theatre</label>
+                <input id="adminTheatreSearch" type="text" placeholder="Search theatre, city, or address..." />
+                <ul id="adminTheatreResults" class="admin-search-results"></ul>
+                <label for="adminFilmSearch">Film</label>
+                <input id="adminFilmSearch" type="text" placeholder="Search films..." />
+                <ul id="adminFilmResults" class="admin-search-results"></ul>
+                <label for="selectedTicketLinkInput">Ticket Link (selected theatre + film)</label>
+                <input id="selectedTicketLinkInput" type="url" placeholder="https://tickets.example.com/..." />
+                <div class="admin-inline-actions">
+                  <button id="saveSelectedTicketLink">Save Ticket Link</button>
+                </div>
+                <label for="tmdbApiKeyInput">TMDb API Key (local)</label>
+                <input id="tmdbApiKeyInput" type="password" placeholder="Used only in this browser" />
+                <div class="admin-inline-actions">
+                  <button id="addTheatre" class="ghost-btn">+ Add Theatre</button>
+                  <button id="addFilm" class="ghost-btn">+ Add Film</button>
+                  <button id="deleteFilm" class="ghost-btn">Delete Film</button>
+                  <button id="refreshTmdb" class="ghost-btn">Refresh TMDb</button>
+                </div>
+              </section>
+
+              <section class="admin-card admin-card-wide">
+                <h3>Showings</h3>
+                <p class="admin-help">Tip: keep times as <code>h:mm AM/PM</code> and separate multiple times with commas.</p>
+                <label for="showingDateInput">Date</label>
+                <input id="showingDateInput" type="date" />
+                <label for="showingSpanDaysInput">Number of days</label>
+                <input id="showingSpanDaysInput" type="number" min="1" step="1" value="1" />
+                <label for="showingTimesInput">Times (comma separated)</label>
+                <input id="showingTimesInput" type="text" placeholder="1:30 PM, 6:50 PM" />
+                <div class="admin-inline-actions">
+                  <button id="addShowing">+ Add Showing</button>
+                </div>
+                <ul id="showingsList" class="admin-list"></ul>
+              </section>
             </div>
-            <label for="tmdbApiKeyInput">TMDb API Key (local)</label>
-            <input id="tmdbApiKeyInput" type="password" placeholder="Used only in this browser" />
-            <div class="admin-inline-actions">
-              <button id="addTheatre" class="ghost-btn">+ Add Theatre</button>
-              <button id="addFilm" class="ghost-btn">+ Add Film</button>
-              <button id="deleteFilm" class="ghost-btn">Delete Film</button>
-              <button id="refreshTmdb" class="ghost-btn">Refresh TMDb</button>
+
+            <details class="admin-advanced">
+              <summary>Advanced: Edit Raw JSON</summary>
+              <label for="adminJson">Showtimes JSON</label>
+              <textarea id="adminJson" rows="16" spellcheck="false"></textarea>
+              <button id="applyJson">Apply Raw JSON Changes</button>
+            </details>
+
+            <div class="admin-actions">
+              <button id="saveAllAdmin">Save All Changes</button>
+              <button id="downloadJson" class="ghost-btn">Download JSON</button>
+              <label class="upload-label">
+                Import JSON
+                <input id="uploadJson" type="file" accept="application/json" />
+              </label>
+              <button id="resetJson" class="ghost-btn">Reset to Source File</button>
             </div>
           </section>
 
-          <section class="admin-card admin-card-wide">
-            <h3>Showings</h3>
-            <p class="admin-help">Tip: keep times as <code>h:mm AM/PM</code> and separate multiple times with commas.</p>
-            <label for="showingDateInput">Date</label>
-            <input id="showingDateInput" type="date" />
-            <label for="showingSpanDaysInput">Number of days</label>
-            <input id="showingSpanDaysInput" type="number" min="1" step="1" value="1" />
-            <label for="showingTimesInput">Times (comma separated)</label>
-            <input id="showingTimesInput" type="text" placeholder="1:30 PM, 6:50 PM" />
-            <div class="admin-inline-actions">
-              <button id="addShowing">+ Add Showing</button>
+          <section
+            id="adminPromosPanel"
+            class="admin-section-panel hidden"
+            role="tabpanel"
+            aria-labelledby="adminPromosTab"
+          >
+            <div class="admin-grid">
+              <section class="admin-card admin-card-wide">
+                <h3>Promos</h3>
+                <p class="admin-help">Toggle promo visibility and edit title/button URL. Leave title blank to hide it.</p>
+                <div class="admin-inline-actions">
+                  <button id="openAddPromoModalButton" type="button">+ Add Promo</button>
+                </div>
+                <div id="promoSettingsList" class="promo-settings-list"></div>
+              </section>
             </div>
-            <ul id="showingsList" class="admin-list"></ul>
           </section>
-        </div>
-
-        <details class="admin-advanced">
-          <summary>Advanced: Edit Raw JSON</summary>
-          <label for="adminJson">Showtimes JSON</label>
-          <textarea id="adminJson" rows="16" spellcheck="false"></textarea>
-          <button id="applyJson">Apply Raw JSON Changes</button>
-        </details>
 
         <dialog id="addFilmModal" class="admin-modal">
           <form id="addFilmForm" method="dialog" class="admin-modal-body">
@@ -203,16 +255,23 @@
           </form>
         </dialog>
 
-        <div class="admin-actions">
-          <button id="saveAllAdmin">Save All Changes</button>
-          <button id="downloadJson" class="ghost-btn">Download JSON</button>
-          <label class="upload-label">
-            Import JSON
-            <input id="uploadJson" type="file" accept="application/json" />
-          </label>
-          <button id="resetJson" class="ghost-btn">Reset to Source File</button>
-        </div>
-        <p id="adminMessage" class="admin-message" role="status"></p>
+        <dialog id="addPromoModal" class="admin-modal">
+          <form id="addPromoForm" method="dialog" class="admin-modal-body">
+            <h3>Add Promo</h3>
+            <label for="modalPromoImageInput">Image</label>
+            <input id="modalPromoImageInput" type="file" accept="image/*" required />
+            <label for="modalPromoTitleInput">Title (optional)</label>
+            <input id="modalPromoTitleInput" type="text" placeholder="Optional" />
+            <label for="modalPromoButtonUrlInput">Button URL</label>
+            <input id="modalPromoButtonUrlInput" type="url" placeholder="https://example.com" />
+            <div class="admin-inline-actions">
+              <button id="confirmAddPromo" value="confirm">Add Promo</button>
+              <button id="cancelAddPromo" class="ghost-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </dialog>
+
+          <p id="adminMessage" class="admin-message" role="status"></p>
         </div>
       </section>
     </main>
