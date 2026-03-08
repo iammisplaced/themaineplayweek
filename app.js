@@ -2179,10 +2179,12 @@ function insertPromotedCards(cards, adCards) {
   const columns = Math.max(1, getMasonryColumnCount());
   const desiredPositions = [0.42, 0.74];
   let previousSlot = -1;
+  let previousRow = -1;
   adCards.forEach((adCard, index) => {
     const currentTotal = cards.length;
     const minStart = currentTotal >= 14 ? 6 : currentTotal >= 10 ? 4 : 3;
     const minGap = currentTotal >= 18 ? 8 : currentTotal >= 12 ? 6 : 4;
+    const minRowGap = index > 0 ? 3 : 0;
     const desiredRatio = desiredPositions[index] || 0.7;
     const rawTarget = Math.floor(currentTotal * desiredRatio);
 
@@ -2191,10 +2193,13 @@ function insertPromotedCards(cards, adCards) {
       : Math.min(currentTotal - 1, previousSlot + minGap);
     const maxIndex = Math.max(minIndex, currentTotal - Math.max(columns, 3));
     const target = clampNumber(rawTarget, minIndex, maxIndex);
-    const insertIndex = findAdInsertionIndex(cards, target, minIndex, maxIndex, columns);
+    const insertIndex = findAdInsertionIndex(cards, target, minIndex, maxIndex, columns, previousRow, minRowGap);
+    const states = getGridInsertionStates(cards, columns);
+    const rowAtInsert = states[insertIndex]?.row ?? previousRow;
 
     cards.splice(insertIndex, 0, adCard);
     previousSlot = insertIndex;
+    previousRow = rowAtInsert;
   });
 }
 
@@ -2202,10 +2207,52 @@ function clampNumber(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }
 
-function findAdInsertionIndex(cards, targetIndex, minIndex, maxIndex, columns) {
+function findAdInsertionIndex(cards, targetIndex, minIndex, maxIndex, columns, previousRow, minRowGap) {
   const states = getGridInsertionStates(cards, columns);
   const target = clampNumber(targetIndex, minIndex, maxIndex);
 
+  for (let index = target; index <= maxIndex; index += 1) {
+    if (isCenteredAdSlot(states[index], columns) && hasRequiredRowGap(states[index], previousRow, minRowGap)) {
+      return index;
+    }
+  }
+  for (let index = target - 1; index >= minIndex; index -= 1) {
+    if (isCenteredAdSlot(states[index], columns) && hasRequiredRowGap(states[index], previousRow, minRowGap)) {
+      return index;
+    }
+  }
+
+  // Global fallback: still prefer center slots.
+  for (let index = maxIndex + 1; index < states.length; index += 1) {
+    if (isCenteredAdSlot(states[index], columns) && hasRequiredRowGap(states[index], previousRow, minRowGap)) {
+      return index;
+    }
+  }
+  for (let index = minIndex - 1; index >= 0; index -= 1) {
+    if (isCenteredAdSlot(states[index], columns) && hasRequiredRowGap(states[index], previousRow, minRowGap)) {
+      return index;
+    }
+  }
+
+  // If row gap isn't possible, keep center bias.
+  for (let index = target; index <= maxIndex; index += 1) {
+    if (isCenteredAdSlot(states[index], columns)) return index;
+  }
+  for (let index = target - 1; index >= minIndex; index -= 1) {
+    if (isCenteredAdSlot(states[index], columns)) return index;
+  }
+
+  // Narrow grids cannot always center a 2-column card.
+  for (let index = target; index <= maxIndex; index += 1) {
+    if (isPreferredAdSlot(states[index], columns) && hasRequiredRowGap(states[index], previousRow, minRowGap)) {
+      return index;
+    }
+  }
+  for (let index = target - 1; index >= minIndex; index -= 1) {
+    if (isPreferredAdSlot(states[index], columns) && hasRequiredRowGap(states[index], previousRow, minRowGap)) {
+      return index;
+    }
+  }
   for (let index = target; index <= maxIndex; index += 1) {
     if (isPreferredAdSlot(states[index], columns)) return index;
   }
@@ -2213,21 +2260,26 @@ function findAdInsertionIndex(cards, targetIndex, minIndex, maxIndex, columns) {
     if (isPreferredAdSlot(states[index], columns)) return index;
   }
 
-  // Global fallback: still require a clean row-start slot to avoid dangling one-column gaps.
-  for (let index = maxIndex + 1; index < states.length; index += 1) {
-    if (isPreferredAdSlot(states[index], columns)) return index;
-  }
-  for (let index = minIndex - 1; index >= 0; index -= 1) {
-    if (isPreferredAdSlot(states[index], columns)) return index;
-  }
-
   return target;
+}
+
+function hasRequiredRowGap(stateAtIndex, previousRow, minRowGap) {
+  if (!stateAtIndex) return false;
+  if (minRowGap <= 0 || previousRow < 0) return true;
+  return stateAtIndex.row - previousRow >= minRowGap;
+}
+
+function isCenteredAdSlot(stateAtIndex, columns) {
+  if (!stateAtIndex) return false;
+  if (columns < 4) return false;
+  const startCol = stateAtIndex.colUsed;
+  return startCol >= 1 && startCol <= columns - 3;
 }
 
 function isPreferredAdSlot(stateAtIndex, columns) {
   if (!stateAtIndex) return false;
   if (columns <= 1) return true;
-  return stateAtIndex.colUsed === 0;
+  return stateAtIndex.colUsed <= columns - 2;
 }
 
 function isAcceptableAdSlot(stateAtIndex, columns) {

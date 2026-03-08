@@ -1261,6 +1261,34 @@ textarea {
   background: #1e2b27;
 }
 
+:root[data-theme="dark"] .group-card.promo-card {
+  background: linear-gradient(180deg, #1a2422 0%, #141d1b 100%);
+  border: 1px solid rgba(141, 210, 193, 0.2);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 10px 20px rgba(0, 0, 0, 0.34);
+}
+
+:root[data-theme="dark"] .promo-card-title {
+  color: #deeee9;
+}
+
+:root[data-theme="dark"] .promo-card-image {
+  border-color: rgba(141, 210, 193, 0.24);
+  background: #111816;
+}
+
+:root[data-theme="dark"] .promo-card-cta {
+  border-color: rgba(141, 210, 193, 0.4);
+  color: #cbe9df;
+  background: #1f2d29;
+}
+
+:root[data-theme="dark"] .promo-card-cta:hover,
+:root[data-theme="dark"] .promo-card-cta:focus-visible {
+  background: #253631;
+}
+
 @media (max-width: 640px) {
   :root {
     --page-top-space: 0.55rem;
