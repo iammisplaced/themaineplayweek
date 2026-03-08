@@ -2140,21 +2140,21 @@ function render() {
 function buildPromotedAdCards() {
   return PROMOTED_CARDS.map((card) => {
     const article = document.createElement("article");
-    article.className = "group-card ad-card";
+    article.className = "group-card promo-card";
 
     const title = document.createElement("h3");
-    title.className = "group-title ad-card-title";
+    title.className = "group-title promo-card-title";
     title.textContent = card.title;
 
     const image = document.createElement("img");
-    image.className = "ad-card-image";
+    image.className = "promo-card-image";
     image.src = card.imageSrc;
     image.alt = card.imageAlt;
     image.loading = "lazy";
     image.decoding = "async";
 
     const cta = document.createElement("a");
-    cta.className = "ad-card-cta";
+    cta.className = "promo-card-cta";
     cta.href = card.buttonUrl;
     cta.target = "_blank";
     cta.rel = "noopener noreferrer";
@@ -2270,8 +2270,8 @@ function getCardGridSpan(card, columns) {
   if (columns <= 1) return 1;
   const isExpandedFilmCard =
     card.classList.contains("film-card") && !card.classList.contains("film-card-collapsed");
-  const isAdCard = card.classList.contains("ad-card");
-  if (isExpandedFilmCard || isAdCard) return 2;
+  const isPromoCard = card.classList.contains("promo-card");
+  if (isExpandedFilmCard || isPromoCard) return 2;
   return 1;
 }
 

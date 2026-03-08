@@ -490,8 +490,8 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   grid-column: span 2;
 }
 
-.results.results-masonry[data-view="films"] .group-card.ad-card,
-.results.results-masonry[data-view="days"] .group-card.ad-card {
+.results.results-masonry[data-view="films"] .group-card.promo-card,
+.results.results-masonry[data-view="days"] .group-card.promo-card {
   grid-column: span 2;
 }
 
@@ -738,7 +738,7 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   margin: 0.42rem auto 0;
 }
 
-.group-card.ad-card {
+.group-card.promo-card {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
@@ -748,14 +748,14 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   background: linear-gradient(180deg, #fffcf7 0%, #f3ede3 100%);
 }
 
-.ad-card-title {
+.promo-card-title {
   margin: 0;
   font-size: 1.02rem;
   line-height: 1.2;
   text-align: left;
 }
 
-.ad-card-image {
+.promo-card-image {
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 8px;
@@ -764,7 +764,7 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   background: var(--surface-soft);
 }
 
-.ad-card-cta {
+.promo-card-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -779,8 +779,8 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   font-size: 0.78rem;
 }
 
-.ad-card-cta:hover,
-.ad-card-cta:focus-visible {
+.promo-card-cta:hover,
+.promo-card-cta:focus-visible {
   background: var(--hover-soft);
 }
 
