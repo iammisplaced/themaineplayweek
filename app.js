@@ -169,6 +169,7 @@ const elements = {
   showingsList: document.getElementById("showingsList"),
   promoSettingsList: document.getElementById("promoSettingsList"),
   saveAllAdmin: document.getElementById("saveAllAdmin"),
+  saveAllPromos: document.getElementById("saveAllPromos"),
   adminJson: document.getElementById("adminJson"),
   applyJson: document.getElementById("applyJson"),
   downloadJson: document.getElementById("downloadJson"),
@@ -902,7 +903,7 @@ function bindEvents() {
     elements.adminMessage.textContent = "Deleted showing.";
   });
 
-  elements.saveAllAdmin.addEventListener("click", async () => {
+  const handleSaveAllChanges = async () => {
     if (!requireAdminAuth()) return;
     if (state.admin.isRefreshingTmdb) {
       elements.adminMessage.textContent = "TMDb refresh in progress. Wait for it to finish before saving.";
@@ -921,7 +922,10 @@ function bindEvents() {
       state.admin.isSaving = false;
       syncAdminEditor();
     }
-  });
+  };
+
+  elements.saveAllAdmin.addEventListener("click", handleSaveAllChanges);
+  elements.saveAllPromos?.addEventListener("click", handleSaveAllChanges);
 
   elements.applyJson.addEventListener("click", () => {
     if (!requireAdminAuth()) return;
@@ -1475,6 +1479,9 @@ function renderFilmOptions() {
   elements.showingTimesInput.disabled = !hasFilm;
   elements.addShowing.disabled = !hasFilm;
   elements.saveAllAdmin.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
+  if (elements.saveAllPromos) {
+    elements.saveAllPromos.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
+  }
   elements.saveSelectedTicketLink.disabled = !hasFilm || state.admin.isSaving || state.admin.isRefreshingTmdb;
 }
 
