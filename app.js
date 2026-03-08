@@ -9,6 +9,7 @@ const NO_POSTER_IMAGE_URL = "./noposter.webp";
 const MASONRY_MIN_COLUMN_WIDTH = 280;
 const FILMS_MASONRY_MIN_COLUMN_WIDTH = 170;
 const MASONRY_GAP_PX = 16;
+const THEATRE_COLLAPSED_FILM_COUNT = 5;
 const FILM_LAYOUT_ANIMATION_MS = 320;
 const FILM_SORT_WEIGHTS = Object.freeze({
   tmdbPopularity: 0.25,
@@ -1944,6 +1945,7 @@ function render() {
     const list = card.querySelector(".show-list");
     const shows = group.shows;
     let filmGroupExpanded = true;
+    let theatreGroupExpanded = true;
 
     if (group.theatreInfo && state.view === "theatres") {
       subtitle.textContent = `${group.theatreInfo.address}`;
@@ -1952,6 +1954,20 @@ function render() {
       if (theatreWebsite) {
         groupLink.href = theatreWebsite;
         groupLink.classList.remove("hidden");
+      }
+
+      const theatreExpandKey = buildExpandCardKey(state.view, group);
+      const theatreHasOverflow = shows.length > THEATRE_COLLAPSED_FILM_COUNT;
+      const hiddenFilmCount = Math.max(0, shows.length - THEATRE_COLLAPSED_FILM_COUNT);
+      theatreGroupExpanded = !theatreHasOverflow || state.expandedFilmGroups.has(theatreExpandKey);
+      if (filmExpandToggle && theatreHasOverflow) {
+        filmExpandToggle.classList.add("theatre-card-toggle");
+        filmExpandToggle.dataset.filmKey = theatreExpandKey;
+        filmExpandToggle.textContent = theatreGroupExpanded
+          ? "Show less"
+          : `Show all (+${hiddenFilmCount})`;
+        filmExpandToggle.setAttribute("aria-expanded", String(theatreGroupExpanded));
+        filmExpandToggle.classList.remove("hidden");
       }
     }
     if (isFilmsView) {
@@ -2020,7 +2036,12 @@ function render() {
         return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
       });
 
-      for (const show of shows) {
+      const showsToRender =
+        state.view === "theatres" && !theatreGroupExpanded
+          ? shows.slice(0, THEATRE_COLLAPSED_FILM_COUNT)
+          : shows;
+
+      for (const show of showsToRender) {
         const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
         const main = item.querySelector(".show-main");
         const meta = item.querySelector(".show-meta");
@@ -2084,6 +2105,10 @@ function render() {
         }
         list.appendChild(item);
       }
+    }
+
+    if (state.view === "theatres" && filmExpandToggle && !filmExpandToggle.classList.contains("hidden")) {
+      card.appendChild(filmExpandToggle);
     }
 
     cards.push(card);

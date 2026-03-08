@@ -635,6 +635,13 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   border-color: #c8beb1;
 }
 
+.film-expand-toggle.theatre-card-toggle {
+  margin: 0.45rem auto 0;
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+  padding: 0.14rem 0.5rem;
+}
+
 .group-subtitle {
   margin: 0 0 0.35rem;
   color: var(--muted);
@@ -1197,6 +1204,10 @@ textarea {
 :root[data-theme="dark"] .film-expand-toggle:hover,
 :root[data-theme="dark"] .film-expand-toggle:focus-visible {
   border-color: #4a5f59;
+}
+
+:root[data-theme="dark"] .film-expand-toggle.theatre-card-toggle {
+  background: #1e2b27;
 }
 
 @media (max-width: 640px) {
