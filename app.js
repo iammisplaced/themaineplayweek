@@ -10,6 +10,16 @@ const MASONRY_MIN_COLUMN_WIDTH = 280;
 const FILMS_MASONRY_MIN_COLUMN_WIDTH = 170;
 const MASONRY_GAP_PX = 16;
 const FILM_LAYOUT_ANIMATION_MS = 320;
+const FILM_SORT_WEIGHTS = Object.freeze({
+  tmdbPopularity: 0.25,
+  tmdbRating: 0.15,
+  tmdbRecency: 0.1,
+  upcomingShowings: 0.35,
+  theatreCoverage: 0.15,
+});
+const RELEASE_RECENCY_WINDOW_DAYS = 30;
+const TMDB_FRESHNESS_HALF_LIFE_DAYS = 10;
+const TMDB_FRESHNESS_FLOOR = 0.1;
 const SUBSTACK_ARCHIVE_URL = "https://themaineplayweek.substack.com/api/v1/archive?sort=new";
 const THEATRE_GEO_CACHE_KEY = "theatre-geocode-cache-v1";
 const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
@@ -1880,6 +1890,10 @@ function render() {
 
   if (isFilmStyleView) {
     entries.sort(([, groupA], [, groupB]) => {
+      const scoreA = getFilmGroupSortScore(groupA);
+      const scoreB = getFilmGroupSortScore(groupB);
+      if (scoreA !== scoreB) return scoreB - scoreA;
+
       const titleA = groupA?.filmInfo?.film || "";
       const titleB = groupB?.filmInfo?.film || "";
       const normalizedCompare = normalizeSortTitle(titleA).localeCompare(normalizeSortTitle(titleB));
@@ -2459,6 +2473,96 @@ function normalizeSortTitle(value) {
     .toLowerCase();
 }
 
+function getFilmGroupSortScore(group) {
+  const filmInfo = group?.filmInfo || {};
+  const popularity = normalizeScoreRange(toFiniteNumber(filmInfo.popularity), 100);
+  const voteAverage = normalizeScoreRange(toFiniteNumber(filmInfo.voteAverage), 10);
+  const voteCount = toFiniteNumber(filmInfo.voteCount);
+  const voteConfidence = normalizeLogRange(voteCount, 10000);
+  const ratingScore = voteAverage * voteConfidence;
+  const releaseRecency = calculateReleaseRecencyScore(filmInfo.releaseDate);
+  const freshness = calculateTmdbFreshnessMultiplier(filmInfo.matchedAt);
+
+  const upcomingTimes = countGroupUpcomingTimes(group);
+  const theatreCoverage = normalizeLogRange(countGroupTheatreCoverage(group), 30);
+  const upcomingShowings = normalizeLogRange(upcomingTimes, 80);
+
+  const tmdbScore =
+    FILM_SORT_WEIGHTS.tmdbPopularity * popularity +
+    FILM_SORT_WEIGHTS.tmdbRating * ratingScore +
+    FILM_SORT_WEIGHTS.tmdbRecency * releaseRecency;
+  const localDemandScore =
+    FILM_SORT_WEIGHTS.upcomingShowings * upcomingShowings +
+    FILM_SORT_WEIGHTS.theatreCoverage * theatreCoverage;
+
+  return tmdbScore * freshness + localDemandScore;
+}
+
+function countGroupUpcomingTimes(group) {
+  return (group?.shows || []).reduce((total, show) => {
+    const times = Object.values(show?.dates || {}).reduce((count, dateTimes) => count + (dateTimes?.length || 0), 0);
+    return total + times;
+  }, 0);
+}
+
+function countGroupTheatreCoverage(group) {
+  const keys = new Set();
+  (group?.shows || []).forEach((show) => {
+    keys.add(`${show?.theatre || ""}::${show?.city || ""}`);
+  });
+  return keys.size;
+}
+
+function calculateReleaseRecencyScore(releaseDate) {
+  const release = parseIsoDateLike(releaseDate);
+  if (!release) return 0;
+  const now = new Date();
+  const daysSinceRelease = (now.getTime() - release.getTime()) / 86400000;
+  if (!Number.isFinite(daysSinceRelease)) return 0;
+  if (daysSinceRelease <= 0) return 1;
+  if (daysSinceRelease >= RELEASE_RECENCY_WINDOW_DAYS) return 0;
+  return 1 - (daysSinceRelease / RELEASE_RECENCY_WINDOW_DAYS);
+}
+
+function calculateTmdbFreshnessMultiplier(matchedAt) {
+  const matched = parseIsoDateTimeLike(matchedAt);
+  if (!matched) return 0.35;
+  const ageDays = (Date.now() - matched.getTime()) / 86400000;
+  if (!Number.isFinite(ageDays) || ageDays <= 0) return 1;
+  const decay = Math.exp((-Math.LN2 * ageDays) / TMDB_FRESHNESS_HALF_LIFE_DAYS);
+  return Math.max(TMDB_FRESHNESS_FLOOR, decay);
+}
+
+function normalizeScoreRange(value, max) {
+  if (!Number.isFinite(value) || max <= 0) return 0;
+  return Math.max(0, Math.min(1, value / max));
+}
+
+function normalizeLogRange(value, expectedHigh) {
+  if (!Number.isFinite(value) || value <= 0 || expectedHigh <= 0) return 0;
+  return Math.max(0, Math.min(1, Math.log1p(value) / Math.log1p(expectedHigh)));
+}
+
+function toFiniteNumber(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function parseIsoDateLike(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  const head = raw.slice(0, 10);
+  return parseIsoDate(head);
+}
+
+function parseIsoDateTimeLike(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  const date = new Date(raw);
+  if (Number.isNaN(date.getTime())) return null;
+  return date;
+}
+
 function getRowEarliestShowtimeTimestamp(row) {
   let earliest = Number.POSITIVE_INFINITY;
   Object.entries(row?.dates || {}).forEach(([date, times]) => {
@@ -2545,6 +2649,11 @@ function buildSingleDayGroups(theatres, selectedDate) {
             director: metadata.director,
             stars: metadata.stars,
             genres: metadata.genres,
+            popularity: metadata.popularity,
+            voteAverage: metadata.voteAverage,
+            voteCount: metadata.voteCount,
+            releaseDate: metadata.releaseDate,
+            matchedAt: metadata.matchedAt,
           },
           shows: [],
         };
@@ -2591,6 +2700,11 @@ function buildGroups(theatres, view) {
         director: metadata.director,
         stars: metadata.stars,
         genres: metadata.genres,
+        popularity: metadata.popularity,
+        voteAverage: metadata.voteAverage,
+        voteCount: metadata.voteCount,
+        releaseDate: metadata.releaseDate,
+        matchedAt: metadata.matchedAt,
         dates: {},
       };
 
@@ -2799,11 +2913,19 @@ function buildFilmFacts(show) {
 
 function extractFilmMetadata(film) {
   const tmdb = film.tmdb || {};
+  const popularityRaw = tmdb.popularity ?? tmdb.popularity_score ?? film.popularity;
+  const voteAverageRaw = tmdb.voteAverage ?? tmdb.vote_average ?? film.voteAverage ?? film.vote_average;
+  const voteCountRaw = tmdb.voteCount ?? tmdb.vote_count ?? film.voteCount ?? film.vote_count;
+  const releaseDate = String(tmdb.releaseDate || tmdb.release_date || film.releaseDate || film.release_date || "").trim();
+  const matchedAt = String(tmdb.matchedAt || tmdb.matched_at || "").trim();
   const genres = normalizeStringArray(tmdb.genres || film.genres);
   const stars = normalizeStringArray(tmdb.stars || film.stars);
   const director = typeof (tmdb.director || film.director) === "string" ? (tmdb.director || film.director).trim() : "";
   const posterUrl = normalizePosterUrl(tmdb.posterUrl || tmdb.posterPath || film.posterUrl || film.posterPath);
-  return { genres, stars, director, posterUrl };
+  const popularity = toFiniteNumber(popularityRaw);
+  const voteAverage = toFiniteNumber(voteAverageRaw);
+  const voteCount = toFiniteNumber(voteCountRaw);
+  return { genres, stars, director, posterUrl, popularity, voteAverage, voteCount, releaseDate, matchedAt };
 }
 
 function normalizeStringArray(value) {
@@ -2944,6 +3066,9 @@ function buildTmdbRecord(details) {
     id: details.id,
     title: details.title || "",
     releaseDate: details.release_date || "",
+    popularity: toFiniteNumber(details.popularity),
+    voteAverage: toFiniteNumber(details.vote_average),
+    voteCount: toFiniteNumber(details.vote_count),
     posterPath: details.poster_path || "",
     posterUrl: details.poster_path ? `https://image.tmdb.org/t/p/w342${details.poster_path}` : "",
     director,

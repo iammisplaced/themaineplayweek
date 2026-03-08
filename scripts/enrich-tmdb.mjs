@@ -45,6 +45,9 @@ for (const theatre of data.theatreGroups) {
       id: details.id,
       title: details.title,
       releaseDate: details.release_date,
+      popularity: toFiniteNumber(details.popularity),
+      voteAverage: toFiniteNumber(details.vote_average),
+      voteCount: toFiniteNumber(details.vote_count),
       posterPath: details.poster_path || "",
       posterUrl: details.poster_path ? `https://image.tmdb.org/t/p/w342${details.poster_path}` : "",
       director: details.director,
@@ -89,6 +92,9 @@ async function fetchTmdbFilmDetails(key, title, year) {
     id: details.id,
     title: details.title || best.title || title,
     release_date: details.release_date || best.release_date || "",
+    popularity: toFiniteNumber(details.popularity || best.popularity),
+    vote_average: toFiniteNumber(details.vote_average || best.vote_average),
+    vote_count: toFiniteNumber(details.vote_count || best.vote_count),
     poster_path: details.poster_path || best.poster_path || "",
     director,
     stars,
@@ -125,6 +131,9 @@ async function fetchMovieDetailsById(key, movieId, fallbackTitle = "") {
     id: details.id,
     title: details.title || fallbackTitle,
     release_date: details.release_date || "",
+    popularity: toFiniteNumber(details.popularity),
+    vote_average: toFiniteNumber(details.vote_average),
+    vote_count: toFiniteNumber(details.vote_count),
     poster_path: details.poster_path || "",
     director,
     stars,
@@ -160,4 +169,9 @@ async function fetchJson(url) {
   }
 
   return response.json();
+}
+
+function toFiniteNumber(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
 }
