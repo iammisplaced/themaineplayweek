@@ -9,19 +9,23 @@ Data now supports Supabase as the primary backend, with JSON/local fallback.
 
 ## Files
 - `index.html` - page structure
-- `styles.css` - styling
-- `app.js` - frontend logic + Supabase read/write + admin UI
+- `css/styles.css` - styling
+- `js/app.js` - frontend logic + Supabase read/write + admin UI
+- `admin-films.html` - admin film catalog page
+- `css/admin-films.css` - admin film catalog styles
+- `js/admin-films.js` - admin film catalog behavior
+- `assets/` - icons, brand assets, and images
 - `data/showtimes.json` - fallback seed data
 - `supabase/schema.sql` - Supabase tables + RLS policies
 - `scripts/enrich-tmdb.mjs` - TMDb metadata enrichment script (local/offline workflow)
 
 ## Revert note (film card newspaper style)
 - The "torn newspaper" film card treatment touches:
-  - `styles.css` (`.group-card.film-card` block and related pseudo-elements)
-  - `app.js` (adds `film-card` class in `render()` for films view cards)
+  - `css/styles.css` (`.group-card.film-card` block and related pseudo-elements)
+  - `js/app.js` (adds `film-card` class in `render()` for films view cards)
 - Fast rollback target (last commit before newspaper styling): `57c0f2a`
 - To restore pre-newspaper look quickly:
-  - `git checkout 57c0f2a -- app.js styles.css`
+  - `git checkout 57c0f2a -- js/app.js css/styles.css`
 
 ## Run locally
 
@@ -41,7 +45,7 @@ Open <http://localhost:8080>.
 4. If you already set this up earlier, re-run `supabase/schema.sql` to install the latest transactional save function (`replace_showtimes_data`).
 
 ## Current Supabase config in app
-`app.js` is configured with:
+`js/app.js` is configured with:
 - URL: `https://rjfsjoratsfqcyyjseqm.supabase.co`
 - anon key: your provided key
 

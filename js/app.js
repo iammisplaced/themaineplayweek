@@ -1,11 +1,11 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const DATA_URL = "./data/showtimes.json";
+const DATA_URL = "../data/showtimes.json";
 const STORAGE_KEY = "showtimes-local-edit";
 const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
 const THEME_STORAGE_KEY = "tmp-theme";
 const VIEW_STORAGE_KEY = "tmp-view";
-const NO_POSTER_IMAGE_URL = "./noposter.webp";
+const NO_POSTER_IMAGE_URL = "./assets/images/noposter.webp";
 const PROMO_STORAGE_BUCKET = "promo-images";
 const MASONRY_MIN_COLUMN_WIDTH = 280;
 const FILMS_MASONRY_MIN_COLUMN_WIDTH = 170;
@@ -13,14 +13,14 @@ const MASONRY_GAP_PX = 16;
 const PROMOTED_CARDS = Object.freeze([
   {
     title: "The Golden Statue Collection",
-    imagePath: "defaults/golden_statue_promo.gif",
+    imagePath: "assets/images/golden_statue_promo.gif",
     imageAlt: "The Golden Statue Collection",
     buttonLabel: "Shop Now",
     buttonUrl: "https://shop.themaineplayweek.com",
   },
   {
     title: "TMP Newspaper Tee",
-    imagePath: "defaults/newspaper_promo.gif",
+    imagePath: "assets/images/newspaper_promo.gif",
     imageAlt: "TMP Newspaper Tee",
     buttonLabel: "Shop Now",
     buttonUrl: "https://themaineplayweek.printful.me/product/unisex-garment-dyed-heavyweight-t-shirt",
@@ -1042,12 +1042,16 @@ function applyTheme(theme, options = {}) {
   document.documentElement.setAttribute("data-theme", normalizedTheme);
 
   if (elements.brandLogo) {
-    elements.brandLogo.src = normalizedTheme === DARK_THEME ? "TMP logo light.png" : "TMP logo dark.png";
+    elements.brandLogo.src = normalizedTheme === DARK_THEME
+      ? "assets/brand/TMP logo light.png"
+      : "assets/brand/TMP logo dark.png";
   }
 
   if (elements.brandWordmark) {
     elements.brandWordmark.src =
-      normalizedTheme === DARK_THEME ? "TMP Wordmark Three Line Light.png" : "TMP Wordmark Three Line Dark.png";
+      normalizedTheme === DARK_THEME
+        ? "assets/brand/TMP Wordmark Three Line Light.png"
+        : "assets/brand/TMP Wordmark Three Line Dark.png";
   }
 
   if (elements.themeToggle) {
@@ -2617,6 +2621,7 @@ function buildPromosReplacePayload(promotedCards) {
 function resolvePromoImageSrc(promo) {
   const path = String(promo?.imagePath || "").trim();
   if (!path) return "";
+  if (path.startsWith("assets/") || path.startsWith("./assets/")) return path;
   if (/^https?:\/\//i.test(path)) return path;
   return state.supabase?.storage?.from(PROMO_STORAGE_BUCKET).getPublicUrl(path)?.data?.publicUrl || "";
 }
@@ -2638,7 +2643,7 @@ async function uploadPromoImageToStorage(file) {
 async function deletePromoImageFromStorage(path) {
   if (!state.supabase) return;
   const normalized = String(path || "").trim();
-  if (!normalized || normalized.startsWith("defaults/") || /^https?:\/\//i.test(normalized)) return;
+  if (!normalized || normalized.startsWith("assets/") || normalized.startsWith("defaults/") || /^https?:\/\//i.test(normalized)) return;
   const result = await state.supabase.storage.from(PROMO_STORAGE_BUCKET).remove([normalized]);
   if (result.error) throw result.error;
 }
