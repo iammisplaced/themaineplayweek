@@ -2121,16 +2121,9 @@ function render() {
   const searchQuery = getPublicSearchQueryForView(state.view);
   if (searchQuery) {
     if (isFilmStyleView) {
-      entries = entries.filter(([, group]) => normalizeSearchText(group?.filmInfo?.film).includes(searchQuery));
+      entries = entries.filter(([, group]) => doesFilmStyleGroupMatchSearch(group, searchQuery));
     } else if (state.view === "theatres") {
-      entries = entries.filter(([groupName, group]) => {
-        const theatreName = group?.theatreInfo?.name || groupName;
-        const theatreCity = group?.theatreInfo?.city || "";
-        return (
-          normalizeSearchText(theatreName).includes(searchQuery) ||
-          normalizeSearchText(theatreCity).includes(searchQuery)
-        );
-      });
+      entries = entries.filter(([groupName, group]) => doesTheatreGroupMatchSearch(groupName, group, searchQuery));
     }
   }
   if (!entries.length) {
@@ -2756,11 +2749,11 @@ function syncPublicSearchUI() {
   syncLatestPostVisibility();
   if (state.view === "films") {
     elements.publicSearchWrap.classList.remove("hidden");
-    elements.publicSearchInput.placeholder = "Search films...";
+    elements.publicSearchInput.placeholder = "Search films or genres...";
     elements.publicSearchInput.value = state.publicSearch.films;
   } else if (state.view === "theatres") {
     elements.publicSearchWrap.classList.remove("hidden");
-    elements.publicSearchInput.placeholder = "Search theatres or town...";
+    elements.publicSearchInput.placeholder = "Search theatres, town, or film...";
     elements.publicSearchInput.value = state.publicSearch.theatres;
   } else {
     elements.publicSearchWrap.classList.add("hidden");
@@ -2778,6 +2771,23 @@ function getPublicSearchQueryForView(view) {
   if (view === "films") return normalizeSearchText(state.publicSearch.films);
   if (view === "theatres") return normalizeSearchText(state.publicSearch.theatres);
   return "";
+}
+
+function doesFilmStyleGroupMatchSearch(group, query) {
+  if (!query) return true;
+  const filmTitleMatches = normalizeSearchText(group?.filmInfo?.film || "").includes(query);
+  if (filmTitleMatches) return true;
+  return normalizeStringArray(group?.filmInfo?.genres).some((genre) => normalizeSearchText(genre).includes(query));
+}
+
+function doesTheatreGroupMatchSearch(groupName, group, query) {
+  if (!query) return true;
+  const theatreName = group?.theatreInfo?.name || groupName;
+  const theatreCity = group?.theatreInfo?.city || "";
+  if (normalizeSearchText(theatreName).includes(query) || normalizeSearchText(theatreCity).includes(query)) {
+    return true;
+  }
+  return (group?.shows || []).some((show) => normalizeSearchText(show?.film || "").includes(query));
 }
 
 function normalizeSearchText(value) {
