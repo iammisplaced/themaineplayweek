@@ -647,6 +647,12 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   padding: 0.14rem 0.5rem;
 }
 
+.film-expand-toggle.theatre-row-toggle {
+  font-size: 0.64rem;
+  letter-spacing: 0.03em;
+  padding: 0.14rem 0.46rem;
+}
+
 .group-subtitle {
   margin: 0 0 0.35rem;
   color: var(--muted);
@@ -890,6 +896,16 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
 
 .show-meta .film-expand-toggle {
   margin: 0.35rem 0 0;
+}
+
+.show-schedule .film-expand-toggle.theatre-row-toggle {
+  margin: 0.42rem 0 0;
+}
+
+.show-item > .film-expand-toggle.theatre-row-toggle {
+  display: flex;
+  width: fit-content;
+  margin-top: 0.42rem;
 }
 
 .show-schedule {

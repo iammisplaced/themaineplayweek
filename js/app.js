@@ -2299,7 +2299,7 @@ function render() {
           const rowExpanded = state.expandedFilmGroups.has(rowExpandKey);
           const rowToggle = document.createElement("button");
           rowToggle.type = "button";
-          rowToggle.className = "film-expand-toggle";
+          rowToggle.className = "film-expand-toggle theatre-row-toggle";
           rowToggle.dataset.filmKey = rowExpandKey;
           rowToggle.textContent = rowExpanded ? "Collapse" : "Expand";
           rowToggle.setAttribute("aria-expanded", String(rowExpanded));
@@ -2317,13 +2317,13 @@ function render() {
 
           main.textContent = filmLabel;
           meta.textContent = "";
-          meta.appendChild(rowToggle);
 
           if (state.view === "theatres") {
             renderSchedule(schedule, show.dates);
           }
 
           if (!rowExpanded) {
+            meta.appendChild(rowToggle);
             schedule.classList.add("hidden");
           } else {
             schedule.classList.remove("hidden");
@@ -2335,6 +2335,9 @@ function render() {
             link.classList.remove("hidden");
           } else {
             link.classList.add("hidden");
+          }
+          if (rowExpanded) {
+            item.appendChild(rowToggle);
           }
         } else {
           main.textContent = `${show.theatre}`;
