@@ -832,7 +832,7 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
 
 .film-favorite-stamp {
   position: absolute;
-  top: clamp(3.4rem, 9vw, 4.8rem);
+  top: 0.38rem;
   right: 0.28rem;
   width: clamp(58px, 18vw, 78px);
   height: auto;
@@ -843,10 +843,18 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   transform: rotate(8deg);
 }
 
+.group-card.film-card:not(.film-card-collapsed) .film-favorite-stamp {
+  top: clamp(4.3rem, 12vw, 5.6rem);
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%) rotate(8deg);
+}
+
 .group-card.film-card.film-card-collapsed .film-favorite-stamp {
   top: clamp(2.4rem, 14vw, 3.4rem);
   right: 0.2rem;
   width: clamp(54px, 26vw, 72px);
+  transform: rotate(8deg);
 }
 
 .film-expand-toggle {
