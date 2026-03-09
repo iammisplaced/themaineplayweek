@@ -12,6 +12,9 @@ const state = {
   query: "",
   films: [],
   userEmail: "",
+  isAuthed: false,
+  staffFavoriteSupported: true,
+  favoriteSaveBusy: new Set(),
 };
 
 const elements = {
@@ -79,9 +82,28 @@ function bindEvents() {
     state.query = normalize(elements.filmSearch.value);
     renderCatalog();
   });
+
+  elements.catalogList.addEventListener("change", (event) => {
+    const toggle = event.target.closest('input[data-role="favorite-toggle"]');
+    if (!toggle) return;
+    const row = toggle.closest("tr[data-film-id]");
+    const byInput = row?.querySelector('input[data-role="favorite-by"]');
+    if (!byInput) return;
+    byInput.disabled = !toggle.checked || state.favoriteSaveBusy.has(String(row.dataset.filmId));
+    if (!toggle.checked) byInput.value = "";
+  });
+
+  elements.catalogList.addEventListener("click", async (event) => {
+    const saveButton = event.target.closest('button[data-action="save-favorite"]');
+    if (!saveButton) return;
+    const row = saveButton.closest("tr[data-film-id]");
+    if (!row) return;
+    await saveStaffFavorite(row);
+  });
 }
 
 function updateAuthUI(authed) {
+  state.isAuthed = authed;
   elements.authGate.classList.toggle("hidden", authed);
   elements.catalogApp.classList.remove("hidden");
   elements.authStatus.textContent = authed
@@ -95,16 +117,26 @@ async function loadCatalog() {
     setStatus("Loading film catalog...");
 
     setStatus("Loading films table...");
-    const filmsResult = await runWithTimeout(
-      fetchAllRows(() => supabase.from("films").select("id,title,year,tmdb_id,ticket_link,tmdb_json")),
+    let warnings = [];
+    let filmsResult = await runWithTimeout(
+      fetchAllRows(
+        () => supabase.from("films").select("id,title,year,tmdb_id,ticket_link,tmdb_json,staff_favorite,staff_favorite_by")
+      ),
       "films"
     );
+    state.staffFavoriteSupported = true;
+    if (filmsResult.error && isStaffFavoriteSchemaMissing(filmsResult.error)) {
+      state.staffFavoriteSupported = false;
+      warnings.push("films: staff favorite fields missing; run latest supabase/schema.sql");
+      filmsResult = await runWithTimeout(
+        fetchAllRows(() => supabase.from("films").select("id,title,year,tmdb_id,ticket_link,tmdb_json")),
+        "films"
+      );
+    }
     if (filmsResult.error) {
       setStatus(`Load failed (films): ${filmsResult.error.message}`);
       return;
     }
-
-    const warnings = [];
 
     setStatus("Loading related tables...");
     const [theatresResult, theatreFilmsResult, showingsResult] = await Promise.all([
@@ -167,6 +199,11 @@ function runWithTimeout(promise, label, timeoutMs = QUERY_TIMEOUT_MS) {
       }, timeoutMs);
     }),
   ]);
+}
+
+function isStaffFavoriteSchemaMissing(error) {
+  const message = String(error?.message || "").toLowerCase();
+  return message.includes("staff_favorite") || message.includes("staff_favorite_by");
 }
 
 function buildCatalogRows(films, theatres, theatreFilms, showings) {
@@ -246,6 +283,8 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
       year: film.year,
       tmdbId: film.tmdb_id,
       tmdb: film.tmdb_json || {},
+      staffFavorite: Boolean(film.staff_favorite),
+      staffFavoriteBy: String(film.staff_favorite_by || "").trim(),
       totalTimes,
       futureTimes,
       links,
@@ -266,6 +305,7 @@ function renderSummary() {
   const withFuture = state.films.filter((film) => film.futureTimes > 0).length;
   const withoutFuture = total - withFuture;
   const withAnyTicketLinks = state.films.filter((film) => film.links.some((entry) => entry.ticketLink)).length;
+  const staffFavorites = state.films.filter((film) => film.staffFavorite).length;
 
   elements.summary.innerHTML = `
     <strong>${total}</strong> films total
@@ -273,6 +313,8 @@ function renderSummary() {
     <strong>${withFuture}</strong> with upcoming showtimes, <strong>${withoutFuture}</strong> without upcoming showtimes
     <br />
     <strong>${withAnyTicketLinks}</strong> with at least one ticket link
+    <br />
+    <strong>${staffFavorites}</strong> marked as staff favorites
   `;
 }
 
@@ -300,6 +342,7 @@ function renderCatalog() {
         <th>Director</th>
         <th>Starring</th>
         <th>Genre</th>
+        <th>Staff Favorite</th>
         <th>DB Rows</th>
       </tr>
     </thead>
@@ -314,8 +357,15 @@ function renderCatalog() {
     const genres = Array.isArray(tmdb.genres) ? tmdb.genres.filter(Boolean) : [];
     const statusClass = film.futureTimes > 0 ? "badge badge-on" : "badge badge-off";
     const statusText = film.futureTimes > 0 ? "Showing" : "No upcoming";
+    const isFavoriteBusy = state.favoriteSaveBusy.has(String(film.id));
+    const favoriteBadge = film.staffFavorite
+      ? film.staffFavoriteBy
+        ? `Yes (${escapeHtml(film.staffFavoriteBy)})`
+        : "Yes (General)"
+      : "No";
 
     const row = document.createElement("tr");
+    row.dataset.filmId = String(film.id);
     row.innerHTML = `
       <td><strong>${escapeHtml(film.title || "")}</strong></td>
       <td>${Number.isInteger(Number(film.year)) ? Number(film.year) : ""}</td>
@@ -327,6 +377,31 @@ function renderCatalog() {
       <td>${escapeHtml(director)}</td>
       <td>${escapeHtml(stars.join(", "))}</td>
       <td>${escapeHtml(genres.join(", "))}</td>
+      <td>
+        ${
+          !state.staffFavoriteSupported
+            ? '<span class="muted-inline">Schema update required</span>'
+            : state.isAuthed
+              ? `
+          <div class="staff-favorite-controls">
+            <label class="staff-favorite-toggle-wrap">
+              <input data-role="favorite-toggle" type="checkbox" ${film.staffFavorite ? "checked" : ""} ${isFavoriteBusy ? "disabled" : ""} />
+              Favorite
+            </label>
+            <input
+              data-role="favorite-by"
+              class="staff-favorite-by"
+              type="text"
+              value="${escapeHtml(film.staffFavoriteBy)}"
+              placeholder="Staff name (optional)"
+              ${film.staffFavorite && !isFavoriteBusy ? "" : "disabled"}
+            />
+            <button type="button" data-action="save-favorite" class="staff-favorite-save" ${isFavoriteBusy ? "disabled" : ""}>Save</button>
+          </div>
+        `
+              : `<span class="badge ${film.staffFavorite ? "badge-on" : "badge-off"}">${favoriteBadge}</span>`
+        }
+      </td>
       <td>
         <details>
           <summary>View</summary>
@@ -341,6 +416,58 @@ function renderCatalog() {
   wrap.className = "table-wrap panel";
   wrap.appendChild(table);
   elements.catalogList.appendChild(wrap);
+}
+
+async function saveStaffFavorite(row) {
+  if (!state.isAuthed) {
+    setStatus("Sign in first to edit staff favorites.");
+    return;
+  }
+  if (!state.staffFavoriteSupported) {
+    setStatus("Staff favorite columns are missing. Run latest supabase/schema.sql first.");
+    return;
+  }
+
+  const filmId = Number(row.dataset.filmId);
+  if (!Number.isInteger(filmId) || filmId <= 0) return;
+
+  const favoriteToggle = row.querySelector('input[data-role="favorite-toggle"]');
+  const favoriteByInput = row.querySelector('input[data-role="favorite-by"]');
+  if (!favoriteToggle || !favoriteByInput) return;
+
+  const staffFavorite = Boolean(favoriteToggle.checked);
+  const staffFavoriteBy = staffFavorite ? String(favoriteByInput.value || "").trim() : "";
+  const busyKey = String(filmId);
+  state.favoriteSaveBusy.add(busyKey);
+  renderCatalog();
+
+  try {
+    const { error } = await supabase
+      .from("films")
+      .update({
+        staff_favorite: staffFavorite,
+        staff_favorite_by: staffFavoriteBy,
+      })
+      .eq("id", filmId);
+    if (error) throw error;
+
+    const film = state.films.find((entry) => Number(entry.id) === filmId);
+    if (film) {
+      film.staffFavorite = staffFavorite;
+      film.staffFavoriteBy = staffFavoriteBy;
+    }
+    setStatus(
+      staffFavorite
+        ? `Saved staff favorite for film ${filmId}${staffFavoriteBy ? ` (${staffFavoriteBy})` : " (General)"}.`
+        : `Cleared staff favorite for film ${filmId}.`
+    );
+  } catch (error) {
+    setStatus(`Save failed: ${error.message}`);
+  } finally {
+    state.favoriteSaveBusy.delete(busyKey);
+    renderSummary();
+    renderCatalog();
+  }
 }
 
 function normalize(value) {

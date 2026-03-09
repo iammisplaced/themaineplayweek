@@ -151,7 +151,7 @@ label {
 .catalog-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1120px;
+  min-width: 1280px;
 }
 
 .catalog-table th,
@@ -182,6 +182,45 @@ label {
   cursor: pointer;
   color: var(--accent-2);
   font-weight: 600;
+}
+
+.staff-favorite-controls {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 180px;
+}
+
+.staff-favorite-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.staff-favorite-toggle-wrap input[type="checkbox"] {
+  width: auto;
+  min-width: 0;
+}
+
+.staff-favorite-by {
+  width: 100%;
+  min-width: 0;
+  border-radius: 8px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.staff-favorite-save {
+  justify-self: start;
+  padding: 0.28rem 0.62rem;
+  font-size: 0.78rem;
+}
+
+.muted-inline {
+  color: var(--muted);
+  font-size: 0.8rem;
 }
 
 pre {

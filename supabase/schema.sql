@@ -15,9 +15,14 @@ create table if not exists public.films (
   year integer,
   tmdb_id bigint,
   ticket_link text not null default '',
+  staff_favorite boolean not null default false,
+  staff_favorite_by text not null default '',
   tmdb_json jsonb,
   created_at timestamptz not null default now()
 );
+
+alter table public.films add column if not exists staff_favorite boolean not null default false;
+alter table public.films add column if not exists staff_favorite_by text not null default '';
 
 create table if not exists public.theatre_films (
   theatre_id bigint not null references public.theatres(id) on delete cascade,
@@ -293,12 +298,14 @@ begin
   for film_item in
     select value from jsonb_array_elements(coalesce(payload->'films', '[]'::jsonb))
   loop
-    insert into public.films (title, year, tmdb_id, ticket_link, tmdb_json)
+    insert into public.films (title, year, tmdb_id, ticket_link, staff_favorite, staff_favorite_by, tmdb_json)
     values (
       coalesce(film_item->>'title', ''),
       nullif(film_item->>'year', '')::integer,
       nullif(film_item->>'tmdb_id', '')::bigint,
       coalesce(film_item->>'ticket_link', ''),
+      coalesce((film_item->>'staff_favorite')::boolean, false),
+      coalesce(film_item->>'staff_favorite_by', ''),
       film_item->'tmdb_json'
     )
     returning id into film_id;

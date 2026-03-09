@@ -830,6 +830,25 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   text-align: center;
 }
 
+.film-favorite-stamp {
+  position: absolute;
+  top: clamp(3.4rem, 9vw, 4.8rem);
+  right: 0.28rem;
+  width: clamp(58px, 18vw, 78px);
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.92;
+  transform: rotate(8deg);
+}
+
+.group-card.film-card.film-card-collapsed .film-favorite-stamp {
+  top: clamp(2.4rem, 14vw, 3.4rem);
+  right: 0.2rem;
+  width: clamp(54px, 26vw, 72px);
+}
+
 .film-expand-toggle {
   display: inline-flex;
   align-items: center;
@@ -1537,6 +1556,10 @@ textarea {
     0 1px 0 rgba(255, 255, 255, 0.05) inset,
     0 0 0 1px rgba(141, 210, 193, 0.12) inset,
     0 10px 20px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] .film-favorite-stamp {
+  filter: saturate(0.9) brightness(0.92);
 }
 
 :root[data-theme="dark"] .group-card.film-card::before,

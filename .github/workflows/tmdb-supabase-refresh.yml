@@ -1,0 +1,30 @@
+name: TMDb Refresh (Supabase Source)
+
+on:
+  schedule:
+    - cron: "25 9 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Refresh TMDb metadata in Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          TMDB_REQUEST_DELAY_MS: "250"
+        run: node scripts/enrich-tmdb-supabase.mjs

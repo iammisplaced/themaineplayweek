@@ -6,6 +6,7 @@ const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
 const THEME_STORAGE_KEY = "tmp-theme";
 const VIEW_STORAGE_KEY = "tmp-view";
 const NO_POSTER_IMAGE_URL = "./assets/images/noposter.webp";
+const PLAYWEEK_RECOMMENDS_STAMP_URL = "./assets/images/playweek%20recommends.png";
 const PROMO_STORAGE_BUCKET = "promo-images";
 const MASONRY_MIN_COLUMN_WIDTH = 280;
 const FILMS_MASONRY_MIN_COLUMN_WIDTH = 170;
@@ -34,6 +35,7 @@ const FILM_SORT_WEIGHTS = Object.freeze({
   tmdbRecency: 0.1,
   upcomingShowings: 0.35,
   theatreCoverage: 0.15,
+  staffFavoriteBoost: 0.12,
 });
 const RELEASE_RECENCY_WINDOW_DAYS = 30;
 const TMDB_FRESHNESS_HALF_LIFE_DAYS = 10;
@@ -818,6 +820,8 @@ function bindEvents() {
     const film = {
       title,
       ticketLink: "",
+      staffFavorite: false,
+      staffFavoriteBy: "",
       showings: [],
     };
     if (yearValue) film.year = Number(yearValue);
@@ -1176,7 +1180,7 @@ async function loadDataFromSupabase() {
   const films = await fetchAllRowsFromSupabase(() =>
     state.supabase
       .from("films")
-      .select("id,title,year,tmdb_id,ticket_link,tmdb_json")
+      .select("id,title,year,tmdb_id,ticket_link,staff_favorite,staff_favorite_by,tmdb_json")
       .order("id", { ascending: true })
   );
   const theatreFilms = await fetchAllRowsFromSupabase(() =>
@@ -1223,6 +1227,8 @@ async function loadDataFromSupabase() {
       tmdbId: filmRow.tmdb_id,
       ticketLink: "",
       legacyTicketLink: filmRow.ticket_link || "",
+      staffFavorite: Boolean(filmRow.staff_favorite),
+      staffFavoriteBy: String(filmRow.staff_favorite_by || "").trim(),
       tmdb: filmRow.tmdb_json || undefined,
       _dbId: filmRow.id,
     });
@@ -1236,6 +1242,8 @@ async function loadDataFromSupabase() {
         year: filmTemplate.year,
         tmdbId: filmTemplate.tmdbId,
         ticketLink: "",
+        staffFavorite: Boolean(filmTemplate.staffFavorite),
+        staffFavoriteBy: String(filmTemplate.staffFavoriteBy || ""),
         tmdb: filmTemplate.tmdb,
         showings: [],
         _dbId: filmTemplate._dbId,
@@ -1732,6 +1740,8 @@ function addFilmToAllTheatres(baseFilm) {
         year: baseFilm.year,
         tmdbId: baseFilm.tmdbId,
         ticketLink: baseFilm.ticketLink,
+        staffFavorite: Boolean(baseFilm.staffFavorite),
+        staffFavoriteBy: String(baseFilm.staffFavoriteBy || ""),
         tmdb: baseFilm.tmdb,
         showings: [],
       });
@@ -1984,13 +1994,21 @@ function buildReplacePayload(data, promotedCards) {
           year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
           tmdb_id: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
           ticket_link: filmTicketLink,
+          staff_favorite: Boolean(film.staffFavorite),
+          staff_favorite_by: String(film.staffFavoriteBy || "").trim(),
           tmdb_json: film.tmdb || null,
         });
         filmPayloadIndexByKey.set(filmKey, films.length - 1);
       } else {
         const filmTicketLink = String(film.ticketLink || "").trim();
+        const existingFilmIndex = filmPayloadIndexByKey.get(filmKey);
+        if (typeof existingFilmIndex === "number" && Boolean(film.staffFavorite)) {
+          films[existingFilmIndex].staff_favorite = true;
+          if (!films[existingFilmIndex].staff_favorite_by) {
+            films[existingFilmIndex].staff_favorite_by = String(film.staffFavoriteBy || "").trim();
+          }
+        }
         if (filmTicketLink) {
-          const existingFilmIndex = filmPayloadIndexByKey.get(filmKey);
           if (typeof existingFilmIndex === "number" && !films[existingFilmIndex].ticket_link) {
             films[existingFilmIndex].ticket_link = filmTicketLink;
           }
@@ -2180,6 +2198,22 @@ function render() {
       card.classList.add("film-card");
       groupTitle.textContent = group.filmInfo.film;
       groupTitle.classList.add("group-title-film");
+      if (group.filmInfo.staffFavorite) {
+        card.classList.add("film-card-staff-favorite");
+        const favoriteStamp = document.createElement("img");
+        favoriteStamp.className = "film-favorite-stamp";
+        favoriteStamp.src = PLAYWEEK_RECOMMENDS_STAMP_URL;
+        favoriteStamp.alt = "Playweek recommends";
+        favoriteStamp.loading = "lazy";
+        favoriteStamp.decoding = "async";
+        if (group.filmInfo.staffFavoriteBy) {
+          favoriteStamp.title = `Playweek recommends (${group.filmInfo.staffFavoriteBy})`;
+        }
+        favoriteStamp.onerror = () => {
+          favoriteStamp.remove();
+        };
+        card.appendChild(favoriteStamp);
+      }
     } else {
       groupTitle.textContent = groupName;
     }
@@ -3081,8 +3115,9 @@ function getFilmGroupSortScore(group) {
   const localDemandScore =
     FILM_SORT_WEIGHTS.upcomingShowings * upcomingShowings +
     FILM_SORT_WEIGHTS.theatreCoverage * theatreCoverage;
+  const staffFavoriteBoost = filmInfo.staffFavorite ? FILM_SORT_WEIGHTS.staffFavoriteBoost : 0;
 
-  return tmdbScore * freshness + localDemandScore;
+  return tmdbScore * freshness + localDemandScore + staffFavoriteBoost;
 }
 
 function countGroupUpcomingTimes(group) {
@@ -3236,6 +3271,8 @@ function buildSingleDayGroups(theatres, selectedDate) {
             director: metadata.director,
             stars: metadata.stars,
             genres: metadata.genres,
+            staffFavorite: metadata.staffFavorite,
+            staffFavoriteBy: metadata.staffFavoriteBy,
             popularity: metadata.popularity,
             voteAverage: metadata.voteAverage,
             voteCount: metadata.voteCount,
@@ -3287,6 +3324,8 @@ function buildGroups(theatres, view) {
         director: metadata.director,
         stars: metadata.stars,
         genres: metadata.genres,
+        staffFavorite: metadata.staffFavorite,
+        staffFavoriteBy: metadata.staffFavoriteBy,
         popularity: metadata.popularity,
         voteAverage: metadata.voteAverage,
         voteCount: metadata.voteCount,
@@ -3509,10 +3548,24 @@ function extractFilmMetadata(film) {
   const stars = normalizeStringArray(tmdb.stars || film.stars);
   const director = typeof (tmdb.director || film.director) === "string" ? (tmdb.director || film.director).trim() : "";
   const posterUrl = normalizePosterUrl(tmdb.posterUrl || tmdb.posterPath || film.posterUrl || film.posterPath);
+  const staffFavorite = Boolean(film.staffFavorite ?? tmdb.staffFavorite ?? tmdb.staff_favorite);
+  const staffFavoriteBy = String(film.staffFavoriteBy || tmdb.staffFavoriteBy || tmdb.staff_favorite_by || "").trim();
   const popularity = toFiniteNumber(popularityRaw);
   const voteAverage = toFiniteNumber(voteAverageRaw);
   const voteCount = toFiniteNumber(voteCountRaw);
-  return { genres, stars, director, posterUrl, popularity, voteAverage, voteCount, releaseDate, matchedAt };
+  return {
+    genres,
+    stars,
+    director,
+    posterUrl,
+    staffFavorite,
+    staffFavoriteBy,
+    popularity,
+    voteAverage,
+    voteCount,
+    releaseDate,
+    matchedAt,
+  };
 }
 
 function normalizeStringArray(value) {
