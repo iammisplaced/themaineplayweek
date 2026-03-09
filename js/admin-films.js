@@ -5,6 +5,8 @@ const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqZnNqb3JhdHNmcWN5eWpzZXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2Mzc5MDgsImV4cCI6MjA4ODIxMzkwOH0.dmcQ_ffwmm4JIKTjSUNNYLGQ9w_v1mR6VRMZimVnLNg";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const QUERY_TIMEOUT_MS = 30000;
+const QUERY_PAGE_SIZE = 1000;
 
 const state = {
   query: "",
@@ -94,7 +96,7 @@ async function loadCatalog() {
 
     setStatus("Loading films table...");
     const filmsResult = await runWithTimeout(
-      supabase.from("films").select("id,title,year,tmdb_id,tmdb_json").order("title"),
+      fetchAllRows(() => supabase.from("films").select("id,title,year,tmdb_id,ticket_link,tmdb_json")),
       "films"
     );
     if (filmsResult.error) {
@@ -104,25 +106,20 @@ async function loadCatalog() {
 
     const warnings = [];
 
-    setStatus("Loading theatres table...");
-    const theatresResult = await runWithTimeout(
-      supabase.from("theatres").select("id,name,city").order("name"),
-      "theatres"
-    );
+    setStatus("Loading related tables...");
+    const [theatresResult, theatreFilmsResult, showingsResult] = await Promise.all([
+      runWithTimeout(fetchAllRows(() => supabase.from("theatres").select("id,name,city")), "theatres"),
+      runWithTimeout(
+        fetchAllRows(() => supabase.from("theatre_films").select("theatre_id,film_id,ticket_link")),
+        "theatre_films"
+      ),
+      runWithTimeout(
+        fetchAllRows(() => supabase.from("showings").select("theatre_id,film_id,show_date,times")),
+        "showings"
+      ),
+    ]);
     if (theatresResult.error) warnings.push(`theatres: ${theatresResult.error.message}`);
-
-    setStatus("Loading theatre-film links...");
-    const theatreFilmsResult = await runWithTimeout(
-      supabase.from("theatre_films").select("theatre_id,film_id,ticket_link"),
-      "theatre_films"
-    );
     if (theatreFilmsResult.error) warnings.push(`theatre_films: ${theatreFilmsResult.error.message}`);
-
-    setStatus("Loading showings table...");
-    const showingsResult = await runWithTimeout(
-      supabase.from("showings").select("theatre_id,film_id,show_date,times").order("show_date"),
-      "showings"
-    );
     if (showingsResult.error) warnings.push(`showings: ${showingsResult.error.message}`);
 
     state.films = buildCatalogRows(
@@ -144,7 +141,24 @@ async function loadCatalog() {
   }
 }
 
-function runWithTimeout(promise, label, timeoutMs = 12000) {
+async function fetchAllRows(queryBuilderFactory, pageSize = QUERY_PAGE_SIZE) {
+  const rows = [];
+  let from = 0;
+
+  while (true) {
+    const to = from + pageSize - 1;
+    const { data, error } = await queryBuilderFactory().range(from, to);
+    if (error) return { data: null, error };
+    const chunk = Array.isArray(data) ? data : [];
+    rows.push(...chunk);
+    if (chunk.length < pageSize) break;
+    from += pageSize;
+  }
+
+  return { data: rows, error: null };
+}
+
+function runWithTimeout(promise, label, timeoutMs = QUERY_TIMEOUT_MS) {
   return Promise.race([
     promise,
     new Promise((_, reject) => {
@@ -159,6 +173,7 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
   const theatreById = new Map(theatres.map((row) => [String(row.id), row]));
   const theatreFilmsByFilmId = new Map();
   const showingsByFilmId = new Map();
+  const theatreIdsByFilmIdFromShowings = new Map();
 
   theatreFilms.forEach((row) => {
     const key = String(row.film_id);
@@ -170,9 +185,14 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
     const key = String(row.film_id);
     if (!showingsByFilmId.has(key)) showingsByFilmId.set(key, []);
     showingsByFilmId.get(key).push(row);
+
+    if (!theatreIdsByFilmIdFromShowings.has(key)) {
+      theatreIdsByFilmIdFromShowings.set(key, new Set());
+    }
+    theatreIdsByFilmIdFromShowings.get(key).add(String(row.theatre_id));
   });
 
-  return films.map((film) => {
+  const rows = films.map((film) => {
     const linkRows = theatreFilmsByFilmId.get(String(film.id)) || [];
     const showingRows = showingsByFilmId.get(String(film.id)) || [];
 
@@ -198,6 +218,25 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
         ticketLink: String(row.ticket_link || "").trim(),
       };
     });
+    if (!links.length && String(film.ticket_link || "").trim()) {
+      const linkedTheatreIds = theatreIdsByFilmIdFromShowings.get(String(film.id));
+      if (linkedTheatreIds?.size) {
+        linkedTheatreIds.forEach((theatreId) => {
+          const theatre = theatreById.get(String(theatreId));
+          links.push({
+            theatreName: theatre?.name || `Theatre ${theatreId}`,
+            theatreCity: theatre?.city || "",
+            ticketLink: String(film.ticket_link || "").trim(),
+          });
+        });
+      } else {
+        links.push({
+          theatreName: "All theatres",
+          theatreCity: "",
+          ticketLink: String(film.ticket_link || "").trim(),
+        });
+      }
+    }
 
     links.sort((a, b) => `${a.theatreName} ${a.theatreCity}`.localeCompare(`${b.theatreName} ${b.theatreCity}`));
 
@@ -218,6 +257,8 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
       },
     };
   });
+  rows.sort((a, b) => String(a.title || "").localeCompare(String(b.title || "")));
+  return rows;
 }
 
 function renderSummary() {
@@ -341,7 +382,25 @@ function getShowDateTime(dateIso, time12Hour) {
 function to24HourTime(time12Hour) {
   const value = String(time12Hour || "").trim().toUpperCase();
   const match = value.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/);
-  if (!match) return "";
+  if (!match) {
+    const match24 = value.match(/^(\d{1,2}):(\d{2})$/);
+    if (match24) {
+      const hours = Number(match24[1]);
+      const minutes = Number(match24[2]);
+      if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+        return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+      }
+    }
+    const matchNoMinutes = value.match(/^(\d{1,2})\s*(AM|PM)$/);
+    if (matchNoMinutes) {
+      let hours = Number(matchNoMinutes[1]);
+      const period = matchNoMinutes[2];
+      if (hours === 12) hours = 0;
+      if (period === "PM") hours += 12;
+      return `${String(hours).padStart(2, "0")}:00`;
+    }
+    return "";
+  }
   let hours = Number(match[1]);
   const minutes = Number(match[2]);
   const period = match[3];
