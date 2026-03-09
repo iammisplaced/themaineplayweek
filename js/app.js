@@ -395,8 +395,6 @@ function bindEvents() {
         return;
       }
       const previousRects = captureFilmCardRects();
-      const cardBefore = filmExpandToggle.closest(".group-card");
-      const cardTopBefore = cardBefore?.getBoundingClientRect().top ?? 0;
       if (state.expandedFilmGroups.has(key)) {
         state.expandedFilmGroups.delete(key);
       } else {
@@ -404,15 +402,28 @@ function bindEvents() {
       }
       render();
       requestAnimationFrame(() => {
-        const cardAfter = Array.from(elements.results.querySelectorAll(".group-card")).find(
-          (card) => card.dataset.filmKey === key
-        );
-        if (!cardAfter) {
-          setPageScrollTop(scrollTopBefore);
-          return;
-        }
-        const cardTopAfter = cardAfter.getBoundingClientRect().top;
-        setPageScrollTop(scrollTopBefore + (cardTopAfter - cardTopBefore));
+        setPageScrollTop(scrollTopBefore);
+        animateFilmCardLayout(previousRects);
+      });
+      return;
+    }
+
+    const tappedFilmCard = event.target.closest(".group-card.film-card");
+    const isMobileFilmCardTapToExpand =
+      (state.view === "films" || state.view === "days") &&
+      window.innerWidth <= 700 &&
+      Boolean(tappedFilmCard) &&
+      tappedFilmCard.classList.contains("film-card-collapsed") &&
+      !event.target.closest("a, button, input, select, textarea, summary, label");
+    if (isMobileFilmCardTapToExpand) {
+      const key = tappedFilmCard.dataset.filmKey;
+      if (!key || state.expandedFilmGroups.has(key)) return;
+      const scrollTopBefore = getPageScrollTop();
+      const previousRects = captureFilmCardRects();
+      state.expandedFilmGroups.add(key);
+      render();
+      requestAnimationFrame(() => {
+        setPageScrollTop(scrollTopBefore);
         animateFilmCardLayout(previousRects);
       });
       return;

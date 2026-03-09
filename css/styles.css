@@ -577,6 +577,8 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   flex-direction: column;
   border: 0;
   border-radius: 2px;
+  padding-top: 1.02rem;
+  padding-bottom: 1.08rem;
   clip-path: var(--film-card-clip);
   transform: rotate(var(--film-card-tilt)) translateY(var(--film-card-shift-y));
   background:
@@ -607,6 +609,7 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
 .group-card.film-card .film-expand-toggle {
   order: 4;
   margin-top: 0.6rem;
+  margin-bottom: 0.2rem;
   align-self: flex-start;
 }
 
@@ -749,6 +752,69 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
     1.9% 29.3%,
     1.1% 14.8%
   );
+}
+
+.results[data-view="films"] .group-card.film-card:not(.film-card-collapsed),
+.results[data-view="days"] .group-card.film-card:not(.film-card-collapsed) {
+  --film-card-clip: polygon(
+    0.9% 0.5%,
+    14% 1.1%,
+    28% 0.6%,
+    42% 1.2%,
+    56% 0.7%,
+    70% 1.2%,
+    84% 0.7%,
+    98.9% 1.1%,
+    98.5% 15%,
+    99.1% 33.5%,
+    98.6% 52.1%,
+    99.1% 70.5%,
+    98.6% 88.7%,
+    98.9% 99.2%,
+    86% 99.6%,
+    72% 99.1%,
+    58% 99.7%,
+    44% 99.1%,
+    30% 99.6%,
+    16% 99%,
+    1.2% 99.5%,
+    1.6% 85.5%,
+    1% 67.3%,
+    1.5% 48.8%,
+    1% 30.4%,
+    1.4% 12.6%
+  );
+  --film-left-tear: polygon(
+    100% 0%,
+    71% 8%,
+    90% 23%,
+    68% 39%,
+    89% 55%,
+    69% 71%,
+    87% 86%,
+    74% 96%,
+    100% 100%,
+    0% 100%,
+    0% 0%
+  );
+  --film-right-tear: polygon(
+    0% 0%,
+    31% 8%,
+    13% 24%,
+    34% 40%,
+    12% 56%,
+    33% 72%,
+    14% 87%,
+    26% 96%,
+    0% 100%,
+    100% 100%,
+    100% 0%
+  );
+  --film-card-tilt: 0deg;
+  --film-card-shift-y: 0;
+  padding-top: 1.24rem;
+  padding-bottom: 1.28rem;
+  clip-path: inset(0 round 2px);
 }
 
 .group-title {
