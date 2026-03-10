@@ -143,6 +143,8 @@ const elements = {
   modalTheatreCityInput: document.getElementById("modalTheatreCityInput"),
   modalTheatreAddressInput: document.getElementById("modalTheatreAddressInput"),
   modalTheatreWebsiteInput: document.getElementById("modalTheatreWebsiteInput"),
+  modalTheatreLatitudeInput: document.getElementById("modalTheatreLatitudeInput"),
+  modalTheatreLongitudeInput: document.getElementById("modalTheatreLongitudeInput"),
   tmdbApiKeyInput: document.getElementById("tmdbApiKeyInput"),
   adminFilmSearch: document.getElementById("adminFilmSearch"),
   adminFilmResults: document.getElementById("adminFilmResults"),
@@ -802,18 +804,38 @@ function bindEvents() {
     const city = elements.modalTheatreCityInput.value.trim();
     const address = elements.modalTheatreAddressInput.value.trim();
     const website = elements.modalTheatreWebsiteInput.value.trim();
+    const latitudeRaw = elements.modalTheatreLatitudeInput.value.trim();
+    const longitudeRaw = elements.modalTheatreLongitudeInput.value.trim();
     if (!name || !city || !address || !website) {
       elements.adminMessage.textContent = "Fill out all theatre fields.";
       return;
     }
+    let latitude = null;
+    let longitude = null;
+    try {
+      latitude = parseOptionalCoordinate(latitudeRaw, "latitude", -90, 90);
+      longitude = parseOptionalCoordinate(longitudeRaw, "longitude", -180, 180);
+    } catch (error) {
+      elements.adminMessage.textContent = error.message;
+      return;
+    }
+    if ((latitude === null) !== (longitude === null)) {
+      elements.adminMessage.textContent = "Provide both latitude and longitude, or leave both blank.";
+      return;
+    }
 
-    state.data.theatreGroups.push({
+    const theatre = {
       name,
       city,
       address,
       website: normalizeOutboundUrl(website),
       films: [],
-    });
+    };
+    if (latitude !== null && longitude !== null) {
+      theatre.latitude = latitude;
+      theatre.longitude = longitude;
+    }
+    state.data.theatreGroups.push(theatre);
     state.admin.theatreIndex = state.data.theatreGroups.length - 1;
     state.admin.filmIndex = 0;
     state.admin.theatreQuery = getAdminTheatreLabelByIndex(state.admin.theatreIndex);
@@ -1262,7 +1284,7 @@ async function loadData() {
 
 async function loadDataFromSupabase() {
   const theatres = await fetchAllRowsFromSupabase(() =>
-    state.supabase.from("theatres").select("id,name,city,address,website").order("id", { ascending: true })
+    state.supabase.from("theatres").select("id,name,city,address,website,latitude,longitude").order("id", { ascending: true })
   );
   const films = await fetchAllRowsFromSupabase(() =>
     state.supabase
@@ -1301,6 +1323,8 @@ async function loadDataFromSupabase() {
       city: theatreRow.city,
       address: theatreRow.address,
       website: theatreRow.website,
+      latitude: Number.isFinite(Number(theatreRow.latitude)) ? Number(theatreRow.latitude) : undefined,
+      longitude: Number.isFinite(Number(theatreRow.longitude)) ? Number(theatreRow.longitude) : undefined,
       films: [],
       _dbId: theatreRow.id,
       _filmMap: new Map(),
@@ -1419,6 +1443,23 @@ function validateData(data) {
     }
     if (typeof theatre?.website !== "string" || !theatre.website.trim()) {
       throw new Error(`Theatre "${theatre.name}" is missing website.`);
+    }
+    if (typeof theatre?.latitude !== "undefined" && theatre.latitude !== null) {
+      const latitude = Number(theatre.latitude);
+      if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90) {
+        throw new Error(`Theatre "${theatre.name}" has invalid latitude.`);
+      }
+    }
+    if (typeof theatre?.longitude !== "undefined" && theatre.longitude !== null) {
+      const longitude = Number(theatre.longitude);
+      if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180) {
+        throw new Error(`Theatre "${theatre.name}" has invalid longitude.`);
+      }
+    }
+    const hasLatitude = Number.isFinite(Number(theatre?.latitude));
+    const hasLongitude = Number.isFinite(Number(theatre?.longitude));
+    if (hasLatitude !== hasLongitude) {
+      throw new Error(`Theatre "${theatre.name}" must include both latitude and longitude.`);
     }
     if (!Array.isArray(theatre?.films)) {
       throw new Error(`Theatre "${theatre.name}" must include a films array.`);
@@ -2300,6 +2341,8 @@ function buildReplacePayload(data, promotedCards) {
       city: theatre.city,
       address: theatre.address,
       website: theatre.website,
+      latitude: Number.isFinite(Number(theatre.latitude)) ? Number(theatre.latitude) : null,
+      longitude: Number.isFinite(Number(theatre.longitude)) ? Number(theatre.longitude) : null,
     });
 
     (theatre.films || []).forEach((film) => {
@@ -3235,18 +3278,23 @@ async function ensureTheatreDistanceSort() {
     for (const theatre of theatres) {
       const distanceKey = buildTheatreDistanceKey(theatre);
       if (!distanceKey) continue;
-      const cacheEntry = cache[distanceKey];
       let coords = null;
-      if (cacheEntry && now - Number(cacheEntry.updatedAt || 0) < THEATRE_GEO_CACHE_TTL_MS) {
-        coords = { lat: Number(cacheEntry.lat), lng: Number(cacheEntry.lng) };
+      const storedCoords = getTheatreCoordinates(theatre);
+      if (storedCoords) {
+        coords = storedCoords;
       } else {
-        coords = await geocodeTheatre(theatre);
-        if (coords) {
-          cache[distanceKey] = {
-            lat: coords.lat,
-            lng: coords.lng,
-            updatedAt: now,
-          };
+        const cacheEntry = cache[distanceKey];
+        if (cacheEntry && now - Number(cacheEntry.updatedAt || 0) < THEATRE_GEO_CACHE_TTL_MS) {
+          coords = { lat: Number(cacheEntry.lat), lng: Number(cacheEntry.lng) };
+        } else {
+          coords = await geocodeTheatre(theatre);
+          if (coords) {
+            cache[distanceKey] = {
+              lat: coords.lat,
+              lng: coords.lng,
+              updatedAt: now,
+            };
+          }
         }
       }
       if (!coords) continue;
@@ -3289,6 +3337,24 @@ function buildTheatreDistanceKey(theatre) {
     normalizeSearchText(theatre.city),
     normalizeSearchText(theatre.address),
   ].join("::");
+}
+
+function getTheatreCoordinates(theatre) {
+  const lat = Number(theatre?.latitude);
+  const lng = Number(theatre?.longitude);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
+  return { lat, lng };
+}
+
+function parseOptionalCoordinate(value, fieldLabel, min, max) {
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed) || parsed < min || parsed > max) {
+    throw new Error(`${fieldLabel} must be a number between ${min} and ${max}.`);
+  }
+  return parsed;
 }
 
 function buildTheatreGeocodeQueries(theatre) {
