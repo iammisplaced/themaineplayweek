@@ -54,6 +54,28 @@ const SUPABASE_ANON_KEY =
 const LOGO_SPIN_ANIMATION_MS = 420;
 const LIGHT_THEME = "light";
 const DARK_THEME = "dark";
+const WORDMARK_VARIANTS = Object.freeze([
+  {
+    darkSrc: "assets/brand/TMP Wordmark v01 Dark.png",
+    lightSrc: "assets/brand/TMP Wordmark v01 Light.png",
+  },
+  {
+    darkSrc: "assets/brand/TMP Wordmark v02 Dark.png",
+    lightSrc: "assets/brand/TMP Wordmark v02 Light.png",
+  },
+  {
+    darkSrc: "assets/brand/TMP Wordmark v03 Dark.png",
+    lightSrc: "assets/brand/TMP Wordmark v03 Light.png",
+  },
+  {
+    darkSrc: "assets/brand/TMP Wordmark v04 Dark.png",
+    lightSrc: "assets/brand/TMP Wordmark v04 Light.png",
+  },
+  {
+    darkSrc: "assets/brand/TMP Wordmark v05 Dark.png",
+    lightSrc: "assets/brand/TMP Wordmark v05 Light.png",
+  },
+]);
 const THEME_COLOR_MAP = {
   [LIGHT_THEME]: "#ECE5E0",
   [DARK_THEME]: "#121816",
@@ -83,6 +105,7 @@ const state = {
   },
   selectedDay: "",
   theme: LIGHT_THEME,
+  brandWordmarkVariant: WORDMARK_VARIANTS[0],
   supabase: null,
   promotedCards: cloneDefaultPromotedCards(),
   admin: {
@@ -243,6 +266,7 @@ function setLoadingState(isLoading) {
 }
 
 async function init() {
+  initializeBrandWordmarkVariant();
   initializeTheme();
   initializeViewPreference();
   loadLocationPreference();
@@ -1237,6 +1261,12 @@ function initializeTheme() {
   applyTheme(initialTheme, { persist: false });
 }
 
+function initializeBrandWordmarkVariant() {
+  if (!WORDMARK_VARIANTS.length) return;
+  const randomIndex = Math.floor(Math.random() * WORDMARK_VARIANTS.length);
+  state.brandWordmarkVariant = WORDMARK_VARIANTS[randomIndex] || WORDMARK_VARIANTS[0];
+}
+
 function initializeViewPreference() {
   const storedView = String(localStorage.getItem(VIEW_STORAGE_KEY) || "").trim();
   if (VALID_VIEWS.has(storedView)) {
@@ -1285,10 +1315,11 @@ function applyTheme(theme, options = {}) {
   }
 
   if (elements.brandWordmark) {
+    const variant = state.brandWordmarkVariant || WORDMARK_VARIANTS[0];
     elements.brandWordmark.src =
       normalizedTheme === DARK_THEME
-        ? "assets/brand/TMP Wordmark Three Line Light.png"
-        : "assets/brand/TMP Wordmark Three Line Dark.png";
+        ? variant.lightSrc
+        : variant.darkSrc;
   }
 
   if (elements.themeToggle) {
