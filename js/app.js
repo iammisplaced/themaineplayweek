@@ -411,18 +411,41 @@ function bindEvents() {
     }
 
     const tappedFilmCard = event.target.closest(".group-card.film-card");
-    const isMobileFilmCardTapToExpand =
-      (state.view === "films" || state.view === "days") &&
-      window.innerWidth <= 700 &&
+    const isFilmCardView = state.view === "films" || state.view === "days";
+    const isInteractiveTarget = Boolean(event.target.closest("a, button, input, select, textarea, summary, label"));
+    const isFilmTitleTarget = Boolean(event.target.closest(".group-title-film"));
+    const isCardBlankspaceTarget = event.target === tappedFilmCard;
+    const isFilmCardTapToExpand =
+      isFilmCardView &&
       Boolean(tappedFilmCard) &&
       tappedFilmCard.classList.contains("film-card-collapsed") &&
-      !event.target.closest("a, button, input, select, textarea, summary, label");
-    if (isMobileFilmCardTapToExpand) {
+      !isInteractiveTarget;
+    if (isFilmCardTapToExpand) {
       const key = tappedFilmCard.dataset.filmKey;
       if (!key || state.expandedFilmGroups.has(key)) return;
       const scrollTopBefore = getPageScrollTop();
       const previousRects = captureFilmCardRects();
       state.expandedFilmGroups.add(key);
+      render();
+      requestAnimationFrame(() => {
+        setPageScrollTop(scrollTopBefore);
+        animateFilmCardLayout(previousRects);
+      });
+      return;
+    }
+
+    const isFilmCardTapToCollapse =
+      isFilmCardView &&
+      Boolean(tappedFilmCard) &&
+      !tappedFilmCard.classList.contains("film-card-collapsed") &&
+      !isInteractiveTarget &&
+      (isFilmTitleTarget || isCardBlankspaceTarget);
+    if (isFilmCardTapToCollapse) {
+      const key = tappedFilmCard.dataset.filmKey;
+      if (!key || !state.expandedFilmGroups.has(key)) return;
+      const scrollTopBefore = getPageScrollTop();
+      const previousRects = captureFilmCardRects();
+      state.expandedFilmGroups.delete(key);
       render();
       requestAnimationFrame(() => {
         setPageScrollTop(scrollTopBefore);
