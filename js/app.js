@@ -175,7 +175,9 @@ const elements = {
   adminJson: document.getElementById("adminJson"),
   applyJson: document.getElementById("applyJson"),
   downloadJson: document.getElementById("downloadJson"),
+  downloadCsvTemplate: document.getElementById("downloadCsvTemplate"),
   uploadJson: document.getElementById("uploadJson"),
+  uploadCsv: document.getElementById("uploadCsv"),
   resetJson: document.getElementById("resetJson"),
   adminMessage: document.getElementById("adminMessage"),
 };
@@ -999,6 +1001,43 @@ function bindEvents() {
     URL.revokeObjectURL(url);
   });
 
+  elements.downloadCsvTemplate?.addEventListener("click", () => {
+    const header = [
+      "theatre_name",
+      "theatre_city",
+      "film_title",
+      "show_date",
+      "show_times",
+      "ticket_link",
+      "film_year",
+      "film_tmdb_id",
+    ];
+    const rows = [
+      header,
+      [
+        "Nickelodeon Cinema",
+        "Portland",
+        "Anora",
+        "2026-03-12",
+        "6:30 PM|9:15 PM",
+        "https://tickets.example.com/anora",
+        "",
+        "",
+      ],
+      ["Nickelodeon Cinema", "Portland", "Anora", "2026-03-13", "4:00 PM|7:45 PM", "", "", ""],
+    ];
+    const csv = rows.map((row) => row.map((value) => toCsvCell(value)).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "showtimes-template.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  });
+
   elements.uploadJson.addEventListener("change", async (event) => {
     if (!requireAdminAuth()) return;
     const file = event.target.files?.[0];
@@ -1015,6 +1054,28 @@ function bindEvents() {
       elements.uploadJson.value = "";
     } catch (error) {
       elements.adminMessage.textContent = `Import failed: ${error.message}`;
+    }
+  });
+
+  elements.uploadCsv?.addEventListener("change", async (event) => {
+    if (!requireAdminAuth()) return;
+    const file = event.target.files?.[0];
+    if (!file) return;
+    try {
+      const content = await file.text();
+      const nextData = JSON.parse(JSON.stringify(stripInternalFields(state.data)));
+      const result = importShowtimesCsv(nextData, content);
+      validateData(nextData);
+      state.data = nextData;
+      initializeAdminState();
+      syncAdminEditor();
+      render();
+      elements.adminMessage.textContent =
+        `Imported CSV: ${result.rowsProcessed} rows, ${result.showingDatesUpdated} showing date entries updated. ` +
+        "Click Save All Changes to sync Supabase.";
+      elements.uploadCsv.value = "";
+    } catch (error) {
+      elements.adminMessage.textContent = `CSV import failed: ${error.message}`;
     }
   });
 
@@ -1710,6 +1771,224 @@ function parseTimesInput(input) {
     .filter(Boolean);
 }
 
+function importShowtimesCsv(data, csvContent) {
+  if (!data || !Array.isArray(data.theatreGroups)) {
+    throw new Error("Current data is invalid. Reload before importing CSV.");
+  }
+  const rows = parseCsvRows(csvContent);
+  if (rows.length < 2) {
+    throw new Error("CSV must include a header row and at least one data row.");
+  }
+
+  const normalizedHeaders = rows[0].map(normalizeCsvHeader);
+  const headerIndexByKey = new Map(normalizedHeaders.map((key, index) => [key, index]));
+  const requiredHeaders = ["theatre_name", "theatre_city", "film_title", "show_date", "show_times"];
+  const missingHeaders = requiredHeaders.filter((key) => !headerIndexByKey.has(key));
+  if (missingHeaders.length) {
+    throw new Error(`Missing required CSV header(s): ${missingHeaders.join(", ")}`);
+  }
+
+  const stats = {
+    rowsProcessed: 0,
+    showingDatesUpdated: 0,
+  };
+
+  for (let rowIndex = 1; rowIndex < rows.length; rowIndex += 1) {
+    const row = rows[rowIndex];
+    if (isCsvRowBlank(row)) continue;
+    const rowNumber = rowIndex + 1;
+
+    const theatreName = readCsvValue(row, headerIndexByKey, "theatre_name");
+    const theatreCity = readCsvValue(row, headerIndexByKey, "theatre_city");
+    const filmTitle = readCsvValue(row, headerIndexByKey, "film_title");
+    const filmYearRaw = readCsvValue(row, headerIndexByKey, "film_year");
+    const filmTmdbIdRaw = readCsvValue(row, headerIndexByKey, "film_tmdb_id");
+    const ticketLinkRaw = readCsvValue(row, headerIndexByKey, "ticket_link");
+    const showDate = readCsvValue(row, headerIndexByKey, "show_date");
+    const showTimesRaw = readCsvValue(row, headerIndexByKey, "show_times");
+
+    if (!theatreName) throw new Error(`Row ${rowNumber}: theatre_name is required.`);
+    if (!theatreCity) throw new Error(`Row ${rowNumber}: theatre_city is required.`);
+    if (!filmTitle) throw new Error(`Row ${rowNumber}: film_title is required.`);
+    if (!showDate) throw new Error(`Row ${rowNumber}: show_date is required.`);
+    if (!parseIsoDate(showDate)) {
+      throw new Error(`Row ${rowNumber}: show_date must be YYYY-MM-DD.`);
+    }
+
+    const filmYear = parseOptionalCsvInteger(filmYearRaw, "film_year", rowNumber);
+    const filmTmdbId = parseOptionalCsvInteger(filmTmdbIdRaw, "film_tmdb_id", rowNumber);
+    if (filmTmdbId !== null && filmTmdbId <= 0) {
+      throw new Error(`Row ${rowNumber}: film_tmdb_id must be greater than 0.`);
+    }
+
+    const parsedTimes = parseCsvTimesField(showTimesRaw);
+    if (!parsedTimes.length) {
+      throw new Error(`Row ${rowNumber}: show_times must include at least one time.`);
+    }
+    const invalidTime = parsedTimes.find((time) => !to24HourTime(time));
+    if (invalidTime) {
+      throw new Error(`Row ${rowNumber}: invalid time "${invalidTime}". Use h:mm AM/PM.`);
+    }
+
+    const theatreMatches = data.theatreGroups.filter(
+      (entry) => normalizeSearchText(entry?.name) === normalizeSearchText(theatreName)
+    );
+    if (!theatreMatches.length) {
+      throw new Error(`Row ${rowNumber}: theatre "${theatreName}" was not found. Add it in admin first.`);
+    }
+    const theatre = theatreMatches.find(
+      (entry) => normalizeSearchText(entry?.city) === normalizeSearchText(theatreCity)
+    );
+    if (!theatre) {
+      throw new Error(
+        `Row ${rowNumber}: theatre "${theatreName}" with city "${theatreCity}" was not found.`
+      );
+    }
+
+    if (!Array.isArray(theatre.films)) theatre.films = [];
+    const filmMatches = theatre.films.filter((entry) => {
+      if (normalizeFilmTitle(entry?.title) !== normalizeFilmTitle(filmTitle)) return false;
+      if (filmTmdbId !== null) return Number(entry?.tmdbId) === filmTmdbId;
+      if (filmYear !== null) return Number(entry?.year) === filmYear;
+      return true;
+    });
+    if (!filmMatches.length) {
+      throw new Error(
+        `Row ${rowNumber}: film "${filmTitle}" was not found at theatre "${theatre.name}". Add the film first.`
+      );
+    }
+    if (filmMatches.length > 1 && filmTmdbId === null && filmYear === null) {
+      throw new Error(
+        `Row ${rowNumber}: multiple "${filmTitle}" entries at "${theatre.name}". Include film_year or film_tmdb_id.`
+      );
+    }
+
+    const film = filmMatches[0];
+    if (ticketLinkRaw) {
+      film.ticketLink = normalizeOutboundUrl(ticketLinkRaw);
+    }
+
+    if (!Array.isArray(film.showings)) film.showings = [];
+    const showing = film.showings.find((entry) => entry.date === showDate);
+    if (showing) {
+      const beforeCount = Array.isArray(showing.times) ? showing.times.length : 0;
+      showing.times = Array.from(new Set([...(showing.times || []), ...parsedTimes])).sort(compareTimes);
+      if (showing.times.length !== beforeCount) {
+        stats.showingDatesUpdated += 1;
+      }
+    } else {
+      film.showings.push({
+        date: showDate,
+        times: Array.from(new Set(parsedTimes)).sort(compareTimes),
+      });
+      film.showings.sort((a, b) => a.date.localeCompare(b.date));
+      stats.showingDatesUpdated += 1;
+    }
+
+    stats.rowsProcessed += 1;
+  }
+
+  return stats;
+}
+
+function parseCsvRows(input) {
+  const text = String(input || "").replace(/\r\n?/g, "\n");
+  const rows = [];
+  let row = [];
+  let field = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (text[i + 1] === '"') {
+          field += '"';
+          i += 1;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        field += ch;
+      }
+      continue;
+    }
+
+    if (ch === '"') {
+      inQuotes = true;
+      continue;
+    }
+    if (ch === ",") {
+      row.push(field);
+      field = "";
+      continue;
+    }
+    if (ch === "\n") {
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = "";
+      continue;
+    }
+    field += ch;
+  }
+
+  if (inQuotes) {
+    throw new Error("CSV has an unclosed quoted field.");
+  }
+
+  if (field.length > 0 || row.length > 0) {
+    row.push(field);
+    rows.push(row);
+  }
+
+  if (rows.length && rows[0].length) {
+    rows[0][0] = String(rows[0][0] || "").replace(/^\uFEFF/, "");
+  }
+
+  return rows;
+}
+
+function toCsvCell(value) {
+  const text = String(value || "");
+  if (!/[",\n]/.test(text)) return text;
+  return `"${text.replace(/"/g, '""')}"`;
+}
+
+function normalizeCsvHeader(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+function readCsvValue(row, headerIndexByKey, header) {
+  const idx = headerIndexByKey.get(header);
+  if (typeof idx !== "number") return "";
+  return String(row[idx] || "").trim();
+}
+
+function parseOptionalCsvInteger(value, fieldLabel, rowNumber) {
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  if (!/^-?\d+$/.test(raw)) {
+    throw new Error(`Row ${rowNumber}: ${fieldLabel} must be an integer when provided.`);
+  }
+  return Number(raw);
+}
+
+function parseCsvTimesField(value) {
+  return String(value || "")
+    .split(/[|;,]/)
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+function isCsvRowBlank(row) {
+  return !row.some((value) => String(value || "").trim());
+}
+
 function clampSpanDays(value) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) return 1;
@@ -1800,7 +2079,13 @@ function filmsMatch(a, b) {
 }
 
 function normalizeFilmTitle(value) {
-  return normalizeSearchText(value);
+  return stripDiacritics(String(value || ""))
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/['’]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
 }
 
 function findFilmIndex(films, targetFilm) {
