@@ -604,8 +604,21 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   transform: rotate(8deg);
 }
 
+.film-featured-stamp {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.28rem;
+  width: clamp(58px, 18vw, 78px);
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.95;
+  transform: rotate(-7deg);
+}
+
 .group-card.film-card:not(.film-card-collapsed) .film-favorite-stamp {
-  top: clamp(4.3rem, 12vw, 5.6rem);
+  top: 0;
   left: 50%;
   right: auto;
   transform: translateX(-50%) rotate(8deg);
@@ -616,6 +629,34 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   right: 0.2rem;
   width: clamp(54px, 26vw, 72px);
   transform: rotate(8deg);
+}
+
+.group-card.film-card:not(.film-card-collapsed) .film-featured-stamp {
+  top: 0;
+  left: 50%;
+  right: auto;
+  width: clamp(58px, 18vw, 78px);
+  transform: translateX(-50%) rotate(-7deg);
+}
+
+.group-card.film-card.film-card-collapsed .film-featured-stamp {
+  top: clamp(2.2rem, 13vw, 3.1rem);
+  left: 0.15rem;
+  width: clamp(54px, 26vw, 72px);
+}
+
+.group-card.film-card.film-card-staff-favorite.film-card-featured-playweek:not(.film-card-collapsed) .film-favorite-stamp {
+  top: clamp(3.5rem, 10vw, 4.6rem);
+  right: 50%;
+  left: auto;
+  transform: translateX(-0.35rem) rotate(8deg);
+}
+
+.group-card.film-card.film-card-staff-favorite.film-card-featured-playweek:not(.film-card-collapsed) .film-featured-stamp {
+  top: clamp(3.5rem, 10vw, 4.6rem);
+  left: 50%;
+  right: auto;
+  transform: translateX(0.35rem) rotate(-7deg);
 }
 
 .film-expand-toggle {
@@ -668,7 +709,30 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   font-size: 0.88rem;
 }
 
+.group-feature-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 0.28rem 0.72rem;
+  background: #fdf1ea;
+  color: #8d3f2b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.group-feature-link:hover,
+.group-feature-link:focus-visible {
+  background: #fde6dc;
+  border-color: #b74f34;
+}
+
 .group-film-summary {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 92px;
   gap: 0.55rem;
@@ -710,7 +774,8 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
 }
 
 .group-card.film-card.film-card-collapsed .show-list,
-.group-card.film-card.film-card-collapsed .group-film-facts {
+.group-card.film-card.film-card-collapsed .group-film-facts,
+.group-card.film-card.film-card-collapsed .group-feature-link {
   display: none;
 }
 
@@ -1336,6 +1401,10 @@ textarea {
   filter: saturate(0.9) brightness(0.92);
 }
 
+:root[data-theme="dark"] .film-featured-stamp {
+  filter: saturate(0.92) brightness(0.9);
+}
+
 :root[data-theme="dark"] .film-expand-toggle {
   border-color: var(--border);
   color: var(--accent-2);
@@ -1349,6 +1418,17 @@ textarea {
 
 :root[data-theme="dark"] .film-expand-toggle.theatre-card-toggle {
   background: #1e2b27;
+}
+
+:root[data-theme="dark"] .group-feature-link {
+  border-color: rgba(141, 210, 193, 0.4);
+  color: #cbe9df;
+  background: #1f2d29;
+}
+
+:root[data-theme="dark"] .group-feature-link:hover,
+:root[data-theme="dark"] .group-feature-link:focus-visible {
+  background: #253631;
 }
 
 :root[data-theme="dark"] .group-card.promo-card {

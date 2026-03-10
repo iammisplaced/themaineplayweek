@@ -218,6 +218,40 @@ label {
   font-size: 0.78rem;
 }
 
+.featured-controls {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 220px;
+}
+
+.featured-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.featured-toggle-wrap input[type="checkbox"] {
+  width: auto;
+  min-width: 0;
+}
+
+.featured-url {
+  width: 100%;
+  min-width: 0;
+  border-radius: 8px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+.featured-save {
+  justify-self: start;
+  padding: 0.28rem 0.62rem;
+  font-size: 0.78rem;
+}
+
 .muted-inline {
   color: var(--muted);
   font-size: 0.8rem;

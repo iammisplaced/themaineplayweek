@@ -14,7 +14,9 @@ const state = {
   userEmail: "",
   isAuthed: false,
   staffFavoriteSupported: true,
+  featuredOnPlayweekSupported: true,
   favoriteSaveBusy: new Set(),
+  featuredSaveBusy: new Set(),
 };
 
 const elements = {
@@ -85,20 +87,37 @@ function bindEvents() {
 
   elements.catalogList.addEventListener("change", (event) => {
     const toggle = event.target.closest('input[data-role="favorite-toggle"]');
-    if (!toggle) return;
-    const row = toggle.closest("tr[data-film-id]");
-    const byInput = row?.querySelector('input[data-role="favorite-by"]');
-    if (!byInput) return;
-    byInput.disabled = !toggle.checked || state.favoriteSaveBusy.has(String(row.dataset.filmId));
-    if (!toggle.checked) byInput.value = "";
+    if (toggle) {
+      const row = toggle.closest("tr[data-film-id]");
+      const byInput = row?.querySelector('input[data-role="favorite-by"]');
+      if (!byInput) return;
+      byInput.disabled = !toggle.checked || state.favoriteSaveBusy.has(String(row.dataset.filmId));
+      if (!toggle.checked) byInput.value = "";
+      return;
+    }
+
+    const featuredToggle = event.target.closest('input[data-role="featured-toggle"]');
+    if (!featuredToggle) return;
+    const row = featuredToggle.closest("tr[data-film-id]");
+    const urlInput = row?.querySelector('input[data-role="featured-url"]');
+    if (!urlInput) return;
+    urlInput.disabled = !featuredToggle.checked || state.featuredSaveBusy.has(String(row.dataset.filmId));
   });
 
   elements.catalogList.addEventListener("click", async (event) => {
     const saveButton = event.target.closest('button[data-action="save-favorite"]');
-    if (!saveButton) return;
-    const row = saveButton.closest("tr[data-film-id]");
+    if (saveButton) {
+      const row = saveButton.closest("tr[data-film-id]");
+      if (!row) return;
+      await saveStaffFavorite(row);
+      return;
+    }
+
+    const saveFeaturedButton = event.target.closest('button[data-action="save-featured"]');
+    if (!saveFeaturedButton) return;
+    const row = saveFeaturedButton.closest("tr[data-film-id]");
     if (!row) return;
-    await saveStaffFavorite(row);
+    await saveFeaturedOnPlayweek(row);
   });
 }
 
@@ -118,20 +137,28 @@ async function loadCatalog() {
 
     setStatus("Loading films table...");
     let warnings = [];
-    let filmsResult = await runWithTimeout(
-      fetchAllRows(
-        () => supabase.from("films").select("id,title,year,tmdb_id,ticket_link,tmdb_json,staff_favorite,staff_favorite_by")
-      ),
-      "films"
-    );
     state.staffFavoriteSupported = true;
-    if (filmsResult.error && isStaffFavoriteSchemaMissing(filmsResult.error)) {
-      state.staffFavoriteSupported = false;
-      warnings.push("films: staff favorite fields missing; run latest supabase/schema.sql");
+    state.featuredOnPlayweekSupported = true;
+    let filmsResult = { data: null, error: null };
+    for (let attempt = 0; attempt < 3; attempt += 1) {
       filmsResult = await runWithTimeout(
-        fetchAllRows(() => supabase.from("films").select("id,title,year,tmdb_id,ticket_link,tmdb_json")),
+        fetchAllRows(() => supabase.from("films").select(buildFilmSelectColumns())),
         "films"
       );
+      if (!filmsResult.error) break;
+
+      let changed = false;
+      if (state.staffFavoriteSupported && isStaffFavoriteSchemaMissing(filmsResult.error)) {
+        state.staffFavoriteSupported = false;
+        warnings.push("films: staff favorite fields missing; run latest supabase/schema.sql");
+        changed = true;
+      }
+      if (state.featuredOnPlayweekSupported && isFeaturedOnPlayweekSchemaMissing(filmsResult.error)) {
+        state.featuredOnPlayweekSupported = false;
+        warnings.push("films: featured-on-playweek fields missing; run latest supabase/schema.sql");
+        changed = true;
+      }
+      if (!changed) break;
     }
     if (filmsResult.error) {
       setStatus(`Load failed (films): ${filmsResult.error.message}`);
@@ -204,6 +231,22 @@ function runWithTimeout(promise, label, timeoutMs = QUERY_TIMEOUT_MS) {
 function isStaffFavoriteSchemaMissing(error) {
   const message = String(error?.message || "").toLowerCase();
   return message.includes("staff_favorite") || message.includes("staff_favorite_by");
+}
+
+function isFeaturedOnPlayweekSchemaMissing(error) {
+  const message = String(error?.message || "").toLowerCase();
+  return message.includes("featured_on_playweek") || message.includes("featured_on_playweek_url");
+}
+
+function buildFilmSelectColumns() {
+  const columns = ["id", "title", "year", "tmdb_id", "ticket_link", "tmdb_json"];
+  if (state.staffFavoriteSupported) {
+    columns.push("staff_favorite", "staff_favorite_by");
+  }
+  if (state.featuredOnPlayweekSupported) {
+    columns.push("featured_on_playweek", "featured_on_playweek_url");
+  }
+  return columns.join(",");
 }
 
 function buildCatalogRows(films, theatres, theatreFilms, showings) {
@@ -285,6 +328,8 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
       tmdb: film.tmdb_json || {},
       staffFavorite: Boolean(film.staff_favorite),
       staffFavoriteBy: String(film.staff_favorite_by || "").trim(),
+      featuredOnPlayweek: Boolean(film.featured_on_playweek),
+      featuredOnPlayweekUrl: String(film.featured_on_playweek_url || "").trim(),
       totalTimes,
       futureTimes,
       links,
@@ -306,6 +351,7 @@ function renderSummary() {
   const withoutFuture = total - withFuture;
   const withAnyTicketLinks = state.films.filter((film) => film.links.some((entry) => entry.ticketLink)).length;
   const staffFavorites = state.films.filter((film) => film.staffFavorite).length;
+  const featuredOnPlayweek = state.films.filter((film) => film.featuredOnPlayweek).length;
 
   elements.summary.innerHTML = `
     <strong>${total}</strong> films total
@@ -315,6 +361,8 @@ function renderSummary() {
     <strong>${withAnyTicketLinks}</strong> with at least one ticket link
     <br />
     <strong>${staffFavorites}</strong> marked as staff favorites
+    <br />
+    <strong>${featuredOnPlayweek}</strong> featured on Playweek
   `;
 }
 
@@ -343,6 +391,7 @@ function renderCatalog() {
         <th>Starring</th>
         <th>Genre</th>
         <th>Staff Favorite</th>
+        <th>Featured On Playweek</th>
         <th>DB Rows</th>
       </tr>
     </thead>
@@ -358,10 +407,16 @@ function renderCatalog() {
     const statusClass = film.futureTimes > 0 ? "badge badge-on" : "badge badge-off";
     const statusText = film.futureTimes > 0 ? "Showing" : "No upcoming";
     const isFavoriteBusy = state.favoriteSaveBusy.has(String(film.id));
+    const isFeaturedBusy = state.featuredSaveBusy.has(String(film.id));
     const favoriteBadge = film.staffFavorite
       ? film.staffFavoriteBy
         ? `Yes (${escapeHtml(film.staffFavoriteBy)})`
         : "Yes (General)"
+      : "No";
+    const featuredBadge = film.featuredOnPlayweek
+      ? film.featuredOnPlayweekUrl
+        ? `Yes (${escapeHtml(film.featuredOnPlayweekUrl)})`
+        : "Yes"
       : "No";
 
     const row = document.createElement("tr");
@@ -400,6 +455,31 @@ function renderCatalog() {
           </div>
         `
               : `<span class="badge ${film.staffFavorite ? "badge-on" : "badge-off"}">${favoriteBadge}</span>`
+        }
+      </td>
+      <td>
+        ${
+          !state.featuredOnPlayweekSupported
+            ? '<span class="muted-inline">Schema update required</span>'
+            : state.isAuthed
+              ? `
+          <div class="featured-controls">
+            <label class="featured-toggle-wrap">
+              <input data-role="featured-toggle" type="checkbox" ${film.featuredOnPlayweek ? "checked" : ""} ${isFeaturedBusy ? "disabled" : ""} />
+              Featured
+            </label>
+            <input
+              data-role="featured-url"
+              class="featured-url"
+              type="url"
+              value="${escapeHtml(film.featuredOnPlayweekUrl)}"
+              placeholder="https://themaineplayweek.com/..."
+              ${film.featuredOnPlayweek && !isFeaturedBusy ? "" : "disabled"}
+            />
+            <button type="button" data-action="save-featured" class="featured-save" ${isFeaturedBusy ? "disabled" : ""}>Save</button>
+          </div>
+        `
+              : `<span class="badge ${film.featuredOnPlayweek ? "badge-on" : "badge-off"}">${featuredBadge}</span>`
         }
       </td>
       <td>
@@ -470,6 +550,63 @@ async function saveStaffFavorite(row) {
   }
 }
 
+async function saveFeaturedOnPlayweek(row) {
+  if (!state.isAuthed) {
+    setStatus("Sign in first to edit featured-on-playweek settings.");
+    return;
+  }
+  if (!state.featuredOnPlayweekSupported) {
+    setStatus("Featured-on-playweek columns are missing. Run latest supabase/schema.sql first.");
+    return;
+  }
+
+  const filmId = Number(row.dataset.filmId);
+  if (!Number.isInteger(filmId) || filmId <= 0) return;
+
+  const featuredToggle = row.querySelector('input[data-role="featured-toggle"]');
+  const featuredUrlInput = row.querySelector('input[data-role="featured-url"]');
+  if (!featuredToggle || !featuredUrlInput) return;
+
+  const featuredOnPlayweek = Boolean(featuredToggle.checked);
+  const rawUrl = String(featuredUrlInput.value || "").trim();
+  if (featuredOnPlayweek && !rawUrl) {
+    setStatus("Featured on Playweek requires a URL.");
+    return;
+  }
+  const featuredOnPlayweekUrl = featuredOnPlayweek ? normalizeOutboundUrl(rawUrl) : "";
+  const busyKey = String(filmId);
+  state.featuredSaveBusy.add(busyKey);
+  renderCatalog();
+
+  try {
+    const { error } = await supabase
+      .from("films")
+      .update({
+        featured_on_playweek: featuredOnPlayweek,
+        featured_on_playweek_url: featuredOnPlayweekUrl,
+      })
+      .eq("id", filmId);
+    if (error) throw error;
+
+    const film = state.films.find((entry) => Number(entry.id) === filmId);
+    if (film) {
+      film.featuredOnPlayweek = featuredOnPlayweek;
+      film.featuredOnPlayweekUrl = featuredOnPlayweekUrl;
+    }
+    setStatus(
+      featuredOnPlayweek
+        ? `Saved featured-on-playweek for film ${filmId}.`
+        : `Cleared featured-on-playweek for film ${filmId}.`
+    );
+  } catch (error) {
+    setStatus(`Save failed: ${error.message}`);
+  } finally {
+    state.featuredSaveBusy.delete(busyKey);
+    renderSummary();
+    renderCatalog();
+  }
+}
+
 function normalize(value) {
   return stripDiacritics(value)
     .trim()
@@ -493,6 +630,14 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function normalizeOutboundUrl(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return "";
+  if (/^[a-z][a-z0-9+.-]*:/i.test(raw)) return raw;
+  if (raw.startsWith("//")) return `https:${raw}`;
+  return `https://${raw}`;
 }
 
 function getShowDateTime(dateIso, time12Hour) {

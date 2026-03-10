@@ -17,12 +17,16 @@ create table if not exists public.films (
   ticket_link text not null default '',
   staff_favorite boolean not null default false,
   staff_favorite_by text not null default '',
+  featured_on_playweek boolean not null default false,
+  featured_on_playweek_url text not null default '',
   tmdb_json jsonb,
   created_at timestamptz not null default now()
 );
 
 alter table public.films add column if not exists staff_favorite boolean not null default false;
 alter table public.films add column if not exists staff_favorite_by text not null default '';
+alter table public.films add column if not exists featured_on_playweek boolean not null default false;
+alter table public.films add column if not exists featured_on_playweek_url text not null default '';
 
 create table if not exists public.theatre_films (
   theatre_id bigint not null references public.theatres(id) on delete cascade,
@@ -298,7 +302,17 @@ begin
   for film_item in
     select value from jsonb_array_elements(coalesce(payload->'films', '[]'::jsonb))
   loop
-    insert into public.films (title, year, tmdb_id, ticket_link, staff_favorite, staff_favorite_by, tmdb_json)
+    insert into public.films (
+      title,
+      year,
+      tmdb_id,
+      ticket_link,
+      staff_favorite,
+      staff_favorite_by,
+      featured_on_playweek,
+      featured_on_playweek_url,
+      tmdb_json
+    )
     values (
       coalesce(film_item->>'title', ''),
       nullif(film_item->>'year', '')::integer,
@@ -306,6 +320,8 @@ begin
       coalesce(film_item->>'ticket_link', ''),
       coalesce((film_item->>'staff_favorite')::boolean, false),
       coalesce(film_item->>'staff_favorite_by', ''),
+      coalesce((film_item->>'featured_on_playweek')::boolean, false),
+      coalesce(film_item->>'featured_on_playweek_url', ''),
       film_item->'tmdb_json'
     )
     returning id into film_id;
