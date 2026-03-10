@@ -375,6 +375,64 @@ h1 {
   line-height: 1.35;
 }
 
+.location-chooser-title {
+  margin: 0;
+  color: var(--accent-2);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.location-chooser-copy {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.location-chooser-trigger-wrap {
+  width: min(1024px, 100%);
+  margin: -0.55rem auto 0.7rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.location-chooser-modal {
+  width: min(520px, calc(100vw - 2rem));
+}
+
+.location-chooser-modal::backdrop {
+  background: rgba(0, 0, 0, 0.42);
+}
+
+.location-chooser-modal-body {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.location-chooser-actions {
+  margin-top: 0.2rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.location-chooser-zip-form {
+  display: inline-flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.location-chooser-zip-form input {
+  width: 150px;
+}
+
+.location-chooser-message {
+  min-height: 1.1rem;
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
 .latest-post {
   margin: 0.35rem 0 1rem;
 }
@@ -1532,6 +1590,18 @@ textarea {
     width: 24px;
     height: 24px;
     object-fit: contain;
+  }
+
+  .location-chooser-actions {
+    align-items: stretch;
+  }
+
+  .location-chooser-zip-form {
+    width: 100%;
+  }
+
+  .location-chooser-zip-form input {
+    width: 100%;
   }
 
   .brand-logo {

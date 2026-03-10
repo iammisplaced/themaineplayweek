@@ -54,9 +54,9 @@
     <main>
       <section class="controls" aria-label="View controls">
         <div class="tabs" role="tablist" aria-label="Showtimes view type">
-          <button class="tab" role="tab" data-view="days" aria-selected="false">Dates</button>
+          <button class="tab active" role="tab" data-view="days" aria-selected="true">Nearby</button>
           <button class="tab" role="tab" data-view="theatres" aria-selected="false">Theatres</button>
-          <button class="tab active" role="tab" data-view="films" aria-selected="true">Films</button>
+          <button class="tab" role="tab" data-view="films" aria-selected="false">Films</button>
         </div>
         <div id="publicSearchWrap" class="public-search">
           <input id="publicSearchInput" type="search" placeholder="Search films..." aria-label="Search listings" />
@@ -80,6 +80,9 @@
         </a>
       </section>
       <p id="theatreSortStatus" class="theatre-sort-status hidden" role="status" aria-live="polite"></p>
+      <div id="locationChooserTriggerWrap" class="location-chooser-trigger-wrap hidden">
+        <button id="openLocationChooser" class="ghost-btn" type="button">Set Location</button>
+      </div>
 
       <section id="latestPost" class="latest-post hidden" aria-label="Latest Substack post">
         <a
@@ -295,6 +298,32 @@
           <p id="adminMessage" class="admin-message" role="status"></p>
         </div>
       </section>
+
+      <dialog id="locationChooserModal" class="admin-modal location-chooser-modal">
+        <div class="admin-modal-body location-chooser-modal-body">
+          <h3 class="location-chooser-title">Sort nearby showtimes by:</h3>
+          <p class="location-chooser-copy">Use your location once, or set a ZIP code.</p>
+          <div class="location-chooser-actions">
+            <button id="useDeviceLocation" type="button">Use My Location</button>
+            <form id="zipLocationForm" class="location-chooser-zip-form">
+              <label class="visually-hidden" for="zipLocationInput">ZIP code</label>
+              <input
+                id="zipLocationInput"
+                type="text"
+                inputmode="numeric"
+                autocomplete="postal-code"
+                placeholder="ZIP code"
+                pattern="[0-9]{5}(-[0-9]{4})?"
+              />
+              <button id="useZipLocation" class="ghost-btn" type="submit">Use ZIP</button>
+            </form>
+          </div>
+          <p id="locationChooserMessage" class="location-chooser-message"></p>
+          <div class="admin-actions">
+            <button id="closeLocationChooser" class="ghost-btn" type="button">Not Now</button>
+          </div>
+        </div>
+      </dialog>
     </main>
 
     <template id="groupTemplate">
