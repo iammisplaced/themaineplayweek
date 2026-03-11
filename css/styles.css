@@ -1450,17 +1450,7 @@ textarea {
 }
 
 :root[data-theme="dark"] .group-card.film-card {
-  background:
-    linear-gradient(90deg, rgba(141, 210, 193, 0.24) 0 52%, transparent 52% 100%) left 0.9rem top 0.62rem / 9px
-      1px repeat-x,
-    linear-gradient(90deg, rgba(141, 210, 193, 0.24) 0 52%, transparent 52% 100%) left 0.9rem
-      bottom 0.62rem / 9px 1px repeat-x,
-    repeating-linear-gradient(
-      0deg,
-      rgba(118, 151, 137, 0.08) 0 1px,
-      rgba(0, 0, 0, 0) 1px 4px
-    ),
-    linear-gradient(180deg, #1b2522 0%, #171f1d 100%);
+  background: linear-gradient(180deg, #1b2522 0%, #171f1d 100%);
   border-color: rgba(141, 210, 193, 0.36);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.05) inset,
