@@ -1363,6 +1363,19 @@ textarea {
   margin-top: 0.75rem;
 }
 
+.admin-actions > button,
+.admin-actions > .upload-label {
+  padding: 0.48rem 0.88rem;
+  font-size: 0.84rem;
+  line-height: 1.2;
+}
+
+.admin-actions > .upload-label {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+
 .upload-label input {
   display: none;
 }

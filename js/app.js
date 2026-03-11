@@ -219,11 +219,8 @@ const elements = {
   saveAllPromos: document.getElementById("saveAllPromos"),
   adminJson: document.getElementById("adminJson"),
   applyJson: document.getElementById("applyJson"),
-  downloadJson: document.getElementById("downloadJson"),
   downloadCsvTemplate: document.getElementById("downloadCsvTemplate"),
-  uploadJson: document.getElementById("uploadJson"),
   uploadCsv: document.getElementById("uploadCsv"),
-  resetJson: document.getElementById("resetJson"),
   adminMessage: document.getElementById("adminMessage"),
 };
 
@@ -1149,18 +1146,6 @@ function bindEvents() {
     }
   });
 
-  elements.downloadJson.addEventListener("click", () => {
-    const blob = new Blob([JSON.stringify(state.data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "showtimes.json";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  });
-
   elements.downloadCsvTemplate?.addEventListener("click", () => {
     const header = [
       "theatre_name",
@@ -1198,25 +1183,6 @@ function bindEvents() {
     URL.revokeObjectURL(url);
   });
 
-  elements.uploadJson.addEventListener("change", async (event) => {
-    if (!requireAdminAuth()) return;
-    const file = event.target.files?.[0];
-    if (!file) return;
-    try {
-      const content = await file.text();
-      const parsed = JSON.parse(content);
-      validateData(parsed);
-      state.data = parsed;
-      initializeAdminState();
-      syncAdminEditor();
-      render();
-      elements.adminMessage.textContent = "Imported JSON. Click Save All Changes to sync Supabase.";
-      elements.uploadJson.value = "";
-    } catch (error) {
-      elements.adminMessage.textContent = `Import failed: ${error.message}`;
-    }
-  });
-
   elements.uploadCsv?.addEventListener("change", async (event) => {
     if (!requireAdminAuth()) return;
     const file = event.target.files?.[0];
@@ -1239,14 +1205,6 @@ function bindEvents() {
     }
   });
 
-  elements.resetJson.addEventListener("click", async () => {
-    localStorage.removeItem(STORAGE_KEY);
-    await loadData();
-    initializeAdminState();
-    syncAdminEditor();
-    render();
-    elements.adminMessage.textContent = "Reset from source data.";
-  });
 }
 
 function initializeTheme() {
