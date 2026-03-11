@@ -284,6 +284,7 @@ async function init() {
   }
   updateTheatreSortStatus();
   render();
+  registerSortDebugTools();
 }
 
 async function loadLatestSubstackPost() {
@@ -3778,7 +3779,7 @@ function normalizeSortTitle(value) {
     .toLowerCase();
 }
 
-function getFilmGroupSortScore(group) {
+function getFilmGroupSortBreakdown(group) {
   const filmInfo = group?.filmInfo || {};
   const popularity = normalizeScoreRange(toFiniteNumber(filmInfo.popularity), 100);
   const voteAverage = normalizeScoreRange(toFiniteNumber(filmInfo.voteAverage), 10);
@@ -3801,8 +3802,80 @@ function getFilmGroupSortScore(group) {
     FILM_SORT_WEIGHTS.theatreCoverage * theatreCoverage;
   const hasEditorialBoost = Boolean(filmInfo.staffFavorite || filmInfo.featuredOnPlayweek);
   const editorialBoost = hasEditorialBoost ? FILM_SORT_WEIGHTS.staffFavoriteBoost : 0;
+  const finalScore = tmdbScore * freshness + localDemandScore + editorialBoost;
 
-  return tmdbScore * freshness + localDemandScore + editorialBoost;
+  return {
+    finalScore,
+    tmdbScore,
+    localDemandScore,
+    editorialBoost,
+    freshness,
+    inputs: {
+      popularity,
+      voteAverage,
+      voteCount,
+      voteConfidence,
+      ratingScore,
+      releaseRecency,
+      upcomingTimes,
+      upcomingShowings,
+      theatreCoverage,
+      staffFavorite: Boolean(filmInfo.staffFavorite),
+      featuredOnPlayweek: Boolean(filmInfo.featuredOnPlayweek),
+    },
+    weights: FILM_SORT_WEIGHTS,
+  };
+}
+
+function getFilmGroupSortScore(group) {
+  return getFilmGroupSortBreakdown(group).finalScore;
+}
+
+function registerSortDebugTools() {
+  if (typeof window === "undefined") return;
+  const debugApi = {
+    filmSortBreakdown(options = {}) {
+      const query = normalizeSearchText(options.query || "");
+      const limitRaw = Number(options.limit);
+      const limit = Number.isFinite(limitRaw) && limitRaw > 0 ? Math.floor(limitRaw) : null;
+
+      const grouped = buildGroups(state.data.theatreGroups, "films");
+      const rows = Object.values(grouped).map((group) => {
+        const filmInfo = group?.filmInfo || {};
+        const breakdown = getFilmGroupSortBreakdown(group);
+        return {
+          film: String(filmInfo.film || "").trim(),
+          year: Number.isFinite(Number(filmInfo.year)) ? Number(filmInfo.year) : null,
+          score: breakdown.finalScore,
+          tmdbScore: breakdown.tmdbScore,
+          freshness: breakdown.freshness,
+          localDemandScore: breakdown.localDemandScore,
+          editorialBoost: breakdown.editorialBoost,
+          popularity: breakdown.inputs.popularity,
+          ratingScore: breakdown.inputs.ratingScore,
+          releaseRecency: breakdown.inputs.releaseRecency,
+          voteAverage: breakdown.inputs.voteAverage,
+          voteCount: breakdown.inputs.voteCount,
+          voteConfidence: breakdown.inputs.voteConfidence,
+          upcomingTimes: breakdown.inputs.upcomingTimes,
+          upcomingShowings: breakdown.inputs.upcomingShowings,
+          theatreCoverage: breakdown.inputs.theatreCoverage,
+          staffFavorite: breakdown.inputs.staffFavorite,
+          featuredOnPlayweek: breakdown.inputs.featuredOnPlayweek,
+        };
+      });
+
+      const filtered = query
+        ? rows.filter((row) => normalizeSearchText(row.film).includes(query))
+        : rows;
+      filtered.sort((a, b) => b.score - a.score);
+      const finalRows = limit ? filtered.slice(0, limit) : filtered;
+      console.table(finalRows);
+      return finalRows;
+    },
+  };
+
+  window.__tmpDebug = Object.freeze(debugApi);
 }
 
 function countGroupUpcomingTimes(group) {
