@@ -3802,7 +3802,7 @@ function getFilmGroupSortBreakdown(group) {
     FILM_SORT_WEIGHTS.theatreCoverage * theatreCoverage;
   const hasEditorialBoost = Boolean(filmInfo.staffFavorite || filmInfo.featuredOnPlayweek);
   const editorialBoost = hasEditorialBoost ? FILM_SORT_WEIGHTS.staffFavoriteBoost : 0;
-  const finalScore = tmdbScore * freshness + localDemandScore + editorialBoost;
+  const finalScore = tmdbScore + localDemandScore + editorialBoost;
 
   return {
     finalScore,
