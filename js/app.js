@@ -3799,9 +3799,10 @@ function getFilmGroupSortScore(group) {
   const localDemandScore =
     FILM_SORT_WEIGHTS.upcomingShowings * upcomingShowings +
     FILM_SORT_WEIGHTS.theatreCoverage * theatreCoverage;
-  const staffFavoriteBoost = filmInfo.staffFavorite ? FILM_SORT_WEIGHTS.staffFavoriteBoost : 0;
+  const hasEditorialBoost = Boolean(filmInfo.staffFavorite || filmInfo.featuredOnPlayweek);
+  const editorialBoost = hasEditorialBoost ? FILM_SORT_WEIGHTS.staffFavoriteBoost : 0;
 
-  return tmdbScore * freshness + localDemandScore + staffFavoriteBoost;
+  return tmdbScore * freshness + localDemandScore + editorialBoost;
 }
 
 function countGroupUpcomingTimes(group) {
