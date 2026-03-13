@@ -24,6 +24,7 @@ create table if not exists public.films (
   staff_favorite_by text not null default '',
   featured_on_playweek boolean not null default false,
   featured_on_playweek_url text not null default '',
+  metadata_source text not null default 'manual',
   tmdb_json jsonb,
   created_at timestamptz not null default now()
 );
@@ -32,6 +33,38 @@ alter table public.films add column if not exists staff_favorite boolean not nul
 alter table public.films add column if not exists staff_favorite_by text not null default '';
 alter table public.films add column if not exists featured_on_playweek boolean not null default false;
 alter table public.films add column if not exists featured_on_playweek_url text not null default '';
+alter table public.films add column if not exists metadata_source text;
+
+update public.films
+set metadata_source = case
+  when tmdb_id is not null then 'tmdb'
+  else 'manual'
+end
+where metadata_source is null
+   or btrim(metadata_source) = '';
+
+update public.films
+set metadata_source = 'manual'
+where metadata_source not in ('tmdb', 'manual');
+
+alter table public.films alter column metadata_source set default 'manual';
+alter table public.films alter column metadata_source set not null;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'films_metadata_source_check'
+      and conrelid = 'public.films'::regclass
+  ) then
+    execute $sql$
+      alter table public.films
+      add constraint films_metadata_source_check
+      check (metadata_source in ('tmdb', 'manual'))
+    $sql$;
+  end if;
+end $$;
 
 create table if not exists public.theatre_films (
   theatre_id bigint not null references public.theatres(id) on delete cascade,
@@ -313,6 +346,7 @@ begin
       title,
       year,
       tmdb_id,
+      metadata_source,
       ticket_link,
       staff_favorite,
       staff_favorite_by,
@@ -324,6 +358,14 @@ begin
       coalesce(film_item->>'title', ''),
       nullif(film_item->>'year', '')::integer,
       nullif(film_item->>'tmdb_id', '')::bigint,
+      case lower(trim(coalesce(film_item->>'metadata_source', '')))
+        when 'tmdb' then 'tmdb'
+        when 'manual' then 'manual'
+        else case
+          when nullif(film_item->>'tmdb_id', '') is not null then 'tmdb'
+          else 'manual'
+        end
+      end,
       coalesce(film_item->>'ticket_link', ''),
       coalesce((film_item->>'staff_favorite')::boolean, false),
       coalesce(film_item->>'staff_favorite_by', ''),

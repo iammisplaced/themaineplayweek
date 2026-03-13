@@ -176,6 +176,7 @@
                 <div class="admin-inline-actions">
                   <button id="addTheatre" class="ghost-btn">+ Add Theatre</button>
                   <button id="addFilm" class="ghost-btn">+ Add Film</button>
+                  <button id="editFilmMetadata" class="ghost-btn">Edit Film Metadata</button>
                   <button id="deleteFilm" class="ghost-btn">Delete Film</button>
                   <button id="refreshTmdb" class="ghost-btn">Refresh TMDb</button>
                 </div>
@@ -247,6 +248,31 @@
             <div class="admin-inline-actions">
               <button id="confirmAddFilm" value="confirm">Add Film</button>
               <button id="cancelAddFilm" class="ghost-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </dialog>
+
+        <dialog id="editFilmMetadataModal" class="admin-modal">
+          <form id="editFilmMetadataForm" method="dialog" class="admin-modal-body">
+            <h3>Edit Film Metadata</h3>
+            <p class="admin-help">
+              Use this when TMDb data is missing or you want manual overrides.
+            </p>
+            <label for="metadataSourceInput">Metadata Source</label>
+            <input id="metadataSourceInput" type="text" readonly />
+            <label for="metadataPosterUrlInput">Poster URL (optional)</label>
+            <input id="metadataPosterUrlInput" type="url" placeholder="https://..." />
+            <label for="metadataDirectorInput">Director (optional)</label>
+            <input id="metadataDirectorInput" type="text" />
+            <label for="metadataStarsInput">Actors/Stars (comma separated)</label>
+            <textarea id="metadataStarsInput" rows="3" placeholder="Actor One, Actor Two"></textarea>
+            <label for="metadataGenresInput">Genres (comma separated)</label>
+            <textarea id="metadataGenresInput" rows="2" placeholder="Drama, Comedy"></textarea>
+            <label for="metadataReleaseDateInput">Release Date (optional)</label>
+            <input id="metadataReleaseDateInput" type="date" />
+            <div class="admin-inline-actions">
+              <button id="confirmEditFilmMetadata" value="confirm">Save Metadata</button>
+              <button id="cancelEditFilmMetadata" class="ghost-btn" type="button">Cancel</button>
             </div>
           </form>
         </dialog>

@@ -58,10 +58,11 @@ Open <http://localhost:8080>.
 6. `+ Add Film` creates that film across all theatres so it is available everywhere.
 7. Set `Ticket Link (selected theatre + film)` for the current theatre/film pair (ticket links are not entered in Add Film modal).
 8. Use `Refresh TMDb` to pull movie metadata for the selected film (needs film `tmdbId` + local TMDb key input).
-9. Add showings with date + comma-separated times (optionally set number of days to auto-extend across consecutive dates).
-10. Click `Save All Changes` to push to Supabase.
-11. Use `Import CSV` in the admin actions row to bulk import showtimes, then click `Save All Changes`.
-12. Use `Download CSV Template` to export a ready-to-fill import file with correct headers.
+9. Use `Edit Film Metadata` to manually set poster URL, director, stars, genres, and release date for films without TMDb IDs (or to override TMDb metadata).
+10. Add showings with date + comma-separated times (optionally set number of days to auto-extend across consecutive dates).
+11. Click `Save All Changes` to push to Supabase.
+12. Use `Import CSV` in the admin actions row to bulk import showtimes, then click `Save All Changes`.
+13. Use `Download CSV Template` to export a ready-to-fill import file with correct headers.
 
 ### CSV bulk upload format
 Required headers:
@@ -138,5 +139,7 @@ Showtimes in the past (date+time) are hidden automatically.
 
 ## Schema update note
 Ticket links are theatre-specific. Re-run `supabase/schema.sql` so `public.theatre_films` exists.
+
+Film metadata source hardening now uses `public.films.metadata_source` (`tmdb` or `manual`). Re-run `supabase/schema.sql` to install the column + constraint.
 
 If you see `DELETE requires a WHERE clause`, re-run `supabase/schema.sql` to install the updated `replace_showtimes_data` function.

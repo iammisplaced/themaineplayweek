@@ -198,11 +198,21 @@ const elements = {
   modalPromoButtonUrlInput: document.getElementById("modalPromoButtonUrlInput"),
   cancelAddPromo: document.getElementById("cancelAddPromo"),
   addFilm: document.getElementById("addFilm"),
+  editFilmMetadata: document.getElementById("editFilmMetadata"),
   addFilmModal: document.getElementById("addFilmModal"),
   addFilmForm: document.getElementById("addFilmForm"),
   modalFilmTitleInput: document.getElementById("modalFilmTitleInput"),
   modalFilmYearInput: document.getElementById("modalFilmYearInput"),
   modalFilmTmdbIdInput: document.getElementById("modalFilmTmdbIdInput"),
+  editFilmMetadataModal: document.getElementById("editFilmMetadataModal"),
+  editFilmMetadataForm: document.getElementById("editFilmMetadataForm"),
+  metadataSourceInput: document.getElementById("metadataSourceInput"),
+  metadataPosterUrlInput: document.getElementById("metadataPosterUrlInput"),
+  metadataDirectorInput: document.getElementById("metadataDirectorInput"),
+  metadataStarsInput: document.getElementById("metadataStarsInput"),
+  metadataGenresInput: document.getElementById("metadataGenresInput"),
+  metadataReleaseDateInput: document.getElementById("metadataReleaseDateInput"),
+  cancelEditFilmMetadata: document.getElementById("cancelEditFilmMetadata"),
   cancelAddFilm: document.getElementById("cancelAddFilm"),
   cancelAddTheatre: document.getElementById("cancelAddTheatre"),
   deleteFilm: document.getElementById("deleteFilm"),
@@ -923,6 +933,25 @@ function bindEvents() {
     elements.addFilmModal.close();
   });
 
+  elements.editFilmMetadata.addEventListener("click", () => {
+    if (!requireAdminAuth()) return;
+    const film = getSelectedFilm();
+    if (!film) return;
+    const metadata = readEditableFilmMetadata(film);
+    const metadataSource = normalizeMetadataSource(film.metadataSource, film);
+    elements.metadataSourceInput.value = metadataSource === "tmdb" ? "tmdb" : "manual";
+    elements.metadataPosterUrlInput.value = metadata.posterUrl;
+    elements.metadataDirectorInput.value = metadata.director;
+    elements.metadataStarsInput.value = metadata.stars.join(", ");
+    elements.metadataGenresInput.value = metadata.genres.join(", ");
+    elements.metadataReleaseDateInput.value = metadata.releaseDate;
+    elements.editFilmMetadataModal.showModal();
+  });
+
+  elements.cancelEditFilmMetadata?.addEventListener("click", () => {
+    elements.editFilmMetadataModal?.close();
+  });
+
   elements.cancelAddTheatre.addEventListener("click", () => {
     elements.addTheatreModal.close();
   });
@@ -1003,6 +1032,7 @@ function bindEvents() {
       staffFavoriteBy: "",
       featuredOnPlayweek: false,
       featuredOnPlayweekUrl: "",
+      metadataSource: "manual",
       showings: [],
     };
     if (yearValue) film.year = Number(yearValue);
@@ -1015,6 +1045,54 @@ function bindEvents() {
     elements.addFilmModal.close();
     syncAdminEditor();
     elements.adminMessage.textContent = "Added film to all theatres.";
+  });
+
+  elements.editFilmMetadataForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!requireAdminAuth()) return;
+
+    const film = getSelectedFilm();
+    if (!film) return;
+
+    const posterUrlRaw = String(elements.metadataPosterUrlInput.value || "").trim();
+    let posterUrl = "";
+    if (posterUrlRaw) {
+      if (/^https?:\/\//i.test(posterUrlRaw)) {
+        posterUrl = posterUrlRaw;
+      } else if (posterUrlRaw.startsWith("//")) {
+        posterUrl = `https:${posterUrlRaw}`;
+      } else {
+        elements.adminMessage.textContent = "Poster URL must start with http:// or https://.";
+        return;
+      }
+    }
+    const director = String(elements.metadataDirectorInput.value || "").trim();
+    const stars = parseCommaSeparatedList(elements.metadataStarsInput.value);
+    const genres = parseCommaSeparatedList(elements.metadataGenresInput.value);
+    const releaseDate = String(elements.metadataReleaseDateInput.value || "").trim();
+
+    if (releaseDate && !parseIsoDate(releaseDate)) {
+      elements.adminMessage.textContent = "Release date must be YYYY-MM-DD.";
+      return;
+    }
+
+    const nextMetadata = {
+      ...(film.tmdb && typeof film.tmdb === "object" ? film.tmdb : {}),
+      posterUrl,
+      posterPath: "",
+      director,
+      stars,
+      genres,
+      releaseDate,
+      manualUpdatedAt: new Date().toISOString(),
+    };
+
+    film.tmdb = nextMetadata;
+    film.metadataSource = "manual";
+    syncFilmMetadataAcrossTheatres(film);
+    elements.editFilmMetadataModal.close();
+    syncAdminEditor();
+    elements.adminMessage.textContent = "Saved manual film metadata.";
   });
 
   elements.deleteFilm.addEventListener("click", () => {
@@ -1045,12 +1123,22 @@ function bindEvents() {
       elements.adminMessage.textContent = "Set a TMDb ID for this film first.";
       return;
     }
+    if (normalizeMetadataSource(film.metadataSource, film) === "manual" && hasEditableMetadata(film)) {
+      const confirmed = window.confirm(
+        "This film currently uses manual metadata. Refreshing TMDb will replace it. Continue?"
+      );
+      if (!confirmed) {
+        elements.adminMessage.textContent = "TMDb refresh cancelled.";
+        return;
+      }
+    }
 
     try {
       state.admin.isRefreshingTmdb = true;
       syncAdminEditor();
       const details = await fetchTmdbMovieById(state.admin.tmdbApiKey, Number(film.tmdbId));
       film.tmdb = buildTmdbRecord(details);
+      film.metadataSource = "tmdb";
       syncFilmMetadataAcrossTheatres(film);
       syncAdminEditor();
       elements.adminMessage.textContent = "TMDb details refreshed.";
@@ -1391,7 +1479,7 @@ async function loadDataFromSupabase() {
     state.supabase
       .from("films")
       .select(
-        "id,title,year,tmdb_id,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,tmdb_json"
+        "id,title,year,tmdb_id,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json"
       )
       .order("id", { ascending: true })
   );
@@ -1445,6 +1533,7 @@ async function loadDataFromSupabase() {
       staffFavoriteBy: String(filmRow.staff_favorite_by || "").trim(),
       featuredOnPlayweek: Boolean(filmRow.featured_on_playweek),
       featuredOnPlayweekUrl: String(filmRow.featured_on_playweek_url || "").trim(),
+      metadataSource: normalizeMetadataSource(filmRow.metadata_source, { tmdbId: filmRow.tmdb_id }),
       tmdb: filmRow.tmdb_json || undefined,
       _dbId: filmRow.id,
     });
@@ -1462,6 +1551,7 @@ async function loadDataFromSupabase() {
         staffFavoriteBy: String(filmTemplate.staffFavoriteBy || ""),
         featuredOnPlayweek: Boolean(filmTemplate.featuredOnPlayweek),
         featuredOnPlayweekUrl: String(filmTemplate.featuredOnPlayweekUrl || ""),
+        metadataSource: normalizeMetadataSource(filmTemplate.metadataSource, filmTemplate),
         tmdb: filmTemplate.tmdb,
         showings: [],
         _dbId: filmTemplate._dbId,
@@ -1579,6 +1669,12 @@ function validateData(data) {
       }
       if (typeof film?.featuredOnPlayweekUrl !== "undefined" && typeof film?.featuredOnPlayweekUrl !== "string") {
         throw new Error(`Film "${film.title}" at "${theatre.name}" has invalid featuredOnPlayweekUrl.`);
+      }
+      if (typeof film?.metadataSource !== "undefined") {
+        const metadataSource = String(film.metadataSource || "").trim().toLowerCase();
+        if (metadataSource && metadataSource !== "tmdb" && metadataSource !== "manual") {
+          throw new Error(`Film "${film.title}" at "${theatre.name}" has invalid metadataSource.`);
+        }
       }
       if (!Array.isArray(film?.showings)) {
         throw new Error(`Film "${film.title}" at "${theatre.name}" must include a showings array.`);
@@ -1738,6 +1834,7 @@ function renderFilmOptions() {
   }
 
   elements.addFilm.disabled = !theatre;
+  elements.editFilmMetadata.disabled = !hasFilm || state.admin.isSaving || state.admin.isRefreshingTmdb;
   elements.deleteFilm.disabled = !hasFilm;
   elements.refreshTmdb.disabled = !hasFilm || state.admin.isSaving || state.admin.isRefreshingTmdb;
   elements.showingDateInput.disabled = !hasFilm;
@@ -2186,6 +2283,46 @@ function normalizeOutboundUrl(value) {
   return `https://${raw}`;
 }
 
+function parseCommaSeparatedList(value) {
+  return String(value || "")
+    .split(/[;,|]+/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function readEditableFilmMetadata(film) {
+  const tmdb = film?.tmdb && typeof film.tmdb === "object" ? film.tmdb : {};
+  const posterUrl = normalizePosterUrl(tmdb.posterUrl || tmdb.posterPath || "");
+  const director = typeof tmdb.director === "string" ? tmdb.director.trim() : "";
+  const stars = normalizeStringArray(tmdb.stars);
+  const genres = normalizeStringArray(tmdb.genres);
+  const releaseDate = String(tmdb.releaseDate || tmdb.release_date || "").trim();
+  return { posterUrl, director, stars, genres, releaseDate };
+}
+
+function hasEditableMetadata(film) {
+  const metadata = readEditableFilmMetadata(film);
+  return Boolean(
+    metadata.posterUrl ||
+      metadata.director ||
+      metadata.releaseDate ||
+      metadata.stars.length ||
+      metadata.genres.length
+  );
+}
+
+function normalizeMetadataSource(value, film = null) {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (normalized === "tmdb" || normalized === "manual") return normalized;
+  const tmdbId = Number(film?.tmdbId);
+  return Number.isInteger(tmdbId) && tmdbId > 0 ? "tmdb" : "manual";
+}
+
+function mergeMetadataSource(existing, incoming) {
+  if (existing === "manual" || incoming === "manual") return "manual";
+  return "tmdb";
+}
+
 function addFilmToAllTheatres(baseFilm) {
   state.data.theatreGroups.forEach((theatre) => {
     if (!Array.isArray(theatre.films)) theatre.films = [];
@@ -2200,6 +2337,7 @@ function addFilmToAllTheatres(baseFilm) {
         staffFavoriteBy: String(baseFilm.staffFavoriteBy || ""),
         featuredOnPlayweek: Boolean(baseFilm.featuredOnPlayweek),
         featuredOnPlayweekUrl: String(baseFilm.featuredOnPlayweekUrl || ""),
+        metadataSource: normalizeMetadataSource(baseFilm.metadataSource, baseFilm),
         tmdb: baseFilm.tmdb,
         showings: [],
       });
@@ -2219,6 +2357,7 @@ function syncFilmMetadataAcrossTheatres(sourceFilm) {
     (theatre.films || []).forEach((film) => {
       if (!filmsMatch(film, sourceFilm)) return;
       film.tmdb = sourceFilm.tmdb;
+      film.metadataSource = normalizeMetadataSource(sourceFilm.metadataSource, sourceFilm);
       if (sourceFilm.tmdbId) film.tmdbId = sourceFilm.tmdbId;
       if (sourceFilm.year) film.year = sourceFilm.year;
     });
@@ -2296,7 +2435,7 @@ async function saveDataToSupabase() {
 async function verifySupabaseSchema(supabase) {
   const checks = await Promise.all([
     supabase.from("theatres").select("id").limit(1),
-    supabase.from("films").select("id").limit(1),
+    supabase.from("films").select("id,metadata_source").limit(1),
     supabase.from("showings").select("id").limit(1),
     supabase.from("theatre_films").select("theatre_id").limit(1),
     supabase.from("promos").select("id").limit(1),
@@ -2459,6 +2598,7 @@ function buildReplacePayload(data, promotedCards) {
           title: film.title,
           year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
           tmdb_id: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
+          metadata_source: normalizeMetadataSource(film.metadataSource, film),
           ticket_link: filmTicketLink,
           staff_favorite: Boolean(film.staffFavorite),
           staff_favorite_by: String(film.staffFavoriteBy || "").trim(),
@@ -2470,6 +2610,19 @@ function buildReplacePayload(data, promotedCards) {
       } else {
         const filmTicketLink = String(film.ticketLink || "").trim();
         const existingFilmIndex = filmPayloadIndexByKey.get(filmKey);
+        if (typeof existingFilmIndex === "number") {
+          const incomingMetadataSource = normalizeMetadataSource(film.metadataSource, film);
+          films[existingFilmIndex].metadata_source = mergeMetadataSource(
+            films[existingFilmIndex].metadata_source,
+            incomingMetadataSource
+          );
+          if (
+            film.tmdb &&
+            (films[existingFilmIndex].tmdb_json == null || incomingMetadataSource === "manual")
+          ) {
+            films[existingFilmIndex].tmdb_json = film.tmdb;
+          }
+        }
         if (typeof existingFilmIndex === "number" && Boolean(film.staffFavorite)) {
           films[existingFilmIndex].staff_favorite = true;
           if (!films[existingFilmIndex].staff_favorite_by) {
