@@ -31,16 +31,14 @@ const PROMOTED_CARDS = Object.freeze([
 const THEATRE_COLLAPSED_FILM_COUNT = 5;
 const FILM_LAYOUT_ANIMATION_MS = 320;
 const FILM_SORT_WEIGHTS = Object.freeze({
-  tmdbPopularity: 0.25,
+  tmdbPopularity: 0.2,
   tmdbRating: 0.15,
   tmdbRecency: 0.1,
   upcomingShowings: 0.35,
   theatreCoverage: 0.15,
   staffFavoriteBoost: 0.12,
 });
-const RELEASE_RECENCY_WINDOW_DAYS = 30;
-const TMDB_FRESHNESS_HALF_LIFE_DAYS = 10;
-const TMDB_FRESHNESS_FLOOR = 0.1;
+const RELEASE_RECENCY_WINDOW_DAYS = 14;
 const SUBSTACK_ARCHIVE_URL = "https://themaineplayweek.substack.com/api/v1/archive?sort=new";
 const THEATRE_GEO_CACHE_KEY = "theatre-geocode-cache-v1";
 const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
@@ -3787,7 +3785,6 @@ function getFilmGroupSortBreakdown(group) {
   const voteConfidence = normalizeLogRange(voteCount, 10000);
   const ratingScore = voteAverage * voteConfidence;
   const releaseRecency = calculateReleaseRecencyScore(filmInfo.releaseDate);
-  const freshness = calculateTmdbFreshnessMultiplier(filmInfo.matchedAt);
 
   const upcomingTimes = countGroupUpcomingTimes(group);
   const theatreCoverage = normalizeLogRange(countGroupTheatreCoverage(group), 30);
@@ -3800,8 +3797,7 @@ function getFilmGroupSortBreakdown(group) {
   const localDemandScore =
     FILM_SORT_WEIGHTS.upcomingShowings * upcomingShowings +
     FILM_SORT_WEIGHTS.theatreCoverage * theatreCoverage;
-  const hasEditorialBoost = Boolean(filmInfo.staffFavorite || filmInfo.featuredOnPlayweek);
-  const editorialBoost = hasEditorialBoost ? FILM_SORT_WEIGHTS.staffFavoriteBoost : 0;
+  const editorialBoost = filmInfo.staffFavorite ? FILM_SORT_WEIGHTS.staffFavoriteBoost : 0;
   const finalScore = tmdbScore + localDemandScore + editorialBoost;
 
   return {
@@ -3809,7 +3805,6 @@ function getFilmGroupSortBreakdown(group) {
     tmdbScore,
     localDemandScore,
     editorialBoost,
-    freshness,
     inputs: {
       popularity,
       voteAverage,
@@ -3848,7 +3843,6 @@ function registerSortDebugTools() {
           year: Number.isFinite(Number(filmInfo.year)) ? Number(filmInfo.year) : null,
           score: breakdown.finalScore,
           tmdbScore: breakdown.tmdbScore,
-          freshness: breakdown.freshness,
           localDemandScore: breakdown.localDemandScore,
           editorialBoost: breakdown.editorialBoost,
           popularity: breakdown.inputs.popularity,
@@ -3904,15 +3898,6 @@ function calculateReleaseRecencyScore(releaseDate) {
   return 1 - (daysSinceRelease / RELEASE_RECENCY_WINDOW_DAYS);
 }
 
-function calculateTmdbFreshnessMultiplier(matchedAt) {
-  const matched = parseIsoDateTimeLike(matchedAt);
-  if (!matched) return 0.35;
-  const ageDays = (Date.now() - matched.getTime()) / 86400000;
-  if (!Number.isFinite(ageDays) || ageDays <= 0) return 1;
-  const decay = Math.exp((-Math.LN2 * ageDays) / TMDB_FRESHNESS_HALF_LIFE_DAYS);
-  return Math.max(TMDB_FRESHNESS_FLOOR, decay);
-}
-
 function normalizeScoreRange(value, max) {
   if (!Number.isFinite(value) || max <= 0) return 0;
   return Math.max(0, Math.min(1, value / max));
@@ -3933,14 +3918,6 @@ function parseIsoDateLike(value) {
   if (!raw) return null;
   const head = raw.slice(0, 10);
   return parseIsoDate(head);
-}
-
-function parseIsoDateTimeLike(value) {
-  const raw = String(value || "").trim();
-  if (!raw) return null;
-  const date = new Date(raw);
-  if (Number.isNaN(date.getTime())) return null;
-  return date;
 }
 
 function getRowEarliestShowtimeTimestamp(row) {
