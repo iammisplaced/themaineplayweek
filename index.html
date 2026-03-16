@@ -54,35 +54,37 @@
     <main>
       <section class="controls" aria-label="View controls">
         <div class="tabs" role="tablist" aria-label="Showtimes view type">
-          <button class="tab active" role="tab" data-view="days" aria-selected="true">Nearby</button>
+          <button class="tab active" role="tab" data-view="days" aria-selected="true">Near You</button>
           <button class="tab" role="tab" data-view="theatres" aria-selected="false">Theatres</button>
-          <button class="tab" role="tab" data-view="films" aria-selected="false">Films</button>
+          <button class="tab" role="tab" data-view="films" aria-selected="false">All Films</button>
         </div>
         <div id="publicSearchWrap" class="public-search">
           <input id="publicSearchInput" type="search" placeholder="Search films..." aria-label="Search listings" />
         </div>
         <div id="dayPickerWrap" class="day-picker hidden" aria-label="Date selection">
-          <button id="dayPrevButton" class="day-picker-nav" type="button" aria-label="Previous date">Prev</button>
-          <div class="day-picker-main">
-            <input id="dayPickerInput" class="day-picker-input" type="date" aria-label="Select date" />
+          <div class="day-picker-date-group">
+            <button id="dayPrevButton" class="day-picker-nav" type="button" aria-label="Previous date">Prev</button>
+            <div class="day-picker-main">
+              <input id="dayPickerInput" class="day-picker-input" type="date" aria-label="Select date" />
+            </div>
+            <button id="dayNextButton" class="day-picker-nav" type="button" aria-label="Next date">Next</button>
           </div>
-          <button id="dayNextButton" class="day-picker-nav" type="button" aria-label="Next date">Next</button>
+          <div class="day-radius-group">
+            <select id="dayRadiusInput" class="day-radius-input" aria-label="Search radius">
+              <option value="10">10 mi</option>
+              <option value="25">25 mi</option>
+              <option value="50" selected>50 mi</option>
+              <option value="100">100 mi</option>
+            </select>
+          </div>
         </div>
-        <a
-          class="controls-substack"
-          href="https://themaineplayweek.substack.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Read the Substack"
-        >
-          <span class="controls-substack-label">Read the Substack</span>
-          <img class="controls-substack-icon" src="assets/brand/substack.png" alt="" aria-hidden="true" />
-        </a>
+        <div id="locationChooserTriggerWrap" class="location-chooser-trigger-wrap hidden">
+          <button id="openLocationChooser" class="location-control-btn" type="button" aria-label="Set location">
+            <img src="assets/icons/location.png" alt="" aria-hidden="true" />
+          </button>
+        </div>
       </section>
       <p id="theatreSortStatus" class="theatre-sort-status hidden" role="status" aria-live="polite"></p>
-      <div id="locationChooserTriggerWrap" class="location-chooser-trigger-wrap hidden">
-        <button id="openLocationChooser" class="ghost-btn" type="button">Set Location</button>
-      </div>
 
       <section id="latestPost" class="latest-post hidden" aria-label="Latest Substack post">
         <a

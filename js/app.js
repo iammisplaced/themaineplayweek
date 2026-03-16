@@ -42,7 +42,7 @@ const RELEASE_RECENCY_WINDOW_DAYS = 14;
 const SUBSTACK_ARCHIVE_URL = "https://themaineplayweek.substack.com/api/v1/archive?sort=new";
 const THEATRE_GEO_CACHE_KEY = "theatre-geocode-cache-v1";
 const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
-const DAYS_VIEW_MAX_RADIUS_MILES = 50;
+const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
 const LOCATION_PREFERENCE_STORAGE_KEY = "tmp-location-preference-v1";
 const LOCATION_CHOOSER_SEEN_STORAGE_KEY = "tmp-location-chooser-seen-v1";
 
@@ -102,6 +102,7 @@ const state = {
     theatres: "",
   },
   selectedDay: "",
+  daysViewRadiusMiles: DEFAULT_DAYS_VIEW_RADIUS_MILES,
   theme: LIGHT_THEME,
   brandWordmarkVariant: WORDMARK_VARIANTS[0],
   supabase: null,
@@ -136,6 +137,7 @@ const elements = {
   publicSearchInput: document.getElementById("publicSearchInput"),
   dayPickerWrap: document.getElementById("dayPickerWrap"),
   dayPickerInput: document.getElementById("dayPickerInput"),
+  dayRadiusInput: document.getElementById("dayRadiusInput"),
   dayPrevButton: document.getElementById("dayPrevButton"),
   dayNextButton: document.getElementById("dayNextButton"),
   locationChooserModal: document.getElementById("locationChooserModal"),
@@ -562,6 +564,15 @@ function bindEvents() {
   elements.dayPickerInput?.addEventListener("change", () => {
     const requested = String(elements.dayPickerInput.value || "").trim();
     state.selectedDay = requested || toIsoDate(new Date());
+    render();
+  });
+
+  elements.dayRadiusInput?.addEventListener("change", () => {
+    const requestedRadius = Number(elements.dayRadiusInput.value);
+    state.daysViewRadiusMiles =
+      Number.isFinite(requestedRadius) && requestedRadius > 0
+        ? requestedRadius
+        : DEFAULT_DAYS_VIEW_RADIUS_MILES;
     render();
   });
 
@@ -2748,13 +2759,14 @@ function render() {
   let grouped = {};
   let activeDay = "";
   if (state.view === "days") {
+    const selectedRadiusMiles = getDaysViewRadiusMiles();
     if (state.theatreDistanceStatus === "idle") {
       void ensureTheatreDistanceSort();
     }
     activeDay = ensureSelectedDay();
     syncDayPickerUI(activeDay);
     grouped = activeDay ? buildSingleDayGroups(state.data.theatreGroups, activeDay) : {};
-    grouped = filterSingleDayGroupsByDistance(grouped, DAYS_VIEW_MAX_RADIUS_MILES);
+    grouped = filterSingleDayGroupsByDistance(grouped, selectedRadiusMiles);
   } else {
     syncDayPickerUI("");
     grouped = buildGroups(state.data.theatreGroups, state.view);
@@ -2786,7 +2798,7 @@ function render() {
             ? "Set your location or ZIP code to view nearby showtimes."
           : state.theatreDistanceStatus !== "ready"
             ? "Nearby showtimes require location access."
-            : `No showtimes within ${DAYS_VIEW_MAX_RADIUS_MILES} miles for this day...`;
+            : `No showtimes within ${getDaysViewRadiusMiles()} miles for this day...`;
     elements.results.innerHTML = `<p class="no-results-message">${message}</p>`;
     return;
   }
@@ -3578,14 +3590,7 @@ function closeLocationChooserModal() {
 
 function refreshLocationChooser() {
   if (!elements.locationChooserTriggerWrap) return;
-  const canRetryWithChooser =
-    state.theatreDistanceError === "location-permission-denied" ||
-    state.theatreDistanceError === "location-unavailable" ||
-    state.theatreDistanceError === "location-timeout" ||
-    state.theatreDistanceError === "location-request-failed" ||
-    state.theatreDistanceError === "zip-location-invalid";
-  const shouldShow =
-    (!hasConfiguredLocationPreference() || canRetryWithChooser) && (state.view === "theatres" || state.view === "days");
+  const shouldShow = state.view === "theatres" || state.view === "days";
   elements.locationChooserTriggerWrap.classList.toggle("hidden", !shouldShow);
   if (shouldShow && !elements.locationChooserMessage?.textContent) {
     setLocationChooserMessage("Use your location or ZIP code to sort nearby showtimes.");
@@ -3884,36 +3889,35 @@ function updateTheatreSortStatus() {
   el.classList.remove("hidden");
   const distanceCount = state.theatreDistanceByKey.size;
   if (state.theatreDistanceStatus === "loading") {
-    el.textContent = "Theatre sort: finding nearby theatres...";
+    el.textContent = "Finding theatres near you...";
     return;
   }
   if (state.theatreDistanceStatus === "ready") {
     if (distanceCount > 0) {
       if (state.locationPreference.mode === "zip" && state.locationPreference.zip) {
         el.textContent =
-          `Theatre sort: nearest first from ZIP ${state.locationPreference.zip} (${distanceCount} theatres distance-ranked).`;
+          `Sorted by distance from ZIP ${state.locationPreference.zip} (${distanceCount} theatres).`;
       } else {
-        el.textContent = `Theatre sort: nearest first (${distanceCount} theatres distance-ranked).`;
+        el.textContent = `Sorted by distance from your current location (${distanceCount} theatres).`;
       }
     } else {
-      el.textContent = "Theatre sort: location found, but no theatre distances resolved. Showing alphabetical order.";
+      el.textContent = "Could not calculate theatre distances. Showing theatres A-Z.";
     }
     return;
   }
   if (state.theatreDistanceStatus === "unavailable") {
     if (state.theatreDistanceError === "location-not-configured") {
-      el.textContent = "Theatre sort: choose location or ZIP to enable nearest-first ordering.";
+      el.textContent = "Set your location or ZIP code to sort theatres by distance.";
       return;
     }
     if (state.theatreDistanceError === "zip-location-invalid") {
-      el.textContent = "Theatre sort: ZIP lookup failed. Set another ZIP or use browser location.";
+      el.textContent = "Could not find that ZIP code. Try another ZIP or use current location.";
       return;
     }
-    const reason = state.theatreDistanceError ? ` (${state.theatreDistanceError})` : "";
-    el.textContent = `Theatre sort: location unavailable${reason}. Showing alphabetical order.`;
+    el.textContent = "Location unavailable. Showing theatres A-Z.";
     return;
   }
-  el.textContent = "Theatre sort: alphabetical (location not requested yet).";
+  el.textContent = "Showing theatres A-Z. Set location to sort by distance.";
 }
 
 function stripDiacritics(value) {
@@ -4092,6 +4096,11 @@ function ensureSelectedDay() {
   return state.selectedDay;
 }
 
+function getDaysViewRadiusMiles() {
+  const parsed = Number(state.daysViewRadiusMiles);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_DAYS_VIEW_RADIUS_MILES;
+}
+
 function filterSingleDayGroupsByDistance(groups, maxMiles) {
   const filtered = {};
   Object.entries(groups || {}).forEach(([key, group]) => {
@@ -4131,6 +4140,10 @@ function syncDayPickerUI(activeDay) {
 
   elements.dayPickerWrap.classList.remove("hidden");
   elements.dayPickerInput.disabled = false;
+  if (elements.dayRadiusInput) {
+    elements.dayRadiusInput.disabled = false;
+    elements.dayRadiusInput.value = String(getDaysViewRadiusMiles());
+  }
   elements.dayPrevButton.disabled = false;
   elements.dayNextButton.disabled = false;
 
