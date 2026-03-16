@@ -52,6 +52,8 @@ const SUPABASE_ANON_KEY =
 const LOGO_SPIN_ANIMATION_MS = 420;
 const LIGHT_THEME = "light";
 const DARK_THEME = "dark";
+const LOCATION_ICON_DARK_MODE_SRC = "assets/icons/location-light.png";
+const LOCATION_ICON_LIGHT_MODE_SRC = "assets/icons/location.png";
 const WORDMARK_VARIANTS = Object.freeze([
   {
     darkSrc: "assets/brand/TMP Wordmark v01 Dark.png",
@@ -143,6 +145,7 @@ const elements = {
   locationChooserModal: document.getElementById("locationChooserModal"),
   locationChooserTriggerWrap: document.getElementById("locationChooserTriggerWrap"),
   openLocationChooser: document.getElementById("openLocationChooser"),
+  locationControlIcon: document.getElementById("locationControlIcon"),
   closeLocationChooser: document.getElementById("closeLocationChooser"),
   useDeviceLocation: document.getElementById("useDeviceLocation"),
   zipLocationForm: document.getElementById("zipLocationForm"),
@@ -1383,6 +1386,11 @@ function applyTheme(theme, options = {}) {
     const nextThemeLabel = isDark ? "light" : "dark";
     elements.themeToggle.setAttribute("aria-label", `Switch to ${nextThemeLabel} mode`);
     elements.themeToggle.setAttribute("title", `Switch to ${nextThemeLabel} mode`);
+  }
+
+  if (elements.locationControlIcon) {
+    elements.locationControlIcon.src =
+      normalizedTheme === DARK_THEME ? LOCATION_ICON_DARK_MODE_SRC : LOCATION_ICON_LIGHT_MODE_SRC;
   }
 
   if (elements.themeColorMeta) {
