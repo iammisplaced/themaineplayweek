@@ -52,6 +52,7 @@ const SUPABASE_ANON_KEY =
 const LOGO_SPIN_ANIMATION_MS = 420;
 const LIGHT_THEME = "light";
 const DARK_THEME = "dark";
+const ENABLE_SUPABASE_DELTA_SAVE = false;
 const LOCATION_ICON_DARK_MODE_SRC = "assets/icons/location-light.png";
 const LOCATION_ICON_LIGHT_MODE_SRC = "assets/icons/location.png";
 const WORDMARK_VARIANTS = Object.freeze([
@@ -2480,7 +2481,7 @@ async function saveDataToSupabase() {
   }
 
   const baselinePayload = state.supabaseBaselinePayload;
-  if (baselinePayload) {
+  if (ENABLE_SUPABASE_DELTA_SAVE && baselinePayload) {
     const deltaPayload = buildShowtimesDeltaPayload(baselinePayload, payload);
     if (isDeltaPayloadEmpty(deltaPayload)) return;
     const deltaRpc = await supabase.rpc("apply_showtimes_delta", { payload: deltaPayload });
