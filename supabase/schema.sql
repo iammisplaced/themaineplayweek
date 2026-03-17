@@ -333,10 +333,10 @@ begin
       nullif(theatre_item->>'latitude', '')::double precision,
       nullif(theatre_item->>'longitude', '')::double precision
     )
-    returning id into theatre_id;
+    returning id into v_theatre_id;
 
     theatre_key := theatre_item->>'key';
-    theatre_id_map := theatre_id_map || jsonb_build_object(theatre_key, theatre_id);
+    theatre_id_map := theatre_id_map || jsonb_build_object(theatre_key, v_theatre_id);
   end loop;
 
   for film_item in
@@ -373,35 +373,35 @@ begin
       coalesce(film_item->>'featured_on_playweek_url', ''),
       film_item->'tmdb_json'
     )
-    returning id into film_id;
+    returning id into v_film_id;
 
     film_key := film_item->>'key';
-    film_id_map := film_id_map || jsonb_build_object(film_key, film_id);
+    film_id_map := film_id_map || jsonb_build_object(film_key, v_film_id);
   end loop;
 
   for theatre_film_item in
     select value from jsonb_array_elements(coalesce(payload->'theatre_films', '[]'::jsonb))
   loop
-    theatre_id := nullif(theatre_id_map->>(theatre_film_item->>'theatre_key'), '')::bigint;
-    film_id := nullif(film_id_map->>(theatre_film_item->>'film_key'), '')::bigint;
+    v_theatre_id := nullif(theatre_id_map->>(theatre_film_item->>'theatre_key'), '')::bigint;
+    v_film_id := nullif(film_id_map->>(theatre_film_item->>'film_key'), '')::bigint;
 
-    if theatre_id is not null and film_id is not null then
+    if v_theatre_id is not null and v_film_id is not null then
       insert into public.theatre_films (theatre_id, film_id, ticket_link)
-      values (theatre_id, film_id, coalesce(theatre_film_item->>'ticket_link', ''));
+      values (v_theatre_id, v_film_id, coalesce(theatre_film_item->>'ticket_link', ''));
     end if;
   end loop;
 
   for showing_item in
     select value from jsonb_array_elements(coalesce(payload->'showings', '[]'::jsonb))
   loop
-    theatre_id := nullif(theatre_id_map->>(showing_item->>'theatre_key'), '')::bigint;
-    film_id := nullif(film_id_map->>(showing_item->>'film_key'), '')::bigint;
+    v_theatre_id := nullif(theatre_id_map->>(showing_item->>'theatre_key'), '')::bigint;
+    v_film_id := nullif(film_id_map->>(showing_item->>'film_key'), '')::bigint;
 
-    if theatre_id is not null and film_id is not null then
+    if v_theatre_id is not null and v_film_id is not null then
       insert into public.showings (theatre_id, film_id, show_date, times)
       values (
-        theatre_id,
-        film_id,
+        v_theatre_id,
+        v_film_id,
         (showing_item->>'show_date')::date,
         array(select jsonb_array_elements_text(coalesce(showing_item->'times', '[]'::jsonb)))
       );
