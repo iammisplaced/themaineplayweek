@@ -219,8 +219,8 @@ declare
   promo_item jsonb;
   theatre_id_map jsonb := '{}'::jsonb;
   film_id_map jsonb := '{}'::jsonb;
-  theatre_id bigint;
-  film_id bigint;
+  v_theatre_id bigint;
+  v_film_id bigint;
   theatre_key text;
   film_key text;
   risky_ticket_link_clears integer := 0;
@@ -455,8 +455,8 @@ declare
   delete_id_item jsonb;
   theatre_id_map jsonb := '{}'::jsonb;
   film_id_map jsonb := '{}'::jsonb;
-  theatre_id bigint;
-  film_id bigint;
+  v_theatre_id bigint;
+  v_film_id bigint;
   promo_id bigint;
   resolved_theatre_id bigint;
   resolved_film_id bigint;
@@ -472,7 +472,7 @@ begin
   for theatre_item in
     select value from jsonb_array_elements(coalesce(payload->'theatres_upsert', '[]'::jsonb))
   loop
-    theatre_id := null;
+    v_theatre_id := null;
     if nullif(theatre_item->>'db_id', '') is not null then
       update public.theatres
       set
@@ -483,10 +483,10 @@ begin
         latitude = nullif(theatre_item->>'latitude', '')::double precision,
         longitude = nullif(theatre_item->>'longitude', '')::double precision
       where id = nullif(theatre_item->>'db_id', '')::bigint
-      returning id into theatre_id;
+      returning id into v_theatre_id;
     end if;
 
-    if theatre_id is null then
+    if v_theatre_id is null then
       insert into public.theatres (name, city, address, website, latitude, longitude)
       values (
         coalesce(theatre_item->>'name', ''),
@@ -496,18 +496,18 @@ begin
         nullif(theatre_item->>'latitude', '')::double precision,
         nullif(theatre_item->>'longitude', '')::double precision
       )
-      returning id into theatre_id;
+      returning id into v_theatre_id;
     end if;
 
     if nullif(theatre_item->>'key', '') is not null then
-      theatre_id_map := theatre_id_map || jsonb_build_object(theatre_item->>'key', theatre_id);
+      theatre_id_map := theatre_id_map || jsonb_build_object(theatre_item->>'key', v_theatre_id);
     end if;
   end loop;
 
   for film_item in
     select value from jsonb_array_elements(coalesce(payload->'films_upsert', '[]'::jsonb))
   loop
-    film_id := null;
+    v_film_id := null;
     if nullif(film_item->>'db_id', '') is not null then
       update public.films
       set
@@ -529,10 +529,10 @@ begin
         featured_on_playweek_url = coalesce(film_item->>'featured_on_playweek_url', ''),
         tmdb_json = film_item->'tmdb_json'
       where id = nullif(film_item->>'db_id', '')::bigint
-      returning id into film_id;
+      returning id into v_film_id;
     end if;
 
-    if film_id is null then
+    if v_film_id is null then
       insert into public.films (
         title,
         year,
@@ -564,11 +564,11 @@ begin
         coalesce(film_item->>'featured_on_playweek_url', ''),
         film_item->'tmdb_json'
       )
-      returning id into film_id;
+      returning id into v_film_id;
     end if;
 
     if nullif(film_item->>'key', '') is not null then
-      film_id_map := film_id_map || jsonb_build_object(film_item->>'key', film_id);
+      film_id_map := film_id_map || jsonb_build_object(film_item->>'key', v_film_id);
     end if;
   end loop;
 
