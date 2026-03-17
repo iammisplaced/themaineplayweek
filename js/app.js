@@ -1219,8 +1219,12 @@ function bindEvents() {
       syncAdminEditor();
       validateData(state.data);
       prunePastShowtimes(state.data);
-      await persistData();
-      elements.adminMessage.textContent = "All changes saved to Supabase.";
+      const saveResult = await persistData();
+      if (saveResult.localDraftWarning) {
+        elements.adminMessage.textContent = `All changes saved to Supabase. ${saveResult.localDraftWarning}`;
+      } else {
+        elements.adminMessage.textContent = "All changes saved to Supabase.";
+      }
     } catch (error) {
       elements.adminMessage.textContent = `Save failed: ${error.message}. Run latest supabase/schema.sql and try again.`;
     } finally {
@@ -2412,11 +2416,19 @@ function sortFilms(films) {
 }
 
 async function persistData() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(stripInternalFields(state.data)));
+  let localDraftWarning = "";
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stripInternalFields(state.data)));
+  } catch (error) {
+    if (!isStorageQuotaExceeded(error)) throw error;
+    localDraftWarning =
+      "Could not cache a local browser draft because this browser storage is full.";
+  }
+
   if (!state.supabase || !state.admin.auth.authenticated) {
     syncAdminEditor();
     render();
-    return;
+    return { localDraftWarning };
   }
   await saveDataToSupabase();
   const refreshed = await loadDataFromSupabase();
@@ -2427,6 +2439,15 @@ async function persistData() {
   state.loadedFromSupabaseThisSession = true;
   syncAdminEditor();
   render();
+  return { localDraftWarning };
+}
+
+function isStorageQuotaExceeded(error) {
+  if (!error) return false;
+  if (error?.name === "QuotaExceededError") return true;
+  if (typeof error?.code === "number" && error.code === 22) return true;
+  const message = String(error?.message || "").toLowerCase();
+  return message.includes("quota") || message.includes("exceeded");
 }
 
 async function saveDataToSupabase() {
