@@ -1295,7 +1295,8 @@ function bindEvents() {
     if (!file) return;
     try {
       const content = await file.text();
-      const nextData = JSON.parse(JSON.stringify(stripInternalFields(state.data)));
+      // Preserve _dbId fields so CSV edits map to existing Supabase rows.
+      const nextData = JSON.parse(JSON.stringify(state.data));
       const result = importShowtimesCsv(nextData, content);
       validateData(nextData);
       state.data = nextData;
