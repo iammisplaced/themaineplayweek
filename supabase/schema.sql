@@ -437,3 +437,277 @@ $$;
 
 revoke all on function public.replace_showtimes_data(jsonb, boolean) from public;
 grant execute on function public.replace_showtimes_data(jsonb, boolean) to authenticated;
+
+drop function if exists public.apply_showtimes_delta(jsonb);
+create or replace function public.apply_showtimes_delta(payload jsonb)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  theatre_item jsonb;
+  film_item jsonb;
+  theatre_film_item jsonb;
+  showing_pair_item jsonb;
+  showing_item jsonb;
+  promo_item jsonb;
+  delete_id_item jsonb;
+  theatre_id_map jsonb := '{}'::jsonb;
+  film_id_map jsonb := '{}'::jsonb;
+  theatre_id bigint;
+  film_id bigint;
+  promo_id bigint;
+  resolved_theatre_id bigint;
+  resolved_film_id bigint;
+begin
+  if auth.role() <> 'authenticated' then
+    raise exception 'Not authorized';
+  end if;
+
+  if payload is null then
+    raise exception 'Payload is required';
+  end if;
+
+  for theatre_item in
+    select value from jsonb_array_elements(coalesce(payload->'theatres_upsert', '[]'::jsonb))
+  loop
+    theatre_id := null;
+    if nullif(theatre_item->>'db_id', '') is not null then
+      update public.theatres
+      set
+        name = coalesce(theatre_item->>'name', ''),
+        city = coalesce(theatre_item->>'city', ''),
+        address = coalesce(theatre_item->>'address', ''),
+        website = coalesce(theatre_item->>'website', ''),
+        latitude = nullif(theatre_item->>'latitude', '')::double precision,
+        longitude = nullif(theatre_item->>'longitude', '')::double precision
+      where id = nullif(theatre_item->>'db_id', '')::bigint
+      returning id into theatre_id;
+    end if;
+
+    if theatre_id is null then
+      insert into public.theatres (name, city, address, website, latitude, longitude)
+      values (
+        coalesce(theatre_item->>'name', ''),
+        coalesce(theatre_item->>'city', ''),
+        coalesce(theatre_item->>'address', ''),
+        coalesce(theatre_item->>'website', ''),
+        nullif(theatre_item->>'latitude', '')::double precision,
+        nullif(theatre_item->>'longitude', '')::double precision
+      )
+      returning id into theatre_id;
+    end if;
+
+    if nullif(theatre_item->>'key', '') is not null then
+      theatre_id_map := theatre_id_map || jsonb_build_object(theatre_item->>'key', theatre_id);
+    end if;
+  end loop;
+
+  for film_item in
+    select value from jsonb_array_elements(coalesce(payload->'films_upsert', '[]'::jsonb))
+  loop
+    film_id := null;
+    if nullif(film_item->>'db_id', '') is not null then
+      update public.films
+      set
+        title = coalesce(film_item->>'title', ''),
+        year = nullif(film_item->>'year', '')::integer,
+        tmdb_id = nullif(film_item->>'tmdb_id', '')::bigint,
+        metadata_source = case lower(trim(coalesce(film_item->>'metadata_source', '')))
+          when 'tmdb' then 'tmdb'
+          when 'manual' then 'manual'
+          else case
+            when nullif(film_item->>'tmdb_id', '') is not null then 'tmdb'
+            else 'manual'
+          end
+        end,
+        ticket_link = coalesce(film_item->>'ticket_link', ''),
+        staff_favorite = coalesce((film_item->>'staff_favorite')::boolean, false),
+        staff_favorite_by = coalesce(film_item->>'staff_favorite_by', ''),
+        featured_on_playweek = coalesce((film_item->>'featured_on_playweek')::boolean, false),
+        featured_on_playweek_url = coalesce(film_item->>'featured_on_playweek_url', ''),
+        tmdb_json = film_item->'tmdb_json'
+      where id = nullif(film_item->>'db_id', '')::bigint
+      returning id into film_id;
+    end if;
+
+    if film_id is null then
+      insert into public.films (
+        title,
+        year,
+        tmdb_id,
+        metadata_source,
+        ticket_link,
+        staff_favorite,
+        staff_favorite_by,
+        featured_on_playweek,
+        featured_on_playweek_url,
+        tmdb_json
+      )
+      values (
+        coalesce(film_item->>'title', ''),
+        nullif(film_item->>'year', '')::integer,
+        nullif(film_item->>'tmdb_id', '')::bigint,
+        case lower(trim(coalesce(film_item->>'metadata_source', '')))
+          when 'tmdb' then 'tmdb'
+          when 'manual' then 'manual'
+          else case
+            when nullif(film_item->>'tmdb_id', '') is not null then 'tmdb'
+            else 'manual'
+          end
+        end,
+        coalesce(film_item->>'ticket_link', ''),
+        coalesce((film_item->>'staff_favorite')::boolean, false),
+        coalesce(film_item->>'staff_favorite_by', ''),
+        coalesce((film_item->>'featured_on_playweek')::boolean, false),
+        coalesce(film_item->>'featured_on_playweek_url', ''),
+        film_item->'tmdb_json'
+      )
+      returning id into film_id;
+    end if;
+
+    if nullif(film_item->>'key', '') is not null then
+      film_id_map := film_id_map || jsonb_build_object(film_item->>'key', film_id);
+    end if;
+  end loop;
+
+  for theatre_film_item in
+    select value from jsonb_array_elements(coalesce(payload->'theatre_films_delete', '[]'::jsonb))
+  loop
+    resolved_theatre_id := nullif(theatre_film_item->>'theatre_db_id', '')::bigint;
+    resolved_film_id := nullif(theatre_film_item->>'film_db_id', '')::bigint;
+    if resolved_theatre_id is not null and resolved_film_id is not null then
+      delete from public.theatre_films
+      where theatre_id = resolved_theatre_id
+        and film_id = resolved_film_id;
+    end if;
+  end loop;
+
+  for theatre_film_item in
+    select value from jsonb_array_elements(coalesce(payload->'theatre_films_upsert', '[]'::jsonb))
+  loop
+    resolved_theatre_id := coalesce(
+      nullif(theatre_film_item->>'theatre_db_id', '')::bigint,
+      nullif(theatre_id_map->>(theatre_film_item->>'theatre_key'), '')::bigint
+    );
+    resolved_film_id := coalesce(
+      nullif(theatre_film_item->>'film_db_id', '')::bigint,
+      nullif(film_id_map->>(theatre_film_item->>'film_key'), '')::bigint
+    );
+
+    if resolved_theatre_id is not null and resolved_film_id is not null then
+      insert into public.theatre_films (theatre_id, film_id, ticket_link)
+      values (resolved_theatre_id, resolved_film_id, coalesce(theatre_film_item->>'ticket_link', ''))
+      on conflict (theatre_id, film_id)
+      do update set ticket_link = excluded.ticket_link;
+    end if;
+  end loop;
+
+  for showing_pair_item in
+    select value from jsonb_array_elements(coalesce(payload->'showings_replace_pairs', '[]'::jsonb))
+  loop
+    resolved_theatre_id := coalesce(
+      nullif(showing_pair_item->>'theatre_db_id', '')::bigint,
+      nullif(theatre_id_map->>(showing_pair_item->>'theatre_key'), '')::bigint
+    );
+    resolved_film_id := coalesce(
+      nullif(showing_pair_item->>'film_db_id', '')::bigint,
+      nullif(film_id_map->>(showing_pair_item->>'film_key'), '')::bigint
+    );
+
+    if resolved_theatre_id is not null and resolved_film_id is not null then
+      delete from public.showings
+      where theatre_id = resolved_theatre_id
+        and film_id = resolved_film_id;
+    end if;
+  end loop;
+
+  for showing_item in
+    select value from jsonb_array_elements(coalesce(payload->'showings_upsert', '[]'::jsonb))
+  loop
+    resolved_theatre_id := coalesce(
+      nullif(showing_item->>'theatre_db_id', '')::bigint,
+      nullif(theatre_id_map->>(showing_item->>'theatre_key'), '')::bigint
+    );
+    resolved_film_id := coalesce(
+      nullif(showing_item->>'film_db_id', '')::bigint,
+      nullif(film_id_map->>(showing_item->>'film_key'), '')::bigint
+    );
+
+    if resolved_theatre_id is not null and resolved_film_id is not null then
+      insert into public.showings (theatre_id, film_id, show_date, times)
+      values (
+        resolved_theatre_id,
+        resolved_film_id,
+        (showing_item->>'show_date')::date,
+        array(select jsonb_array_elements_text(coalesce(showing_item->'times', '[]'::jsonb)))
+      );
+    end if;
+  end loop;
+
+  for delete_id_item in
+    select value from jsonb_array_elements(coalesce(payload->'promos_delete_ids', '[]'::jsonb))
+  loop
+    delete from public.promos where id = (delete_id_item #>> '{}')::bigint;
+  end loop;
+
+  for promo_item in
+    select value from jsonb_array_elements(coalesce(payload->'promos_upsert', '[]'::jsonb))
+  loop
+    promo_id := null;
+    if nullif(promo_item->>'db_id', '') is not null then
+      update public.promos
+      set
+        title = coalesce(promo_item->>'title', ''),
+        button_url = coalesce(promo_item->>'button_url', ''),
+        image_path = coalesce(promo_item->>'image_path', ''),
+        image_alt = coalesce(promo_item->>'image_alt', ''),
+        image_name = coalesce(promo_item->>'image_name', ''),
+        button_label = coalesce(promo_item->>'button_label', 'Shop Now'),
+        enabled = coalesce((promo_item->>'enabled')::boolean, true),
+        sort_order = coalesce((promo_item->>'sort_order')::integer, 0)
+      where id = nullif(promo_item->>'db_id', '')::bigint
+      returning id into promo_id;
+    end if;
+
+    if promo_id is null then
+      insert into public.promos (
+        title,
+        button_url,
+        image_path,
+        image_alt,
+        image_name,
+        button_label,
+        enabled,
+        sort_order
+      )
+      values (
+        coalesce(promo_item->>'title', ''),
+        coalesce(promo_item->>'button_url', ''),
+        coalesce(promo_item->>'image_path', ''),
+        coalesce(promo_item->>'image_alt', ''),
+        coalesce(promo_item->>'image_name', ''),
+        coalesce(promo_item->>'button_label', 'Shop Now'),
+        coalesce((promo_item->>'enabled')::boolean, true),
+        coalesce((promo_item->>'sort_order')::integer, 0)
+      );
+    end if;
+  end loop;
+
+  for delete_id_item in
+    select value from jsonb_array_elements(coalesce(payload->'films_delete_ids', '[]'::jsonb))
+  loop
+    delete from public.films where id = (delete_id_item #>> '{}')::bigint;
+  end loop;
+
+  for delete_id_item in
+    select value from jsonb_array_elements(coalesce(payload->'theatres_delete_ids', '[]'::jsonb))
+  loop
+    delete from public.theatres where id = (delete_id_item #>> '{}')::bigint;
+  end loop;
+end;
+$$;
+
+revoke all on function public.apply_showtimes_delta(jsonb) from public;
+grant execute on function public.apply_showtimes_delta(jsonb) to authenticated;
