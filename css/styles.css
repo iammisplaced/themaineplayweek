@@ -814,6 +814,21 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   font-size: 0.88rem;
 }
 
+.group-tmdb-link {
+  display: block;
+  margin-top: 0.95rem;
+  padding-top: 0.1rem;
+  color: var(--accent-2);
+  font-size: 0.84rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.group-tmdb-link:hover,
+.group-tmdb-link:focus-visible {
+  color: var(--accent);
+}
+
 .group-feature-link {
   display: inline-flex;
   align-items: center;
@@ -1532,6 +1547,15 @@ textarea {
   border-color: rgba(141, 210, 193, 0.4);
   color: #cbe9df;
   background: #1f2d29;
+}
+
+:root[data-theme="dark"] .group-tmdb-link {
+  color: #b8e3d7;
+}
+
+:root[data-theme="dark"] .group-tmdb-link:hover,
+:root[data-theme="dark"] .group-tmdb-link:focus-visible {
+  color: #8dd2c1;
 }
 
 :root[data-theme="dark"] .group-feature-link:hover,

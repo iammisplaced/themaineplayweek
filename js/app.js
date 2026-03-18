@@ -3269,6 +3269,30 @@ function render() {
         }
       }
       groupFilmSummary.classList.remove("hidden");
+      const tmdbUrl = buildTmdbMovieUrl(group.filmInfo.tmdbId);
+      const groupFilmDetails = groupFilmFacts?.parentElement || groupFilmSummary;
+      let groupTmdbLink = groupFilmDetails?.querySelector(".group-tmdb-link");
+      if (!groupTmdbLink && groupFilmDetails) {
+        groupTmdbLink = document.createElement("a");
+        groupTmdbLink.className = "group-tmdb-link hidden";
+        groupTmdbLink.target = "_blank";
+        groupTmdbLink.rel = "noopener noreferrer";
+        groupTmdbLink.textContent = "View on TMDb";
+        if (groupFeatureLink && groupFeatureLink.parentElement === groupFilmDetails) {
+          groupFilmDetails.insertBefore(groupTmdbLink, groupFeatureLink);
+        } else {
+          groupFilmDetails.appendChild(groupTmdbLink);
+        }
+      }
+      if (groupTmdbLink) {
+        if (filmGroupExpanded && tmdbUrl) {
+          groupTmdbLink.href = tmdbUrl;
+          groupTmdbLink.classList.remove("hidden");
+        } else {
+          groupTmdbLink.classList.add("hidden");
+          groupTmdbLink.removeAttribute("href");
+        }
+      }
       if (groupFeatureLink) {
         const featuredUrl = normalizeOutboundUrl(group.filmInfo.featuredOnPlayweekUrl || "");
         const canShowFeatureLink = filmGroupExpanded && group.filmInfo.featuredOnPlayweek && Boolean(featuredUrl);
@@ -4496,6 +4520,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
           filmInfo: {
             film: film.title,
             year,
+            tmdbId: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
             posterUrl: metadata.posterUrl,
             director: metadata.director,
             stars: metadata.stars,
@@ -4551,6 +4576,7 @@ function buildGroups(theatres, view) {
         city: theatre.city,
         film: film.title,
         year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
+        tmdbId: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
         ticketLink: film.ticketLink,
         posterUrl: metadata.posterUrl,
         director: metadata.director,
@@ -4632,6 +4658,7 @@ function buildGroups(theatres, view) {
             const dayRow = {
               film: row.film,
               year: row.year,
+              tmdbId: row.tmdbId,
               posterUrl: row.posterUrl,
               director: row.director,
               stars: row.stars,
@@ -4769,6 +4796,12 @@ function buildFilmFacts(show) {
     facts.push({ label: "Genre", value: show.genres.join(", ") });
   }
   return facts;
+}
+
+function buildTmdbMovieUrl(tmdbId) {
+  const id = Number(tmdbId);
+  if (!Number.isInteger(id) || id <= 0) return "";
+  return `https://www.themoviedb.org/movie/${id}`;
 }
 
 function extractFilmMetadata(film) {
