@@ -84,6 +84,7 @@ async function main() {
   }
 
   await fs.writeFile(path.join(outputDir, "index.html"), renderIndexPage(pageItems, siteUrl), "utf8");
+  await removeFinderDuplicateDirs(outputDir);
 
   if (writeSourcePath) {
     await fs.mkdir(path.dirname(writeSourcePath), { recursive: true });
@@ -92,6 +93,20 @@ async function main() {
   }
 
   console.log(`Generated ${pageItems.length} film pages at ${path.relative(cwd, outputDir)}`);
+}
+
+async function removeFinderDuplicateDirs(rootDir) {
+  const entries = await fs.readdir(rootDir, { withFileTypes: true });
+  const duplicates = entries
+    .filter((entry) => entry.isDirectory() && /\s\d+$/.test(entry.name))
+    .map((entry) => entry.name);
+
+  if (!duplicates.length) return;
+
+  await Promise.all(
+    duplicates.map((name) => fs.rm(path.join(rootDir, name), { recursive: true, force: true }))
+  );
+  console.log(`Removed ${duplicates.length} duplicate Finder folders from ${path.relative(cwd, rootDir)}`);
 }
 
 async function loadFilmSourceFromSupabase() {
