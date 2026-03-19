@@ -25,6 +25,15 @@ const writeSourcePath = writeSourceArg ? path.resolve(cwd, writeSourceArg) : "";
 
 const DEFAULT_NO_POSTER = "/assets/images/noposter.webp";
 const BRAND_NAME = "The Maine Playweek";
+const FILM_SORT_WEIGHTS = Object.freeze({
+  tmdbPopularity: 0.2,
+  tmdbRating: 0.15,
+  tmdbRecency: 0.1,
+  upcomingShowings: 0.35,
+  theatreCoverage: 0.15,
+  staffFavoriteBoost: 0.12,
+});
+const RELEASE_RECENCY_WINDOW_DAYS = 14;
 
 main().catch((error) => {
   console.error(error instanceof Error ? error.message : String(error));
@@ -33,13 +42,16 @@ main().catch((error) => {
 
 async function main() {
   const source = fromSupabase ? await loadFilmSourceFromSupabase() : JSON.parse(await fs.readFile(inputPath, "utf8"));
-  const films = normalizeFilms(source);
+  const films = normalizeFilms(source)
+    .filter(hasUpcomingShowtimes)
+    .sort(compareFilmsByMainAppRanking);
 
   if (!films.length) {
     const sourceLabel = fromSupabase ? "Supabase" : inputPath;
-    throw new Error(`No films found in ${sourceLabel}`);
+    throw new Error(`No films with upcoming showtimes found in ${sourceLabel}`);
   }
 
+  await fs.rm(outputDir, { recursive: true, force: true });
   await fs.mkdir(outputDir, { recursive: true });
   await writeCss(outputDir);
 
@@ -84,7 +96,7 @@ async function loadFilmSourceFromSupabase() {
       restBase,
       supabaseAnonKey,
       "films",
-      "id,title,year,tmdb_id,synopsis,ticket_link,tmdb_json",
+      "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json",
       "id.asc"
     ),
     fetchAllFromSupabase(
@@ -133,7 +145,11 @@ async function loadFilmSourceFromSupabase() {
       director: String(tmdb.director || "").trim(),
       genres: Array.isArray(tmdb.genres) ? tmdb.genres.filter(Boolean) : [],
       stars: Array.isArray(tmdb.stars) ? tmdb.stars.filter(Boolean) : [],
-      releaseDate: String(tmdb.releaseDate || "").trim(),
+      releaseDate: String(tmdb.releaseDate || tmdb.release_date || "").trim(),
+      popularity: firstFiniteNumber(tmdb.popularity, tmdb.popularity_score),
+      voteAverage: firstFiniteNumber(tmdb.voteAverage, tmdb.vote_average),
+      voteCount: firstFiniteNumber(tmdb.voteCount, tmdb.vote_count),
+      staffFavorite: Boolean(row.staff_favorite ?? tmdb.staffFavorite ?? tmdb.staff_favorite),
       legacyTicketLink: String(row.ticket_link || "").trim(),
       theatres: [],
       showings: [],
@@ -231,6 +247,10 @@ function normalizeFilms(source) {
             genres: Array.isArray(rawFilm?.tmdb?.genres) ? rawFilm.tmdb.genres.filter(Boolean) : [],
             stars: Array.isArray(rawFilm?.tmdb?.stars) ? rawFilm.tmdb.stars.filter(Boolean) : [],
             releaseDate: stringOrEmpty(rawFilm?.tmdb?.releaseDate),
+            popularity: firstFiniteNumber(rawFilm?.tmdb?.popularity, rawFilm?.tmdb?.popularity_score),
+            voteAverage: firstFiniteNumber(rawFilm?.tmdb?.voteAverage, rawFilm?.tmdb?.vote_average),
+            voteCount: firstFiniteNumber(rawFilm?.tmdb?.voteCount, rawFilm?.tmdb?.vote_count),
+            staffFavorite: Boolean(rawFilm?.staffFavorite ?? rawFilm?.tmdb?.staffFavorite ?? rawFilm?.tmdb?.staff_favorite),
             theatres: [],
             showings: [],
           });
@@ -273,12 +293,24 @@ function normalizeFlatFilm(film) {
     title,
     year: toNumber(film?.year),
     slug: stringOrEmpty(film?.slug),
-    description: stringOrEmpty(film?.description),
-    posterUrl: stringOrEmpty(film?.posterUrl),
-    director: stringOrEmpty(film?.director),
-    genres: Array.isArray(film?.genres) ? film.genres.filter(Boolean) : [],
-    stars: Array.isArray(film?.stars) ? film.stars.filter(Boolean) : [],
-    releaseDate: stringOrEmpty(film?.releaseDate),
+    description: stringOrEmpty(film?.description || film?.synopsis || film?.tmdb?.overview),
+    posterUrl: stringOrEmpty(film?.posterUrl || film?.tmdb?.posterUrl || film?.tmdb?.posterPath || film?.tmdb?.poster_path),
+    director: stringOrEmpty(film?.director || film?.tmdb?.director),
+    genres: Array.isArray(film?.genres)
+      ? film.genres.filter(Boolean)
+      : Array.isArray(film?.tmdb?.genres)
+        ? film.tmdb.genres.filter(Boolean)
+        : [],
+    stars: Array.isArray(film?.stars)
+      ? film.stars.filter(Boolean)
+      : Array.isArray(film?.tmdb?.stars)
+        ? film.tmdb.stars.filter(Boolean)
+        : [],
+    releaseDate: stringOrEmpty(film?.releaseDate || film?.release_date || film?.tmdb?.releaseDate || film?.tmdb?.release_date),
+    popularity: firstFiniteNumber(film?.popularity, film?.tmdb?.popularity, film?.tmdb?.popularity_score),
+    voteAverage: firstFiniteNumber(film?.voteAverage, film?.vote_average, film?.tmdb?.voteAverage, film?.tmdb?.vote_average),
+    voteCount: firstFiniteNumber(film?.voteCount, film?.vote_count, film?.tmdb?.voteCount, film?.tmdb?.vote_count),
+    staffFavorite: Boolean(film?.staffFavorite ?? film?.staff_favorite ?? film?.tmdb?.staffFavorite ?? film?.tmdb?.staff_favorite),
     theatres: Array.isArray(film?.theatres) ? film.theatres.filter(Boolean) : [],
     showings: Array.isArray(film?.showings)
       ? film.showings
@@ -297,7 +329,43 @@ function normalizeFlatFilm(film) {
   };
 }
 
+function hasUpcomingShowtimes(film) {
+  const showings = Array.isArray(film?.showings) ? film.showings : [];
+  if (!showings.length) return false;
+
+  const nowEt = getCurrentEasternDateTimeParts();
+  for (const showing of showings) {
+    const date = String(showing?.date || "").trim();
+    const time = String(showing?.time || "").trim();
+    if (!date) continue;
+    if (date > nowEt.date) return true;
+    if (date < nowEt.date) continue;
+    const minutes = parseTimeToMinutes(time);
+    if (minutes === null) return true;
+    if (minutes >= nowEt.minutes) return true;
+  }
+  return false;
+}
+
+function getCurrentEasternDateTimeParts() {
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+  const parts = formatter.formatToParts(new Date());
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  const date = `${values.year}-${values.month}-${values.day}`;
+  const minutes = Number(values.hour) * 60 + Number(values.minute);
+  return { date, minutes };
+}
+
 function renderFilmPage(film, slug, siteUrl) {
+  const filmDisplayTitle = film.title;
   const filmTitle = [film.title, film.year].filter(Boolean).join(" ");
   const description =
     film.description ||
@@ -339,7 +407,7 @@ function renderFilmPage(film, slug, siteUrl) {
           </details>`
         : "";
 
-      return `<li class="show-item">
+      return `<article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="${Number.isFinite(Number(group.latitude)) ? String(group.latitude) : ""}"
@@ -353,7 +421,7 @@ function renderFilmPage(film, slug, siteUrl) {
           </div>
         </div>
         ${group.ticketLink ? `<a class="show-link" href="${escapeHtml(group.ticketLink)}" target="_blank" rel="noopener noreferrer">Tickets</a>` : ""}
-      </li>`;
+      </article>`;
     })
     .join("");
 
@@ -450,6 +518,15 @@ function renderFilmPage(film, slug, siteUrl) {
       .film-showtimes-box .show-list {
         display: grid;
         grid-template-columns: 1fr;
+        gap: 0.7rem;
+      }
+      .film-showtimes-box .show-list.show-list-masonry {
+        grid-template-columns: repeat(var(--show-columns, 2), minmax(0, 1fr));
+        align-items: start;
+      }
+      .film-showtimes-box .show-masonry-column {
+        display: flex;
+        flex-direction: column;
         gap: 0.7rem;
       }
       .film-showtimes-box .show-main {
@@ -609,9 +686,9 @@ function renderFilmPage(film, slug, siteUrl) {
         <p class="film-page-note">Prototype: static SEO detail page</p>
       </div>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">${escapeHtml(filmTitle)}</h1>
+        <h1 class="group-title group-title-film">${escapeHtml(filmDisplayTitle)}</h1>
         <div class="group-film-summary">
-          <img class="group-film-poster" src="${escapeHtml(posterUrl)}" alt="Poster for ${escapeHtml(filmTitle)}" loading="lazy" />
+          <img class="group-film-poster" src="${escapeHtml(posterUrl)}" alt="Poster for ${escapeHtml(filmDisplayTitle)}" loading="lazy" />
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
               ${buildFilmFactsMarkup(film, description)}
@@ -636,7 +713,7 @@ function renderFilmPage(film, slug, siteUrl) {
         </section>
         ${
           theatreRowsMarkup
-            ? `<ul class="show-list">${theatreRowsMarkup}</ul>`
+            ? `<div class="show-list">${theatreRowsMarkup}</div>`
             : `<p class="film-page-empty">Showtimes not published yet.</p>`
         }
       </section>
@@ -648,8 +725,9 @@ function renderFilmPage(film, slug, siteUrl) {
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
         const status = document.getElementById("locationSortStatus");
+        const list = document.querySelector(".film-showtimes-box .show-list");
         const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
-        if (!theatreItems.length) return;
+        if (!theatreItems.length || !list) return;
 
         function setStatus(message) {
           if (!status) return;
@@ -688,6 +766,42 @@ function renderFilmPage(film, slug, siteUrl) {
           return 2 * R * Math.asin(Math.sqrt(a));
         }
 
+        function getMasonryColumnCount() {
+          if (window.matchMedia("(max-width: 859px)").matches) return 1;
+          const width = list.clientWidth;
+          if (!width) return 2;
+          const minColumnWidth = 320;
+          const gap = 12;
+          return Math.max(2, Math.floor((width + gap) / (minColumnWidth + gap)));
+        }
+
+        function applyShowtimesLayout(items) {
+          const orderedItems = Array.isArray(items) ? items : theatreItems;
+          const columns = getMasonryColumnCount();
+          list.innerHTML = "";
+
+          if (columns <= 1) {
+            list.classList.remove("show-list-masonry");
+            list.style.removeProperty("--show-columns");
+            orderedItems.forEach((item) => list.appendChild(item));
+            return;
+          }
+
+          list.classList.add("show-list-masonry");
+          list.style.setProperty("--show-columns", String(columns));
+          const fragment = document.createDocumentFragment();
+          const columnEls = Array.from({ length: columns }, () => {
+            const col = document.createElement("div");
+            col.className = "show-masonry-column";
+            fragment.appendChild(col);
+            return col;
+          });
+          orderedItems.forEach((item, index) => {
+            columnEls[index % columns].appendChild(item);
+          });
+          list.appendChild(fragment);
+        }
+
         function sortByDistance(lat, lng, sourceLabel) {
           const scored = theatreItems.map((item) => {
             const holder = item.querySelector("[data-theatre-lat]");
@@ -709,9 +823,7 @@ function renderFilmPage(film, slug, siteUrl) {
             const bLabel = b.item.querySelector(".show-main-theatre")?.textContent || "";
             return aLabel.localeCompare(bLabel);
           });
-
-          const list = document.querySelector(".film-showtimes-box .show-list");
-          scored.forEach(({ item }) => list?.appendChild(item));
+          applyShowtimesLayout(scored.map(({ item }) => item));
           setStatus("Sorted by distance using " + sourceLabel + ".");
         }
 
@@ -766,8 +878,18 @@ function renderFilmPage(film, slug, siteUrl) {
         if (saved) {
           sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
         } else {
+          applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
         }
+
+        let resizeTimer = null;
+        window.addEventListener("resize", () => {
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            const currentItems = Array.from(list.querySelectorAll(".show-item"));
+            applyShowtimesLayout(currentItems);
+          }, 90);
+        });
       })();
     </script>
   </body>
@@ -779,7 +901,7 @@ function renderIndexPage(items, siteUrl) {
   const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath.replace(/^\//, "");
   const cards = items
     .map(({ film, slug }) => {
-      const title = [film.title, film.year].filter(Boolean).join(" ");
+      const title = film.title;
       const description =
         film.description || `${film.title} showtimes and details from ${BRAND_NAME}.`;
       const poster = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 1);
@@ -1149,6 +1271,17 @@ function toSortableMinutes(value) {
   return hour * 60 + minute;
 }
 
+function parseTimeToMinutes(value) {
+  const raw = String(value || "").trim().toUpperCase();
+  const match = raw.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/);
+  if (!match) return null;
+  let hour = Number(match[1]) % 12;
+  const minute = Number(match[2]);
+  if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null;
+  if (match[3] === "PM") hour += 12;
+  return hour * 60 + minute;
+}
+
 function formatIsoDateLabel(isoDate) {
   const match = String(isoDate || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if (!match) return String(isoDate || "");
@@ -1182,8 +1315,127 @@ function toNumber(value) {
   return Number.isFinite(n) ? n : undefined;
 }
 
+function firstFiniteNumber(...values) {
+  for (const value of values) {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  return 0;
+}
+
 function stringOrEmpty(value) {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function compareFilmsByMainAppRanking(a, b) {
+  const scoreA = getFilmSortScore(a);
+  const scoreB = getFilmSortScore(b);
+  if (scoreA !== scoreB) return scoreB - scoreA;
+
+  const normalizedCompare = normalizeSortTitle(a?.title).localeCompare(normalizeSortTitle(b?.title));
+  if (normalizedCompare !== 0) return normalizedCompare;
+
+  const yearA = Number(a?.year || 0);
+  const yearB = Number(b?.year || 0);
+  if (yearA !== yearB) return yearA - yearB;
+
+  return String(a?.title || "").localeCompare(String(b?.title || ""));
+}
+
+function getFilmSortScore(film) {
+  const popularity = normalizeScoreRange(toFiniteNumber(film?.popularity), 100);
+  const voteAverage = normalizeScoreRange(toFiniteNumber(film?.voteAverage), 10);
+  const voteCount = toFiniteNumber(film?.voteCount);
+  const voteConfidence = normalizeLogRange(voteCount, 10000);
+  const ratingScore = voteAverage * voteConfidence;
+  const releaseRecency = calculateReleaseRecencyScore(film?.releaseDate);
+
+  const upcomingTimes = countUpcomingShowings(film);
+  const theatreCoverage = normalizeLogRange(countUpcomingTheatreCoverage(film), 30);
+  const upcomingShowings = normalizeLogRange(upcomingTimes, 80);
+  const editorialBoost = film?.staffFavorite ? FILM_SORT_WEIGHTS.staffFavoriteBoost : 0;
+
+  return (
+    FILM_SORT_WEIGHTS.tmdbPopularity * popularity +
+    FILM_SORT_WEIGHTS.tmdbRating * ratingScore +
+    FILM_SORT_WEIGHTS.tmdbRecency * releaseRecency +
+    FILM_SORT_WEIGHTS.upcomingShowings * upcomingShowings +
+    FILM_SORT_WEIGHTS.theatreCoverage * theatreCoverage +
+    editorialBoost
+  );
+}
+
+function countUpcomingShowings(film) {
+  return (film?.showings || []).reduce((total, showing) => (
+    total + (isUpcomingShowing(showing) ? 1 : 0)
+  ), 0);
+}
+
+function countUpcomingTheatreCoverage(film) {
+  const keys = new Set();
+  (film?.showings || []).forEach((showing) => {
+    if (!isUpcomingShowing(showing)) return;
+    keys.add(`${String(showing?.theatre || "").trim()}::${String(showing?.city || "").trim()}`);
+  });
+  return keys.size;
+}
+
+function isUpcomingShowing(showing) {
+  const date = String(showing?.date || "").trim();
+  const time = String(showing?.time || "").trim();
+  if (!date) return false;
+  const nowEt = getCurrentEasternDateTimeParts();
+  if (date > nowEt.date) return true;
+  if (date < nowEt.date) return false;
+  const minutes = parseTimeToMinutes(time);
+  if (minutes === null) return true;
+  return minutes >= nowEt.minutes;
+}
+
+function calculateReleaseRecencyScore(releaseDate) {
+  const release = parseIsoDateLike(releaseDate);
+  if (!release) return 0;
+  const daysSinceRelease = (Date.now() - release.getTime()) / 86400000;
+  if (!Number.isFinite(daysSinceRelease)) return 0;
+  if (daysSinceRelease <= 0) return 1;
+  if (daysSinceRelease >= RELEASE_RECENCY_WINDOW_DAYS) return 0;
+  return 1 - (daysSinceRelease / RELEASE_RECENCY_WINDOW_DAYS);
+}
+
+function parseIsoDateLike(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  const head = raw.slice(0, 10);
+  const match = head.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]) - 1;
+  const day = Number(match[3]);
+  const dt = new Date(Date.UTC(year, month, day));
+  return Number.isFinite(dt.getTime()) ? dt : null;
+}
+
+function normalizeScoreRange(value, max) {
+  if (!Number.isFinite(value) || max <= 0) return 0;
+  return Math.max(0, Math.min(1, value / max));
+}
+
+function normalizeLogRange(value, expectedHigh) {
+  if (!Number.isFinite(value) || value <= 0 || expectedHigh <= 0) return 0;
+  return Math.max(0, Math.min(1, Math.log1p(value) / Math.log1p(expectedHigh)));
+}
+
+function toFiniteNumber(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function normalizeSortTitle(value) {
+  return String(value || "")
+    .trim()
+    .replace(/^[^A-Za-z0-9]+/, "")
+    .replace(/^the\s+/i, "")
+    .toLowerCase();
 }
 
 function pruneUndefined(obj) {

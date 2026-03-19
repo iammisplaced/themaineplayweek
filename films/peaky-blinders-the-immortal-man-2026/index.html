@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Peaky Blinders: The Immortal Man 2026 | The Maine Playweek</title>
     <meta name="description" content="After his estranged son gets embroiled in a Nazi plot, self-exiled gangster Tommy Shelby must return to Birmingham to save his family — and his nation." />
-    <link rel="canonical" href="https://themaineplayweek.com/films/peaky-blinders-the-immortal-man-2026/" />
+    <link rel="canonical" href="films/peaky-blinders-the-immortal-man-2026/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Peaky Blinders: The Immortal Man 2026 | The Maine Playweek" />
     <meta property="og:description" content="After his estranged son gets embroiled in a Nazi plot, self-exiled gangster Tommy Shelby must return to Birmingham to save his family — and his nation." />
-    <meta property="og:url" content="https://themaineplayweek.com/films/peaky-blinders-the-immortal-man-2026/" />
+    <meta property="og:url" content="films/peaky-blinders-the-immortal-man-2026/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/gRMalasZEzsZi4w2VFuYusfSfqf.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Peaky Blinders: The Immortal Man 2026 | The Maine Playweek" />
@@ -78,6 +78,15 @@
       .film-showtimes-box .show-list {
         display: grid;
         grid-template-columns: 1fr;
+        gap: 0.7rem;
+      }
+      .film-showtimes-box .show-list.show-list-masonry {
+        grid-template-columns: repeat(var(--show-columns, 2), minmax(0, 1fr));
+        align-items: start;
+      }
+      .film-showtimes-box .show-masonry-column {
+        display: flex;
+        flex-direction: column;
         gap: 0.7rem;
       }
       .film-showtimes-box .show-main {
@@ -228,7 +237,7 @@
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Peaky Blinders: The Immortal Man 2026","description":"After his estranged son gets embroiled in a Nazi plot, self-exiled gangster Tommy Shelby must return to Birmingham to save his family — and his nation.","image":"https://image.tmdb.org/t/p/w342/gRMalasZEzsZi4w2VFuYusfSfqf.jpg","datePublished":"2026-03-05","director":[{"@type":"Person","name":"Tom Harper"}],"actor":[{"@type":"Person","name":"Cillian Murphy"},{"@type":"Person","name":"Tim Roth"},{"@type":"Person","name":"Rebecca Ferguson"}],"genre":["Crime","Drama","War"],"url":"https://themaineplayweek.com/films/peaky-blinders-the-immortal-man-2026/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Peaky Blinders: The Immortal Man 2026","description":"After his estranged son gets embroiled in a Nazi plot, self-exiled gangster Tommy Shelby must return to Birmingham to save his family — and his nation.","image":"https://image.tmdb.org/t/p/w342/gRMalasZEzsZi4w2VFuYusfSfqf.jpg","datePublished":"2026-03-05","director":[{"@type":"Person","name":"Tom Harper"}],"actor":[{"@type":"Person","name":"Cillian Murphy"},{"@type":"Person","name":"Tim Roth"},{"@type":"Person","name":"Rebecca Ferguson"}],"genre":["Crime","Drama","War"],"url":"films/peaky-blinders-the-immortal-man-2026/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
@@ -237,9 +246,9 @@
         <p class="film-page-note">Prototype: static SEO detail page</p>
       </div>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">Peaky Blinders: The Immortal Man 2026</h1>
+        <h1 class="group-title group-title-film">Peaky Blinders: The Immortal Man</h1>
         <div class="group-film-summary">
-          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/gRMalasZEzsZi4w2VFuYusfSfqf.jpg" alt="Poster for Peaky Blinders: The Immortal Man 2026" loading="lazy" />
+          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/gRMalasZEzsZi4w2VFuYusfSfqf.jpg" alt="Poster for Peaky Blinders: The Immortal Man" loading="lazy" />
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
               <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">After his estranged son gets embroiled in a Nazi plot, self-exiled gangster Tommy Shelby must return to Birmingham to save his family — and his nation.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Tom Harper</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Crime, Drama, War</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Cillian Murphy, Tim Roth, Rebecca Ferguson</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">2026-03-05</span></div>
@@ -262,7 +271,7 @@
           </div>
           <p id="locationSortStatus" class="location-sort-status" aria-live="polite"></p>
         </section>
-        <ul class="show-list"><li class="show-item">
+        <div class="show-list"><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.8277689"
@@ -326,7 +335,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22769" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.127541"
@@ -385,7 +394,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/auburn/movie/22720" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.7204846"
@@ -444,7 +453,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/falmouth/movie/22720" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li></ul>
+      </article></div>
       </section>
     </main>
     <script>
@@ -454,8 +463,9 @@
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
         const status = document.getElementById("locationSortStatus");
+        const list = document.querySelector(".film-showtimes-box .show-list");
         const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
-        if (!theatreItems.length) return;
+        if (!theatreItems.length || !list) return;
 
         function setStatus(message) {
           if (!status) return;
@@ -494,6 +504,42 @@
           return 2 * R * Math.asin(Math.sqrt(a));
         }
 
+        function getMasonryColumnCount() {
+          if (window.matchMedia("(max-width: 859px)").matches) return 1;
+          const width = list.clientWidth;
+          if (!width) return 2;
+          const minColumnWidth = 320;
+          const gap = 12;
+          return Math.max(2, Math.floor((width + gap) / (minColumnWidth + gap)));
+        }
+
+        function applyShowtimesLayout(items) {
+          const orderedItems = Array.isArray(items) ? items : theatreItems;
+          const columns = getMasonryColumnCount();
+          list.innerHTML = "";
+
+          if (columns <= 1) {
+            list.classList.remove("show-list-masonry");
+            list.style.removeProperty("--show-columns");
+            orderedItems.forEach((item) => list.appendChild(item));
+            return;
+          }
+
+          list.classList.add("show-list-masonry");
+          list.style.setProperty("--show-columns", String(columns));
+          const fragment = document.createDocumentFragment();
+          const columnEls = Array.from({ length: columns }, () => {
+            const col = document.createElement("div");
+            col.className = "show-masonry-column";
+            fragment.appendChild(col);
+            return col;
+          });
+          orderedItems.forEach((item, index) => {
+            columnEls[index % columns].appendChild(item);
+          });
+          list.appendChild(fragment);
+        }
+
         function sortByDistance(lat, lng, sourceLabel) {
           const scored = theatreItems.map((item) => {
             const holder = item.querySelector("[data-theatre-lat]");
@@ -515,9 +561,7 @@
             const bLabel = b.item.querySelector(".show-main-theatre")?.textContent || "";
             return aLabel.localeCompare(bLabel);
           });
-
-          const list = document.querySelector(".film-showtimes-box .show-list");
-          scored.forEach(({ item }) => list?.appendChild(item));
+          applyShowtimesLayout(scored.map(({ item }) => item));
           setStatus("Sorted by distance using " + sourceLabel + ".");
         }
 
@@ -572,8 +616,18 @@
         if (saved) {
           sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
         } else {
+          applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
         }
+
+        let resizeTimer = null;
+        window.addEventListener("resize", () => {
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            const currentItems = Array.from(list.querySelectorAll(".show-item"));
+            applyShowtimesLayout(currentItems);
+          }, 90);
+        });
       })();
     </script>
   </body>

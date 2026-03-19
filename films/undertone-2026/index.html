@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>undertone 2026 | The Maine Playweek</title>
     <meta name="description" content="The host of a popular paranormal podcast becomes haunted by terrifying recordings mysteriously sent her way." />
-    <link rel="canonical" href="https://themaineplayweek.com/films/undertone-2026/" />
+    <link rel="canonical" href="films/undertone-2026/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="undertone 2026 | The Maine Playweek" />
     <meta property="og:description" content="The host of a popular paranormal podcast becomes haunted by terrifying recordings mysteriously sent her way." />
-    <meta property="og:url" content="https://themaineplayweek.com/films/undertone-2026/" />
+    <meta property="og:url" content="films/undertone-2026/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/1wREWUEHzjDWSreNFbFLDO7YEaM.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="undertone 2026 | The Maine Playweek" />
@@ -78,6 +78,15 @@
       .film-showtimes-box .show-list {
         display: grid;
         grid-template-columns: 1fr;
+        gap: 0.7rem;
+      }
+      .film-showtimes-box .show-list.show-list-masonry {
+        grid-template-columns: repeat(var(--show-columns, 2), minmax(0, 1fr));
+        align-items: start;
+      }
+      .film-showtimes-box .show-masonry-column {
+        display: flex;
+        flex-direction: column;
         gap: 0.7rem;
       }
       .film-showtimes-box .show-main {
@@ -228,7 +237,7 @@
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"undertone 2026","description":"The host of a popular paranormal podcast becomes haunted by terrifying recordings mysteriously sent her way.","image":"https://image.tmdb.org/t/p/w342/1wREWUEHzjDWSreNFbFLDO7YEaM.jpg","datePublished":"2026-03-12","director":[{"@type":"Person","name":"Ian Tuason"}],"actor":[{"@type":"Person","name":"Nina Kiri"},{"@type":"Person","name":"Adam DiMarco"},{"@type":"Person","name":"Michèle Duquet"}],"genre":["Horror","Mystery"],"url":"https://themaineplayweek.com/films/undertone-2026/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"undertone 2026","description":"The host of a popular paranormal podcast becomes haunted by terrifying recordings mysteriously sent her way.","image":"https://image.tmdb.org/t/p/w342/1wREWUEHzjDWSreNFbFLDO7YEaM.jpg","datePublished":"2026-03-12","director":[{"@type":"Person","name":"Ian Tuason"}],"actor":[{"@type":"Person","name":"Nina Kiri"},{"@type":"Person","name":"Adam DiMarco"},{"@type":"Person","name":"Michèle Duquet"}],"genre":["Horror","Mystery"],"url":"films/undertone-2026/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
@@ -237,9 +246,9 @@
         <p class="film-page-note">Prototype: static SEO detail page</p>
       </div>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">undertone 2026</h1>
+        <h1 class="group-title group-title-film">undertone</h1>
         <div class="group-film-summary">
-          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/1wREWUEHzjDWSreNFbFLDO7YEaM.jpg" alt="Poster for undertone 2026" loading="lazy" />
+          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/1wREWUEHzjDWSreNFbFLDO7YEaM.jpg" alt="Poster for undertone" loading="lazy" />
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
               <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">The host of a popular paranormal podcast becomes haunted by terrifying recordings mysteriously sent her way.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Ian Tuason</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Horror, Mystery</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Nina Kiri, Adam DiMarco, Michèle Duquet</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">2026-03-12</span></div>
@@ -262,7 +271,7 @@
           </div>
           <p id="locationSortStatus" class="location-sort-status" aria-live="polite"></p>
         </section>
-        <ul class="show-list"><li class="show-item">
+        <div class="show-list"><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.5285596"
@@ -321,7 +330,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.applecinemas.com/home/611fea26f74bab2423301ee4" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.6505461"
@@ -365,7 +374,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.applecinemas.com/Undertone/611fe9edf74bab2423301ee0/699f2130a52bdb49440d544a" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.8277689"
@@ -429,7 +438,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22911?date=2026-03-12" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.9059551"
@@ -488,7 +497,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.blackbearcinemas.com/movie/undertone" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.127541"
@@ -547,7 +556,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/auburn/movie/22918" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.7204846"
@@ -606,7 +615,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/falmouth/movie/22918" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.0958045"
@@ -665,7 +674,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/thomaston/movie/22918" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.5428402"
@@ -724,7 +733,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/waterville/movie/22918" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.3004064"
@@ -783,7 +792,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/wells/movie/22918" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.6575821"
@@ -837,7 +846,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.patriotcinemas.com/movie/undertone" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.1490064"
@@ -896,7 +905,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.regmovies.com/theatres/regal-augusta-1704" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.4143151"
@@ -945,7 +954,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.smittyscinema.com/movie/Sanford/UNDERTONE#" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.9381304"
@@ -1009,7 +1018,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.smittyscinema.com/movie/Topsham/UNDERTONE#" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.8396584"
@@ -1063,7 +1072,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.smittyscinema.com/movie/Windham/UNDERTONE#" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li></ul>
+      </article></div>
       </section>
     </main>
     <script>
@@ -1073,8 +1082,9 @@
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
         const status = document.getElementById("locationSortStatus");
+        const list = document.querySelector(".film-showtimes-box .show-list");
         const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
-        if (!theatreItems.length) return;
+        if (!theatreItems.length || !list) return;
 
         function setStatus(message) {
           if (!status) return;
@@ -1113,6 +1123,42 @@
           return 2 * R * Math.asin(Math.sqrt(a));
         }
 
+        function getMasonryColumnCount() {
+          if (window.matchMedia("(max-width: 859px)").matches) return 1;
+          const width = list.clientWidth;
+          if (!width) return 2;
+          const minColumnWidth = 320;
+          const gap = 12;
+          return Math.max(2, Math.floor((width + gap) / (minColumnWidth + gap)));
+        }
+
+        function applyShowtimesLayout(items) {
+          const orderedItems = Array.isArray(items) ? items : theatreItems;
+          const columns = getMasonryColumnCount();
+          list.innerHTML = "";
+
+          if (columns <= 1) {
+            list.classList.remove("show-list-masonry");
+            list.style.removeProperty("--show-columns");
+            orderedItems.forEach((item) => list.appendChild(item));
+            return;
+          }
+
+          list.classList.add("show-list-masonry");
+          list.style.setProperty("--show-columns", String(columns));
+          const fragment = document.createDocumentFragment();
+          const columnEls = Array.from({ length: columns }, () => {
+            const col = document.createElement("div");
+            col.className = "show-masonry-column";
+            fragment.appendChild(col);
+            return col;
+          });
+          orderedItems.forEach((item, index) => {
+            columnEls[index % columns].appendChild(item);
+          });
+          list.appendChild(fragment);
+        }
+
         function sortByDistance(lat, lng, sourceLabel) {
           const scored = theatreItems.map((item) => {
             const holder = item.querySelector("[data-theatre-lat]");
@@ -1134,9 +1180,7 @@
             const bLabel = b.item.querySelector(".show-main-theatre")?.textContent || "";
             return aLabel.localeCompare(bLabel);
           });
-
-          const list = document.querySelector(".film-showtimes-box .show-list");
-          scored.forEach(({ item }) => list?.appendChild(item));
+          applyShowtimesLayout(scored.map(({ item }) => item));
           setStatus("Sorted by distance using " + sourceLabel + ".");
         }
 
@@ -1191,8 +1235,18 @@
         if (saved) {
           sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
         } else {
+          applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
         }
+
+        let resizeTimer = null;
+        window.addEventListener("resize", () => {
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            const currentItems = Array.from(list.querySelectorAll(".show-item"));
+            applyShowtimesLayout(currentItems);
+          }, 90);
+        });
       })();
     </script>
   </body>

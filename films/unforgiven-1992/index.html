@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Unforgiven 1992 | The Maine Playweek</title>
     <meta name="description" content="William Munny is a retired, once-ruthless killer turned gentle widower and hog farmer. To help support his two motherless children, he accepts one last bounty-hunter mission to find the men who brutalized a prostitute. Joined by his former partner and a cocky greenhorn, he takes on a corrupt sheriff." />
-    <link rel="canonical" href="https://themaineplayweek.com/films/unforgiven-1992/" />
+    <link rel="canonical" href="films/unforgiven-1992/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Unforgiven 1992 | The Maine Playweek" />
     <meta property="og:description" content="William Munny is a retired, once-ruthless killer turned gentle widower and hog farmer. To help support his two motherless children, he accepts one last bounty-hunter mission to find the men who brutalized a prostitute. Joined by his former partner and a cocky greenhorn, he takes on a corrupt sheriff." />
-    <meta property="og:url" content="https://themaineplayweek.com/films/unforgiven-1992/" />
+    <meta property="og:url" content="films/unforgiven-1992/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/54roTwbX9fltg85zjsmrooXAs12.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Unforgiven 1992 | The Maine Playweek" />
@@ -78,6 +78,15 @@
       .film-showtimes-box .show-list {
         display: grid;
         grid-template-columns: 1fr;
+        gap: 0.7rem;
+      }
+      .film-showtimes-box .show-list.show-list-masonry {
+        grid-template-columns: repeat(var(--show-columns, 2), minmax(0, 1fr));
+        align-items: start;
+      }
+      .film-showtimes-box .show-masonry-column {
+        display: flex;
+        flex-direction: column;
         gap: 0.7rem;
       }
       .film-showtimes-box .show-main {
@@ -228,7 +237,7 @@
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Unforgiven 1992","description":"William Munny is a retired, once-ruthless killer turned gentle widower and hog farmer. To help support his two motherless children, he accepts one last bounty-hunter mission to find the men who brutalized a prostitute. Joined by his former partner and a cocky greenhorn, he takes on a corrupt sheriff.","image":"https://image.tmdb.org/t/p/w342/54roTwbX9fltg85zjsmrooXAs12.jpg","datePublished":"1992-08-07","director":[{"@type":"Person","name":"Clint Eastwood"}],"actor":[{"@type":"Person","name":"Clint Eastwood"},{"@type":"Person","name":"Gene Hackman"},{"@type":"Person","name":"Morgan Freeman"}],"genre":["Western"],"url":"https://themaineplayweek.com/films/unforgiven-1992/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Unforgiven 1992","description":"William Munny is a retired, once-ruthless killer turned gentle widower and hog farmer. To help support his two motherless children, he accepts one last bounty-hunter mission to find the men who brutalized a prostitute. Joined by his former partner and a cocky greenhorn, he takes on a corrupt sheriff.","image":"https://image.tmdb.org/t/p/w342/54roTwbX9fltg85zjsmrooXAs12.jpg","datePublished":"1992-08-07","director":[{"@type":"Person","name":"Clint Eastwood"}],"actor":[{"@type":"Person","name":"Clint Eastwood"},{"@type":"Person","name":"Gene Hackman"},{"@type":"Person","name":"Morgan Freeman"}],"genre":["Western"],"url":"films/unforgiven-1992/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
@@ -237,9 +246,9 @@
         <p class="film-page-note">Prototype: static SEO detail page</p>
       </div>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">Unforgiven 1992</h1>
+        <h1 class="group-title group-title-film">Unforgiven</h1>
         <div class="group-film-summary">
-          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/54roTwbX9fltg85zjsmrooXAs12.jpg" alt="Poster for Unforgiven 1992" loading="lazy" />
+          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/54roTwbX9fltg85zjsmrooXAs12.jpg" alt="Poster for Unforgiven" loading="lazy" />
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
               <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">William Munny is a retired, once-ruthless killer turned gentle widower and hog farmer. To help support his two motherless children, he accepts one last bounty-hunter mission to find the men who brutalized a prostitute. Joined by his former partner and a cocky greenhorn, he takes on a corrupt sheriff.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Clint Eastwood</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Western</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Clint Eastwood, Gene Hackman, Morgan Freeman</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">1992-08-07</span></div>
@@ -262,7 +271,7 @@
           </div>
           <p id="locationSortStatus" class="location-sort-status" aria-live="polite"></p>
         </section>
-        <ul class="show-list"><li class="show-item">
+        <div class="show-list"><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.1490064"
@@ -281,7 +290,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.regmovies.com/movies/mars-unforgiven-ho00020879?date=03-21-2026" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li></ul>
+      </article></div>
       </section>
     </main>
     <script>
@@ -291,8 +300,9 @@
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
         const status = document.getElementById("locationSortStatus");
+        const list = document.querySelector(".film-showtimes-box .show-list");
         const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
-        if (!theatreItems.length) return;
+        if (!theatreItems.length || !list) return;
 
         function setStatus(message) {
           if (!status) return;
@@ -331,6 +341,42 @@
           return 2 * R * Math.asin(Math.sqrt(a));
         }
 
+        function getMasonryColumnCount() {
+          if (window.matchMedia("(max-width: 859px)").matches) return 1;
+          const width = list.clientWidth;
+          if (!width) return 2;
+          const minColumnWidth = 320;
+          const gap = 12;
+          return Math.max(2, Math.floor((width + gap) / (minColumnWidth + gap)));
+        }
+
+        function applyShowtimesLayout(items) {
+          const orderedItems = Array.isArray(items) ? items : theatreItems;
+          const columns = getMasonryColumnCount();
+          list.innerHTML = "";
+
+          if (columns <= 1) {
+            list.classList.remove("show-list-masonry");
+            list.style.removeProperty("--show-columns");
+            orderedItems.forEach((item) => list.appendChild(item));
+            return;
+          }
+
+          list.classList.add("show-list-masonry");
+          list.style.setProperty("--show-columns", String(columns));
+          const fragment = document.createDocumentFragment();
+          const columnEls = Array.from({ length: columns }, () => {
+            const col = document.createElement("div");
+            col.className = "show-masonry-column";
+            fragment.appendChild(col);
+            return col;
+          });
+          orderedItems.forEach((item, index) => {
+            columnEls[index % columns].appendChild(item);
+          });
+          list.appendChild(fragment);
+        }
+
         function sortByDistance(lat, lng, sourceLabel) {
           const scored = theatreItems.map((item) => {
             const holder = item.querySelector("[data-theatre-lat]");
@@ -352,9 +398,7 @@
             const bLabel = b.item.querySelector(".show-main-theatre")?.textContent || "";
             return aLabel.localeCompare(bLabel);
           });
-
-          const list = document.querySelector(".film-showtimes-box .show-list");
-          scored.forEach(({ item }) => list?.appendChild(item));
+          applyShowtimesLayout(scored.map(({ item }) => item));
           setStatus("Sorted by distance using " + sourceLabel + ".");
         }
 
@@ -409,8 +453,18 @@
         if (saved) {
           sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
         } else {
+          applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
         }
+
+        let resizeTimer = null;
+        window.addEventListener("resize", () => {
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            const currentItems = Array.from(list.querySelectorAll(".show-item"));
+            applyShowtimesLayout(currentItems);
+          }, 90);
+        });
       })();
     </script>
   </body>

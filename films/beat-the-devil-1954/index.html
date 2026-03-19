@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Beat the Devil 1954 | The Maine Playweek</title>
     <meta name="description" content="A group of con artists stake their claim on a bogus uranium mine." />
-    <link rel="canonical" href="https://themaineplayweek.com/films/beat-the-devil-1954/" />
+    <link rel="canonical" href="films/beat-the-devil-1954/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Beat the Devil 1954 | The Maine Playweek" />
     <meta property="og:description" content="A group of con artists stake their claim on a bogus uranium mine." />
-    <meta property="og:url" content="https://themaineplayweek.com/films/beat-the-devil-1954/" />
+    <meta property="og:url" content="films/beat-the-devil-1954/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/yBg55pY6WYPqzZuQ1rJ4Cjj5nOG.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Beat the Devil 1954 | The Maine Playweek" />
@@ -78,6 +78,15 @@
       .film-showtimes-box .show-list {
         display: grid;
         grid-template-columns: 1fr;
+        gap: 0.7rem;
+      }
+      .film-showtimes-box .show-list.show-list-masonry {
+        grid-template-columns: repeat(var(--show-columns, 2), minmax(0, 1fr));
+        align-items: start;
+      }
+      .film-showtimes-box .show-masonry-column {
+        display: flex;
+        flex-direction: column;
         gap: 0.7rem;
       }
       .film-showtimes-box .show-main {
@@ -228,7 +237,7 @@
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Beat the Devil 1954","description":"A group of con artists stake their claim on a bogus uranium mine.","image":"https://image.tmdb.org/t/p/w342/yBg55pY6WYPqzZuQ1rJ4Cjj5nOG.jpg","datePublished":"1953-11-24","director":[{"@type":"Person","name":"John Huston"}],"actor":[{"@type":"Person","name":"Humphrey Bogart"},{"@type":"Person","name":"Jennifer Jones"},{"@type":"Person","name":"Gina Lollobrigida"}],"genre":["Adventure","Comedy"],"url":"https://themaineplayweek.com/films/beat-the-devil-1954/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Beat the Devil 1954","description":"A group of con artists stake their claim on a bogus uranium mine.","image":"https://image.tmdb.org/t/p/w342/yBg55pY6WYPqzZuQ1rJ4Cjj5nOG.jpg","datePublished":"1953-11-24","director":[{"@type":"Person","name":"John Huston"}],"actor":[{"@type":"Person","name":"Humphrey Bogart"},{"@type":"Person","name":"Jennifer Jones"},{"@type":"Person","name":"Gina Lollobrigida"}],"genre":["Adventure","Comedy"],"url":"films/beat-the-devil-1954/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
@@ -237,9 +246,9 @@
         <p class="film-page-note">Prototype: static SEO detail page</p>
       </div>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">Beat the Devil 1954</h1>
+        <h1 class="group-title group-title-film">Beat the Devil</h1>
         <div class="group-film-summary">
-          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/yBg55pY6WYPqzZuQ1rJ4Cjj5nOG.jpg" alt="Poster for Beat the Devil 1954" loading="lazy" />
+          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/yBg55pY6WYPqzZuQ1rJ4Cjj5nOG.jpg" alt="Poster for Beat the Devil" loading="lazy" />
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
               <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">A group of con artists stake their claim on a bogus uranium mine.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">John Huston</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Adventure, Comedy</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Humphrey Bogart, Jennifer Jones, Gina Lollobrigida</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">1953-11-24</span></div>
@@ -262,7 +271,7 @@
           </div>
           <p id="locationSortStatus" class="location-sort-status" aria-live="polite"></p>
         </section>
-        <ul class="show-list"><li class="show-item">
+        <div class="show-list"><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.6425626"
@@ -286,7 +295,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.zeffy.com/en-US/ticketing/beat-the-devil--1953" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li></ul>
+      </article></div>
       </section>
     </main>
     <script>
@@ -296,8 +305,9 @@
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
         const status = document.getElementById("locationSortStatus");
+        const list = document.querySelector(".film-showtimes-box .show-list");
         const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
-        if (!theatreItems.length) return;
+        if (!theatreItems.length || !list) return;
 
         function setStatus(message) {
           if (!status) return;
@@ -336,6 +346,42 @@
           return 2 * R * Math.asin(Math.sqrt(a));
         }
 
+        function getMasonryColumnCount() {
+          if (window.matchMedia("(max-width: 859px)").matches) return 1;
+          const width = list.clientWidth;
+          if (!width) return 2;
+          const minColumnWidth = 320;
+          const gap = 12;
+          return Math.max(2, Math.floor((width + gap) / (minColumnWidth + gap)));
+        }
+
+        function applyShowtimesLayout(items) {
+          const orderedItems = Array.isArray(items) ? items : theatreItems;
+          const columns = getMasonryColumnCount();
+          list.innerHTML = "";
+
+          if (columns <= 1) {
+            list.classList.remove("show-list-masonry");
+            list.style.removeProperty("--show-columns");
+            orderedItems.forEach((item) => list.appendChild(item));
+            return;
+          }
+
+          list.classList.add("show-list-masonry");
+          list.style.setProperty("--show-columns", String(columns));
+          const fragment = document.createDocumentFragment();
+          const columnEls = Array.from({ length: columns }, () => {
+            const col = document.createElement("div");
+            col.className = "show-masonry-column";
+            fragment.appendChild(col);
+            return col;
+          });
+          orderedItems.forEach((item, index) => {
+            columnEls[index % columns].appendChild(item);
+          });
+          list.appendChild(fragment);
+        }
+
         function sortByDistance(lat, lng, sourceLabel) {
           const scored = theatreItems.map((item) => {
             const holder = item.querySelector("[data-theatre-lat]");
@@ -357,9 +403,7 @@
             const bLabel = b.item.querySelector(".show-main-theatre")?.textContent || "";
             return aLabel.localeCompare(bLabel);
           });
-
-          const list = document.querySelector(".film-showtimes-box .show-list");
-          scored.forEach(({ item }) => list?.appendChild(item));
+          applyShowtimesLayout(scored.map(({ item }) => item));
           setStatus("Sorted by distance using " + sourceLabel + ".");
         }
 
@@ -414,8 +458,18 @@
         if (saved) {
           sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
         } else {
+          applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
         }
+
+        let resizeTimer = null;
+        window.addEventListener("resize", () => {
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            const currentItems = Array.from(list.querySelectorAll(".show-item"));
+            applyShowtimesLayout(currentItems);
+          }, 90);
+        });
       })();
     </script>
   </body>

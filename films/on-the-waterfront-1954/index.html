@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>On the Waterfront 1954 | The Maine Playweek</title>
     <meta name="description" content="A prizefighter-turned-longshoreman with a conscience goes up against labor leaders to expose corruption, extortion, and murder among the union ranks." />
-    <link rel="canonical" href="https://themaineplayweek.com/films/on-the-waterfront-1954/" />
+    <link rel="canonical" href="films/on-the-waterfront-1954/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="On the Waterfront 1954 | The Maine Playweek" />
     <meta property="og:description" content="A prizefighter-turned-longshoreman with a conscience goes up against labor leaders to expose corruption, extortion, and murder among the union ranks." />
-    <meta property="og:url" content="https://themaineplayweek.com/films/on-the-waterfront-1954/" />
+    <meta property="og:url" content="films/on-the-waterfront-1954/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/v1RtJ1qR4v9nrnfoBVBl6hjTW9.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="On the Waterfront 1954 | The Maine Playweek" />
@@ -78,6 +78,15 @@
       .film-showtimes-box .show-list {
         display: grid;
         grid-template-columns: 1fr;
+        gap: 0.7rem;
+      }
+      .film-showtimes-box .show-list.show-list-masonry {
+        grid-template-columns: repeat(var(--show-columns, 2), minmax(0, 1fr));
+        align-items: start;
+      }
+      .film-showtimes-box .show-masonry-column {
+        display: flex;
+        flex-direction: column;
         gap: 0.7rem;
       }
       .film-showtimes-box .show-main {
@@ -228,7 +237,7 @@
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"On the Waterfront 1954","description":"A prizefighter-turned-longshoreman with a conscience goes up against labor leaders to expose corruption, extortion, and murder among the union ranks.","image":"https://image.tmdb.org/t/p/w342/v1RtJ1qR4v9nrnfoBVBl6hjTW9.jpg","datePublished":"1954-06-22","director":[{"@type":"Person","name":"Elia Kazan"}],"actor":[{"@type":"Person","name":"Marlon Brando"},{"@type":"Person","name":"Eva Marie Saint"},{"@type":"Person","name":"Karl Malden"}],"genre":["Crime","Drama","Romance"],"url":"https://themaineplayweek.com/films/on-the-waterfront-1954/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"On the Waterfront 1954","description":"A prizefighter-turned-longshoreman with a conscience goes up against labor leaders to expose corruption, extortion, and murder among the union ranks.","image":"https://image.tmdb.org/t/p/w342/v1RtJ1qR4v9nrnfoBVBl6hjTW9.jpg","datePublished":"1954-06-22","director":[{"@type":"Person","name":"Elia Kazan"}],"actor":[{"@type":"Person","name":"Marlon Brando"},{"@type":"Person","name":"Eva Marie Saint"},{"@type":"Person","name":"Karl Malden"}],"genre":["Crime","Drama","Romance"],"url":"films/on-the-waterfront-1954/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
@@ -237,9 +246,9 @@
         <p class="film-page-note">Prototype: static SEO detail page</p>
       </div>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">On the Waterfront 1954</h1>
+        <h1 class="group-title group-title-film">On the Waterfront</h1>
         <div class="group-film-summary">
-          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/v1RtJ1qR4v9nrnfoBVBl6hjTW9.jpg" alt="Poster for On the Waterfront 1954" loading="lazy" />
+          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/v1RtJ1qR4v9nrnfoBVBl6hjTW9.jpg" alt="Poster for On the Waterfront" loading="lazy" />
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
               <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">A prizefighter-turned-longshoreman with a conscience goes up against labor leaders to expose corruption, extortion, and murder among the union ranks.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Elia Kazan</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Crime, Drama, Romance</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Marlon Brando, Eva Marie Saint, Karl Malden</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">1954-06-22</span></div>
@@ -262,7 +271,7 @@
           </div>
           <p id="locationSortStatus" class="location-sort-status" aria-live="polite"></p>
         </section>
-        <ul class="show-list"><li class="show-item">
+        <div class="show-list"><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.1490064"
@@ -281,7 +290,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.regmovies.com/movies/mars-on-the-waterfront-ho00020888" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li></ul>
+      </article></div>
       </section>
     </main>
     <script>
@@ -291,8 +300,9 @@
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
         const status = document.getElementById("locationSortStatus");
+        const list = document.querySelector(".film-showtimes-box .show-list");
         const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
-        if (!theatreItems.length) return;
+        if (!theatreItems.length || !list) return;
 
         function setStatus(message) {
           if (!status) return;
@@ -331,6 +341,42 @@
           return 2 * R * Math.asin(Math.sqrt(a));
         }
 
+        function getMasonryColumnCount() {
+          if (window.matchMedia("(max-width: 859px)").matches) return 1;
+          const width = list.clientWidth;
+          if (!width) return 2;
+          const minColumnWidth = 320;
+          const gap = 12;
+          return Math.max(2, Math.floor((width + gap) / (minColumnWidth + gap)));
+        }
+
+        function applyShowtimesLayout(items) {
+          const orderedItems = Array.isArray(items) ? items : theatreItems;
+          const columns = getMasonryColumnCount();
+          list.innerHTML = "";
+
+          if (columns <= 1) {
+            list.classList.remove("show-list-masonry");
+            list.style.removeProperty("--show-columns");
+            orderedItems.forEach((item) => list.appendChild(item));
+            return;
+          }
+
+          list.classList.add("show-list-masonry");
+          list.style.setProperty("--show-columns", String(columns));
+          const fragment = document.createDocumentFragment();
+          const columnEls = Array.from({ length: columns }, () => {
+            const col = document.createElement("div");
+            col.className = "show-masonry-column";
+            fragment.appendChild(col);
+            return col;
+          });
+          orderedItems.forEach((item, index) => {
+            columnEls[index % columns].appendChild(item);
+          });
+          list.appendChild(fragment);
+        }
+
         function sortByDistance(lat, lng, sourceLabel) {
           const scored = theatreItems.map((item) => {
             const holder = item.querySelector("[data-theatre-lat]");
@@ -352,9 +398,7 @@
             const bLabel = b.item.querySelector(".show-main-theatre")?.textContent || "";
             return aLabel.localeCompare(bLabel);
           });
-
-          const list = document.querySelector(".film-showtimes-box .show-list");
-          scored.forEach(({ item }) => list?.appendChild(item));
+          applyShowtimesLayout(scored.map(({ item }) => item));
           setStatus("Sorted by distance using " + sourceLabel + ".");
         }
 
@@ -409,8 +453,18 @@
         if (saved) {
           sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
         } else {
+          applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
         }
+
+        let resizeTimer = null;
+        window.addEventListener("resize", () => {
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            const currentItems = Array.from(list.querySelectorAll(".show-item"));
+            applyShowtimesLayout(currentItems);
+          }, 90);
+        });
       })();
     </script>
   </body>

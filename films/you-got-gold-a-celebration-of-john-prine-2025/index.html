@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>You Got Gold: A Celebration of John Prine 2025 | The Maine Playweek</title>
     <meta name="description" content="This concert film was shot in October, 2022, over two nights at the Ryman Auditorium in Nashville, TN. More than 70 artists gathered with family, the Nashville community, and music fans to remember and pay tribute to the life and songs of John Prine." />
-    <link rel="canonical" href="https://themaineplayweek.com/films/you-got-gold-a-celebration-of-john-prine-2025/" />
+    <link rel="canonical" href="films/you-got-gold-a-celebration-of-john-prine-2025/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="You Got Gold: A Celebration of John Prine 2025 | The Maine Playweek" />
     <meta property="og:description" content="This concert film was shot in October, 2022, over two nights at the Ryman Auditorium in Nashville, TN. More than 70 artists gathered with family, the Nashville community, and music fans to remember and pay tribute to the life and songs of John Prine." />
-    <meta property="og:url" content="https://themaineplayweek.com/films/you-got-gold-a-celebration-of-john-prine-2025/" />
+    <meta property="og:url" content="films/you-got-gold-a-celebration-of-john-prine-2025/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/4EusMsRW35EZsyGD0kWYvWbskxL.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="You Got Gold: A Celebration of John Prine 2025 | The Maine Playweek" />
@@ -78,6 +78,15 @@
       .film-showtimes-box .show-list {
         display: grid;
         grid-template-columns: 1fr;
+        gap: 0.7rem;
+      }
+      .film-showtimes-box .show-list.show-list-masonry {
+        grid-template-columns: repeat(var(--show-columns, 2), minmax(0, 1fr));
+        align-items: start;
+      }
+      .film-showtimes-box .show-masonry-column {
+        display: flex;
+        flex-direction: column;
         gap: 0.7rem;
       }
       .film-showtimes-box .show-main {
@@ -228,7 +237,7 @@
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"You Got Gold: A Celebration of John Prine 2025","description":"This concert film was shot in October, 2022, over two nights at the Ryman Auditorium in Nashville, TN. More than 70 artists gathered with family, the Nashville community, and music fans to remember and pay tribute to the life and songs of John Prine.","image":"https://image.tmdb.org/t/p/w342/4EusMsRW35EZsyGD0kWYvWbskxL.jpg","datePublished":"2025-11-28","director":[{"@type":"Person","name":"Michael John Warren"}],"actor":[{"@type":"Person","name":"Tyler Childers"},{"@type":"Person","name":"Brandi Carlile"},{"@type":"Person","name":"Lyle Lovett"}],"genre":["Music","Documentary"],"url":"https://themaineplayweek.com/films/you-got-gold-a-celebration-of-john-prine-2025/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"You Got Gold: A Celebration of John Prine 2025","description":"This concert film was shot in October, 2022, over two nights at the Ryman Auditorium in Nashville, TN. More than 70 artists gathered with family, the Nashville community, and music fans to remember and pay tribute to the life and songs of John Prine.","image":"https://image.tmdb.org/t/p/w342/4EusMsRW35EZsyGD0kWYvWbskxL.jpg","datePublished":"2025-11-28","director":[{"@type":"Person","name":"Michael John Warren"}],"actor":[{"@type":"Person","name":"Tyler Childers"},{"@type":"Person","name":"Brandi Carlile"},{"@type":"Person","name":"Lyle Lovett"}],"genre":["Music","Documentary"],"url":"films/you-got-gold-a-celebration-of-john-prine-2025/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
@@ -237,9 +246,9 @@
         <p class="film-page-note">Prototype: static SEO detail page</p>
       </div>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">You Got Gold: A Celebration of John Prine 2025</h1>
+        <h1 class="group-title group-title-film">You Got Gold: A Celebration of John Prine</h1>
         <div class="group-film-summary">
-          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/4EusMsRW35EZsyGD0kWYvWbskxL.jpg" alt="Poster for You Got Gold: A Celebration of John Prine 2025" loading="lazy" />
+          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/4EusMsRW35EZsyGD0kWYvWbskxL.jpg" alt="Poster for You Got Gold: A Celebration of John Prine" loading="lazy" />
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
               <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">This concert film was shot in October, 2022, over two nights at the Ryman Auditorium in Nashville, TN. More than 70 artists gathered with family, the Nashville community, and music fans to remember and pay tribute to the life and songs of John Prine.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Michael John Warren</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Music, Documentary</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Tyler Childers, Brandi Carlile, Lyle Lovett</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">2025-11-28</span></div>
@@ -262,7 +271,7 @@
           </div>
           <p id="locationSortStatus" class="location-sort-status" aria-live="polite"></p>
         </section>
-        <ul class="show-list"><li class="show-item">
+        <div class="show-list"><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.572681427002"
@@ -291,7 +300,7 @@
           </div>
         </div>
         <a class="show-link" href="https://oldfilm.org/alamo-theatre/" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.5498745"
@@ -350,7 +359,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.watervillecreates.org/shows/you-got-gold-a-celebration-of-john-prine/" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li></ul>
+      </article></div>
       </section>
     </main>
     <script>
@@ -360,8 +369,9 @@
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
         const status = document.getElementById("locationSortStatus");
+        const list = document.querySelector(".film-showtimes-box .show-list");
         const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
-        if (!theatreItems.length) return;
+        if (!theatreItems.length || !list) return;
 
         function setStatus(message) {
           if (!status) return;
@@ -400,6 +410,42 @@
           return 2 * R * Math.asin(Math.sqrt(a));
         }
 
+        function getMasonryColumnCount() {
+          if (window.matchMedia("(max-width: 859px)").matches) return 1;
+          const width = list.clientWidth;
+          if (!width) return 2;
+          const minColumnWidth = 320;
+          const gap = 12;
+          return Math.max(2, Math.floor((width + gap) / (minColumnWidth + gap)));
+        }
+
+        function applyShowtimesLayout(items) {
+          const orderedItems = Array.isArray(items) ? items : theatreItems;
+          const columns = getMasonryColumnCount();
+          list.innerHTML = "";
+
+          if (columns <= 1) {
+            list.classList.remove("show-list-masonry");
+            list.style.removeProperty("--show-columns");
+            orderedItems.forEach((item) => list.appendChild(item));
+            return;
+          }
+
+          list.classList.add("show-list-masonry");
+          list.style.setProperty("--show-columns", String(columns));
+          const fragment = document.createDocumentFragment();
+          const columnEls = Array.from({ length: columns }, () => {
+            const col = document.createElement("div");
+            col.className = "show-masonry-column";
+            fragment.appendChild(col);
+            return col;
+          });
+          orderedItems.forEach((item, index) => {
+            columnEls[index % columns].appendChild(item);
+          });
+          list.appendChild(fragment);
+        }
+
         function sortByDistance(lat, lng, sourceLabel) {
           const scored = theatreItems.map((item) => {
             const holder = item.querySelector("[data-theatre-lat]");
@@ -421,9 +467,7 @@
             const bLabel = b.item.querySelector(".show-main-theatre")?.textContent || "";
             return aLabel.localeCompare(bLabel);
           });
-
-          const list = document.querySelector(".film-showtimes-box .show-list");
-          scored.forEach(({ item }) => list?.appendChild(item));
+          applyShowtimesLayout(scored.map(({ item }) => item));
           setStatus("Sorted by distance using " + sourceLabel + ".");
         }
 
@@ -478,8 +522,18 @@
         if (saved) {
           sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
         } else {
+          applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
         }
+
+        let resizeTimer = null;
+        window.addEventListener("resize", () => {
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            const currentItems = Array.from(list.querySelectorAll(".show-item"));
+            applyShowtimesLayout(currentItems);
+          }, 90);
+        });
       })();
     </script>
   </body>

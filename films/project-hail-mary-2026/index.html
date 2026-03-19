@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project Hail Mary 2026 | The Maine Playweek</title>
     <meta name="description" content="Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction… but an unexpected friendship means he may not have to do it alone." />
-    <link rel="canonical" href="https://themaineplayweek.com/films/project-hail-mary-2026/" />
+    <link rel="canonical" href="films/project-hail-mary-2026/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Project Hail Mary 2026 | The Maine Playweek" />
     <meta property="og:description" content="Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction… but an unexpected friendship means he may not have to do it alone." />
-    <meta property="og:url" content="https://themaineplayweek.com/films/project-hail-mary-2026/" />
+    <meta property="og:url" content="films/project-hail-mary-2026/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/yihdXomYb5kTeSivtFndMy5iDmf.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Project Hail Mary 2026 | The Maine Playweek" />
@@ -78,6 +78,15 @@
       .film-showtimes-box .show-list {
         display: grid;
         grid-template-columns: 1fr;
+        gap: 0.7rem;
+      }
+      .film-showtimes-box .show-list.show-list-masonry {
+        grid-template-columns: repeat(var(--show-columns, 2), minmax(0, 1fr));
+        align-items: start;
+      }
+      .film-showtimes-box .show-masonry-column {
+        display: flex;
+        flex-direction: column;
         gap: 0.7rem;
       }
       .film-showtimes-box .show-main {
@@ -228,7 +237,7 @@
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Project Hail Mary 2026","description":"Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction… but an unexpected friendship means he may not have to do it alone.","image":"https://image.tmdb.org/t/p/w342/yihdXomYb5kTeSivtFndMy5iDmf.jpg","datePublished":"2026-03-15","director":[{"@type":"Person","name":"Phil Lord"}],"actor":[{"@type":"Person","name":"Ryan Gosling"},{"@type":"Person","name":"Sandra Hüller"},{"@type":"Person","name":"James Ortiz"}],"genre":["Science Fiction","Adventure","Mystery"],"url":"https://themaineplayweek.com/films/project-hail-mary-2026/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Project Hail Mary 2026","description":"Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction… but an unexpected friendship means he may not have to do it alone.","image":"https://image.tmdb.org/t/p/w342/yihdXomYb5kTeSivtFndMy5iDmf.jpg","datePublished":"2026-03-15","director":[{"@type":"Person","name":"Phil Lord"}],"actor":[{"@type":"Person","name":"Ryan Gosling"},{"@type":"Person","name":"Sandra Hüller"},{"@type":"Person","name":"James Ortiz"}],"genre":["Science Fiction","Adventure","Mystery"],"url":"films/project-hail-mary-2026/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
@@ -237,9 +246,9 @@
         <p class="film-page-note">Prototype: static SEO detail page</p>
       </div>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">Project Hail Mary 2026</h1>
+        <h1 class="group-title group-title-film">Project Hail Mary</h1>
         <div class="group-film-summary">
-          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/yihdXomYb5kTeSivtFndMy5iDmf.jpg" alt="Poster for Project Hail Mary 2026" loading="lazy" />
+          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/yihdXomYb5kTeSivtFndMy5iDmf.jpg" alt="Poster for Project Hail Mary" loading="lazy" />
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
               <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Science teacher Ryland Grace wakes up on a spaceship light years from home with no recollection of who he is or how he got there. As his memory returns, he begins to uncover his mission: solve the riddle of the mysterious substance causing the sun to die out. He must call on his scientific knowledge and unorthodox ideas to save everything on Earth from extinction… but an unexpected friendship means he may not have to do it alone.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Phil Lord</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Science Fiction, Adventure, Mystery</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Ryan Gosling, Sandra Hüller, James Ortiz</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">2026-03-15</span></div>
@@ -262,7 +271,7 @@
           </div>
           <p id="locationSortStatus" class="location-sort-status" aria-live="polite"></p>
         </section>
-        <ul class="show-list"><li class="show-item">
+        <div class="show-list"><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.572681427002"
@@ -291,7 +300,7 @@
           </div>
         </div>
         <a class="show-link" href="https://centertheatrefortheperformingarts.thundertix.com/events/260689" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.5285596"
@@ -345,7 +354,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.6505461"
@@ -379,7 +388,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.8277689"
@@ -438,7 +447,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22822?date=2026-03-19" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.9059551"
@@ -497,7 +506,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.blackbearcinemas.com/movie/project-hail-mary" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="46.6871109008789"
@@ -541,7 +550,7 @@
           </div>
         </div>
         <a class="show-link" href="https://centertheatrefortheperformingarts.thundertix.com/events/260689" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="45.183952"
@@ -635,7 +644,7 @@
           </div>
         </div>
         <a class="show-link" href="https://centertheatrefortheperformingarts.thundertix.com/events/260689" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.127541"
@@ -689,7 +698,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/auburn/movie/22812" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.7204846"
@@ -743,7 +752,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/falmouth/movie/22812" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.0958045"
@@ -797,7 +806,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/thomaston/movie/22812" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.5428402"
@@ -851,7 +860,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/waterville/movie/22812" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.3004064"
@@ -905,7 +914,7 @@
           </div>
         </div>
         <a class="show-link" href="https://flagshipcinemas.com/wells/movie/22812" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="47.248953"
@@ -974,7 +983,7 @@
           </div>
         </div>
         <a class="show-link" href="https://centertheatrefortheperformingarts.thundertix.com/events/260689" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.032829284668"
@@ -1018,7 +1027,7 @@
           </div>
         </div>
         <a class="show-link" href="https://centertheatrefortheperformingarts.thundertix.com/events/260689" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.0541236"
@@ -1067,7 +1076,7 @@
           </div>
         </div>
         <a class="show-link" href="https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.6575821"
@@ -1121,7 +1130,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.patriotcinemas.com/movie/project-hail-mary" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.3877387"
@@ -1165,7 +1174,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.reelpizza.net/now-playing" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.1490064"
@@ -1224,7 +1233,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.regmovies.com/movies/project-hail-mary-ho00018964?date=03-19-2026" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.4143151"
@@ -1283,7 +1292,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.smittyscinema.com/movie/Sanford/PROJECT-HAIL-MARY" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.9381304"
@@ -1342,7 +1351,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.smittyscinema.com/movie/Topsham/PROJECT-HAIL-MARY" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.8396584"
@@ -1396,7 +1405,7 @@
           </div>
         </div>
         <a class="show-link" href="https://www.smittyscinema.com/movie-theater/windham" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.826376"
@@ -1430,7 +1439,7 @@
           </div>
         </div>
         <a class="show-link" href="https://46027.formovietickets.com:2235/?SelectedDate=20260306" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="46.1259988"
@@ -1499,7 +1508,7 @@
           </div>
         </div>
         <a class="show-link" href="https://templehoulton.com/amy_movie/reminders-of-him/" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li><li class="show-item">
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.4110853"
@@ -1533,7 +1542,7 @@
           </div>
         </div>
         <a class="show-link" href="https://centertheatrefortheperformingarts.thundertix.com/events/260689" target="_blank" rel="noopener noreferrer">Tickets</a>
-      </li></ul>
+      </article></div>
       </section>
     </main>
     <script>
@@ -1543,8 +1552,9 @@
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
         const status = document.getElementById("locationSortStatus");
+        const list = document.querySelector(".film-showtimes-box .show-list");
         const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
-        if (!theatreItems.length) return;
+        if (!theatreItems.length || !list) return;
 
         function setStatus(message) {
           if (!status) return;
@@ -1583,6 +1593,42 @@
           return 2 * R * Math.asin(Math.sqrt(a));
         }
 
+        function getMasonryColumnCount() {
+          if (window.matchMedia("(max-width: 859px)").matches) return 1;
+          const width = list.clientWidth;
+          if (!width) return 2;
+          const minColumnWidth = 320;
+          const gap = 12;
+          return Math.max(2, Math.floor((width + gap) / (minColumnWidth + gap)));
+        }
+
+        function applyShowtimesLayout(items) {
+          const orderedItems = Array.isArray(items) ? items : theatreItems;
+          const columns = getMasonryColumnCount();
+          list.innerHTML = "";
+
+          if (columns <= 1) {
+            list.classList.remove("show-list-masonry");
+            list.style.removeProperty("--show-columns");
+            orderedItems.forEach((item) => list.appendChild(item));
+            return;
+          }
+
+          list.classList.add("show-list-masonry");
+          list.style.setProperty("--show-columns", String(columns));
+          const fragment = document.createDocumentFragment();
+          const columnEls = Array.from({ length: columns }, () => {
+            const col = document.createElement("div");
+            col.className = "show-masonry-column";
+            fragment.appendChild(col);
+            return col;
+          });
+          orderedItems.forEach((item, index) => {
+            columnEls[index % columns].appendChild(item);
+          });
+          list.appendChild(fragment);
+        }
+
         function sortByDistance(lat, lng, sourceLabel) {
           const scored = theatreItems.map((item) => {
             const holder = item.querySelector("[data-theatre-lat]");
@@ -1604,9 +1650,7 @@
             const bLabel = b.item.querySelector(".show-main-theatre")?.textContent || "";
             return aLabel.localeCompare(bLabel);
           });
-
-          const list = document.querySelector(".film-showtimes-box .show-list");
-          scored.forEach(({ item }) => list?.appendChild(item));
+          applyShowtimesLayout(scored.map(({ item }) => item));
           setStatus("Sorted by distance using " + sourceLabel + ".");
         }
 
@@ -1661,8 +1705,18 @@
         if (saved) {
           sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
         } else {
+          applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
         }
+
+        let resizeTimer = null;
+        window.addEventListener("resize", () => {
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            const currentItems = Array.from(list.querySelectorAll(".show-item"));
+            applyShowtimesLayout(currentItems);
+          }, 90);
+        });
       })();
     </script>
   </body>
