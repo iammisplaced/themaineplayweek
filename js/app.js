@@ -1491,7 +1491,12 @@ async function loadData() {
         updateSupabaseBaselinePayload();
         return;
       }
-    } catch {
+    } catch (error) {
+      const message = `Supabase data load failed; falling back to local/static data. ${String(error?.message || "")}`.trim();
+      console.error("[showtimes] " + message, error);
+      if (elements.adminMessage) {
+        elements.adminMessage.textContent = message;
+      }
       // fall through to local fallback
     }
   }
@@ -1666,10 +1671,10 @@ function buildTheatreGroupsFromFilmPagesSource(source) {
 }
 
 async function loadDataFromSupabase() {
-  const theatres = await fetchAllRowsFromSupabase(() =>
+  const theatres = await fetchAllRowsFromSupabase("theatres", () =>
     state.supabase.from("theatres").select("id,name,city,address,website,latitude,longitude").order("id", { ascending: true })
   );
-  const films = await fetchAllRowsFromSupabase(() =>
+  const films = await fetchAllRowsFromSupabase("films", () =>
     state.supabase
       .from("films")
       .select(
@@ -1677,20 +1682,20 @@ async function loadDataFromSupabase() {
       )
       .order("id", { ascending: true })
   );
-  const theatreFilms = await fetchAllRowsFromSupabase(() =>
+  const theatreFilms = await fetchAllRowsFromSupabase("theatre_films", () =>
     state.supabase
       .from("theatre_films")
       .select("theatre_id,film_id,ticket_link")
       .order("theatre_id", { ascending: true })
       .order("film_id", { ascending: true })
   );
-  const showings = await fetchAllRowsFromSupabase(() =>
+  const showings = await fetchAllRowsFromSupabase("showings", () =>
     state.supabase
       .from("showings")
       .select("id,theatre_id,film_id,show_date,times")
       .order("id", { ascending: true })
   );
-  const promos = await fetchAllRowsFromSupabase(() =>
+  const promos = await fetchAllRowsFromSupabase("promos", () =>
     state.supabase
       .from("promos")
       .select("id,title,button_url,image_path,image_alt,image_name,button_label,enabled,sort_order")
@@ -2769,13 +2774,15 @@ async function findTicketLinkClearRisks(supabase, payload) {
   };
 }
 
-async function fetchAllRowsFromSupabase(queryBuilderFactory, pageSize = 1000) {
+async function fetchAllRowsFromSupabase(tableName, queryBuilderFactory, pageSize = 1000) {
   const rows = [];
   let from = 0;
   while (true) {
     const to = from + pageSize - 1;
     const result = await queryBuilderFactory().range(from, to);
-    if (result.error) throw result.error;
+    if (result.error) {
+      throw new Error(`Supabase read failed for table "${tableName}": ${result.error.message}`);
+    }
     const chunk = result.data || [];
     if (!chunk.length) break;
     rows.push(...chunk);
