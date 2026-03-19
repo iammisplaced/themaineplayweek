@@ -1314,6 +1314,11 @@ function bindEvents() {
     const file = event.target.files?.[0];
     if (!file) return;
     try {
+      if (state.source !== "supabase" || !state.loadedFromSupabaseThisSession) {
+        throw new Error(
+          "CSV import is disabled because the app is currently using fallback data. Reload until Supabase data loads, then import again."
+        );
+      }
       const content = await file.text();
       // Preserve _dbId fields so CSV edits map to existing Supabase rows.
       const nextData = JSON.parse(JSON.stringify(state.data));
@@ -2283,12 +2288,19 @@ function importShowtimesCsv(data, csvContent) {
     if (!theatreMatches.length) {
       throw new Error(`Row ${rowNumber}: theatre "${theatreName}" was not found. Add it in admin first.`);
     }
-    const theatre = theatreMatches.find(
-      (entry) => normalizeSearchText(entry?.city) === normalizeSearchText(theatreCity)
-    );
+    const inputCityExact = normalizeSearchText(theatreCity);
+    const inputCityLoose = normalizeCityMatchText(theatreCity);
+    let theatre = theatreMatches.find((entry) => normalizeSearchText(entry?.city) === inputCityExact);
     if (!theatre) {
+      theatre = theatreMatches.find((entry) => normalizeCityMatchText(entry?.city) === inputCityLoose);
+    }
+    if (!theatre && theatreMatches.length === 1) {
+      theatre = theatreMatches[0];
+    }
+    if (!theatre) {
+      const availableCities = theatreMatches.map((entry) => String(entry?.city || "").trim()).filter(Boolean).join(", ");
       throw new Error(
-        `Row ${rowNumber}: theatre "${theatreName}" with city "${theatreCity}" was not found.`
+        `Row ${rowNumber}: theatre "${theatreName}" with city "${theatreCity}" was not found.${availableCities ? ` Available cities: ${availableCities}.` : ""}`
       );
     }
 
@@ -4043,6 +4055,10 @@ function normalizeSearchText(value) {
   return stripDiacritics(value)
     .trim()
     .toLowerCase();
+}
+
+function normalizeCityMatchText(value) {
+  return normalizeSearchText(value).replace(/\b(maine|me)\b/g, "").replace(/,\s*$/g, "").trim();
 }
 
 function getPageScrollTop() {
