@@ -1515,7 +1515,7 @@ async function loadDataFromSupabase() {
     state.supabase
       .from("films")
       .select(
-        "id,title,year,tmdb_id,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json"
+        "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json"
       )
       .order("id", { ascending: true })
   );
@@ -1559,10 +1559,16 @@ async function loadDataFromSupabase() {
   });
 
   films.forEach((filmRow) => {
+    const tmdbJson = isPlainObject(filmRow.tmdb_json) ? { ...filmRow.tmdb_json } : {};
+    const synopsis = String(filmRow.synopsis || "").trim();
+    if (synopsis && !String(tmdbJson.overview || "").trim()) {
+      tmdbJson.overview = synopsis;
+    }
     filmById.set(filmRow.id, {
       title: filmRow.title,
       year: filmRow.year,
       tmdbId: filmRow.tmdb_id,
+      synopsis,
       ticketLink: "",
       legacyTicketLink: filmRow.ticket_link || "",
       staffFavorite: Boolean(filmRow.staff_favorite),
@@ -1570,7 +1576,7 @@ async function loadDataFromSupabase() {
       featuredOnPlayweek: Boolean(filmRow.featured_on_playweek),
       featuredOnPlayweekUrl: String(filmRow.featured_on_playweek_url || "").trim(),
       metadataSource: normalizeMetadataSource(filmRow.metadata_source, { tmdbId: filmRow.tmdb_id }),
-      tmdb: filmRow.tmdb_json || undefined,
+      tmdb: tmdbJson,
       _dbId: filmRow.id,
     });
   });
@@ -1582,6 +1588,7 @@ async function loadDataFromSupabase() {
         title: filmTemplate.title,
         year: filmTemplate.year,
         tmdbId: filmTemplate.tmdbId,
+        synopsis: String(filmTemplate.synopsis || ""),
         ticketLink: "",
         staffFavorite: Boolean(filmTemplate.staffFavorite),
         staffFavoriteBy: String(filmTemplate.staffFavoriteBy || ""),
@@ -2666,6 +2673,7 @@ function buildReplacePayload(data, promotedCards) {
           title: film.title,
           year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
           tmdb_id: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
+          synopsis: extractFilmSynopsis(film),
           metadata_source: normalizeMetadataSource(film.metadataSource, film),
           ticket_link: filmTicketLink,
           staff_favorite: Boolean(film.staffFavorite),
@@ -2684,6 +2692,9 @@ function buildReplacePayload(data, promotedCards) {
             films[existingFilmIndex].metadata_source,
             incomingMetadataSource
           );
+          if (!films[existingFilmIndex].synopsis) {
+            films[existingFilmIndex].synopsis = extractFilmSynopsis(film);
+          }
           if (
             film.tmdb &&
             (films[existingFilmIndex].tmdb_json == null || incomingMetadataSource === "manual")
@@ -2865,6 +2876,7 @@ function hasFilmRowChanges(previousRow, nextRow) {
     String(previousRow?.title || "") !== String(nextRow?.title || "") ||
     nullableInt(previousRow?.year) !== nullableInt(nextRow?.year) ||
     nullableInt(previousRow?.tmdb_id) !== nullableInt(nextRow?.tmdb_id) ||
+    String(previousRow?.synopsis || "") !== String(nextRow?.synopsis || "") ||
     String(previousRow?.metadata_source || "") !== String(nextRow?.metadata_source || "") ||
     String(previousRow?.ticket_link || "") !== String(nextRow?.ticket_link || "") ||
     Boolean(previousRow?.staff_favorite) !== Boolean(nextRow?.staff_favorite) ||
@@ -2886,6 +2898,13 @@ function hasPromoRowChanges(previousRow, nextRow) {
     Boolean(previousRow?.enabled) !== Boolean(nextRow?.enabled) ||
     nullableInt(previousRow?.sort_order) !== nullableInt(nextRow?.sort_order)
   );
+}
+
+function extractFilmSynopsis(film) {
+  const directSynopsis = String(film?.synopsis || "").trim();
+  if (directSynopsis) return directSynopsis;
+  const tmdbSynopsis = String(film?.tmdb?.overview || "").trim();
+  return tmdbSynopsis;
 }
 
 function buildTheatreFilmRowKey(row) {

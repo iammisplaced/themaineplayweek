@@ -51,6 +51,7 @@ for (const film of films) {
     const nextTmdbJson = {
       id: details.id,
       title: details.title,
+      overview: details.overview || "",
       releaseDate: details.release_date,
       popularity: toFiniteNumber(details.popularity),
       voteAverage: toFiniteNumber(details.vote_average),
@@ -65,7 +66,9 @@ for (const film of films) {
 
     const existingTmdbJson = isPlainObject(film.tmdb_json) ? film.tmdb_json : {};
     const changed =
-      Number(film.tmdb_id) !== Number(details.id) || !deepEqualShallow(existingTmdbJson, nextTmdbJson);
+      Number(film.tmdb_id) !== Number(details.id) ||
+      String(film.synopsis || "") !== String(details.overview || "") ||
+      !deepEqualShallow(existingTmdbJson, nextTmdbJson);
     if (!changed) {
       skipped += 1;
       await delay(REQUEST_DELAY_MS);
@@ -74,6 +77,7 @@ for (const film of films) {
 
     await updateFilmRow(film.id, {
       tmdb_id: details.id,
+      synopsis: details.overview || "",
       tmdb_json: nextTmdbJson,
     });
     updated += 1;
@@ -96,7 +100,7 @@ async function fetchAllFilms(pageSize = 1000) {
   let from = 0;
   while (true) {
     const to = from + pageSize - 1;
-    const url = `${restBase}/films?select=id,title,year,tmdb_id,tmdb_json&order=id.asc`;
+    const url = `${restBase}/films?select=id,title,year,tmdb_id,synopsis,tmdb_json&order=id.asc`;
     const response = await fetch(url, {
       headers: {
         apikey: SUPABASE_SERVICE_ROLE_KEY,
@@ -185,6 +189,7 @@ async function fetchMovieDetailsById(apiKey, movieId, fallbackTitle = "") {
   return {
     id: details.id,
     title: details.title || fallbackTitle,
+    overview: details.overview || "",
     release_date: details.release_date || "",
     popularity: toFiniteNumber(details.popularity),
     vote_average: toFiniteNumber(details.vote_average),

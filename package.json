@@ -1,0 +1,11 @@
+{
+  "name": "tmp-showtimes",
+  "private": true,
+  "version": "1.0.0",
+  "description": "The Maine Playweek showtimes site",
+  "scripts": {
+    "film-pages:build": "node scripts/generate-film-pages.mjs",
+    "film-pages:live": "node scripts/generate-film-pages.mjs --from-supabase --write-source=data/film-pages-source.live.json",
+    "film-pages:live:site": "node scripts/generate-film-pages.mjs --from-supabase --write-source=data/film-pages-source.live.json --site-url=$SITE_URL"
+  }
+}
