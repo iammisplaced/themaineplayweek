@@ -2701,13 +2701,13 @@ function buildFilmUniqKey(film) {
 
 async function findTicketLinkClearRisks(supabase, payload) {
   const [theatres, films, theatreFilms] = await Promise.all([
-    fetchAllRowsFromSupabase(() =>
+    fetchAllRowsFromSupabase("theatres", () =>
       supabase.from("theatres").select("id,name,city").order("id", { ascending: true })
     ),
-    fetchAllRowsFromSupabase(() =>
+    fetchAllRowsFromSupabase("films", () =>
       supabase.from("films").select("id,title,year,tmdb_id").order("id", { ascending: true })
     ),
-    fetchAllRowsFromSupabase(() =>
+    fetchAllRowsFromSupabase("theatre_films", () =>
       supabase
         .from("theatre_films")
         .select("theatre_id,film_id,ticket_link")
