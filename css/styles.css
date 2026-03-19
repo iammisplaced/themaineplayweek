@@ -1133,12 +1133,12 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   gap: 0.35rem;
 }
 
-.show-meta .theatre-row-actions {
-  margin-top: 0.35rem;
-}
-
 .show-item > .theatre-row-actions {
   margin-top: 0.42rem;
+}
+
+.theatre-row-actions .film-expand-toggle.theatre-row-toggle {
+  margin: 0;
 }
 
 .theatre-row-film-link {
@@ -1155,6 +1155,7 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   text-transform: uppercase;
   padding: 0.14rem 0.5rem;
   text-decoration: none;
+  line-height: 1;
 }
 
 .theatre-row-film-link:hover,

@@ -3566,16 +3566,6 @@ function render() {
           rowToggle.dataset.filmKey = rowExpandKey;
           rowToggle.textContent = rowExpanded ? "Collapse" : "Expand";
           rowToggle.setAttribute("aria-expanded", String(rowExpanded));
-          const rowFilmPageLink = document.createElement("a");
-          rowFilmPageLink.className = "theatre-row-film-link";
-          rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
-          rowFilmPageLink.target = "_blank";
-          rowFilmPageLink.rel = "noopener noreferrer";
-          rowFilmPageLink.textContent = "View Film Page";
-          const rowActions = document.createElement("div");
-          rowActions.className = "theatre-row-actions";
-          rowActions.appendChild(rowToggle);
-          rowActions.appendChild(rowFilmPageLink);
 
           row.classList.add("has-poster");
           poster.onerror = () => {
@@ -3596,7 +3586,7 @@ function render() {
           }
 
           if (!rowExpanded) {
-            meta.appendChild(rowActions);
+            meta.appendChild(rowToggle);
             schedule.classList.add("hidden");
           } else {
             schedule.classList.remove("hidden");
@@ -3610,6 +3600,16 @@ function render() {
             link.classList.add("hidden");
           }
           if (rowExpanded) {
+            const rowFilmPageLink = document.createElement("a");
+            rowFilmPageLink.className = "theatre-row-film-link";
+            rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
+            rowFilmPageLink.target = "_blank";
+            rowFilmPageLink.rel = "noopener noreferrer";
+            rowFilmPageLink.textContent = "View Film Page";
+            const rowActions = document.createElement("div");
+            rowActions.className = "theatre-row-actions";
+            rowActions.appendChild(rowToggle);
+            rowActions.appendChild(rowFilmPageLink);
             item.appendChild(rowActions);
           }
         } else {
