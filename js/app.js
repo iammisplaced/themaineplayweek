@@ -448,10 +448,7 @@ function bindEvents() {
     if (filmExpandToggle) {
       const filmPageUrl = String(filmExpandToggle.dataset.filmPageUrl || "").trim();
       if (filmPageUrl) {
-        const newTab = window.open(filmPageUrl, "_blank", "noopener,noreferrer");
-        if (!newTab) {
-          window.location.href = filmPageUrl;
-        }
+        window.open(filmPageUrl, "_blank", "noopener,noreferrer");
         return;
       }
       const key = filmExpandToggle.dataset.filmKey || filmExpandToggle.closest(".group-card")?.dataset.filmKey;
@@ -533,10 +530,7 @@ function bindEvents() {
     if (!poster || poster.classList.contains("hidden")) return;
     const posterFilmPageUrl = String(poster.dataset.filmPageUrl || "").trim();
     if (posterFilmPageUrl) {
-      const newTab = window.open(posterFilmPageUrl, "_blank", "noopener,noreferrer");
-      if (!newTab) {
-        window.location.href = posterFilmPageUrl;
-      }
+      window.open(posterFilmPageUrl, "_blank", "noopener,noreferrer");
       return;
     }
     const src = poster.getAttribute("src");
