@@ -341,6 +341,7 @@ function normalizeFlatFilm(film) {
   return {
     title,
     year: toNumber(film?.year),
+    tmdbId: stringOrEmpty(film?.tmdbId || film?.tmdb_id),
     slug: stringOrEmpty(film?.slug),
     description: stringOrEmpty(film?.description || film?.synopsis || film?.tmdb?.overview),
     posterUrl: stringOrEmpty(film?.posterUrl || film?.tmdb?.posterUrl || film?.tmdb?.posterPath || film?.tmdb?.poster_path),
