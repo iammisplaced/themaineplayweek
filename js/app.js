@@ -4064,6 +4064,10 @@ function normalizeSearchText(value) {
     .toLowerCase();
 }
 
+function isPlainObject(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
 function normalizeCityMatchText(value) {
   return normalizeSearchText(value).replace(/\b(maine|me)\b/g, "").replace(/,\s*$/g, "").trim();
 }
