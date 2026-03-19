@@ -25,6 +25,8 @@ const writeSourcePath = writeSourceArg ? path.resolve(cwd, writeSourceArg) : "";
 
 const DEFAULT_NO_POSTER = "/assets/images/noposter.webp";
 const BRAND_NAME = "The Maine Playweek";
+const PLAYWEEK_RECOMMENDS_STAMP_URL = "/assets/images/playweek%20recommends.png";
+const FEATURED_ON_PLAYWEEK_STAMP_URL = "/assets/images/featured%20on%20playweek.png";
 const FILM_SORT_WEIGHTS = Object.freeze({
   tmdbPopularity: 0.2,
   tmdbRating: 0.15,
@@ -150,6 +152,11 @@ async function loadFilmSourceFromSupabase() {
       voteAverage: firstFiniteNumber(tmdb.voteAverage, tmdb.vote_average),
       voteCount: firstFiniteNumber(tmdb.voteCount, tmdb.vote_count),
       staffFavorite: Boolean(row.staff_favorite ?? tmdb.staffFavorite ?? tmdb.staff_favorite),
+      staffFavoriteBy: String(row.staff_favorite_by || tmdb.staffFavoriteBy || tmdb.staff_favorite_by || "").trim(),
+      featuredOnPlayweek: Boolean(row.featured_on_playweek ?? tmdb.featuredOnPlayweek ?? tmdb.featured_on_playweek),
+      featuredOnPlayweekUrl: String(
+        row.featured_on_playweek_url || tmdb.featuredOnPlayweekUrl || tmdb.featured_on_playweek_url || ""
+      ).trim(),
       legacyTicketLink: String(row.ticket_link || "").trim(),
       theatres: [],
       showings: [],
@@ -251,6 +258,17 @@ function normalizeFilms(source) {
             voteAverage: firstFiniteNumber(rawFilm?.tmdb?.voteAverage, rawFilm?.tmdb?.vote_average),
             voteCount: firstFiniteNumber(rawFilm?.tmdb?.voteCount, rawFilm?.tmdb?.vote_count),
             staffFavorite: Boolean(rawFilm?.staffFavorite ?? rawFilm?.tmdb?.staffFavorite ?? rawFilm?.tmdb?.staff_favorite),
+            staffFavoriteBy: stringOrEmpty(
+              rawFilm?.staffFavoriteBy || rawFilm?.tmdb?.staffFavoriteBy || rawFilm?.tmdb?.staff_favorite_by
+            ),
+            featuredOnPlayweek: Boolean(
+              rawFilm?.featuredOnPlayweek ?? rawFilm?.tmdb?.featuredOnPlayweek ?? rawFilm?.tmdb?.featured_on_playweek
+            ),
+            featuredOnPlayweekUrl: stringOrEmpty(
+              rawFilm?.featuredOnPlayweekUrl ||
+                rawFilm?.tmdb?.featuredOnPlayweekUrl ||
+                rawFilm?.tmdb?.featured_on_playweek_url
+            ),
             theatres: [],
             showings: [],
           });
@@ -311,6 +329,21 @@ function normalizeFlatFilm(film) {
     voteAverage: firstFiniteNumber(film?.voteAverage, film?.vote_average, film?.tmdb?.voteAverage, film?.tmdb?.vote_average),
     voteCount: firstFiniteNumber(film?.voteCount, film?.vote_count, film?.tmdb?.voteCount, film?.tmdb?.vote_count),
     staffFavorite: Boolean(film?.staffFavorite ?? film?.staff_favorite ?? film?.tmdb?.staffFavorite ?? film?.tmdb?.staff_favorite),
+    staffFavoriteBy: stringOrEmpty(
+      film?.staffFavoriteBy || film?.staff_favorite_by || film?.tmdb?.staffFavoriteBy || film?.tmdb?.staff_favorite_by
+    ),
+    featuredOnPlayweek: Boolean(
+      film?.featuredOnPlayweek ??
+        film?.featured_on_playweek ??
+        film?.tmdb?.featuredOnPlayweek ??
+        film?.tmdb?.featured_on_playweek
+    ),
+    featuredOnPlayweekUrl: stringOrEmpty(
+      film?.featuredOnPlayweekUrl ||
+        film?.featured_on_playweek_url ||
+        film?.tmdb?.featuredOnPlayweekUrl ||
+        film?.tmdb?.featured_on_playweek_url
+    ),
     theatres: Array.isArray(film?.theatres) ? film.theatres.filter(Boolean) : [],
     showings: Array.isArray(film?.showings)
       ? film.showings
@@ -373,6 +406,7 @@ function renderFilmPage(film, slug, siteUrl) {
   const canonicalPath = `/films/${slug}/`;
   const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath.replace(/^\//, "");
   const posterUrl = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 2);
+  const stampMarkup = buildFilmStampMarkup(film, 2);
   const theatreGroups = buildShowtimesByTheatre(film);
   const theatreRowsMarkup = theatreGroups
     .map((group) => {
@@ -612,7 +646,8 @@ function renderFilmPage(film, slug, siteUrl) {
         white-space: nowrap;
       }
       .film-showtimes-box .show-item {
-        align-self: start;
+        align-self: stretch;
+        width: 100%;
         margin: 0;
       }
       .location-sort-controls {
@@ -685,10 +720,13 @@ function renderFilmPage(film, slug, siteUrl) {
         <a class="back-link" href="../">All Films</a>
         <p class="film-page-note">Prototype: static SEO detail page</p>
       </div>
-      <article class="group-card film-card film-page-card film-info-box">
+      <article class="group-card film-card film-page-card film-info-box${film.staffFavorite ? " film-card-staff-favorite" : ""}${
+        film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
+      }">
         <h1 class="group-title group-title-film">${escapeHtml(filmDisplayTitle)}</h1>
         <div class="group-film-summary">
           <img class="group-film-poster" src="${escapeHtml(posterUrl)}" alt="Poster for ${escapeHtml(filmDisplayTitle)}" loading="lazy" />
+          ${stampMarkup}
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
               ${buildFilmFactsMarkup(film, description)}
@@ -905,11 +943,15 @@ function renderIndexPage(items, siteUrl) {
       const description =
         film.description || `${film.title} showtimes and details from ${BRAND_NAME}.`;
       const poster = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 1);
-      return `<article class="group-card film-card film-card-collapsed">
+      const stampMarkup = buildFilmStampMarkup(film, 1);
+      return `<article class="group-card film-card film-card-collapsed${film.staffFavorite ? " film-card-staff-favorite" : ""}${
+        film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
+      }">
   <h2 class="group-title group-title-film">${escapeHtml(title)}</h2>
   <a class="film-expand-toggle film-page-link" href="./${slug}/" aria-label="View page for ${escapeHtml(title)}">View Film Page</a>
   <div class="group-film-summary">
     <img class="group-film-poster" src="${escapeHtml(poster)}" alt="Poster for ${escapeHtml(title)}" loading="lazy" />
+    ${stampMarkup}
     <div class="group-film-details">
       <p class="group-film-facts hidden">${escapeHtml(description)}</p>
       <a class="group-feature-link hidden" href="./${slug}/">View Film Page</a>
@@ -1179,6 +1221,28 @@ function buildFilmFactsMarkup(film, synopsis) {
         )}</span><span class="film-fact-value">${escapeHtml(fact.value)}</span></div>`
     )
     .join("");
+}
+
+function buildFilmStampMarkup(film, depthToRoot) {
+  const stamps = [];
+  if (film?.staffFavorite) {
+    const titleText = film?.staffFavoriteBy
+      ? ` title="${escapeHtml(`Playweek recommends (${String(film.staffFavoriteBy)})`)}"`
+      : "";
+    stamps.push(
+      `<img class="film-favorite-stamp" src="${escapeHtml(
+        resolveRelativeAssetPath(PLAYWEEK_RECOMMENDS_STAMP_URL, depthToRoot)
+      )}" alt="Playweek recommends" loading="lazy" decoding="async"${titleText} />`
+    );
+  }
+  if (film?.featuredOnPlayweek) {
+    stamps.push(
+      `<img class="film-featured-stamp" src="${escapeHtml(
+        resolveRelativeAssetPath(FEATURED_ON_PLAYWEEK_STAMP_URL, depthToRoot)
+      )}" alt="Featured on the Playweek" loading="lazy" decoding="async" />`
+    );
+  }
+  return stamps.join("");
 }
 
 function buildShowtimesByTheatre(film) {

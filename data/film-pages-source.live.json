@@ -21,6 +21,9 @@
       "voteAverage": 6.3,
       "voteCount": 526,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": true,
+      "featuredOnPlayweekUrl": "https://themaineplayweek.substack.com/p/whoa-nelly",
       "legacyTicketLink": "https://oldfilm.org/alamo-theatre/",
       "theatres": [
         "Alamo Theatre, Bucksport",
@@ -994,6 +997,9 @@
       "voteAverage": 6,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-2026-oscar-nominated-shorts-animated-16/",
       "theatres": [],
       "showings": []
@@ -1014,6 +1020,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-2026-oscar-nominated-shorts-documentary-15/",
       "theatres": [],
       "showings": []
@@ -1034,6 +1043,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.eveningstarcinema.com/movies/1000037912-2026-oscar-nominated-shorts-live-action/",
       "theatres": [],
       "showings": []
@@ -1058,6 +1070,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://space538.org/event/a-body-to-live-in-2026/",
       "theatres": [
         "SPACE Gallery, Portland"
@@ -1091,6 +1106,9 @@
       "voteAverage": 10,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-a-photographic-memory-with-filmmaker-rachel-elizabeth-seed/",
       "theatres": [
         "PMA Films, Portland"
@@ -1128,6 +1146,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://strandfilms.eventive.org/films/699f333d4ec813146593240e",
       "theatres": [
         "Strand Theatre, Rockland"
@@ -1197,6 +1218,9 @@
       "voteAverage": 5.8,
       "voteCount": 109,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.lincolntheater.org/films-events/a-private-life-(r)",
       "theatres": [],
       "showings": []
@@ -1224,6 +1248,9 @@
       "voteAverage": 6.311,
       "voteCount": 45,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.fortkentcinema.com/",
       "theatres": [],
       "showings": []
@@ -1249,6 +1276,9 @@
       "voteAverage": 8.168,
       "voteCount": 16117,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
       "theatres": [],
       "showings": []
@@ -1274,6 +1304,9 @@
       "voteAverage": 7.743,
       "voteCount": 913,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-all-quiet-on-the-western-front-1930-ho00020884",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -1333,6 +1366,9 @@
       "voteAverage": 5.849,
       "voteCount": 799,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Anaconda--2025-/611fea26f74bab2423301ee4/6920942b6165dc61f96506e0",
       "theatres": [
         "Apple Cinemas, Westbrook",
@@ -1379,6 +1415,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://space538.org/event/andre-is-an-idiot/",
       "theatres": [
         "SPACE Gallery, Portland"
@@ -1419,6 +1458,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Animal-Farm--2026-/611fe9edf74bab2423301ee0/699f3c9fa52bdb49440d5535",
       "theatres": [],
       "showings": []
@@ -1445,6 +1487,9 @@
       "voteAverage": 6.558,
       "voteCount": 758,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.johnsonhall.org/event/annie-1982-movie/",
       "theatres": [],
       "showings": []
@@ -1471,6 +1516,9 @@
       "voteAverage": 7.3,
       "voteCount": 1895,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Avatar--Fire---Ash---2025-/611fe9edf74bab2423301ee0/6912bedfba5d0b84bc715df1",
       "theatres": [
         "Apple Cinemas, Saco"
@@ -1639,6 +1687,9 @@
       "voteAverage": 6.1,
       "voteCount": 164,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/beat-the-devil--1953",
       "theatres": [
         "Kinonik, Portland"
@@ -1699,6 +1750,9 @@
       "voteAverage": 7.725,
       "voteCount": 10555,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://operahousearts.org/beauty-and-the-beast/",
       "theatres": [],
       "showings": []
@@ -1719,6 +1773,9 @@
       "voteAverage": 6.867,
       "voteCount": 15,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://usm.maine.edu/calendar-of-events/event/film-screening-belfast-maine/",
       "theatres": [],
       "showings": []
@@ -1745,6 +1802,9 @@
       "voteAverage": 7.9,
       "voteCount": 3068,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Ben-Hur--2026-/611fe9edf74bab2423301ee0/697b7d294e6ff2ec3886ebc8",
       "theatres": [],
       "showings": []
@@ -1769,6 +1829,9 @@
       "voteAverage": 6.86,
       "voteCount": 652,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
       "theatres": [
         "Criterion Theatre, Bar Harbor"
@@ -1826,6 +1889,9 @@
       "voteAverage": 7,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-blknws-terms-conditions/",
       "theatres": [
         "PMA Films, Portland"
@@ -1924,6 +1990,9 @@
       "voteAverage": 7.96,
       "voteCount": 17610,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.johnsonhall.org/event/bohemian-rhapsody-movie/",
       "theatres": [
         "Johnson Hall Opera House, Gardiner"
@@ -1962,6 +2031,9 @@
       "voteAverage": 7.26,
       "voteCount": 183,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [],
       "showings": []
@@ -1982,6 +2054,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.onthestage.tickets/show/the-waldo-theatre/698803267c5e2b5fcc55a7f8",
       "theatres": [
         "Waldo Theatre, Waldoboro"
@@ -2021,6 +2096,9 @@
       "voteAverage": 7,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://space538.org/event/by-design/",
       "theatres": [],
       "showings": []
@@ -2045,6 +2123,9 @@
       "voteAverage": 6.955,
       "voteCount": 22,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://strandfilms.eventive.org/films/6996218e872aa2669797c7e6",
       "theatres": [],
       "showings": []
@@ -2069,6 +2150,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": true,
+      "staffFavoriteBy": "Charlie",
+      "featuredOnPlayweek": true,
+      "featuredOnPlayweekUrl": "https://themaineplayweek.substack.com/p/in-conversation-with-sam-dunning",
       "legacyTicketLink": "https://www.eveningstarcinema.com/movies/1000027587-canoe-dig-it/",
       "theatres": [
         "Eveningstar Cinema, Brunswick",
@@ -2141,6 +2225,9 @@
       "voteAverage": 6.93,
       "voteCount": 660,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/cat-people--1942",
       "theatres": [],
       "showings": []
@@ -2166,6 +2253,9 @@
       "voteAverage": 7.978,
       "voteCount": 5967,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
       "theatres": [],
       "showings": []
@@ -2190,6 +2280,9 @@
       "voteAverage": 7.367,
       "voteCount": 30,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": true,
+      "featuredOnPlayweekUrl": "https://themaineplayweek.substack.com/p/our-biggest-tiniest-dreams",
       "legacyTicketLink": "https://oldfilm.org/alamo-theatre/",
       "theatres": [
         "Alamo Theatre, Bucksport"
@@ -2258,6 +2351,9 @@
       "voteAverage": 7,
       "voteCount": 183,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22425",
       "theatres": [
         "Alamo Theatre, Bucksport",
@@ -2485,6 +2581,9 @@
       "voteAverage": 7.4,
       "voteCount": 9,
       "staffFavorite": true,
+      "staffFavoriteBy": "Julia",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://space538.org/event/cutting-through-rocks/",
       "theatres": [
         "Strand Theatre, Rockland"
@@ -2524,6 +2623,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://space538.org/event/dead-lover-in-stink-o-vision/",
       "theatres": [
         "SPACE Gallery, Portland"
@@ -2563,6 +2665,9 @@
       "voteAverage": 7.317,
       "voteCount": 1769,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/deliverance",
       "theatres": [],
       "showings": []
@@ -2589,6 +2694,9 @@
       "voteAverage": 9,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Dhurandhar-The-Revenge--Hindi-/611fe9edf74bab2423301ee0/69a1d6ea836680ff1bd74ed1",
       "theatres": [
         "Apple Cinemas, Westbrook",
@@ -2729,6 +2837,9 @@
       "voteAverage": 7.763,
       "voteCount": 13252,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/donnie-darko",
       "theatres": [],
       "showings": []
@@ -2755,6 +2866,9 @@
       "voteAverage": 7.103,
       "voteCount": 956,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Dracula/611fe9edf74bab2423301ee0/69794c9e8d1d8542f0d7d88e",
       "theatres": [],
       "showings": []
@@ -2781,6 +2895,9 @@
       "voteAverage": 6.345,
       "voteCount": 58,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/dreams",
       "theatres": [],
       "showings": []
@@ -2803,6 +2920,9 @@
       "voteAverage": 9,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.eveningstarcinema.com/movies/1000031105-earths-greatest-enemy/",
       "theatres": [
         "Eveningstar Cinema, Brunswick"
@@ -2841,6 +2961,9 @@
       "voteAverage": 7,
       "voteCount": 150,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.eveningstarcinema.com/movies/688-easter-parade-1948/",
       "theatres": [
         "Eveningstar Cinema, Brunswick"
@@ -2889,6 +3012,9 @@
       "voteAverage": 8.2,
       "voteCount": 27,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": true,
+      "featuredOnPlayweekUrl": "https://themaineplayweek.substack.com/p/a-theatrical-tribute-to-the-king",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/epic-elvis-presley-in-concert",
       "theatres": [
         "Eveningstar Cinema, Brunswick",
@@ -3161,6 +3287,9 @@
       "voteAverage": 7.722,
       "voteCount": 7752,
       "staffFavorite": true,
+      "staffFavoriteBy": "Charlie",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.johnsonhall.org/event/everything-everywhere-all-at-once-movie/",
       "theatres": [
         "Johnson Hall Opera House, Gardiner",
@@ -3221,6 +3350,9 @@
       "voteAverage": 7.34,
       "voteCount": 3282,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://operahousearts.org/fantasia/",
       "theatres": [
         "Opera House Arts, Stonington"
@@ -3259,6 +3391,9 @@
       "voteAverage": 6.589,
       "voteCount": 179,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.watervillecreates.org/shows/father-mother-sister-brother/",
       "theatres": [
         "Maine Film Center, Waterville"
@@ -3449,6 +3584,9 @@
       "voteAverage": 6.387,
       "voteCount": 623,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.watervillecreates.org/shows/ferngully-the-last-rainforest/",
       "theatres": [],
       "showings": []
@@ -3474,6 +3612,9 @@
       "voteAverage": 7.1,
       "voteCount": 1638,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://rangeleyarts.org/event/free-movie-weekend-field-of-dreams-lego-batman/",
       "theatres": [
         "Rangeley Lakeside Theatre, Rangeley"
@@ -3533,6 +3674,9 @@
       "voteAverage": 7.817,
       "voteCount": 20359,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://operahousearts.org/finding-nemo/",
       "theatres": [],
       "showings": []
@@ -3558,6 +3702,9 @@
       "voteAverage": 6.1,
       "voteCount": 1476,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/friday-the-13th-the-final-chapter",
       "theatres": [],
       "showings": []
@@ -3583,6 +3730,9 @@
       "voteAverage": 7.7,
       "voteCount": 1453,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Fried-Green-Tomatoes-35th-Anniversary-/611fe9edf74bab2423301ee0/697b81ef4e6ff2ec3886ebcb",
       "theatres": [],
       "showings": []
@@ -3609,6 +3759,9 @@
       "voteAverage": 7.284,
       "voteCount": 696,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-from-here-to-eternity-ho00020883?date=03-25-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -3666,6 +3819,9 @@
       "voteAverage": 7.2,
       "voteCount": 12,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [
         "Maine Film Center, Waterville"
@@ -3925,6 +4081,9 @@
       "voteAverage": 7.6,
       "voteCount": 112,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/goat",
       "theatres": [
         "Black Bear Cinemas, Orono",
@@ -6296,6 +6455,9 @@
       "voteAverage": 8.2,
       "voteCount": 12674,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-green-book-ho00020880?date=03-22-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -6355,6 +6517,9 @@
       "voteAverage": 7.905,
       "voteCount": 29433,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.lincolntheater.org/films-events/guardians-of-the-galaxy-(pg-13)",
       "theatres": [
         "Lincoln Theater, Damariscotta"
@@ -6392,6 +6557,9 @@
       "voteAverage": 7.088,
       "voteCount": 17,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://oldfilm.org/alamo-theatre/",
       "theatres": [
         "Alamo Theatre, Bucksport",
@@ -6512,6 +6680,9 @@
       "voteAverage": 6.221,
       "voteCount": 5406,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-happy-feet-ho00021038?date=03-30-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -6581,6 +6752,9 @@
       "voteAverage": 5.793,
       "voteCount": 1368,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.lincolntheater.org/films-events/hop-(pg)",
       "theatres": [
         "Lincoln Theater, Damariscotta"
@@ -6621,6 +6795,9 @@
       "voteAverage": 7.735,
       "voteCount": 215,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/hoppers",
       "theatres": [
         "Black Bear Cinemas, Orono",
@@ -11979,6 +12156,9 @@
       "voteAverage": 6.826,
       "voteCount": 43,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://colonialtheatre.com/film-guide/?film-id=699c9a2fa9ab303e0775ff6d",
       "theatres": [
         "Colonial Theatre, Belfast"
@@ -12028,6 +12208,9 @@
       "voteAverage": 7.16,
       "voteCount": 266,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/hundreds-of-beavers",
       "theatres": [],
       "showings": []
@@ -12053,6 +12236,9 @@
       "voteAverage": 7.25,
       "voteCount": 4,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://oldfilm.org/alamo-theatre/",
       "theatres": [
         "Alamo Theatre, Bucksport",
@@ -12205,6 +12391,9 @@
       "voteAverage": 7.221,
       "voteCount": 111,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/iron-lung",
       "theatres": [],
       "showings": []
@@ -12231,6 +12420,9 @@
       "voteAverage": 8.277,
       "voteCount": 4819,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/-It-s-A-Wonderful-Life-80th-Anniversary-/611fea26f74bab2423301ee4/697c3332e624a71993e4035f",
       "theatres": [],
       "showings": []
@@ -12255,6 +12447,9 @@
       "voteAverage": 7,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://space538.org/event/john-lilly-and-the-earth-coincidence-control-office/",
       "theatres": [
         "SPACE Gallery, Portland"
@@ -12293,6 +12488,9 @@
       "voteAverage": 6.7,
       "voteCount": 43,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
       "theatres": [],
       "showings": []
@@ -12320,6 +12518,9 @@
       "voteAverage": 7.83,
       "voteCount": 4489,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/DUB-Kiki-s-Delivery-Service-35th-Anniversary/611fe9edf74bab2423301ee0/65e69f0a4552187a75544c45",
       "theatres": [
         "Apple Cinemas, Westbrook",
@@ -12539,6 +12740,9 @@
       "voteAverage": 6.9,
       "voteCount": 88,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-la-grande-seduction-seducing-doctor-lewis-2003-free-screening-with-alliance-francaise-du-maine/",
       "theatres": [
         "PMA Films, Portland"
@@ -12578,6 +12782,9 @@
       "voteAverage": 7.898,
       "voteCount": 17920,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://flagshipcinemas.com/falmouth/movie/22054",
       "theatres": [],
       "showings": []
@@ -12603,6 +12810,9 @@
       "voteAverage": 7,
       "voteCount": 1602,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-little-shop-of-horrors-1986/",
       "theatres": [
         "PMA Films, Portland"
@@ -12638,6 +12848,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.eveningstarcinema.com/movies/1000041485-maine-underground-film-festival/",
       "theatres": [],
       "showings": []
@@ -12663,6 +12876,9 @@
       "voteAverage": 7.5,
       "voteCount": 1347,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://flagshipcinemas.com/falmouth/movie/21449",
       "theatres": [],
       "showings": []
@@ -12689,6 +12905,9 @@
       "voteAverage": 7.173,
       "voteCount": 4746,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://flagshipcinemas.com/falmouth/movie/22698",
       "theatres": [
         "Flagship Cinemas, Falmouth",
@@ -12959,6 +13178,9 @@
       "voteAverage": 6.5,
       "voteCount": 6,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.eveningstarcinema.com/movies/258704-midwinter-break/",
       "theatres": [
         "Lincoln Theater, Damariscotta",
@@ -13069,6 +13291,9 @@
       "voteAverage": 6.846,
       "voteCount": 1076,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://colonialtheatre.com/film-guide/?film-id=69a716d929ec1c7d550bd90d",
       "theatres": [
         "Colonial Theatre, Belfast"
@@ -13104,6 +13329,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://space538.org/event/more-beautiful-perversions/",
       "theatres": [
         "SPACE Gallery, Portland"
@@ -13140,6 +13368,9 @@
       "voteAverage": 7.5,
       "voteCount": 55,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/mr-nobody-against-putin",
       "theatres": [
         "Nickelodeon Cinemas, Portland"
@@ -13407,6 +13638,9 @@
       "voteAverage": 8.5,
       "voteCount": 10,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://strandfilms.eventive.org/films/699f3324016802540f02c751",
       "theatres": [
         "Strand Theatre, Rockland"
@@ -13470,6 +13704,9 @@
       "voteAverage": 8,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://strandfilms.eventive.org/schedule/6995fd0c1b41c64b8a2b1ea7",
       "theatres": [
         "Strand Theatre, Rockland"
@@ -13509,6 +13746,9 @@
       "voteAverage": 8,
       "voteCount": 14,
       "staffFavorite": true,
+      "staffFavoriteBy": "Charlie",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/nirvanna-the-band-the-show-the-movie",
       "theatres": [],
       "showings": []
@@ -13535,6 +13775,9 @@
       "voteAverage": 7.948,
       "voteCount": 13073,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-no-country-for-old-men-ho00020887",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -13583,6 +13826,9 @@
       "voteAverage": 8,
       "voteCount": 4448,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.onthestage.tickets/show/the-waldo-theatre/698b811e31540f105130b938",
       "theatres": [
         "Flagship Cinemas, Falmouth",
@@ -13694,6 +13940,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://space538.org/event/numbskull-revolution/",
       "theatres": [
         "SPACE Gallery, Portland"
@@ -13727,6 +13976,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.lincolntheater.org/films-events/observer-(nr)",
       "theatres": [
         "Lincoln Theater, Damariscotta"
@@ -13766,6 +14018,9 @@
       "voteAverage": 7.875,
       "voteCount": 1738,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-on-the-waterfront-ho00020888",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -13815,6 +14070,9 @@
       "voteAverage": 7.396,
       "voteCount": 3173,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/one-battle-after-another",
       "theatres": [
         "Nickelodeon Cinemas, Portland"
@@ -13963,6 +14221,9 @@
       "voteAverage": 8.033,
       "voteCount": 11485,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-oppenheimer-ho00020886?date=03-28-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -14011,6 +14272,9 @@
       "voteAverage": 7.652,
       "voteCount": 636,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.lincolntheater.org/films-events/out-of-the-past-(1947)",
       "theatres": [
         "Lincoln Theater, Damariscotta"
@@ -14060,6 +14324,9 @@
       "voteAverage": 7.471,
       "voteCount": 2730,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-paddington-2-ho00021037?date=03-20-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -14108,6 +14375,9 @@
       "voteAverage": 8.3,
       "voteCount": 3224,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
       "theatres": [
         "Magic Lantern Theater, Bridgton"
@@ -14147,6 +14417,9 @@
       "voteAverage": 8.6,
       "voteCount": 12,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://flagshipcinemas.com/falmouth/movie/22720",
       "theatres": [
         "Flagship Cinemas, Falmouth",
@@ -14586,6 +14859,9 @@
       "voteAverage": 8.14,
       "voteCount": 2374,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/persona--1966",
       "theatres": [
         "Kinonik, Portland"
@@ -14645,6 +14921,9 @@
       "voteAverage": 6.264,
       "voteCount": 123,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": true,
+      "featuredOnPlayweekUrl": "https://themaineplayweek.substack.com/p/pillion-self-esteem-take-a-back-seat",
       "legacyTicketLink": "https://colonialtheatre.com/film-guide/?film-id=69779c97de03763fe3fd9bca",
       "theatres": [
         "Maine Film Center, Waterville",
@@ -15075,6 +15354,9 @@
       "voteAverage": 7.452,
       "voteCount": 8871,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.johnsonhall.org/event/pretty-woman-movie/",
       "theatres": [
         "Johnson Hall Opera House, Gardiner"
@@ -15113,6 +15395,9 @@
       "voteAverage": 8.049,
       "voteCount": 8652,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-makers-at-the-movies-pride-prejudice-2005/",
       "theatres": [
         "PMA Films, Portland"
@@ -15152,6 +15437,9 @@
       "voteAverage": 8.4,
       "voteCount": 69,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
       "theatres": [
         "Alamo Theatre, Bucksport",
@@ -21593,6 +21881,9 @@
       "voteAverage": 7,
       "voteCount": 3,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://flagshipcinemas.com/falmouth/movie/22909",
       "theatres": [
         "Smitty's Cinema, Windham",
@@ -21643,6 +21934,9 @@
       "voteAverage": 6.695,
       "voteCount": 407,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://rangeleyarts.org/event/free-movie-weekend-purple-rain-the-great-muppet-caper/",
       "theatres": [
         "Rangeley Lakeside Theatre, Rangeley"
@@ -21701,6 +21995,9 @@
       "voteAverage": 6.481,
       "voteCount": 107,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Rad-40th-Anniversary/611fe9edf74bab2423301ee0/699a98e5410291d021d9390e",
       "theatres": [
         "Apple Cinemas, Westbrook",
@@ -21750,6 +22047,9 @@
       "voteAverage": 7.922,
       "voteCount": 13455,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.lincolntheater.org/films-events/raiders-of-the-lost-ark-(pg%2C-1981)",
       "theatres": [
         "Criterion Theatre, Bar Harbor",
@@ -21820,6 +22120,9 @@
       "voteAverage": 8.083,
       "voteCount": 6,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/ready-or-not-2-here-i-come",
       "theatres": [
         "Black Bear Cinemas, Orono",
@@ -24930,6 +25233,9 @@
       "voteAverage": 7.256,
       "voteCount": 45,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/reminders-of-him",
       "theatres": [
         "Black Bear Cinemas, Orono",
@@ -28736,6 +29042,9 @@
       "voteAverage": 6.835,
       "voteCount": 591,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.watervillecreates.org/shows/rent/",
       "theatres": [],
       "showings": []
@@ -28758,6 +29067,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-salt-marsh-with-artist-mitchell-rasor/",
       "theatres": [
         "PMA Films, Portland"
@@ -28795,6 +29107,9 @@
       "voteAverage": 10,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.watervillecreates.org/shows/schindler-space-architect/",
       "theatres": [
         "PMA Films, Portland"
@@ -28834,6 +29149,9 @@
       "voteAverage": 5.936,
       "voteCount": 352,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/scream-7",
       "theatres": [
         "Black Bear Cinemas, Orono",
@@ -31717,6 +32035,9 @@
       "voteAverage": 7.1,
       "voteCount": 366,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
       "theatres": [
         "Apple Cinemas, Westbrook",
@@ -32110,6 +32431,9 @@
       "voteAverage": 6.838,
       "voteCount": 3170,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-shakespeare-in-love-ho00020882?date=03-24-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -32171,6 +32495,9 @@
       "voteAverage": 7.757,
       "voteCount": 18497,
       "staffFavorite": true,
+      "staffFavoriteBy": "Charlie",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.johnsonhall.org/event/shrek-movie-sat-matinee/",
       "theatres": [
         "Johnson Hall Opera House, Gardiner"
@@ -32210,6 +32537,9 @@
       "voteAverage": 7.474,
       "voteCount": 4057,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [
         "The Gem Theater, Bethel"
@@ -32318,6 +32648,9 @@
       "voteAverage": 6.848,
       "voteCount": 557,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.eveningstarcinema.com/movies/317783-sirat/",
       "theatres": [
         "Eveningstar Cinema, Brunswick",
@@ -32519,6 +32852,9 @@
       "voteAverage": 6.6,
       "voteCount": 10,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/slanted",
       "theatres": [
         "Flagship Cinemas, Falmouth",
@@ -32638,6 +32974,9 @@
       "voteAverage": 6.979,
       "voteCount": 71,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://flagshipcinemas.com/wells/movie/22264",
       "theatres": [
         "Apple Cinemas, Westbrook"
@@ -32705,6 +33044,9 @@
       "voteAverage": 6.864,
       "voteCount": 70,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.watervillecreates.org/shows/sound-of-falling/",
       "theatres": [],
       "showings": []
@@ -32731,6 +33073,9 @@
       "voteAverage": 6.1,
       "voteCount": 114,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://boothbaycinema.org/classic-film/",
       "theatres": [
         "Harbor Theater, Boothbay Harbor"
@@ -32766,6 +33111,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://space538.org/event/suburban-fury/",
       "theatres": [],
       "showings": []
@@ -32790,6 +33138,9 @@
       "voteAverage": 8.279,
       "voteCount": 2880,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://strandfilms.eventive.org/films/699f324d9b9392e3daaffc41",
       "theatres": [],
       "showings": []
@@ -32818,6 +33169,9 @@
       "voteAverage": 6.701,
       "voteCount": 1919,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://rangeleyarts.org/event/free-movie-weekend-the-big-lebowski-teenage-mutant-ninja-turtles/",
       "theatres": [],
       "showings": []
@@ -32846,6 +33200,9 @@
       "voteAverage": 6.2,
       "voteCount": 1223,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/tmnt-ii-secret-of-the-ooze-35th-anniversary",
       "theatres": [],
       "showings": []
@@ -32871,6 +33228,9 @@
       "voteAverage": 7.1,
       "voteCount": 815,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-terms-of-endearment-ho00020876",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -32924,6 +33284,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://strandfilms.eventive.org/films/6995e4ac80d31bd63feeaa1a",
       "theatres": [
         "Strand Theatre, Rockland"
@@ -32962,6 +33325,9 @@
       "voteAverage": 7.84,
       "voteCount": 12011,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://rangeleyarts.org/event/free-movie-weekend-the-big-lebowski-teenage-mutant-ninja-turtles/",
       "theatres": [],
       "showings": []
@@ -32987,6 +33353,9 @@
       "voteAverage": 7.515,
       "voteCount": 4407,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://rangeleyarts.org/event/free-movie-weekend-the-birds-iron-giant/",
       "theatres": [],
       "showings": []
@@ -33013,6 +33382,9 @@
       "voteAverage": 6.7,
       "voteCount": 59,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.lincolntheater.org/films-events/the-black-pirate-(1926)-silent-film-with-live-accompaniment!",
       "theatres": [
         "Lincoln Theater, Damariscotta"
@@ -33051,6 +33423,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Breadwinner--2026-/611fe9edf74bab2423301ee0/699e1621f040c40778178a22",
       "theatres": [],
       "showings": []
@@ -33077,6 +33452,9 @@
       "voteAverage": 6.282,
       "voteCount": 172,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/the-bride",
       "theatres": [
         "Colonial Theatre, Belfast",
@@ -33569,6 +33947,9 @@
       "voteAverage": 6.3,
       "voteCount": 21,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://oldfilm.org/alamo-theatre/",
       "theatres": [],
       "showings": []
@@ -33595,6 +33976,9 @@
       "voteAverage": 7.1,
       "voteCount": 1233,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
       "theatres": [
         "Criterion Theatre, Bar Harbor"
@@ -33652,6 +34036,9 @@
       "voteAverage": 8.7,
       "voteCount": 6,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-the-day-iceland-stood-still-free-screening-2/",
       "theatres": [],
       "showings": []
@@ -33677,6 +34064,9 @@
       "voteAverage": 7.979,
       "voteCount": 4172,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-the-deer-hunter-ho00020878?date=03-20-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -33726,6 +34116,9 @@
       "voteAverage": 7.151,
       "voteCount": 2357,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-the-english-patient-ho00020877?date=03-19-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -33774,6 +34167,9 @@
       "voteAverage": 8.687,
       "voteCount": 22615,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/the-godfather",
       "theatres": [
         "Black Bear Cinemas, Orono"
@@ -33845,6 +34241,9 @@
       "voteAverage": 6.905,
       "voteCount": 333,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://rangeleyarts.org/event/free-movie-weekend-purple-rain-the-great-muppet-caper/",
       "theatres": [
         "Rangeley Lakeside Theatre, Rangeley"
@@ -33894,6 +34293,9 @@
       "voteAverage": 6.8,
       "voteCount": 16592,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/the-hunger-games-mockingjay-part-1",
       "theatres": [],
       "showings": []
@@ -33920,6 +34322,9 @@
       "voteAverage": 6.9,
       "voteCount": 13208,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/the-hunger-games-mockingjay-part-2",
       "theatres": [],
       "showings": []
@@ -33947,6 +34352,9 @@
       "voteAverage": 7.95,
       "voteCount": 6067,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://rangeleyarts.org/event/free-movie-weekend-the-birds-iron-giant/",
       "theatres": [
         "Lincoln Theater, Damariscotta"
@@ -33987,6 +34395,9 @@
       "voteAverage": 7.238,
       "voteCount": 5332,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://rangeleyarts.org/event/free-movie-weekend-field-of-dreams-lego-batman/",
       "theatres": [
         "Rangeley Lakeside Theatre, Rangeley"
@@ -34037,6 +34448,9 @@
       "voteAverage": 8.252,
       "voteCount": 19469,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://operahousearts.org/the-lion-king/",
       "theatres": [
         "Opera House Arts, Stonington"
@@ -34076,6 +34490,9 @@
       "voteAverage": 8.429,
       "voteCount": 27167,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.eveningstarcinema.com/movies/27070-the-lord-of-the-rings-the-fellowship-of-the-ring/",
       "theatres": [
         "Eveningstar Cinema, Brunswick"
@@ -34125,6 +34542,9 @@
       "voteAverage": 8.494,
       "voteCount": 26180,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [],
       "showings": []
@@ -34151,6 +34571,9 @@
       "voteAverage": 8.4,
       "voteCount": 23568,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [],
       "showings": []
@@ -34169,6 +34592,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/The-Metropolitan-Opera--Tristan-und-Isolde--2026-/611fe9edf74bab2423301ee0/68daa8ed016a970e01875ef6",
       "theatres": [
         "Apple Cinemas, Westbrook",
@@ -34239,6 +34665,9 @@
       "voteAverage": 6.394,
       "voteCount": 7550,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://flagshipcinemas.com/falmouth/movie/22701",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -34306,6 +34735,9 @@
       "voteAverage": 7,
       "voteCount": 7,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/259218",
       "theatres": [],
       "showings": []
@@ -34331,6 +34763,9 @@
       "voteAverage": 7.094,
       "voteCount": 389,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.lincolntheater.org/films-events/the-phantom-of-the-opera-(1925)-silent-film-with-live-accompaniment!",
       "theatres": [
         "Lincoln Theater, Damariscotta"
@@ -34369,6 +34804,9 @@
       "voteAverage": 7.578,
       "voteCount": 960,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.onthestage.tickets/show/the-waldo-theatre/698b84a7811c6f4fcd97ff8e/tickets#/productions-view",
       "theatres": [
         "Waldo Theatre, Waldoboro"
@@ -34409,6 +34847,9 @@
       "voteAverage": 4,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/the-pout-pout-fish",
       "theatres": [
         "Black Bear Cinemas, Orono",
@@ -36819,6 +37260,9 @@
       "voteAverage": 7.5,
       "voteCount": 40,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.lincolntheater.org/films-events/the-president's-cake-",
       "theatres": [
         "Lincoln Theater, Damariscotta",
@@ -36949,6 +37393,9 @@
       "voteAverage": 7.539,
       "voteCount": 19107,
       "staffFavorite": true,
+      "staffFavoriteBy": "Julia",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/the-revenant-10-year-anniversary-release",
       "theatres": [
         "Apple Cinemas, Westbrook",
@@ -36999,6 +37446,9 @@
       "voteAverage": 7.539,
       "voteCount": 1291,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.johnsonhall.org/event/the-sandlot-movie/",
       "theatres": [
         "Johnson Hall Opera House, Gardiner"
@@ -37036,6 +37486,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [
         "Waldo Theatre, Waldoboro"
@@ -37075,6 +37528,9 @@
       "voteAverage": 7.3,
       "voteCount": 535,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://oldfilm.org/alamo-theatre/",
       "theatres": [],
       "showings": []
@@ -37100,6 +37556,9 @@
       "voteAverage": 8.7,
       "voteCount": 29936,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.johnsonhall.org/event/the-shawshank-redemption-movie/",
       "theatres": [
         "Johnson Hall Opera House, Gardiner"
@@ -37133,6 +37592,9 @@
       "voteAverage": 8,
       "voteCount": 1,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://space538.org/event/the-shepherd-and-the-bear/",
       "theatres": [
         "SPACE Gallery, Portland"
@@ -37171,6 +37633,9 @@
       "voteAverage": 7.08,
       "voteCount": 225,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/the-shop-on-main-street--1965",
       "theatres": [],
       "showings": []
@@ -37197,6 +37662,9 @@
       "voteAverage": 8.345,
       "voteCount": 17698,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.johnsonhall.org/event/the-silence-of-the-lambs-movie/",
       "theatres": [],
       "showings": []
@@ -37224,6 +37692,9 @@
       "voteAverage": 7.73,
       "voteCount": 3574,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.lincolntheater.org/films-events/the-sound-of-music-(1965%3B-g)",
       "theatres": [
         "Lincoln Theater, Damariscotta"
@@ -37261,6 +37732,9 @@
       "voteAverage": 6.523,
       "voteCount": 66,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [
         "Fort Kent Cinema, Fort Kent"
@@ -37300,6 +37774,9 @@
       "voteAverage": 8.016,
       "voteCount": 2902,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-the-sting-ho00020889?date=03-31-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -37361,6 +37838,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260993",
       "theatres": [
         "Magic Lantern Theater, Bridgton"
@@ -37520,6 +38000,9 @@
       "voteAverage": 6.7,
       "voteCount": 73,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [],
       "showings": []
@@ -37544,6 +38027,9 @@
       "voteAverage": 8.113,
       "voteCount": 226,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-the-voice-of-hind-rajab-encore-screening/",
       "theatres": [],
       "showings": []
@@ -37570,6 +38056,9 @@
       "voteAverage": 7.6,
       "voteCount": 6036,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.johnsonhall.org/event/the-wizard-of-oz-movie/",
       "theatres": [
         "Johnson Hall Opera House, Gardiner"
@@ -37609,6 +38098,9 @@
       "voteAverage": 7.6,
       "voteCount": 3793,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://colonialtheatre.com/film-guide/?film-id=69ab20d72b09e2914f1e631a",
       "theatres": [
         "Colonial Theatre, Belfast"
@@ -37648,6 +38140,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://flagshipcinemas.com/falmouth/movie/23197",
       "theatres": [
         "Flagship Cinemas, Falmouth",
@@ -39222,6 +39717,9 @@
       "voteAverage": 7.903,
       "voteCount": 26893,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.johnsonhall.org/event/titanic-1997-movie/",
       "theatres": [
         "Johnson Hall Opera House, Gardiner"
@@ -39260,6 +39758,9 @@
       "voteAverage": 6.455,
       "voteCount": 355,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/TOMMY-In-IMAX--50th-Anniversary-/611fea26f74bab2423301ee4/699dcf6af040c4077817880e",
       "theatres": [
         "Apple Cinemas, Saco"
@@ -39297,6 +39798,9 @@
       "voteAverage": 6.661,
       "voteCount": 398,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [
         "Waldo Theatre, Waldoboro"
@@ -39335,6 +39839,9 @@
       "voteAverage": 5.385,
       "voteCount": 13,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/undertone",
       "theatres": [
         "Black Bear Cinemas, Orono",
@@ -42655,6 +43162,9 @@
       "voteAverage": 7.906,
       "voteCount": 4862,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-unforgiven-ho00020879?date=03-21-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -42698,6 +43208,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": true,
+      "staffFavoriteBy": "Charlie",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [],
       "showings": []
@@ -42724,6 +43237,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Ustaad-Bhagat-Singh---Telugu---/611fe9edf74bab2423301ee0/69a595f1836680ff1bd75399",
       "theatres": [
         "Apple Cinemas, Westbrook"
@@ -42823,6 +43339,9 @@
       "voteAverage": 7.898,
       "voteCount": 15398,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/v-for-vendetta",
       "theatres": [],
       "showings": []
@@ -42849,6 +43368,9 @@
       "voteAverage": 8.146,
       "voteCount": 6250,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/vertigo",
       "theatres": [],
       "showings": []
@@ -42875,6 +43397,9 @@
       "voteAverage": 6.6,
       "voteCount": 878,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://scarboroughlibrary.libcal.com/event/15823689",
       "theatres": [],
       "showings": []
@@ -42902,6 +43427,9 @@
       "voteAverage": 7.208,
       "voteCount": 315,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.regmovies.com/movies/mars-wings-ho00020881?date=03-23-2026",
       "theatres": [
         "Regal Cinemas, Augusta"
@@ -42955,6 +43483,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/the-2026-bernard-osher-lecture-women-laughing/",
       "theatres": [],
       "showings": []
@@ -42981,6 +43512,9 @@
       "voteAverage": 5,
       "voteCount": 2,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/wwwrachelormontcom",
       "theatres": [],
       "showings": []
@@ -43006,6 +43540,9 @@
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.watervillecreates.org/shows/you-got-gold-a-celebration-of-john-prine/",
       "theatres": [
         "Alamo Theatre, Bucksport",
@@ -43184,6 +43721,9 @@
       "voteAverage": 8,
       "voteCount": 2,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://colonialtheatre.com/film-guide/?film-id=699f2b30bc339ba53b77548f",
       "theatres": [],
       "showings": []
@@ -43212,6 +43752,9 @@
       "voteAverage": 7.606,
       "voteCount": 2222,
       "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://flagshipcinemas.com/thomaston/movie/20525",
       "theatres": [
         "Flagship Cinemas, Waterville"
