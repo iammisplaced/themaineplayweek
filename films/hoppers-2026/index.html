@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hoppers 2026 | The Maine Playweek</title>
     <meta name="description" content="Scientists have discovered how to &#39;hop&#39; human consciousness into lifelike robotic animals, allowing people to communicate with animals as animals. Animal lover Mabel seizes an opportunity to use the technology, uncovering mysteries within the animal world beyond anything she could have imagined." />
-    <link rel="canonical" href="films/hoppers-2026/" />
+    <link rel="canonical" href="https://themaineplayweek.com/films/hoppers-2026/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Hoppers 2026 | The Maine Playweek" />
     <meta property="og:description" content="Scientists have discovered how to &#39;hop&#39; human consciousness into lifelike robotic animals, allowing people to communicate with animals as animals. Animal lover Mabel seizes an opportunity to use the technology, uncovering mysteries within the animal world beyond anything she could have imagined." />
-    <meta property="og:url" content="films/hoppers-2026/" />
+    <meta property="og:url" content="https://themaineplayweek.com/films/hoppers-2026/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/xjtWQ2CL1mpmMNwuU5HeS4Iuwuu.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Hoppers 2026 | The Maine Playweek" />
@@ -21,17 +21,32 @@
         width: min(1024px, 100%);
         margin: 0 auto;
       }
-      .film-page-top {
+      .film-page-brandbar {
         display: flex;
-        flex-wrap: wrap;
         justify-content: space-between;
-        align-items: baseline;
-        gap: 0.6rem;
-        margin: 0 0 0.8rem;
+        align-items: flex-start;
+        gap: 1rem;
+        margin: 0 0 0.5rem;
       }
-      .film-page-top a {
+      .film-page-wordmark {
+        display: block;
+        height: 72px;
+        width: auto;
+        max-width: min(72vw, 520px);
+        object-fit: contain;
+        object-position: left center;
+      }
+      .film-page-logo {
+        width: 72px;
+        height: 72px;
+        object-fit: contain;
+      }
+      .film-page-return {
+        display: inline-block;
+        margin: 0 0 0.9rem;
         color: var(--accent-2);
         font-weight: 700;
+        text-decoration: none;
       }
       .film-page-card {
         width: 100%;
@@ -233,19 +248,27 @@
         color: var(--muted);
       }
       @media (min-width: 860px) {
+        .film-page-card .group-film-summary {
+          grid-template-columns: minmax(0, 1fr) 124px;
+        }
+        .film-page-card .group-film-poster {
+          width: 124px;
+          height: 186px;
+        }
         .film-showtimes-box .show-list {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Hoppers 2026","description":"Scientists have discovered how to 'hop' human consciousness into lifelike robotic animals, allowing people to communicate with animals as animals. Animal lover Mabel seizes an opportunity to use the technology, uncovering mysteries within the animal world beyond anything she could have imagined.","image":"https://image.tmdb.org/t/p/w342/xjtWQ2CL1mpmMNwuU5HeS4Iuwuu.jpg","datePublished":"2026-03-04","director":[{"@type":"Person","name":"Daniel Chong"}],"actor":[{"@type":"Person","name":"Bobby Moynihan"},{"@type":"Person","name":"Piper Curda"},{"@type":"Person","name":"Jon Hamm"}],"genre":["Animation","Family","Science Fiction","Comedy"],"url":"films/hoppers-2026/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Hoppers 2026","description":"Scientists have discovered how to 'hop' human consciousness into lifelike robotic animals, allowing people to communicate with animals as animals. Animal lover Mabel seizes an opportunity to use the technology, uncovering mysteries within the animal world beyond anything she could have imagined.","image":"https://image.tmdb.org/t/p/w342/xjtWQ2CL1mpmMNwuU5HeS4Iuwuu.jpg","datePublished":"2026-03-04","director":[{"@type":"Person","name":"Daniel Chong"}],"actor":[{"@type":"Person","name":"Bobby Moynihan"},{"@type":"Person","name":"Piper Curda"},{"@type":"Person","name":"Jon Hamm"}],"genre":["Animation","Family","Science Fiction","Comedy"],"url":"https://themaineplayweek.com/films/hoppers-2026/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
-      <div class="film-page-top">
-        <a class="back-link" href="../">All Films</a>
-        <p class="film-page-note">Prototype: static SEO detail page</p>
+      <div class="film-page-brandbar">
+        <img id="filmPageWordmark" class="film-page-wordmark" src="../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png" alt="The Maine Playweek" />
+        <img id="filmPageLogo" class="film-page-logo" src="../../assets/brand/TMP%20logo%20dark.png" alt="" aria-hidden="true" />
       </div>
+      <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box">
         <h1 class="group-title group-title-film">Hoppers</h1>
         <div class="group-film-summary">
@@ -1329,9 +1352,59 @@
         <a class="show-link" href="https://thegemtheater.com/movies/hoppers/" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article></div>
       </section>
+      <section class="site-meta" aria-label="Site information">
+        <p>&copy; 2026 The Maine Playweek, LLC.</p>
+        <p>hello@themaineplayweek.com</p>
+      </section>
     </main>
     <script>
       (() => {
+        const LIGHT_THEME = "light";
+        const DARK_THEME = "dark";
+        const THEME_STORAGE_KEY = "tmp-theme";
+        const logo = document.getElementById("filmPageLogo");
+        const wordmark = document.getElementById("filmPageWordmark");
+        const logoDarkSrc = "../../assets/brand/TMP%20logo%20dark.png";
+        const logoLightSrc = "../../assets/brand/TMP%20logo%20light.png";
+        const wordmarks = {
+          light: ["../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Light%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Light%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Light%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Light%20-%20One%20Line.png"],
+          dark: ["../../assets/brand/Act%20III%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Dark%20-%20One%20Line.png"],
+        };
+
+        function getTheme() {
+          try {
+            const stored = localStorage.getItem(THEME_STORAGE_KEY);
+            if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
+          } catch {}
+          return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
+        }
+
+        function pickRandom(list) {
+          if (!Array.isArray(list) || !list.length) return "";
+          return list[Math.floor(Math.random() * list.length)] || "";
+        }
+
+        function applyTheme(theme) {
+          const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
+          document.documentElement.setAttribute("data-theme", nextTheme);
+          if (logo) {
+            logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
+          }
+          if (wordmark) {
+            const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+            const chosen = pickRandom(wordmarks[wordmarkTheme]);
+            if (chosen) wordmark.src = chosen;
+          }
+        }
+
+        applyTheme(getTheme());
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        media.addEventListener?.("change", () => applyTheme(getTheme()));
+        window.addEventListener("storage", (event) => {
+          if (event.key !== THEME_STORAGE_KEY) return;
+          applyTheme(getTheme());
+        });
+
         const STORAGE_KEYS = ["tmp-location-preference-v1", "tmp-film-pages-location-v1"];
         const useDeviceButton = document.getElementById("locationSortUseDevice");
         const zipForm = document.getElementById("locationSortZipForm");

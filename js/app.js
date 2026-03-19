@@ -444,6 +444,11 @@ function bindEvents() {
   elements.results.addEventListener("click", (event) => {
     const filmExpandToggle = event.target.closest(".film-expand-toggle");
     if (filmExpandToggle) {
+      const filmPageUrl = String(filmExpandToggle.dataset.filmPageUrl || "").trim();
+      if (filmPageUrl) {
+        window.location.href = filmPageUrl;
+        return;
+      }
       const key = filmExpandToggle.dataset.filmKey || filmExpandToggle.closest(".group-card")?.dataset.filmKey;
       if (!key) return;
       const scrollTopBefore = getPageScrollTop();
@@ -476,7 +481,7 @@ function bindEvents() {
     }
 
     const tappedFilmCard = event.target.closest(".group-card.film-card");
-    const isFilmCardView = state.view === "films" || state.view === "days";
+    const isFilmCardView = state.view === "days";
     const isInteractiveTarget = Boolean(event.target.closest("a, button, input, select, textarea, summary, label"));
     const isFilmTitleTarget = Boolean(event.target.closest(".group-title-film"));
     const isCardBlankspaceTarget = event.target === tappedFilmCard;
@@ -3240,7 +3245,8 @@ function render() {
     }
     if (isFilmsView) {
       const filmGroupKey = buildExpandCardKey(state.view, group);
-      filmGroupExpanded = state.expandedFilmGroups.has(filmGroupKey);
+      const shouldLinkToFilmPage = state.view === "films";
+      filmGroupExpanded = shouldLinkToFilmPage ? false : state.expandedFilmGroups.has(filmGroupKey);
       card.dataset.filmKey = filmGroupKey;
       card.classList.toggle("film-card-collapsed", !filmGroupExpanded);
 
@@ -3252,9 +3258,17 @@ function render() {
       }
 
       if (filmExpandToggle) {
-        filmExpandToggle.dataset.filmKey = filmGroupKey;
-        filmExpandToggle.textContent = filmGroupExpanded ? "Collapse" : "Expand";
-        filmExpandToggle.setAttribute("aria-expanded", String(filmGroupExpanded));
+        if (shouldLinkToFilmPage) {
+          filmExpandToggle.dataset.filmPageUrl = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+          filmExpandToggle.removeAttribute("data-film-key");
+          filmExpandToggle.textContent = "View Film Page";
+          filmExpandToggle.removeAttribute("aria-expanded");
+        } else {
+          filmExpandToggle.dataset.filmKey = filmGroupKey;
+          filmExpandToggle.removeAttribute("data-film-page-url");
+          filmExpandToggle.textContent = filmGroupExpanded ? "Collapse" : "Expand";
+          filmExpandToggle.setAttribute("aria-expanded", String(filmGroupExpanded));
+        }
         filmExpandToggle.classList.remove("hidden");
       }
 
@@ -4904,6 +4918,22 @@ function normalizePosterUrl(value) {
 function buildFilmGroupKey(title, year) {
   if (Number.isInteger(year)) return `${title} (${year})`;
   return title;
+}
+
+function buildFilmPageUrl(title, year) {
+  const slug = slugifyFilmPageSegment(
+    Number.isInteger(Number(year)) ? `${String(title || "")}-${Number(year)}` : String(title || "")
+  );
+  return `films/${slug}/`;
+}
+
+function slugifyFilmPageSegment(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/--+/g, "-")
+    .slice(0, 80);
 }
 
 function compareTimes(a, b) {

@@ -27,6 +27,22 @@ const DEFAULT_NO_POSTER = "/assets/images/noposter.webp";
 const BRAND_NAME = "The Maine Playweek";
 const PLAYWEEK_RECOMMENDS_STAMP_URL = "/assets/images/playweek%20recommends.png";
 const FEATURED_ON_PLAYWEEK_STAMP_URL = "/assets/images/featured%20on%20playweek.png";
+const ONE_LINE_WORDMARKS = Object.freeze({
+  dark: [
+    "Act%20III%20-%20Dark%20-%20One%20Line.png",
+    "Deering%20-%20Dark%20-%20One%20Line.png",
+    "Empire%20-%20Dark%20-%20One%20Line.png",
+    "Fine%20Arts%20-%20Dark%20-%20One%20Line.png",
+    "Strand%20-%20Dark%20-%20One%20Line.png",
+  ],
+  light: [
+    "Act%20III%20-%20Light%20-%20One%20Line.png",
+    "Deering%20-%20Light%20-%20One%20Line.png",
+    "Empire%20-%20Light%20-%20One%20Line.png",
+    "Fine%20Arts%20-%20Light%20-%20One%20Line.png",
+    "Strand%20-%20Light%20-%20One%20Line.png",
+  ],
+});
 const FILM_SORT_WEIGHTS = Object.freeze({
   tmdbPopularity: 0.2,
   tmdbRating: 0.15,
@@ -406,6 +422,13 @@ function renderFilmPage(film, slug, siteUrl) {
   const canonicalPath = `/films/${slug}/`;
   const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath.replace(/^\//, "");
   const posterUrl = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 2);
+  const mainAppUrl = "../..";
+  const logoDarkSrc = resolveRelativeAssetPath("/assets/brand/TMP%20logo%20dark.png", 2);
+  const logoLightSrc = resolveRelativeAssetPath("/assets/brand/TMP%20logo%20light.png", 2);
+  const wordmarksDark = ONE_LINE_WORDMARKS.dark.map((filename) => resolveRelativeAssetPath(`/assets/brand/${filename}`, 2));
+  const wordmarksLight = ONE_LINE_WORDMARKS.light.map((filename) =>
+    resolveRelativeAssetPath(`/assets/brand/${filename}`, 2)
+  );
   const stampMarkup = buildFilmStampMarkup(film, 2);
   const theatreGroups = buildShowtimesByTheatre(film);
   const theatreRowsMarkup = theatreGroups
@@ -495,17 +518,32 @@ function renderFilmPage(film, slug, siteUrl) {
         width: min(1024px, 100%);
         margin: 0 auto;
       }
-      .film-page-top {
+      .film-page-brandbar {
         display: flex;
-        flex-wrap: wrap;
         justify-content: space-between;
-        align-items: baseline;
-        gap: 0.6rem;
-        margin: 0 0 0.8rem;
+        align-items: flex-start;
+        gap: 1rem;
+        margin: 0 0 0.5rem;
       }
-      .film-page-top a {
+      .film-page-wordmark {
+        display: block;
+        height: 72px;
+        width: auto;
+        max-width: min(72vw, 520px);
+        object-fit: contain;
+        object-position: left center;
+      }
+      .film-page-logo {
+        width: 72px;
+        height: 72px;
+        object-fit: contain;
+      }
+      .film-page-return {
+        display: inline-block;
+        margin: 0 0 0.9rem;
         color: var(--accent-2);
         font-weight: 700;
+        text-decoration: none;
       }
       .film-page-card {
         width: 100%;
@@ -707,6 +745,13 @@ function renderFilmPage(film, slug, siteUrl) {
         color: var(--muted);
       }
       @media (min-width: 860px) {
+        .film-page-card .group-film-summary {
+          grid-template-columns: minmax(0, 1fr) 124px;
+        }
+        .film-page-card .group-film-poster {
+          width: 124px;
+          height: 186px;
+        }
         .film-showtimes-box .show-list {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
@@ -716,10 +761,11 @@ function renderFilmPage(film, slug, siteUrl) {
   </head>
   <body>
     <main class="film-page-shell">
-      <div class="film-page-top">
-        <a class="back-link" href="../">All Films</a>
-        <p class="film-page-note">Prototype: static SEO detail page</p>
+      <div class="film-page-brandbar">
+        <img id="filmPageWordmark" class="film-page-wordmark" src="${escapeHtml(wordmarksLight[0] || "")}" alt="${BRAND_NAME}" />
+        <img id="filmPageLogo" class="film-page-logo" src="${escapeHtml(logoDarkSrc)}" alt="" aria-hidden="true" />
       </div>
+      <a class="film-page-return" href="${escapeHtml(mainAppUrl)}">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box${film.staffFavorite ? " film-card-staff-favorite" : ""}${
         film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
       }">
@@ -755,9 +801,59 @@ function renderFilmPage(film, slug, siteUrl) {
             : `<p class="film-page-empty">Showtimes not published yet.</p>`
         }
       </section>
+      <section class="site-meta" aria-label="Site information">
+        <p>&copy; 2026 The Maine Playweek, LLC.</p>
+        <p>hello@themaineplayweek.com</p>
+      </section>
     </main>
     <script>
       (() => {
+        const LIGHT_THEME = "light";
+        const DARK_THEME = "dark";
+        const THEME_STORAGE_KEY = "tmp-theme";
+        const logo = document.getElementById("filmPageLogo");
+        const wordmark = document.getElementById("filmPageWordmark");
+        const logoDarkSrc = ${jsonForScript(logoDarkSrc)};
+        const logoLightSrc = ${jsonForScript(logoLightSrc)};
+        const wordmarks = {
+          light: ${jsonForScript(wordmarksLight)},
+          dark: ${jsonForScript(wordmarksDark)},
+        };
+
+        function getTheme() {
+          try {
+            const stored = localStorage.getItem(THEME_STORAGE_KEY);
+            if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
+          } catch {}
+          return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
+        }
+
+        function pickRandom(list) {
+          if (!Array.isArray(list) || !list.length) return "";
+          return list[Math.floor(Math.random() * list.length)] || "";
+        }
+
+        function applyTheme(theme) {
+          const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
+          document.documentElement.setAttribute("data-theme", nextTheme);
+          if (logo) {
+            logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
+          }
+          if (wordmark) {
+            const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+            const chosen = pickRandom(wordmarks[wordmarkTheme]);
+            if (chosen) wordmark.src = chosen;
+          }
+        }
+
+        applyTheme(getTheme());
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        media.addEventListener?.("change", () => applyTheme(getTheme()));
+        window.addEventListener("storage", (event) => {
+          if (event.key !== THEME_STORAGE_KEY) return;
+          applyTheme(getTheme());
+        });
+
         const STORAGE_KEYS = ["tmp-location-preference-v1", "tmp-film-pages-location-v1"];
         const useDeviceButton = document.getElementById("locationSortUseDevice");
         const zipForm = document.getElementById("locationSortZipForm");

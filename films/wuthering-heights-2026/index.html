@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>&quot;Wuthering Heights&quot; 2026 | The Maine Playweek</title>
     <meta name="description" content="Tragedy strikes when Heathcliff falls in love with Catherine Earnshaw, a woman from a wealthy family in 18th-century England." />
-    <link rel="canonical" href="films/wuthering-heights-2026/" />
+    <link rel="canonical" href="https://themaineplayweek.com/films/wuthering-heights-2026/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="&quot;Wuthering Heights&quot; 2026 | The Maine Playweek" />
     <meta property="og:description" content="Tragedy strikes when Heathcliff falls in love with Catherine Earnshaw, a woman from a wealthy family in 18th-century England." />
-    <meta property="og:url" content="films/wuthering-heights-2026/" />
+    <meta property="og:url" content="https://themaineplayweek.com/films/wuthering-heights-2026/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/3YBce6dTh1D5oCMITXk2S5QhPt.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="&quot;Wuthering Heights&quot; 2026 | The Maine Playweek" />
@@ -21,17 +21,32 @@
         width: min(1024px, 100%);
         margin: 0 auto;
       }
-      .film-page-top {
+      .film-page-brandbar {
         display: flex;
-        flex-wrap: wrap;
         justify-content: space-between;
-        align-items: baseline;
-        gap: 0.6rem;
-        margin: 0 0 0.8rem;
+        align-items: flex-start;
+        gap: 1rem;
+        margin: 0 0 0.5rem;
       }
-      .film-page-top a {
+      .film-page-wordmark {
+        display: block;
+        height: 72px;
+        width: auto;
+        max-width: min(72vw, 520px);
+        object-fit: contain;
+        object-position: left center;
+      }
+      .film-page-logo {
+        width: 72px;
+        height: 72px;
+        object-fit: contain;
+      }
+      .film-page-return {
+        display: inline-block;
+        margin: 0 0 0.9rem;
         color: var(--accent-2);
         font-weight: 700;
+        text-decoration: none;
       }
       .film-page-card {
         width: 100%;
@@ -233,19 +248,27 @@
         color: var(--muted);
       }
       @media (min-width: 860px) {
+        .film-page-card .group-film-summary {
+          grid-template-columns: minmax(0, 1fr) 124px;
+        }
+        .film-page-card .group-film-poster {
+          width: 124px;
+          height: 186px;
+        }
         .film-showtimes-box .show-list {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"\"Wuthering Heights\" 2026","description":"Tragedy strikes when Heathcliff falls in love with Catherine Earnshaw, a woman from a wealthy family in 18th-century England.","image":"https://image.tmdb.org/t/p/w342/3YBce6dTh1D5oCMITXk2S5QhPt.jpg","datePublished":"2026-02-11","director":[{"@type":"Person","name":"Emerald Fennell"}],"actor":[{"@type":"Person","name":"Margot Robbie"},{"@type":"Person","name":"Jacob Elordi"},{"@type":"Person","name":"Hong Chau"}],"genre":["Romance","Drama"],"url":"films/wuthering-heights-2026/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"\"Wuthering Heights\" 2026","description":"Tragedy strikes when Heathcliff falls in love with Catherine Earnshaw, a woman from a wealthy family in 18th-century England.","image":"https://image.tmdb.org/t/p/w342/3YBce6dTh1D5oCMITXk2S5QhPt.jpg","datePublished":"2026-02-11","director":[{"@type":"Person","name":"Emerald Fennell"}],"actor":[{"@type":"Person","name":"Margot Robbie"},{"@type":"Person","name":"Jacob Elordi"},{"@type":"Person","name":"Hong Chau"}],"genre":["Romance","Drama"],"url":"https://themaineplayweek.com/films/wuthering-heights-2026/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
-      <div class="film-page-top">
-        <a class="back-link" href="../">All Films</a>
-        <p class="film-page-note">Prototype: static SEO detail page</p>
+      <div class="film-page-brandbar">
+        <img id="filmPageWordmark" class="film-page-wordmark" src="../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png" alt="The Maine Playweek" />
+        <img id="filmPageLogo" class="film-page-logo" src="../../assets/brand/TMP%20logo%20dark.png" alt="" aria-hidden="true" />
       </div>
+      <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box film-card-featured-playweek">
         <h1 class="group-title group-title-film">&quot;Wuthering Heights&quot;</h1>
         <div class="group-film-summary">
@@ -737,9 +760,59 @@
         <a class="show-link" href="https://www.regmovies.com/theatres/regal-augusta-1704" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article></div>
       </section>
+      <section class="site-meta" aria-label="Site information">
+        <p>&copy; 2026 The Maine Playweek, LLC.</p>
+        <p>hello@themaineplayweek.com</p>
+      </section>
     </main>
     <script>
       (() => {
+        const LIGHT_THEME = "light";
+        const DARK_THEME = "dark";
+        const THEME_STORAGE_KEY = "tmp-theme";
+        const logo = document.getElementById("filmPageLogo");
+        const wordmark = document.getElementById("filmPageWordmark");
+        const logoDarkSrc = "../../assets/brand/TMP%20logo%20dark.png";
+        const logoLightSrc = "../../assets/brand/TMP%20logo%20light.png";
+        const wordmarks = {
+          light: ["../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Light%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Light%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Light%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Light%20-%20One%20Line.png"],
+          dark: ["../../assets/brand/Act%20III%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Dark%20-%20One%20Line.png"],
+        };
+
+        function getTheme() {
+          try {
+            const stored = localStorage.getItem(THEME_STORAGE_KEY);
+            if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
+          } catch {}
+          return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
+        }
+
+        function pickRandom(list) {
+          if (!Array.isArray(list) || !list.length) return "";
+          return list[Math.floor(Math.random() * list.length)] || "";
+        }
+
+        function applyTheme(theme) {
+          const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
+          document.documentElement.setAttribute("data-theme", nextTheme);
+          if (logo) {
+            logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
+          }
+          if (wordmark) {
+            const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+            const chosen = pickRandom(wordmarks[wordmarkTheme]);
+            if (chosen) wordmark.src = chosen;
+          }
+        }
+
+        applyTheme(getTheme());
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        media.addEventListener?.("change", () => applyTheme(getTheme()));
+        window.addEventListener("storage", (event) => {
+          if (event.key !== THEME_STORAGE_KEY) return;
+          applyTheme(getTheme());
+        });
+
         const STORAGE_KEYS = ["tmp-location-preference-v1", "tmp-film-pages-location-v1"];
         const useDeviceButton = document.getElementById("locationSortUseDevice");
         const zipForm = document.getElementById("locationSortZipForm");

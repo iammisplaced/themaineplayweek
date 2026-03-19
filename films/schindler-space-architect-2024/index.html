@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Schindler Space Architect 2024 | The Maine Playweek</title>
     <meta name="description" content="Architect R.M. Schindler, transformed the way we see space and laid the foundation for what is now considered the California lifestyle of indoor-outdoor living. His life story (1887-1953) unfolds in parallel with that of Modern Architecture. The film follows Schindler&#39;s journey from Vienna through Chicago to Southern California, observing where possible through the lens of his own camera or listening to his own words. The story is told through narration, interviews, Schindler&#39;s theoretical writings, correspondence, photos and renderings of his many works and projects." />
-    <link rel="canonical" href="films/schindler-space-architect-2024/" />
+    <link rel="canonical" href="https://themaineplayweek.com/films/schindler-space-architect-2024/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Schindler Space Architect 2024 | The Maine Playweek" />
     <meta property="og:description" content="Architect R.M. Schindler, transformed the way we see space and laid the foundation for what is now considered the California lifestyle of indoor-outdoor living. His life story (1887-1953) unfolds in parallel with that of Modern Architecture. The film follows Schindler&#39;s journey from Vienna through Chicago to Southern California, observing where possible through the lens of his own camera or listening to his own words. The story is told through narration, interviews, Schindler&#39;s theoretical writings, correspondence, photos and renderings of his many works and projects." />
-    <meta property="og:url" content="films/schindler-space-architect-2024/" />
+    <meta property="og:url" content="https://themaineplayweek.com/films/schindler-space-architect-2024/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/c2T62tsl56cwTear4MCfQ7KpL7K.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Schindler Space Architect 2024 | The Maine Playweek" />
@@ -21,17 +21,32 @@
         width: min(1024px, 100%);
         margin: 0 auto;
       }
-      .film-page-top {
+      .film-page-brandbar {
         display: flex;
-        flex-wrap: wrap;
         justify-content: space-between;
-        align-items: baseline;
-        gap: 0.6rem;
-        margin: 0 0 0.8rem;
+        align-items: flex-start;
+        gap: 1rem;
+        margin: 0 0 0.5rem;
       }
-      .film-page-top a {
+      .film-page-wordmark {
+        display: block;
+        height: 72px;
+        width: auto;
+        max-width: min(72vw, 520px);
+        object-fit: contain;
+        object-position: left center;
+      }
+      .film-page-logo {
+        width: 72px;
+        height: 72px;
+        object-fit: contain;
+      }
+      .film-page-return {
+        display: inline-block;
+        margin: 0 0 0.9rem;
         color: var(--accent-2);
         font-weight: 700;
+        text-decoration: none;
       }
       .film-page-card {
         width: 100%;
@@ -233,19 +248,27 @@
         color: var(--muted);
       }
       @media (min-width: 860px) {
+        .film-page-card .group-film-summary {
+          grid-template-columns: minmax(0, 1fr) 124px;
+        }
+        .film-page-card .group-film-poster {
+          width: 124px;
+          height: 186px;
+        }
         .film-showtimes-box .show-list {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Schindler Space Architect 2024","description":"Architect R.M. Schindler, transformed the way we see space and laid the foundation for what is now considered the California lifestyle of indoor-outdoor living. His life story (1887-1953) unfolds in parallel with that of Modern Architecture. The film follows Schindler's journey from Vienna through Chicago to Southern California, observing where possible through the lens of his own camera or listening to his own words. The story is told through narration, interviews, Schindler's theoretical writings, correspondence, photos and renderings of his many works and projects.","image":"https://image.tmdb.org/t/p/w342/c2T62tsl56cwTear4MCfQ7KpL7K.jpg","datePublished":"2024-10-20","director":[{"@type":"Person","name":"Valentina Ganeva"}],"actor":[{"@type":"Person","name":"Meryl Streep"},{"@type":"Person","name":"Udo Kier"},{"@type":"Person","name":"Xander Berkeley"}],"genre":["Documentary"],"url":"films/schindler-space-architect-2024/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Schindler Space Architect 2024","description":"Architect R.M. Schindler, transformed the way we see space and laid the foundation for what is now considered the California lifestyle of indoor-outdoor living. His life story (1887-1953) unfolds in parallel with that of Modern Architecture. The film follows Schindler's journey from Vienna through Chicago to Southern California, observing where possible through the lens of his own camera or listening to his own words. The story is told through narration, interviews, Schindler's theoretical writings, correspondence, photos and renderings of his many works and projects.","image":"https://image.tmdb.org/t/p/w342/c2T62tsl56cwTear4MCfQ7KpL7K.jpg","datePublished":"2024-10-20","director":[{"@type":"Person","name":"Valentina Ganeva"}],"actor":[{"@type":"Person","name":"Meryl Streep"},{"@type":"Person","name":"Udo Kier"},{"@type":"Person","name":"Xander Berkeley"}],"genre":["Documentary"],"url":"https://themaineplayweek.com/films/schindler-space-architect-2024/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
-      <div class="film-page-top">
-        <a class="back-link" href="../">All Films</a>
-        <p class="film-page-note">Prototype: static SEO detail page</p>
+      <div class="film-page-brandbar">
+        <img id="filmPageWordmark" class="film-page-wordmark" src="../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png" alt="The Maine Playweek" />
+        <img id="filmPageLogo" class="film-page-logo" src="../../assets/brand/TMP%20logo%20dark.png" alt="" aria-hidden="true" />
       </div>
+      <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box">
         <h1 class="group-title group-title-film">Schindler Space Architect</h1>
         <div class="group-film-summary">
@@ -294,9 +317,59 @@
         <a class="show-link" href="https://www.portlandmuseum.org/event/pma-films-x-architalx-schinder-space-architect-with-filmmaker-valentina-ganeva/" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article></div>
       </section>
+      <section class="site-meta" aria-label="Site information">
+        <p>&copy; 2026 The Maine Playweek, LLC.</p>
+        <p>hello@themaineplayweek.com</p>
+      </section>
     </main>
     <script>
       (() => {
+        const LIGHT_THEME = "light";
+        const DARK_THEME = "dark";
+        const THEME_STORAGE_KEY = "tmp-theme";
+        const logo = document.getElementById("filmPageLogo");
+        const wordmark = document.getElementById("filmPageWordmark");
+        const logoDarkSrc = "../../assets/brand/TMP%20logo%20dark.png";
+        const logoLightSrc = "../../assets/brand/TMP%20logo%20light.png";
+        const wordmarks = {
+          light: ["../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Light%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Light%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Light%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Light%20-%20One%20Line.png"],
+          dark: ["../../assets/brand/Act%20III%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Dark%20-%20One%20Line.png"],
+        };
+
+        function getTheme() {
+          try {
+            const stored = localStorage.getItem(THEME_STORAGE_KEY);
+            if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
+          } catch {}
+          return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
+        }
+
+        function pickRandom(list) {
+          if (!Array.isArray(list) || !list.length) return "";
+          return list[Math.floor(Math.random() * list.length)] || "";
+        }
+
+        function applyTheme(theme) {
+          const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
+          document.documentElement.setAttribute("data-theme", nextTheme);
+          if (logo) {
+            logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
+          }
+          if (wordmark) {
+            const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+            const chosen = pickRandom(wordmarks[wordmarkTheme]);
+            if (chosen) wordmark.src = chosen;
+          }
+        }
+
+        applyTheme(getTheme());
+        const media = window.matchMedia("(prefers-color-scheme: dark)");
+        media.addEventListener?.("change", () => applyTheme(getTheme()));
+        window.addEventListener("storage", (event) => {
+          if (event.key !== THEME_STORAGE_KEY) return;
+          applyTheme(getTheme());
+        });
+
         const STORAGE_KEYS = ["tmp-location-preference-v1", "tmp-film-pages-location-v1"];
         const useDeviceButton = document.getElementById("locationSortUseDevice");
         const zipForm = document.getElementById("locationSortZipForm");
