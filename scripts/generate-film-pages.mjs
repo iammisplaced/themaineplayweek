@@ -438,6 +438,7 @@ function renderFilmPage(film, slug, siteUrl) {
   const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath.replace(/^\//, "");
   const posterUrl = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 2);
   const mainAppUrl = "../..";
+  const tmdbMovieUrl = buildTmdbMovieUrl(film.tmdbId);
   const logoDarkSrc = resolveRelativeAssetPath("/assets/brand/TMP%20logo%20dark.png", 2);
   const logoLightSrc = resolveRelativeAssetPath("/assets/brand/TMP%20logo%20light.png", 2);
   const wordmarksDark = ONE_LINE_WORDMARKS.dark.map((filename) => resolveRelativeAssetPath(`/assets/brand/${filename}`, 2));
@@ -805,6 +806,7 @@ function renderFilmPage(film, slug, siteUrl) {
             <div class="group-film-facts film-page-facts">
               ${buildFilmFactsMarkup(film, description)}
             </div>
+            ${tmdbMovieUrl ? `<a class="group-tmdb-link" href="${escapeHtml(tmdbMovieUrl)}" target="_blank" rel="noopener noreferrer">View on TMDb</a>` : ""}
           </div>
         </div>
       </article>
@@ -1350,6 +1352,12 @@ function buildFilmFactsMarkup(film, synopsis) {
         )}</span><span class="film-fact-value">${escapeHtml(fact.value)}</span></div>`
     )
     .join("");
+}
+
+function buildTmdbMovieUrl(tmdbId) {
+  const id = Number(tmdbId);
+  if (!Number.isInteger(id) || id <= 0) return "";
+  return `https://www.themoviedb.org/movie/${id}`;
 }
 
 function buildFilmStampMarkup(film, depthToRoot) {

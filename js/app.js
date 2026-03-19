@@ -3463,6 +3463,8 @@ function render() {
       }
       groupFilmSummary.classList.remove("hidden");
       const tmdbUrl = buildTmdbMovieUrl(group.filmInfo.tmdbId);
+      const filmPageUrl = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+      const isNearYouView = state.view === "days";
       const groupFilmDetails = groupFilmFacts?.parentElement || groupFilmSummary;
       let groupTmdbLink = groupFilmDetails?.querySelector(".group-tmdb-link");
       if (!groupTmdbLink && groupFilmDetails) {
@@ -3478,8 +3480,16 @@ function render() {
         }
       }
       if (groupTmdbLink) {
-        if (filmGroupExpanded && tmdbUrl) {
-          groupTmdbLink.href = tmdbUrl;
+        if (isNearYouView) {
+          groupTmdbLink.classList.add("group-view-film-link");
+          groupTmdbLink.textContent = "View film";
+        } else {
+          groupTmdbLink.classList.remove("group-view-film-link");
+          groupTmdbLink.textContent = "View on TMDb";
+        }
+        const actionUrl = isNearYouView ? filmPageUrl : tmdbUrl;
+        if (filmGroupExpanded && actionUrl) {
+          groupTmdbLink.href = actionUrl;
           groupTmdbLink.classList.remove("hidden");
         } else {
           groupTmdbLink.classList.add("hidden");

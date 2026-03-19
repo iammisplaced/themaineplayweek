@@ -848,6 +848,29 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   color: var(--accent);
 }
 
+.group-view-film-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.22rem 0.62rem;
+  background: #f8f2ea;
+  color: var(--accent-2);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.group-view-film-link:hover,
+.group-view-film-link:focus-visible {
+  background: var(--hover-soft-2);
+  border-color: #c8beb1;
+}
+
 .group-feature-link {
   display: inline-flex;
   align-items: center;
@@ -1579,6 +1602,18 @@ textarea {
 
 :root[data-theme="dark"] .group-tmdb-link {
   color: #b8e3d7;
+}
+
+:root[data-theme="dark"] .group-view-film-link {
+  border-color: #3c504a;
+  background: #1a2522;
+  color: #deeee9;
+}
+
+:root[data-theme="dark"] .group-view-film-link:hover,
+:root[data-theme="dark"] .group-view-film-link:focus-visible {
+  border-color: #4f665f;
+  background: #24312d;
 }
 
 :root[data-theme="dark"] .group-tmdb-link:hover,
