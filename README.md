@@ -137,9 +137,62 @@ This keeps the app usable during transition/deployment issues.
 
 Showtimes in the past (date+time) are hidden automatically.
 
+## Static film pages prototype (SEO)
+- Generator script: `scripts/generate-film-pages.mjs`
+- Input file: `data/film-pages-source.json`
+- Output directory: `films/`
+
+Generate pages:
+
+```bash
+node scripts/generate-film-pages.mjs
+```
+
+One-command npm scripts:
+
+```bash
+npm run film-pages:build
+npm run film-pages:live
+```
+
+Generate pages from Supabase live data:
+
+```bash
+node scripts/generate-film-pages.mjs --from-supabase --supabase-url=https://YOUR_PROJECT.supabase.co --supabase-anon-key=YOUR_ANON_KEY --write-source=data/film-pages-source.live.json
+```
+
+Optional flags:
+- `--input=data/film-pages-source.json`
+- `--out=films`
+- `--site-url=https://themaineplayweek.com` (recommended for production canonical/OG absolute URLs)
+- `--from-supabase` (read films/showings directly from Supabase REST API)
+- `--supabase-url=...` and `--supabase-anon-key=...` (or env vars `SUPABASE_URL` and `SUPABASE_ANON_KEY`)
+- `--write-source=data/film-pages-source.live.json` (optional snapshot of live source used for generation)
+
+### GitHub Action (auto-sync)
+- Workflow: `.github/workflows/film-pages-supabase-sync.yml`
+- Runs on schedule and manual dispatch.
+- Regenerates `films/` from Supabase and commits updates when output changes.
+
+Required repository secrets:
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `SITE_URL` (for canonical/OG absolute URLs)
+
+Notes:
+- Script accepts either:
+  - flat `{ "films": [...] }` input
+  - app-shaped `{ "theatreGroups": [...] }` input
+- Generated output includes:
+  - one index page: `films/index.html`
+  - one page per film: `films/<slug>/index.html`
+  - shared styles: `films/film-pages.css`
+
 ## Schema update note
 Ticket links are theatre-specific. Re-run `supabase/schema.sql` so `public.theatre_films` exists.
 
 Film metadata source hardening now uses `public.films.metadata_source` (`tmdb` or `manual`). Re-run `supabase/schema.sql` to install the column + constraint.
+
+Film synopsis is now stored in `public.films.synopsis` and synchronized from TMDb `overview` by `scripts/enrich-tmdb-supabase.mjs`. Re-run `supabase/schema.sql` to install the new column and RPC updates.
 
 If you see `DELETE requires a WHERE clause`, re-run `supabase/schema.sql` to install the updated `replace_showtimes_data` function.

@@ -1,6 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const DATA_URL = "../data/showtimes.json";
+const DATA_URL = "./data/showtimes.json";
+const FILM_PAGES_LIVE_SOURCE_URL = "./data/film-pages-source.live.json";
+const FILM_PAGES_SOURCE_URL = "./data/film-pages-source.json";
 const STORAGE_KEY = "showtimes-local-edit";
 const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
 const THEME_STORAGE_KEY = "tmp-theme";
@@ -444,6 +446,11 @@ function bindEvents() {
   elements.results.addEventListener("click", (event) => {
     const filmExpandToggle = event.target.closest(".film-expand-toggle");
     if (filmExpandToggle) {
+      const filmPageUrl = String(filmExpandToggle.dataset.filmPageUrl || "").trim();
+      if (filmPageUrl) {
+        window.open(filmPageUrl, "_blank", "noopener,noreferrer");
+        return;
+      }
       const key = filmExpandToggle.dataset.filmKey || filmExpandToggle.closest(".group-card")?.dataset.filmKey;
       if (!key) return;
       const scrollTopBefore = getPageScrollTop();
@@ -476,7 +483,7 @@ function bindEvents() {
     }
 
     const tappedFilmCard = event.target.closest(".group-card.film-card");
-    const isFilmCardView = state.view === "films" || state.view === "days";
+    const isFilmCardView = state.view === "days";
     const isInteractiveTarget = Boolean(event.target.closest("a, button, input, select, textarea, summary, label"));
     const isFilmTitleTarget = Boolean(event.target.closest(".group-title-film"));
     const isCardBlankspaceTarget = event.target === tappedFilmCard;
@@ -521,6 +528,11 @@ function bindEvents() {
 
     const poster = event.target.closest(".group-film-poster, .show-poster");
     if (!poster || poster.classList.contains("hidden")) return;
+    const posterFilmPageUrl = String(poster.dataset.filmPageUrl || "").trim();
+    if (posterFilmPageUrl) {
+      window.open(posterFilmPageUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
     const src = poster.getAttribute("src");
     if (!src) return;
     openPosterLightbox(src, poster.getAttribute("alt") || "Poster preview");
@@ -1302,6 +1314,11 @@ function bindEvents() {
     const file = event.target.files?.[0];
     if (!file) return;
     try {
+      if (state.source !== "supabase" || !state.loadedFromSupabaseThisSession) {
+        throw new Error(
+          "CSV import is disabled because the app is currently using fallback data. Reload until Supabase data loads, then import again."
+        );
+      }
       const content = await file.text();
       // Preserve _dbId fields so CSV edits map to existing Supabase rows.
       const nextData = JSON.parse(JSON.stringify(state.data));
@@ -1474,7 +1491,12 @@ async function loadData() {
         updateSupabaseBaselinePayload();
         return;
       }
-    } catch {
+    } catch (error) {
+      const message = `Supabase data load failed; falling back to local/static data. ${String(error?.message || "")}`.trim();
+      console.error("[showtimes] " + message, error);
+      if (elements.adminMessage) {
+        elements.adminMessage.textContent = message;
+      }
       // fall through to local fallback
     }
   }
@@ -1494,45 +1516,186 @@ async function loadData() {
     }
   }
 
-  const response = await fetch(DATA_URL);
-  if (!response.ok) {
-    throw new Error(`Failed to load ${DATA_URL}`);
+  try {
+    const response = await fetch(DATA_URL);
+    if (!response.ok) {
+      throw new Error(`Failed to load ${DATA_URL}`);
+    }
+    const json = await response.json();
+    validateData(json);
+    state.data = json;
+    state.source = "json";
+    state.loadedFromSupabaseThisSession = false;
+    state.supabaseBaselinePayload = null;
+    return;
+  } catch (error) {
+    const fallbackData = await loadFallbackDataFromFilmPagesSource();
+    if (!fallbackData) {
+      throw error;
+    }
+    state.data = fallbackData;
+    state.source = "film-pages-json";
+    state.loadedFromSupabaseThisSession = false;
+    state.supabaseBaselinePayload = null;
+  }
+}
+
+async function loadFallbackDataFromFilmPagesSource() {
+  const fallbackUrls = [FILM_PAGES_LIVE_SOURCE_URL, FILM_PAGES_SOURCE_URL];
+  for (const url of fallbackUrls) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+      const source = await response.json();
+      const theatreGroups = buildTheatreGroupsFromFilmPagesSource(source);
+      if (!theatreGroups.length) continue;
+      const normalized = { theatreGroups };
+      validateData(normalized);
+      return normalized;
+    } catch {
+      // try next source
+    }
+  }
+  return null;
+}
+
+function buildTheatreGroupsFromFilmPagesSource(source) {
+  if (!source || !Array.isArray(source.films)) return [];
+  const theatreMap = new Map();
+
+  for (const filmEntry of source.films) {
+    const filmTitle = String(filmEntry?.title || "").trim();
+    const filmYear = Number.isInteger(Number(filmEntry?.year)) ? Number(filmEntry.year) : null;
+    const tmdbId = Number.isInteger(Number(filmEntry?.tmdbId)) ? Number(filmEntry.tmdbId) : null;
+    if (!filmTitle || (!filmYear && !tmdbId)) continue;
+
+    const showings = Array.isArray(filmEntry?.showings) ? filmEntry.showings : [];
+    for (const showing of showings) {
+      const theatreName = String(showing?.theatre || "").trim();
+      const theatreCity = String(showing?.city || "").trim();
+      const showDate = String(showing?.date || "").trim();
+      const showTime = String(showing?.time || "").trim();
+      if (!theatreName || !theatreCity || !showDate || !showTime) continue;
+
+      const theatreWebsite = String(showing?.theatreWebsite || "").trim();
+      const theatreKey = `${theatreName.toLowerCase()}::${theatreCity.toLowerCase()}`;
+      let theatre = theatreMap.get(theatreKey);
+      if (!theatre) {
+        theatre = {
+          name: theatreName,
+          city: theatreCity,
+          address: "Address unavailable",
+          website: theatreWebsite || "https://themaineplayweek.com",
+          latitude: Number.isFinite(Number(showing?.latitude)) ? Number(showing.latitude) : undefined,
+          longitude: Number.isFinite(Number(showing?.longitude)) ? Number(showing.longitude) : undefined,
+          films: [],
+          _filmMap: new Map(),
+        };
+        theatreMap.set(theatreKey, theatre);
+      } else {
+        if ((!theatre.website || theatre.website === "https://themaineplayweek.com") && theatreWebsite) {
+          theatre.website = theatreWebsite;
+        }
+        if (!Number.isFinite(Number(theatre.latitude)) && Number.isFinite(Number(showing?.latitude))) {
+          theatre.latitude = Number(showing.latitude);
+        }
+        if (!Number.isFinite(Number(theatre.longitude)) && Number.isFinite(Number(showing?.longitude))) {
+          theatre.longitude = Number(showing.longitude);
+        }
+      }
+
+      const filmKey = `${normalizeFilmTitle(filmTitle)}::${filmYear || ""}::${tmdbId || ""}`;
+      let theatreFilm = theatre._filmMap.get(filmKey);
+      if (!theatreFilm) {
+        theatreFilm = {
+          title: filmTitle,
+          year: filmYear || undefined,
+          tmdbId: tmdbId || undefined,
+          ticketLink: String(showing?.ticketLink || filmEntry?.legacyTicketLink || "").trim(),
+          staffFavorite: Boolean(filmEntry?.staffFavorite),
+          staffFavoriteBy: String(filmEntry?.staffFavoriteBy || "").trim(),
+          featuredOnPlayweek: Boolean(filmEntry?.featuredOnPlayweek),
+          featuredOnPlayweekUrl: String(filmEntry?.featuredOnPlayweekUrl || "").trim(),
+          metadataSource: normalizeMetadataSource("tmdb", { tmdbId }),
+          tmdb: {
+            overview: String(filmEntry?.description || "").trim(),
+            posterUrl: String(filmEntry?.posterUrl || "").trim(),
+            director: String(filmEntry?.director || "").trim(),
+            genres: normalizeStringArray(filmEntry?.genres),
+            stars: normalizeStringArray(filmEntry?.stars),
+            releaseDate: String(filmEntry?.releaseDate || "").trim(),
+            popularity: Number.isFinite(Number(filmEntry?.popularity)) ? Number(filmEntry.popularity) : undefined,
+            voteAverage: Number.isFinite(Number(filmEntry?.voteAverage)) ? Number(filmEntry.voteAverage) : undefined,
+            voteCount: Number.isFinite(Number(filmEntry?.voteCount)) ? Number(filmEntry.voteCount) : undefined,
+          },
+          showings: [],
+          _showingByDate: new Map(),
+        };
+        theatre._filmMap.set(filmKey, theatreFilm);
+        theatre.films.push(theatreFilm);
+      } else if (!theatreFilm.ticketLink && showing?.ticketLink) {
+        theatreFilm.ticketLink = String(showing.ticketLink || "").trim();
+      }
+
+      let filmShowing = theatreFilm._showingByDate.get(showDate);
+      if (!filmShowing) {
+        filmShowing = { date: showDate, times: [] };
+        theatreFilm._showingByDate.set(showDate, filmShowing);
+        theatreFilm.showings.push(filmShowing);
+      }
+      if (!filmShowing.times.includes(showTime)) {
+        filmShowing.times.push(showTime);
+      }
+    }
   }
 
-  const json = await response.json();
-  validateData(json);
-  state.data = json;
-  state.source = "json";
-  state.loadedFromSupabaseThisSession = false;
-  state.supabaseBaselinePayload = null;
+  const theatreGroups = Array.from(theatreMap.values());
+  theatreGroups.forEach((theatre) => {
+    theatre.films = theatre.films.filter((film) => Array.isArray(film.showings) && film.showings.length > 0);
+    theatre.films.forEach((film) => {
+      film.showings.sort((a, b) => a.date.localeCompare(b.date));
+      film.showings.forEach((showing) => {
+        showing.times.sort(compareTimes);
+      });
+      delete film._showingByDate;
+    });
+    theatre.films.sort((a, b) => {
+      const titleCompare = normalizeSortTitle(a?.title || "").localeCompare(normalizeSortTitle(b?.title || ""));
+      if (titleCompare !== 0) return titleCompare;
+      return Number(b?.year || 0) - Number(a?.year || 0);
+    });
+    delete theatre._filmMap;
+  });
+
+  return theatreGroups.filter((theatre) => theatre.films.length > 0);
 }
 
 async function loadDataFromSupabase() {
-  const theatres = await fetchAllRowsFromSupabase(() =>
+  const theatres = await fetchAllRowsFromSupabase("theatres", () =>
     state.supabase.from("theatres").select("id,name,city,address,website,latitude,longitude").order("id", { ascending: true })
   );
-  const films = await fetchAllRowsFromSupabase(() =>
+  const films = await fetchAllRowsFromSupabase("films", () =>
     state.supabase
       .from("films")
       .select(
-        "id,title,year,tmdb_id,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json"
+        "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json"
       )
       .order("id", { ascending: true })
   );
-  const theatreFilms = await fetchAllRowsFromSupabase(() =>
+  const theatreFilms = await fetchAllRowsFromSupabase("theatre_films", () =>
     state.supabase
       .from("theatre_films")
       .select("theatre_id,film_id,ticket_link")
       .order("theatre_id", { ascending: true })
       .order("film_id", { ascending: true })
   );
-  const showings = await fetchAllRowsFromSupabase(() =>
+  const showings = await fetchAllRowsFromSupabase("showings", () =>
     state.supabase
       .from("showings")
       .select("id,theatre_id,film_id,show_date,times")
       .order("id", { ascending: true })
   );
-  const promos = await fetchAllRowsFromSupabase(() =>
+  const promos = await fetchAllRowsFromSupabase("promos", () =>
     state.supabase
       .from("promos")
       .select("id,title,button_url,image_path,image_alt,image_name,button_label,enabled,sort_order")
@@ -1559,10 +1722,16 @@ async function loadDataFromSupabase() {
   });
 
   films.forEach((filmRow) => {
+    const tmdbJson = isPlainObject(filmRow.tmdb_json) ? { ...filmRow.tmdb_json } : {};
+    const synopsis = String(filmRow.synopsis || "").trim();
+    if (synopsis && !String(tmdbJson.overview || "").trim()) {
+      tmdbJson.overview = synopsis;
+    }
     filmById.set(filmRow.id, {
       title: filmRow.title,
       year: filmRow.year,
       tmdbId: filmRow.tmdb_id,
+      synopsis,
       ticketLink: "",
       legacyTicketLink: filmRow.ticket_link || "",
       staffFavorite: Boolean(filmRow.staff_favorite),
@@ -1570,7 +1739,7 @@ async function loadDataFromSupabase() {
       featuredOnPlayweek: Boolean(filmRow.featured_on_playweek),
       featuredOnPlayweekUrl: String(filmRow.featured_on_playweek_url || "").trim(),
       metadataSource: normalizeMetadataSource(filmRow.metadata_source, { tmdbId: filmRow.tmdb_id }),
-      tmdb: filmRow.tmdb_json || undefined,
+      tmdb: tmdbJson,
       _dbId: filmRow.id,
     });
   });
@@ -1582,6 +1751,7 @@ async function loadDataFromSupabase() {
         title: filmTemplate.title,
         year: filmTemplate.year,
         tmdbId: filmTemplate.tmdbId,
+        synopsis: String(filmTemplate.synopsis || ""),
         ticketLink: "",
         staffFavorite: Boolean(filmTemplate.staffFavorite),
         staffFavoriteBy: String(filmTemplate.staffFavoriteBy || ""),
@@ -2123,12 +2293,19 @@ function importShowtimesCsv(data, csvContent) {
     if (!theatreMatches.length) {
       throw new Error(`Row ${rowNumber}: theatre "${theatreName}" was not found. Add it in admin first.`);
     }
-    const theatre = theatreMatches.find(
-      (entry) => normalizeSearchText(entry?.city) === normalizeSearchText(theatreCity)
-    );
+    const inputCityExact = normalizeSearchText(theatreCity);
+    const inputCityLoose = normalizeCityMatchText(theatreCity);
+    let theatre = theatreMatches.find((entry) => normalizeSearchText(entry?.city) === inputCityExact);
     if (!theatre) {
+      theatre = theatreMatches.find((entry) => normalizeCityMatchText(entry?.city) === inputCityLoose);
+    }
+    if (!theatre && theatreMatches.length === 1) {
+      theatre = theatreMatches[0];
+    }
+    if (!theatre) {
+      const availableCities = theatreMatches.map((entry) => String(entry?.city || "").trim()).filter(Boolean).join(", ");
       throw new Error(
-        `Row ${rowNumber}: theatre "${theatreName}" with city "${theatreCity}" was not found.`
+        `Row ${rowNumber}: theatre "${theatreName}" with city "${theatreCity}" was not found.${availableCities ? ` Available cities: ${availableCities}.` : ""}`
       );
     }
 
@@ -2524,13 +2701,13 @@ function buildFilmUniqKey(film) {
 
 async function findTicketLinkClearRisks(supabase, payload) {
   const [theatres, films, theatreFilms] = await Promise.all([
-    fetchAllRowsFromSupabase(() =>
+    fetchAllRowsFromSupabase("theatres", () =>
       supabase.from("theatres").select("id,name,city").order("id", { ascending: true })
     ),
-    fetchAllRowsFromSupabase(() =>
+    fetchAllRowsFromSupabase("films", () =>
       supabase.from("films").select("id,title,year,tmdb_id").order("id", { ascending: true })
     ),
-    fetchAllRowsFromSupabase(() =>
+    fetchAllRowsFromSupabase("theatre_films", () =>
       supabase
         .from("theatre_films")
         .select("theatre_id,film_id,ticket_link")
@@ -2597,13 +2774,15 @@ async function findTicketLinkClearRisks(supabase, payload) {
   };
 }
 
-async function fetchAllRowsFromSupabase(queryBuilderFactory, pageSize = 1000) {
+async function fetchAllRowsFromSupabase(tableName, queryBuilderFactory, pageSize = 1000) {
   const rows = [];
   let from = 0;
   while (true) {
     const to = from + pageSize - 1;
     const result = await queryBuilderFactory().range(from, to);
-    if (result.error) throw result.error;
+    if (result.error) {
+      throw new Error(`Supabase read failed for table "${tableName}": ${result.error.message}`);
+    }
     const chunk = result.data || [];
     if (!chunk.length) break;
     rows.push(...chunk);
@@ -2666,6 +2845,7 @@ function buildReplacePayload(data, promotedCards) {
           title: film.title,
           year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
           tmdb_id: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
+          synopsis: extractFilmSynopsis(film),
           metadata_source: normalizeMetadataSource(film.metadataSource, film),
           ticket_link: filmTicketLink,
           staff_favorite: Boolean(film.staffFavorite),
@@ -2684,6 +2864,9 @@ function buildReplacePayload(data, promotedCards) {
             films[existingFilmIndex].metadata_source,
             incomingMetadataSource
           );
+          if (!films[existingFilmIndex].synopsis) {
+            films[existingFilmIndex].synopsis = extractFilmSynopsis(film);
+          }
           if (
             film.tmdb &&
             (films[existingFilmIndex].tmdb_json == null || incomingMetadataSource === "manual")
@@ -2865,6 +3048,7 @@ function hasFilmRowChanges(previousRow, nextRow) {
     String(previousRow?.title || "") !== String(nextRow?.title || "") ||
     nullableInt(previousRow?.year) !== nullableInt(nextRow?.year) ||
     nullableInt(previousRow?.tmdb_id) !== nullableInt(nextRow?.tmdb_id) ||
+    String(previousRow?.synopsis || "") !== String(nextRow?.synopsis || "") ||
     String(previousRow?.metadata_source || "") !== String(nextRow?.metadata_source || "") ||
     String(previousRow?.ticket_link || "") !== String(nextRow?.ticket_link || "") ||
     Boolean(previousRow?.staff_favorite) !== Boolean(nextRow?.staff_favorite) ||
@@ -2886,6 +3070,13 @@ function hasPromoRowChanges(previousRow, nextRow) {
     Boolean(previousRow?.enabled) !== Boolean(nextRow?.enabled) ||
     nullableInt(previousRow?.sort_order) !== nullableInt(nextRow?.sort_order)
   );
+}
+
+function extractFilmSynopsis(film) {
+  const directSynopsis = String(film?.synopsis || "").trim();
+  if (directSynopsis) return directSynopsis;
+  const tmdbSynopsis = String(film?.tmdb?.overview || "").trim();
+  return tmdbSynopsis;
 }
 
 function buildTheatreFilmRowKey(row) {
@@ -3221,7 +3412,8 @@ function render() {
     }
     if (isFilmsView) {
       const filmGroupKey = buildExpandCardKey(state.view, group);
-      filmGroupExpanded = state.expandedFilmGroups.has(filmGroupKey);
+      const shouldLinkToFilmPage = state.view === "films";
+      filmGroupExpanded = shouldLinkToFilmPage ? false : state.expandedFilmGroups.has(filmGroupKey);
       card.dataset.filmKey = filmGroupKey;
       card.classList.toggle("film-card-collapsed", !filmGroupExpanded);
 
@@ -3233,9 +3425,17 @@ function render() {
       }
 
       if (filmExpandToggle) {
-        filmExpandToggle.dataset.filmKey = filmGroupKey;
-        filmExpandToggle.textContent = filmGroupExpanded ? "Collapse" : "Expand";
-        filmExpandToggle.setAttribute("aria-expanded", String(filmGroupExpanded));
+        if (shouldLinkToFilmPage) {
+          filmExpandToggle.dataset.filmPageUrl = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+          filmExpandToggle.removeAttribute("data-film-key");
+          filmExpandToggle.textContent = "View Film Page";
+          filmExpandToggle.removeAttribute("aria-expanded");
+        } else {
+          filmExpandToggle.dataset.filmKey = filmGroupKey;
+          filmExpandToggle.removeAttribute("data-film-page-url");
+          filmExpandToggle.textContent = filmGroupExpanded ? "Collapse" : "Expand";
+          filmExpandToggle.setAttribute("aria-expanded", String(filmGroupExpanded));
+        }
         filmExpandToggle.classList.remove("hidden");
       }
 
@@ -3249,6 +3449,11 @@ function render() {
         groupFilmPoster.alt = group.filmInfo.posterUrl
           ? `Poster for ${group.filmInfo.film}`
           : `No poster available for ${group.filmInfo.film}`;
+        if (shouldLinkToFilmPage) {
+          groupFilmPoster.dataset.filmPageUrl = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+        } else {
+          groupFilmPoster.removeAttribute("data-film-page-url");
+        }
         groupFilmPoster.classList.remove("hidden");
       }
       if (facts.length) {
@@ -3277,6 +3482,8 @@ function render() {
       }
       groupFilmSummary.classList.remove("hidden");
       const tmdbUrl = buildTmdbMovieUrl(group.filmInfo.tmdbId);
+      const filmPageUrl = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+      const isNearYouView = state.view === "days";
       const groupFilmDetails = groupFilmFacts?.parentElement || groupFilmSummary;
       let groupTmdbLink = groupFilmDetails?.querySelector(".group-tmdb-link");
       if (!groupTmdbLink && groupFilmDetails) {
@@ -3292,8 +3499,16 @@ function render() {
         }
       }
       if (groupTmdbLink) {
-        if (filmGroupExpanded && tmdbUrl) {
-          groupTmdbLink.href = tmdbUrl;
+        if (isNearYouView) {
+          groupTmdbLink.classList.add("group-view-film-link");
+          groupTmdbLink.textContent = "View film";
+        } else {
+          groupTmdbLink.classList.remove("group-view-film-link");
+          groupTmdbLink.textContent = "View on TMDb";
+        }
+        const actionUrl = isNearYouView ? filmPageUrl : tmdbUrl;
+        if (filmGroupExpanded && actionUrl) {
+          groupTmdbLink.href = actionUrl;
           groupTmdbLink.classList.remove("hidden");
         } else {
           groupTmdbLink.classList.add("hidden");
@@ -3385,7 +3600,17 @@ function render() {
             link.classList.add("hidden");
           }
           if (rowExpanded) {
-            item.appendChild(rowToggle);
+            const rowFilmPageLink = document.createElement("a");
+            rowFilmPageLink.className = "theatre-row-film-link";
+            rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
+            rowFilmPageLink.target = "_blank";
+            rowFilmPageLink.rel = "noopener noreferrer";
+            rowFilmPageLink.textContent = "View Film Page";
+            const rowActions = document.createElement("div");
+            rowActions.className = "theatre-row-actions";
+            rowActions.appendChild(rowToggle);
+            rowActions.appendChild(rowFilmPageLink);
+            item.appendChild(rowActions);
           }
         } else {
           main.textContent = `${show.theatre}`;
@@ -3847,6 +4072,14 @@ function normalizeSearchText(value) {
   return stripDiacritics(value)
     .trim()
     .toLowerCase();
+}
+
+function isPlainObject(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function normalizeCityMatchText(value) {
+  return normalizeSearchText(value).replace(/\b(maine|me)\b/g, "").replace(/,\s*$/g, "").trim();
 }
 
 function getPageScrollTop() {
@@ -4885,6 +5118,22 @@ function normalizePosterUrl(value) {
 function buildFilmGroupKey(title, year) {
   if (Number.isInteger(year)) return `${title} (${year})`;
   return title;
+}
+
+function buildFilmPageUrl(title, year) {
+  const slug = slugifyFilmPageSegment(
+    Number.isInteger(Number(year)) ? `${String(title || "")}-${Number(year)}` : String(title || "")
+  );
+  return `films/${slug}/`;
+}
+
+function slugifyFilmPageSegment(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .replace(/--+/g, "-")
+    .slice(0, 80);
 }
 
 function compareTimes(a, b) {

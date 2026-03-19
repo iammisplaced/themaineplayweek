@@ -19,6 +19,7 @@ create table if not exists public.films (
   title text not null,
   year integer,
   tmdb_id bigint,
+  synopsis text not null default '',
   ticket_link text not null default '',
   staff_favorite boolean not null default false,
   staff_favorite_by text not null default '',
@@ -33,7 +34,20 @@ alter table public.films add column if not exists staff_favorite boolean not nul
 alter table public.films add column if not exists staff_favorite_by text not null default '';
 alter table public.films add column if not exists featured_on_playweek boolean not null default false;
 alter table public.films add column if not exists featured_on_playweek_url text not null default '';
+alter table public.films add column if not exists synopsis text;
 alter table public.films add column if not exists metadata_source text;
+
+update public.films
+set synopsis = coalesce(
+  nullif(trim(synopsis), ''),
+  nullif(trim(tmdb_json->>'overview'), ''),
+  ''
+)
+where synopsis is null
+   or trim(synopsis) = '';
+
+alter table public.films alter column synopsis set default '';
+alter table public.films alter column synopsis set not null;
 
 update public.films
 set metadata_source = case
@@ -346,6 +360,7 @@ begin
       title,
       year,
       tmdb_id,
+      synopsis,
       metadata_source,
       ticket_link,
       staff_favorite,
@@ -358,6 +373,7 @@ begin
       coalesce(film_item->>'title', ''),
       nullif(film_item->>'year', '')::integer,
       nullif(film_item->>'tmdb_id', '')::bigint,
+      coalesce(nullif(film_item->>'synopsis', ''), nullif(film_item->'tmdb_json'->>'overview', ''), ''),
       case lower(trim(coalesce(film_item->>'metadata_source', '')))
         when 'tmdb' then 'tmdb'
         when 'manual' then 'manual'
@@ -514,6 +530,7 @@ begin
         title = coalesce(film_item->>'title', ''),
         year = nullif(film_item->>'year', '')::integer,
         tmdb_id = nullif(film_item->>'tmdb_id', '')::bigint,
+        synopsis = coalesce(nullif(film_item->>'synopsis', ''), nullif(film_item->'tmdb_json'->>'overview', ''), ''),
         metadata_source = case lower(trim(coalesce(film_item->>'metadata_source', '')))
           when 'tmdb' then 'tmdb'
           when 'manual' then 'manual'
@@ -537,6 +554,7 @@ begin
         title,
         year,
         tmdb_id,
+        synopsis,
         metadata_source,
         ticket_link,
         staff_favorite,
@@ -549,6 +567,7 @@ begin
         coalesce(film_item->>'title', ''),
         nullif(film_item->>'year', '')::integer,
         nullif(film_item->>'tmdb_id', '')::bigint,
+        coalesce(nullif(film_item->>'synopsis', ''), nullif(film_item->'tmdb_json'->>'overview', ''), ''),
         case lower(trim(coalesce(film_item->>'metadata_source', '')))
           when 'tmdb' then 'tmdb'
           when 'manual' then 'manual'

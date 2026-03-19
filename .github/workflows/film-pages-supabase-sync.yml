@@ -25,10 +25,15 @@ jobs:
 
       - name: Generate static film pages from Supabase
         env:
-          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-          SITE_URL: ${{ secrets.SITE_URL }}
-        run: npm run film-pages:live:site
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || vars.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || vars.SUPABASE_ANON_KEY }}
+          SITE_URL: ${{ secrets.SITE_URL || vars.SITE_URL }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "Missing SUPABASE_URL or SUPABASE_ANON_KEY in GitHub Actions secrets/vars."
+            exit 1
+          fi
+          npm run film-pages:live:site
 
       - name: Commit and push changes
         run: |
