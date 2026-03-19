@@ -72,10 +72,35 @@ async function loadFilmSourceFromSupabase() {
   }
 
   const restBase = `${supabaseUrl.replace(/\/+$/, "")}/rest/v1`;
-  const [theatres, films, showings] = await Promise.all([
-    fetchAllFromSupabase(restBase, supabaseAnonKey, "theatres", "id,name,city,address,website"),
-    fetchAllFromSupabase(restBase, supabaseAnonKey, "films", "id,title,year,tmdb_id,synopsis,tmdb_json"),
-    fetchAllFromSupabase(restBase, supabaseAnonKey, "showings", "theatre_id,film_id,show_date,times"),
+  const [theatres, films, theatreFilms, showings] = await Promise.all([
+    fetchAllFromSupabase(
+      restBase,
+      supabaseAnonKey,
+      "theatres",
+      "id,name,city,address,website,latitude,longitude",
+      "id.asc"
+    ),
+    fetchAllFromSupabase(
+      restBase,
+      supabaseAnonKey,
+      "films",
+      "id,title,year,tmdb_id,synopsis,ticket_link,tmdb_json",
+      "id.asc"
+    ),
+    fetchAllFromSupabase(
+      restBase,
+      supabaseAnonKey,
+      "theatre_films",
+      "theatre_id,film_id,ticket_link",
+      "theatre_id.asc,film_id.asc"
+    ),
+    fetchAllFromSupabase(
+      restBase,
+      supabaseAnonKey,
+      "showings",
+      "theatre_id,film_id,show_date,times",
+      "theatre_id.asc,film_id.asc,show_date.asc"
+    ),
   ]);
 
   const theatreById = new Map();
@@ -83,7 +108,17 @@ async function loadFilmSourceFromSupabase() {
     theatreById.set(String(row.id), {
       name: String(row.name || "").trim(),
       city: String(row.city || "").trim(),
+      website: String(row.website || "").trim(),
+      latitude: toNumber(row.latitude),
+      longitude: toNumber(row.longitude),
     });
+  });
+
+  const ticketLinkByPair = new Map();
+  theatreFilms.forEach((row) => {
+    const ticketLink = String(row.ticket_link || "").trim();
+    if (!ticketLink) return;
+    ticketLinkByPair.set(`${row.theatre_id}::${row.film_id}`, ticketLink);
   });
 
   const filmById = new Map();
@@ -93,12 +128,13 @@ async function loadFilmSourceFromSupabase() {
       title: String(row.title || "").trim(),
       year: toNumber(row.year),
       tmdbId: row.tmdb_id ? String(row.tmdb_id) : "",
-      description: String(tmdb.overview || row.synopsis || "").trim(),
+      description: String(row.synopsis || tmdb.overview || "").trim(),
       posterUrl: normalizeSupabasePosterUrl(tmdb.posterUrl || tmdb.poster_path || ""),
       director: String(tmdb.director || "").trim(),
       genres: Array.isArray(tmdb.genres) ? tmdb.genres.filter(Boolean) : [],
       stars: Array.isArray(tmdb.stars) ? tmdb.stars.filter(Boolean) : [],
       releaseDate: String(tmdb.releaseDate || "").trim(),
+      legacyTicketLink: String(row.ticket_link || "").trim(),
       theatres: [],
       showings: [],
     });
@@ -117,10 +153,16 @@ async function loadFilmSourceFromSupabase() {
     times.forEach((time) => {
       const timeValue = String(time || "").trim();
       if (!date || !timeValue) return;
+      const pairKey = `${row.theatre_id}::${row.film_id}`;
       film.showings.push({
         date,
         time: timeValue,
         theatre: theatre.name || theatreLabel || "Theatre TBA",
+        city: theatre.city || "",
+        theatreWebsite: theatre.website || "",
+        ticketLink: ticketLinkByPair.get(pairKey) || theatre.website || film.legacyTicketLink || "",
+        latitude: Number.isFinite(Number(theatre.latitude)) ? Number(theatre.latitude) : undefined,
+        longitude: Number.isFinite(Number(theatre.longitude)) ? Number(theatre.longitude) : undefined,
       });
     });
   });
@@ -129,14 +171,15 @@ async function loadFilmSourceFromSupabase() {
   return { films: sourceFilms };
 }
 
-async function fetchAllFromSupabase(restBase, apiKey, table, select, pageSize = 1000) {
+async function fetchAllFromSupabase(restBase, apiKey, table, select, orderBy = "", pageSize = 1000) {
   const rows = [];
   let from = 0;
   while (true) {
     const to = from + pageSize - 1;
-    const url =
-      `${restBase}/${encodeURIComponent(table)}?select=${encodeURIComponent(select)}` +
-      `&order=id.asc`;
+    let url = `${restBase}/${encodeURIComponent(table)}?select=${encodeURIComponent(select)}`;
+    if (orderBy) {
+      url += `&order=${encodeURIComponent(orderBy)}`;
+    }
     const response = await fetch(url, {
       headers: {
         apikey: apiKey,
@@ -202,7 +245,16 @@ function normalizeFilms(source) {
           for (const time of showing?.times || []) {
             const t = stringOrEmpty(time);
             if (!date || !t) continue;
-            film.showings.push({ date, time, theatre: theatreName });
+            film.showings.push({
+              date,
+              time,
+              theatre: theatreName,
+              city: theatreCity,
+              theatreWebsite: stringOrEmpty(theatre?.website),
+              ticketLink: stringOrEmpty(rawFilm?.ticketLink),
+              latitude: toNumber(theatre?.latitude),
+              longitude: toNumber(theatre?.longitude),
+            });
           }
         }
       }
@@ -234,6 +286,11 @@ function normalizeFlatFilm(film) {
             date: stringOrEmpty(showing?.date),
             time: stringOrEmpty(showing?.time),
             theatre: stringOrEmpty(showing?.theatre),
+            city: stringOrEmpty(showing?.city),
+            theatreWebsite: stringOrEmpty(showing?.theatreWebsite),
+            ticketLink: stringOrEmpty(showing?.ticketLink),
+            latitude: toNumber(showing?.latitude),
+            longitude: toNumber(showing?.longitude),
           }))
           .filter((showing) => showing.date && showing.time)
       : [],
@@ -245,30 +302,57 @@ function renderFilmPage(film, slug, siteUrl) {
   const description =
     film.description ||
     `${film.title} showtimes, theatres, and details from ${BRAND_NAME}.`;
-  const canonicalPath = `films/${slug}/`;
-  const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath;
+  const canonicalPath = `/films/${slug}/`;
+  const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath.replace(/^\//, "");
   const posterUrl = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 2);
   const theatreGroups = buildShowtimesByTheatre(film);
   const theatreRowsMarkup = theatreGroups
     .map((group) => {
+      const visibleSchedule = group.schedule.slice(0, 4);
+      const hiddenSchedule = group.schedule.slice(4);
+
+      const renderDayCards = (rows) =>
+        rows
+          .map(
+            (row) =>
+              `<article class="show-day-card">
+                <h3 class="show-schedule-day">${escapeHtml(formatIsoDateLabel(row.date))}</h3>
+                <div class="show-times-grid">
+                  ${row.times.map((time) => `<span class="show-time-chip">${escapeHtml(time)}</span>`).join("")}
+                </div>
+              </article>`
+          )
+          .join("");
+
       const scheduleMarkup = group.schedule.length
-        ? group.schedule
-            .map(
-              (row) =>
-                `<div class="show-schedule-row"><span class="show-schedule-day">${escapeHtml(
-                  formatIsoDateLabel(row.date)
-                )}</span><span class="show-schedule-times">${escapeHtml(row.times.join(", "))}</span></div>`
-            )
-            .join("")
-        : `<div class="show-schedule-row"><span class="show-schedule-times">Showtimes pending</span></div>`;
+        ? renderDayCards(visibleSchedule)
+        : `<article class="show-day-card show-day-card-empty"><span class="show-schedule-times">Showtimes pending</span></article>`;
+
+      const hiddenScheduleMarkup = hiddenSchedule.length
+        ? `<details class="show-more-days">
+            <summary class="show-more-days-toggle">Show ${hiddenSchedule.length} more day${
+              hiddenSchedule.length === 1 ? "" : "s"
+            }</summary>
+            <div class="show-schedule show-schedule-extra">
+              ${renderDayCards(hiddenSchedule)}
+            </div>
+          </details>`
+        : "";
 
       return `<li class="show-item">
         <div class="show-row">
-          <div>
-            <div class="show-main">${escapeHtml(group.theatre)}</div>
+          <div
+            data-theatre-lat="${Number.isFinite(Number(group.latitude)) ? String(group.latitude) : ""}"
+            data-theatre-lng="${Number.isFinite(Number(group.longitude)) ? String(group.longitude) : ""}"
+          >
+            <div class="show-main show-main-theatre">
+              ${escapeHtml(group.theatre)}${group.city ? `<span class="show-main-city">, ${escapeHtml(group.city)}</span>` : ""}
+            </div>
             <div class="show-schedule">${scheduleMarkup}</div>
+            ${hiddenScheduleMarkup}
           </div>
         </div>
+        ${group.ticketLink ? `<a class="show-link" href="${escapeHtml(group.ticketLink)}" target="_blank" rel="noopener noreferrer">Tickets</a>` : ""}
       </li>`;
     })
     .join("");
@@ -363,6 +447,158 @@ function renderFilmPage(film, slug, siteUrl) {
         padding: 0.72rem 0.74rem;
         border-radius: 12px;
       }
+      .film-showtimes-box .show-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.7rem;
+      }
+      .film-showtimes-box .show-main {
+        margin-bottom: 0.5rem;
+      }
+      .film-showtimes-box .show-main-theatre {
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .film-showtimes-box .show-main-city {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .film-showtimes-box .show-schedule {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.55rem;
+        margin-top: 0;
+      }
+      .film-showtimes-box .show-day-card {
+        margin: 0;
+        padding: 0.55rem 0.62rem;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface-soft);
+      }
+      .film-showtimes-box .show-day-card-empty {
+        display: grid;
+        align-items: center;
+      }
+      .film-showtimes-box .show-schedule-day {
+        margin: 0 0 0.38rem;
+      }
+      .film-showtimes-box .show-times-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.34rem;
+      }
+      .film-showtimes-box .show-more-days {
+        margin-top: 0.5rem;
+      }
+      .film-showtimes-box .show-more-days-toggle {
+        list-style: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #f8f2ea;
+        color: var(--accent-2);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 0.22rem 0.62rem;
+      }
+      .film-showtimes-box .show-more-days-toggle::-webkit-details-marker {
+        display: none;
+      }
+      .film-showtimes-box .show-more-days-toggle:hover,
+      .film-showtimes-box .show-more-days-toggle:focus-visible {
+        background: var(--hover-soft-2);
+        border-color: #c8beb1;
+      }
+      .film-showtimes-box .show-schedule-extra {
+        margin-top: 0.48rem;
+      }
+      .film-showtimes-box .show-time-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 1.7rem;
+        padding: 0.12rem 0.46rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--panel);
+        color: var(--ink);
+        font-size: 0.84rem;
+        font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      .film-showtimes-box .show-item {
+        align-self: start;
+        margin: 0;
+      }
+      .location-sort-controls {
+        margin: 0 0 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface-alt);
+        padding: 0.66rem 0.7rem;
+      }
+      .location-sort-title {
+        margin: 0 0 0.2rem;
+        color: var(--accent-2);
+        font-size: 0.84rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .location-sort-copy {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .location-sort-actions {
+        margin-top: 0.56rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.45rem;
+      }
+      .location-sort-actions button,
+      .location-sort-actions input {
+        min-height: 2rem;
+      }
+      .location-sort-actions input {
+        width: 7.2rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0 0.5rem;
+        background: var(--panel);
+        color: var(--ink);
+      }
+      .location-sort-actions button {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #f8f2ea;
+        color: var(--accent-2);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.62rem;
+        cursor: pointer;
+      }
+      .location-sort-status {
+        margin: 0.5rem 0 0;
+        font-size: 0.84rem;
+        color: var(--muted);
+      }
+      @media (min-width: 860px) {
+        .film-showtimes-box .show-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
     </style>
     <script type="application/ld+json">${jsonForScript(pruneUndefined(ldJson))}</script>
   </head>
@@ -386,6 +622,18 @@ function renderFilmPage(film, slug, siteUrl) {
 
       <section class="group-card film-showtimes-box">
         <h2 class="film-showtimes-heading">Showtimes by Theatre</h2>
+        <section class="location-sort-controls" aria-label="Location sorting">
+          <h3 class="location-sort-title">Near You</h3>
+          <p id="locationSortCopy" class="location-sort-copy">Sort theatres by distance using your saved location, current location, or ZIP code.</p>
+          <div class="location-sort-actions">
+            <button id="locationSortUseDevice" type="button">Use My Location</button>
+            <form id="locationSortZipForm">
+              <input id="locationSortZipInput" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="ZIP code" aria-label="ZIP code" />
+              <button type="submit">Use ZIP</button>
+            </form>
+          </div>
+          <p id="locationSortStatus" class="location-sort-status" aria-live="polite"></p>
+        </section>
         ${
           theatreRowsMarkup
             ? `<ul class="show-list">${theatreRowsMarkup}</ul>`
@@ -393,13 +641,142 @@ function renderFilmPage(film, slug, siteUrl) {
         }
       </section>
     </main>
+    <script>
+      (() => {
+        const STORAGE_KEYS = ["tmp-location-preference-v1", "tmp-film-pages-location-v1"];
+        const useDeviceButton = document.getElementById("locationSortUseDevice");
+        const zipForm = document.getElementById("locationSortZipForm");
+        const zipInput = document.getElementById("locationSortZipInput");
+        const status = document.getElementById("locationSortStatus");
+        const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
+        if (!theatreItems.length) return;
+
+        function setStatus(message) {
+          if (!status) return;
+          status.textContent = message || "";
+        }
+
+        function readSavedLocation() {
+          for (const key of STORAGE_KEYS) {
+            try {
+              const raw = localStorage.getItem(key);
+              if (!raw) continue;
+              const parsed = JSON.parse(raw);
+              const lat = Number(parsed?.lat);
+              const lng = Number(parsed?.lng);
+              if (Number.isFinite(lat) && Number.isFinite(lng)) {
+                return { lat, lng, mode: parsed?.mode || "" };
+              }
+            } catch {}
+          }
+          return null;
+        }
+
+        function saveLocation(lat, lng, mode, zip) {
+          const payload = { lat, lng, mode: mode || "", zip: zip || "" };
+          localStorage.setItem("tmp-film-pages-location-v1", JSON.stringify(payload));
+        }
+
+        function haversineMiles(lat1, lng1, lat2, lng2) {
+          const toRad = (d) => (d * Math.PI) / 180;
+          const R = 3958.8;
+          const dLat = toRad(lat2 - lat1);
+          const dLng = toRad(lng2 - lng1);
+          const a =
+            Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+          return 2 * R * Math.asin(Math.sqrt(a));
+        }
+
+        function sortByDistance(lat, lng, sourceLabel) {
+          const scored = theatreItems.map((item) => {
+            const holder = item.querySelector("[data-theatre-lat]");
+            const itemLat = Number(holder?.dataset?.theatreLat);
+            const itemLng = Number(holder?.dataset?.theatreLng);
+            let distance = Number.POSITIVE_INFINITY;
+            if (Number.isFinite(itemLat) && Number.isFinite(itemLng)) {
+              distance = haversineMiles(lat, lng, itemLat, itemLng);
+            }
+            return { item, distance };
+          });
+
+          scored.sort((a, b) => {
+            const aFinite = Number.isFinite(a.distance);
+            const bFinite = Number.isFinite(b.distance);
+            if (aFinite && bFinite && a.distance !== b.distance) return a.distance - b.distance;
+            if (aFinite !== bFinite) return aFinite ? -1 : 1;
+            const aLabel = a.item.querySelector(".show-main-theatre")?.textContent || "";
+            const bLabel = b.item.querySelector(".show-main-theatre")?.textContent || "";
+            return aLabel.localeCompare(bLabel);
+          });
+
+          const list = document.querySelector(".film-showtimes-box .show-list");
+          scored.forEach(({ item }) => list?.appendChild(item));
+          setStatus("Sorted by distance using " + sourceLabel + ".");
+        }
+
+        async function geocodeZip(zip) {
+          const cleaned = String(zip || "").trim();
+          if (!/^\\d{5}$/.test(cleaned)) {
+            throw new Error("Enter a valid 5-digit ZIP code.");
+          }
+          const response = await fetch("https://api.zippopotam.us/us/" + cleaned);
+          if (!response.ok) throw new Error("Could not find that ZIP code.");
+          const json = await response.json();
+          const place = Array.isArray(json?.places) ? json.places[0] : null;
+          const lat = Number(place?.latitude);
+          const lng = Number(place?.longitude);
+          if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error("ZIP lookup did not return coordinates.");
+          return { lat, lng, zip: cleaned };
+        }
+
+        useDeviceButton?.addEventListener("click", () => {
+          if (!navigator.geolocation) {
+            setStatus("Location is not supported in this browser.");
+            return;
+          }
+          setStatus("Getting your location...");
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const lat = Number(position.coords.latitude);
+              const lng = Number(position.coords.longitude);
+              saveLocation(lat, lng, "device", "");
+              sortByDistance(lat, lng, "device location");
+            },
+            () => {
+              setStatus("Could not get your location. You can enter ZIP instead.");
+            },
+            { enableHighAccuracy: true, timeout: 12000 }
+          );
+        });
+
+        zipForm?.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          try {
+            setStatus("Looking up ZIP...");
+            const geo = await geocodeZip(zipInput?.value || "");
+            saveLocation(geo.lat, geo.lng, "zip", geo.zip);
+            sortByDistance(geo.lat, geo.lng, "ZIP " + geo.zip);
+          } catch (error) {
+            setStatus(error instanceof Error ? error.message : "Could not use that ZIP code.");
+          }
+        });
+
+        const saved = readSavedLocation();
+        if (saved) {
+          sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
+        } else {
+          setStatus("Choose your location to sort theatres by distance.");
+        }
+      })();
+    </script>
   </body>
 </html>`;
 }
 
 function renderIndexPage(items, siteUrl) {
-  const canonicalPath = "films/";
-  const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath;
+  const canonicalPath = "/films/";
+  const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath.replace(/^\//, "");
   const cards = items
     .map(({ film, slug }) => {
       const title = [film.title, film.year].filter(Boolean).join(" ");
@@ -687,31 +1064,71 @@ function buildShowtimesByTheatre(film) {
 
   for (const showing of film.showings || []) {
     const theatre = showing.theatre || "Theatre TBA";
-    if (!byTheatre.has(theatre)) {
-      byTheatre.set(theatre, new Map());
+    const city = showing.city || "";
+    const key = `${theatre}::${city}`;
+    if (!byTheatre.has(key)) {
+      byTheatre.set(key, {
+        theatre,
+        city,
+        ticketLink: String(showing.ticketLink || showing.theatreWebsite || "").trim(),
+        latitude: Number.isFinite(Number(showing.latitude)) ? Number(showing.latitude) : undefined,
+        longitude: Number.isFinite(Number(showing.longitude)) ? Number(showing.longitude) : undefined,
+        byDate: new Map(),
+      });
     }
-    const byDate = byTheatre.get(theatre);
+    const entry = byTheatre.get(key);
+    if (!entry.ticketLink && (showing.ticketLink || showing.theatreWebsite)) {
+      entry.ticketLink = String(showing.ticketLink || showing.theatreWebsite).trim();
+    }
+    if (!Number.isFinite(Number(entry.latitude)) && Number.isFinite(Number(showing.latitude))) {
+      entry.latitude = Number(showing.latitude);
+    }
+    if (!Number.isFinite(Number(entry.longitude)) && Number.isFinite(Number(showing.longitude))) {
+      entry.longitude = Number(showing.longitude);
+    }
+    const byDate = entry.byDate;
     if (!byDate.has(showing.date)) {
       byDate.set(showing.date, []);
     }
     byDate.get(showing.date).push(showing.time);
   }
 
-  const grouped = Array.from(byTheatre.entries()).map(([theatre, dates]) => {
-    const schedule = Array.from(dates.entries())
+  const grouped = Array.from(byTheatre.values()).map((entry) => {
+    const schedule = Array.from(entry.byDate.entries())
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([date, times]) => ({
         date,
         times: dedupeTimes(times),
       }));
-    return { theatre, schedule };
+    return {
+      theatre: entry.theatre,
+      city: entry.city,
+      ticketLink: entry.ticketLink,
+      latitude: entry.latitude,
+      longitude: entry.longitude,
+      schedule,
+    };
   });
 
   if (!grouped.length && Array.isArray(film.theatres) && film.theatres.length) {
-    return film.theatres.map((theatre) => ({ theatre, schedule: [] }));
+    return film.theatres.map((theatreLabel) => {
+      const [theatreName, ...rest] = String(theatreLabel || "").split(",");
+      return {
+        theatre: theatreName?.trim() || "Theatre TBA",
+        city: rest.join(",").trim(),
+        ticketLink: "",
+        latitude: undefined,
+        longitude: undefined,
+        schedule: [],
+      };
+    });
   }
 
-  return grouped.sort((a, b) => a.theatre.localeCompare(b.theatre));
+  return grouped.sort((a, b) => {
+    const theatreCompare = a.theatre.localeCompare(b.theatre);
+    if (theatreCompare !== 0) return theatreCompare;
+    return String(a.city || "").localeCompare(String(b.city || ""));
+  });
 }
 
 function dedupeTimes(times) {

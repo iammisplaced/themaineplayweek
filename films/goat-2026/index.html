@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GOAT 2026 | The Maine Playweek</title>
     <meta name="description" content="A small goat with big dreams gets a once-in-a-lifetime shot to join the pros and play roarball, a high-intensity, co-ed, full-contact sport dominated by the fastest, fiercest animals in the world." />
-    <link rel="canonical" href="films/goat-2026/" />
+    <link rel="canonical" href="https://themaineplayweek.com/films/goat-2026/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="GOAT 2026 | The Maine Playweek" />
     <meta property="og:description" content="A small goat with big dreams gets a once-in-a-lifetime shot to join the pros and play roarball, a high-intensity, co-ed, full-contact sport dominated by the fastest, fiercest animals in the world." />
-    <meta property="og:url" content="films/goat-2026/" />
+    <meta property="og:url" content="https://themaineplayweek.com/films/goat-2026/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/wfuqMlaExcoYiUEvKfVpUTt1v4u.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="GOAT 2026 | The Maine Playweek" />
@@ -75,8 +75,160 @@
         padding: 0.72rem 0.74rem;
         border-radius: 12px;
       }
+      .film-showtimes-box .show-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.7rem;
+      }
+      .film-showtimes-box .show-main {
+        margin-bottom: 0.5rem;
+      }
+      .film-showtimes-box .show-main-theatre {
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .film-showtimes-box .show-main-city {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .film-showtimes-box .show-schedule {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 0.55rem;
+        margin-top: 0;
+      }
+      .film-showtimes-box .show-day-card {
+        margin: 0;
+        padding: 0.55rem 0.62rem;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--surface-soft);
+      }
+      .film-showtimes-box .show-day-card-empty {
+        display: grid;
+        align-items: center;
+      }
+      .film-showtimes-box .show-schedule-day {
+        margin: 0 0 0.38rem;
+      }
+      .film-showtimes-box .show-times-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.34rem;
+      }
+      .film-showtimes-box .show-more-days {
+        margin-top: 0.5rem;
+      }
+      .film-showtimes-box .show-more-days-toggle {
+        list-style: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #f8f2ea;
+        color: var(--accent-2);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 0.22rem 0.62rem;
+      }
+      .film-showtimes-box .show-more-days-toggle::-webkit-details-marker {
+        display: none;
+      }
+      .film-showtimes-box .show-more-days-toggle:hover,
+      .film-showtimes-box .show-more-days-toggle:focus-visible {
+        background: var(--hover-soft-2);
+        border-color: #c8beb1;
+      }
+      .film-showtimes-box .show-schedule-extra {
+        margin-top: 0.48rem;
+      }
+      .film-showtimes-box .show-time-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 1.7rem;
+        padding: 0.12rem 0.46rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--panel);
+        color: var(--ink);
+        font-size: 0.84rem;
+        font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
+      }
+      .film-showtimes-box .show-item {
+        align-self: start;
+        margin: 0;
+      }
+      .location-sort-controls {
+        margin: 0 0 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface-alt);
+        padding: 0.66rem 0.7rem;
+      }
+      .location-sort-title {
+        margin: 0 0 0.2rem;
+        color: var(--accent-2);
+        font-size: 0.84rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .location-sort-copy {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .location-sort-actions {
+        margin-top: 0.56rem;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.45rem;
+      }
+      .location-sort-actions button,
+      .location-sort-actions input {
+        min-height: 2rem;
+      }
+      .location-sort-actions input {
+        width: 7.2rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0 0.5rem;
+        background: var(--panel);
+        color: var(--ink);
+      }
+      .location-sort-actions button {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: #f8f2ea;
+        color: var(--accent-2);
+        font-size: 0.74rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.62rem;
+        cursor: pointer;
+      }
+      .location-sort-status {
+        margin: 0.5rem 0 0;
+        font-size: 0.84rem;
+        color: var(--muted);
+      }
+      @media (min-width: 860px) {
+        .film-showtimes-box .show-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"GOAT 2026","description":"A small goat with big dreams gets a once-in-a-lifetime shot to join the pros and play roarball, a high-intensity, co-ed, full-contact sport dominated by the fastest, fiercest animals in the world.","image":"https://image.tmdb.org/t/p/w342/wfuqMlaExcoYiUEvKfVpUTt1v4u.jpg","datePublished":"2026-02-11","director":[{"@type":"Person","name":"Tyree Dillihay"}],"actor":[{"@type":"Person","name":"Caleb McLaughlin"},{"@type":"Person","name":"Gabrielle Union"},{"@type":"Person","name":"Stephen Curry"}],"genre":["Animation","Comedy","Family"],"url":"films/goat-2026/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"GOAT 2026","description":"A small goat with big dreams gets a once-in-a-lifetime shot to join the pros and play roarball, a high-intensity, co-ed, full-contact sport dominated by the fastest, fiercest animals in the world.","image":"https://image.tmdb.org/t/p/w342/wfuqMlaExcoYiUEvKfVpUTt1v4u.jpg","datePublished":"2026-02-11","director":[{"@type":"Person","name":"Tyree Dillihay"}],"actor":[{"@type":"Person","name":"Caleb McLaughlin"},{"@type":"Person","name":"Gabrielle Union"},{"@type":"Person","name":"Stephen Curry"}],"genre":["Animation","Comedy","Family"],"url":"https://themaineplayweek.com/films/goat-2026/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
@@ -98,50 +250,771 @@
 
       <section class="group-card film-showtimes-box">
         <h2 class="film-showtimes-heading">Showtimes by Theatre</h2>
+        <section class="location-sort-controls" aria-label="Location sorting">
+          <h3 class="location-sort-title">Near You</h3>
+          <p id="locationSortCopy" class="location-sort-copy">Sort theatres by distance using your saved location, current location, or ZIP code.</p>
+          <div class="location-sort-actions">
+            <button id="locationSortUseDevice" type="button">Use My Location</button>
+            <form id="locationSortZipForm">
+              <input id="locationSortZipInput" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="ZIP code" aria-label="ZIP code" />
+              <button type="submit">Use ZIP</button>
+            </form>
+          </div>
+          <p id="locationSortStatus" class="location-sort-status" aria-live="polite"></p>
+        </section>
         <ul class="show-list"><li class="show-item">
         <div class="show-row">
-          <div>
-            <div class="show-main">Apple Cinemas</div>
-            <div class="show-schedule"><div class="show-schedule-row"><span class="show-schedule-day">Wed, Mar 18, 2026</span><span class="show-schedule-times">12:20 PM, 12:30 PM, 1:30 PM, 2:50 PM, 4:00 PM, 5:10 PM, 6:30 PM, 7:30 PM, 9:00 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Thu, Mar 19, 2026</span><span class="show-schedule-times">12:00 PM, 12:20 PM, 12:30 PM, 2:20 PM, 2:50 PM, 4:40 PM, 5:10 PM, 6:15 PM, 7:30 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Fri, Mar 20, 2026</span><span class="show-schedule-times">11:20 AM, 12:15 PM, 1:45 PM, 2:40 PM, 4:15 PM, 5:10 PM, 6:45 PM, 7:40 PM, 9:15 PM, 10:05 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Sat, Mar 21, 2026</span><span class="show-schedule-times">11:20 AM, 1:45 PM, 4:15 PM, 6:40 PM, 6:45 PM, 9:15 PM, 9:30 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Sun, Mar 22, 2026</span><span class="show-schedule-times">11:20 AM, 12:15 PM, 1:45 PM, 3:20 PM, 4:15 PM, 6:45 PM, 9:15 PM, 10:05 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Mon, Mar 23, 2026</span><span class="show-schedule-times">1:10 PM, 3:40 PM, 6:00 PM, 8:40 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Tue, Mar 24, 2026</span><span class="show-schedule-times">1:10 PM, 3:40 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Wed, Mar 25, 2026</span><span class="show-schedule-times">1:10 PM, 3:40 PM</span></div></div>
+          <div
+            data-theatre-lat="43.5285596"
+            data-theatre-lng="-70.4242145"
+          >
+            <div class="show-main show-main-theatre">
+              Apple Cinemas<span class="show-main-city">, Saco</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:20 PM</span><span class="show-time-chip">2:50 PM</span><span class="show-time-chip">5:10 PM</span><span class="show-time-chip">7:30 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:20 PM</span><span class="show-time-chip">2:50 PM</span><span class="show-time-chip">5:10 PM</span><span class="show-time-chip">7:30 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Mar 20, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:15 PM</span><span class="show-time-chip">2:40 PM</span><span class="show-time-chip">5:10 PM</span><span class="show-time-chip">7:40 PM</span><span class="show-time-chip">10:05 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">6:40 PM</span><span class="show-time-chip">9:30 PM</span>
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 4 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Mar 22, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:15 PM</span><span class="show-time-chip">3:20 PM</span><span class="show-time-chip">10:05 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Mon, Mar 23, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:10 PM</span><span class="show-time-chip">3:40 PM</span><span class="show-time-chip">6:00 PM</span><span class="show-time-chip">8:40 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Tue, Mar 24, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:10 PM</span><span class="show-time-chip">3:40 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 25, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:10 PM</span><span class="show-time-chip">3:40 PM</span>
+                </div>
+              </article>
+            </div>
+          </details>
           </div>
         </div>
+        <a class="show-link" href="https://www.applecinemas.com/GOAT--2026-/611fea26f74bab2423301ee4/696162f4313ffdda39b0224a" target="_blank" rel="noopener noreferrer">Tickets</a>
       </li><li class="show-item">
         <div class="show-row">
-          <div>
-            <div class="show-main">Bangor Mall Cinemas</div>
-            <div class="show-schedule"><div class="show-schedule-row"><span class="show-schedule-day">Wed, Mar 18, 2026</span><span class="show-schedule-times">12:15 PM, 3:15 PM, 6:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Thu, Mar 19, 2026</span><span class="show-schedule-times">12:15 PM, 3:15 PM, 6:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Fri, Mar 20, 2026</span><span class="show-schedule-times">12:30 PM, 3:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Sat, Mar 21, 2026</span><span class="show-schedule-times">12:30 PM, 3:15 PM, 6:15 PM, 9:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Sun, Mar 22, 2026</span><span class="show-schedule-times">12:30 PM, 3:15 PM, 6:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Mon, Mar 23, 2026</span><span class="show-schedule-times">12:30 PM, 3:15 PM, 6:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Tue, Mar 24, 2026</span><span class="show-schedule-times">12:30 PM, 3:15 PM, 6:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Wed, Mar 25, 2026</span><span class="show-schedule-times">12:30 PM, 3:15 PM, 6:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Thu, Mar 26, 2026</span><span class="show-schedule-times">12:30 PM, 3:15 PM, 6:15 PM</span></div></div>
+          <div
+            data-theatre-lat="43.6505461"
+            data-theatre-lng="-70.3465631"
+          >
+            <div class="show-main show-main-theatre">
+              Apple Cinemas<span class="show-main-city">, Westbrook</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:30 PM</span><span class="show-time-chip">1:30 PM</span><span class="show-time-chip">4:00 PM</span><span class="show-time-chip">6:30 PM</span><span class="show-time-chip">9:00 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">12:30 PM</span><span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">6:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Mar 20, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:20 AM</span><span class="show-time-chip">1:45 PM</span><span class="show-time-chip">4:15 PM</span><span class="show-time-chip">6:45 PM</span><span class="show-time-chip">9:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:20 AM</span><span class="show-time-chip">1:45 PM</span><span class="show-time-chip">4:15 PM</span><span class="show-time-chip">6:45 PM</span><span class="show-time-chip">9:15 PM</span>
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 1 more day</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Mar 22, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:20 AM</span><span class="show-time-chip">1:45 PM</span><span class="show-time-chip">4:15 PM</span><span class="show-time-chip">6:45 PM</span><span class="show-time-chip">9:15 PM</span>
+                </div>
+              </article>
+            </div>
+          </details>
           </div>
         </div>
+        <a class="show-link" href="https://www.applecinemas.com/GOAT--2026-/611fe9edf74bab2423301ee0/696162f4313ffdda39b0224a" target="_blank" rel="noopener noreferrer">Tickets</a>
       </li><li class="show-item">
         <div class="show-row">
-          <div>
-            <div class="show-main">Black Bear Cinemas</div>
-            <div class="show-schedule"><div class="show-schedule-row"><span class="show-schedule-day">Thu, Mar 19, 2026</span><span class="show-schedule-times">4:00 PM</span></div></div>
+          <div
+            data-theatre-lat="44.8277689"
+            data-theatre-lng="-68.7524346"
+          >
+            <div class="show-main show-main-theatre">
+              Bangor Mall Cinemas<span class="show-main-city">, Bangor</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:15 PM</span><span class="show-time-chip">3:15 PM</span><span class="show-time-chip">6:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:15 PM</span><span class="show-time-chip">3:15 PM</span><span class="show-time-chip">6:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Mar 20, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:30 PM</span><span class="show-time-chip">3:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:30 PM</span><span class="show-time-chip">3:15 PM</span><span class="show-time-chip">6:15 PM</span><span class="show-time-chip">9:15 PM</span>
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 5 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Mar 22, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:30 PM</span><span class="show-time-chip">3:15 PM</span><span class="show-time-chip">6:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Mon, Mar 23, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:30 PM</span><span class="show-time-chip">3:15 PM</span><span class="show-time-chip">6:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Tue, Mar 24, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:30 PM</span><span class="show-time-chip">3:15 PM</span><span class="show-time-chip">6:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 25, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:30 PM</span><span class="show-time-chip">3:15 PM</span><span class="show-time-chip">6:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 26, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:30 PM</span><span class="show-time-chip">3:15 PM</span><span class="show-time-chip">6:15 PM</span>
+                </div>
+              </article>
+            </div>
+          </details>
           </div>
         </div>
+        <a class="show-link" href="https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10" target="_blank" rel="noopener noreferrer">Tickets</a>
       </li><li class="show-item">
         <div class="show-row">
-          <div>
-            <div class="show-main">Flagship Cinemas</div>
-            <div class="show-schedule"><div class="show-schedule-row"><span class="show-schedule-day">Wed, Mar 18, 2026</span><span class="show-schedule-times">12:00 PM, 1:00 PM, 2:20 PM, 4:00 PM, 4:40 PM, 4:45 PM, 4:55 PM, 7:10 PM, 7:15 PM, 7:20 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Thu, Mar 19, 2026</span><span class="show-schedule-times">12:00 PM, 1:00 PM, 2:20 PM, 4:00 PM, 4:40 PM, 4:45 PM, 4:55 PM, 7:05 PM, 7:10 PM, 7:15 PM, 7:20 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Fri, Mar 20, 2026</span><span class="show-schedule-times">11:50 AM, 12:50 PM, 1:00 PM, 2:10 PM, 3:50 PM, 4:00 PM, 4:45 PM, 6:40 PM, 7:10 PM, 7:15 PM, 9:35 PM, 9:40 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Sat, Mar 21, 2026</span><span class="show-schedule-times">10:20 AM, 11:50 AM, 12:50 PM, 1:00 PM, 2:10 PM, 3:50 PM, 4:00 PM, 4:45 PM, 6:40 PM, 7:10 PM, 7:15 PM, 9:35 PM, 9:40 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Sun, Mar 22, 2026</span><span class="show-schedule-times">10:15 AM, 11:50 AM, 12:10 PM, 12:50 PM, 1:00 PM, 2:10 PM, 3:50 PM, 4:00 PM, 4:45 PM, 7:10 PM, 7:15 PM, 9:35 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Mon, Mar 23, 2026</span><span class="show-schedule-times">11:50 AM, 12:50 PM, 1:00 PM, 2:10 PM, 3:50 PM, 4:00 PM, 4:45 PM, 6:40 PM, 7:10 PM, 7:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Tue, Mar 24, 2026</span><span class="show-schedule-times">11:50 AM, 12:50 PM, 1:00 PM, 2:10 PM, 3:50 PM, 4:00 PM, 4:45 PM, 6:40 PM, 7:10 PM, 7:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Wed, Mar 25, 2026</span><span class="show-schedule-times">11:50 AM, 12:05 PM, 12:50 PM, 1:00 PM, 2:10 PM, 3:50 PM, 4:00 PM, 4:45 PM, 7:10 PM, 7:15 PM</span></div></div>
+          <div
+            data-theatre-lat="44.9059551"
+            data-theatre-lng="-68.6911612"
+          >
+            <div class="show-main show-main-theatre">
+              Black Bear Cinemas<span class="show-main-city">, Orono</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">4:00 PM</span>
+                </div>
+              </article></div>
+            
           </div>
         </div>
+        <a class="show-link" href="https://www.blackbearcinemas.com/movie/goat" target="_blank" rel="noopener noreferrer">Tickets</a>
       </li><li class="show-item">
         <div class="show-row">
-          <div>
-            <div class="show-main">Regal Cinemas</div>
-            <div class="show-schedule"><div class="show-schedule-row"><span class="show-schedule-day">Wed, Mar 18, 2026</span><span class="show-schedule-times">1:30 PM, 4:15 PM, 7:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Thu, Mar 19, 2026</span><span class="show-schedule-times">12:15 PM, 3:10 PM, 7:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Fri, Mar 20, 2026</span><span class="show-schedule-times">12:20 PM, 3:45 PM, 6:30 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Sat, Mar 21, 2026</span><span class="show-schedule-times">12:20 PM, 3:45 PM, 6:30 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Sun, Mar 22, 2026</span><span class="show-schedule-times">12:20 PM, 3:45 PM, 6:30 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Mon, Mar 23, 2026</span><span class="show-schedule-times">12:20 PM, 3:45 PM, 6:30 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Tue, Mar 24, 2026</span><span class="show-schedule-times">12:20 PM, 3:45 PM, 6:30 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Wed, Mar 25, 2026</span><span class="show-schedule-times">12:20 PM, 3:45 PM, 6:30 PM</span></div></div>
+          <div
+            data-theatre-lat="44.127541"
+            data-theatre-lng="-70.2260427"
+          >
+            <div class="show-main show-main-theatre">
+              Flagship Cinemas<span class="show-main-city">, Auburn</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Mar 20, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:50 AM</span><span class="show-time-chip">2:10 PM</span><span class="show-time-chip">4:45 PM</span><span class="show-time-chip">7:15 PM</span><span class="show-time-chip">9:35 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:50 AM</span><span class="show-time-chip">2:10 PM</span><span class="show-time-chip">4:45 PM</span><span class="show-time-chip">7:15 PM</span><span class="show-time-chip">9:35 PM</span>
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 4 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Mar 22, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:50 AM</span><span class="show-time-chip">2:10 PM</span><span class="show-time-chip">4:45 PM</span><span class="show-time-chip">7:15 PM</span><span class="show-time-chip">9:35 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Mon, Mar 23, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:50 AM</span><span class="show-time-chip">2:10 PM</span><span class="show-time-chip">4:45 PM</span><span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Tue, Mar 24, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:50 AM</span><span class="show-time-chip">2:10 PM</span><span class="show-time-chip">4:45 PM</span><span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 25, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:50 AM</span><span class="show-time-chip">2:10 PM</span><span class="show-time-chip">4:45 PM</span><span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article>
+            </div>
+          </details>
           </div>
         </div>
+        <a class="show-link" href="https://flagshipcinemas.com/auburn/movie/22117" target="_blank" rel="noopener noreferrer">Tickets</a>
       </li><li class="show-item">
         <div class="show-row">
-          <div>
-            <div class="show-main">Smitty&#39;s Cinema</div>
-            <div class="show-schedule"><div class="show-schedule-row"><span class="show-schedule-day">Wed, Mar 18, 2026</span><span class="show-schedule-times">6:15 PM, 6:30 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Thu, Mar 19, 2026</span><span class="show-schedule-times">6:15 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Fri, Mar 20, 2026</span><span class="show-schedule-times">3:00 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Sat, Mar 21, 2026</span><span class="show-schedule-times">11:45 AM, 12:00 PM, 3:15 PM, 3:45 PM</span></div><div class="show-schedule-row"><span class="show-schedule-day">Sun, Mar 22, 2026</span><span class="show-schedule-times">11:45 AM, 12:00 PM, 3:15 PM, 3:45 PM</span></div></div>
+          <div
+            data-theatre-lat="43.7204846"
+            data-theatre-lng="-70.2352727"
+          >
+            <div class="show-main show-main-theatre">
+              Flagship Cinemas<span class="show-main-city">, Falmouth</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:55 PM</span><span class="show-time-chip">7:20 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:55 PM</span><span class="show-time-chip">7:20 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Mar 20, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:50 PM</span><span class="show-time-chip">3:50 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:50 PM</span><span class="show-time-chip">3:50 PM</span>
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 4 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Mar 22, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">10:15 AM</span><span class="show-time-chip">12:50 PM</span><span class="show-time-chip">3:50 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Mon, Mar 23, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:50 PM</span><span class="show-time-chip">3:50 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Tue, Mar 24, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:50 PM</span><span class="show-time-chip">3:50 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 25, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:50 PM</span><span class="show-time-chip">3:50 PM</span>
+                </div>
+              </article>
+            </div>
+          </details>
           </div>
         </div>
+        <a class="show-link" href="https://flagshipcinemas.com/falmouth/movie/22117" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </li><li class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.0958045"
+            data-theatre-lng="-69.1374609"
+          >
+            <div class="show-main show-main-theatre">
+              Flagship Cinemas<span class="show-main-city">, Thomaston</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">7:10 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">7:10 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Mar 20, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:50 PM</span><span class="show-time-chip">3:50 PM</span><span class="show-time-chip">6:40 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:50 PM</span><span class="show-time-chip">3:50 PM</span><span class="show-time-chip">6:40 PM</span>
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 4 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Mar 22, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:10 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Mon, Mar 23, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:50 PM</span><span class="show-time-chip">3:50 PM</span><span class="show-time-chip">6:40 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Tue, Mar 24, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:50 PM</span><span class="show-time-chip">3:50 PM</span><span class="show-time-chip">6:40 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 25, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:05 PM</span>
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+        <a class="show-link" href="https://flagshipcinemas.com/thomaston/movie/22117" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </li><li class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.5428402"
+            data-theatre-lng="-69.6614214"
+          >
+            <div class="show-main show-main-theatre">
+              Flagship Cinemas<span class="show-main-city">, Waterville</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:45 PM</span><span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:45 PM</span><span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Mar 20, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">7:15 PM</span><span class="show-time-chip">9:40 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">7:15 PM</span><span class="show-time-chip">9:40 PM</span>
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 2 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Mon, Mar 23, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Tue, Mar 24, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+        <a class="show-link" href="https://flagshipcinemas.com/waterville/movie/22117" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </li><li class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.3004064"
+            data-theatre-lng="-70.583234"
+          >
+            <div class="show-main show-main-theatre">
+              Flagship Cinemas<span class="show-main-city">, Wells</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:00 PM</span><span class="show-time-chip">4:00 PM</span><span class="show-time-chip">7:10 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:00 PM</span><span class="show-time-chip">4:00 PM</span><span class="show-time-chip">7:05 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Mar 20, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:00 PM</span><span class="show-time-chip">4:00 PM</span><span class="show-time-chip">7:10 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">10:20 AM</span><span class="show-time-chip">1:00 PM</span><span class="show-time-chip">4:00 PM</span><span class="show-time-chip">7:10 PM</span>
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 4 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Mar 22, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:00 PM</span><span class="show-time-chip">4:00 PM</span><span class="show-time-chip">7:10 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Mon, Mar 23, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:00 PM</span><span class="show-time-chip">4:00 PM</span><span class="show-time-chip">7:10 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Tue, Mar 24, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:00 PM</span><span class="show-time-chip">4:00 PM</span><span class="show-time-chip">7:10 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 25, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:00 PM</span><span class="show-time-chip">4:00 PM</span><span class="show-time-chip">7:10 PM</span>
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+        <a class="show-link" href="https://flagshipcinemas.com/wells/movie/22117" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </li><li class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.1490064"
+            data-theatre-lng="-70.6740573"
+          >
+            <div class="show-main show-main-theatre">
+              Regal Cinemas<span class="show-main-city">, Augusta</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">1:30 PM</span><span class="show-time-chip">4:15 PM</span><span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:15 PM</span><span class="show-time-chip">3:10 PM</span><span class="show-time-chip">7:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Mar 20, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:20 PM</span><span class="show-time-chip">3:45 PM</span><span class="show-time-chip">6:30 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:20 PM</span><span class="show-time-chip">3:45 PM</span><span class="show-time-chip">6:30 PM</span>
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 4 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Mar 22, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:20 PM</span><span class="show-time-chip">3:45 PM</span><span class="show-time-chip">6:30 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Mon, Mar 23, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:20 PM</span><span class="show-time-chip">3:45 PM</span><span class="show-time-chip">6:30 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Tue, Mar 24, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:20 PM</span><span class="show-time-chip">3:45 PM</span><span class="show-time-chip">6:30 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 25, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:20 PM</span><span class="show-time-chip">3:45 PM</span><span class="show-time-chip">6:30 PM</span>
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+        <a class="show-link" href="https://www.regmovies.com/theatres/regal-augusta-1704" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </li><li class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.4143151"
+            data-theatre-lng="-70.7506676"
+          >
+            <div class="show-main show-main-theatre">
+              Smitty&#39;s Cinema<span class="show-main-city">, Sanford</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">6:30 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Mar 19, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">6:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Mar 20, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">3:00 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:45 AM</span><span class="show-time-chip">3:45 PM</span>
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 1 more day</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Mar 22, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">11:45 AM</span><span class="show-time-chip">3:45 PM</span>
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+        <a class="show-link" href="https://www.smittyscinema.com/movie/Sanford/GOAT" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </li><li class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.9381304"
+            data-theatre-lng="-69.9812435"
+          >
+            <div class="show-main show-main-theatre">
+              Smitty&#39;s Cinema<span class="show-main-city">, Topsham</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">6:30 PM</span>
+                </div>
+              </article></div>
+            
+          </div>
+        </div>
+        <a class="show-link" href="https://www.smittyscinema.com/movie/Topsham/GOAT" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </li><li class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.8396584"
+            data-theatre-lng="-70.4409439"
+          >
+            <div class="show-main show-main-theatre">
+              Smitty&#39;s Cinema<span class="show-main-city">, Windham</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Mar 18, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">6:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Mar 21, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">3:15 PM</span>
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Mar 22, 2026</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip">12:00 PM</span><span class="show-time-chip">3:15 PM</span>
+                </div>
+              </article></div>
+            
+          </div>
+        </div>
+        <a class="show-link" href="https://www.smittyscinema.com/movie-theater/windham" target="_blank" rel="noopener noreferrer">Tickets</a>
       </li></ul>
       </section>
     </main>
+    <script>
+      (() => {
+        const STORAGE_KEYS = ["tmp-location-preference-v1", "tmp-film-pages-location-v1"];
+        const useDeviceButton = document.getElementById("locationSortUseDevice");
+        const zipForm = document.getElementById("locationSortZipForm");
+        const zipInput = document.getElementById("locationSortZipInput");
+        const status = document.getElementById("locationSortStatus");
+        const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
+        if (!theatreItems.length) return;
+
+        function setStatus(message) {
+          if (!status) return;
+          status.textContent = message || "";
+        }
+
+        function readSavedLocation() {
+          for (const key of STORAGE_KEYS) {
+            try {
+              const raw = localStorage.getItem(key);
+              if (!raw) continue;
+              const parsed = JSON.parse(raw);
+              const lat = Number(parsed?.lat);
+              const lng = Number(parsed?.lng);
+              if (Number.isFinite(lat) && Number.isFinite(lng)) {
+                return { lat, lng, mode: parsed?.mode || "" };
+              }
+            } catch {}
+          }
+          return null;
+        }
+
+        function saveLocation(lat, lng, mode, zip) {
+          const payload = { lat, lng, mode: mode || "", zip: zip || "" };
+          localStorage.setItem("tmp-film-pages-location-v1", JSON.stringify(payload));
+        }
+
+        function haversineMiles(lat1, lng1, lat2, lng2) {
+          const toRad = (d) => (d * Math.PI) / 180;
+          const R = 3958.8;
+          const dLat = toRad(lat2 - lat1);
+          const dLng = toRad(lng2 - lng1);
+          const a =
+            Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+          return 2 * R * Math.asin(Math.sqrt(a));
+        }
+
+        function sortByDistance(lat, lng, sourceLabel) {
+          const scored = theatreItems.map((item) => {
+            const holder = item.querySelector("[data-theatre-lat]");
+            const itemLat = Number(holder?.dataset?.theatreLat);
+            const itemLng = Number(holder?.dataset?.theatreLng);
+            let distance = Number.POSITIVE_INFINITY;
+            if (Number.isFinite(itemLat) && Number.isFinite(itemLng)) {
+              distance = haversineMiles(lat, lng, itemLat, itemLng);
+            }
+            return { item, distance };
+          });
+
+          scored.sort((a, b) => {
+            const aFinite = Number.isFinite(a.distance);
+            const bFinite = Number.isFinite(b.distance);
+            if (aFinite && bFinite && a.distance !== b.distance) return a.distance - b.distance;
+            if (aFinite !== bFinite) return aFinite ? -1 : 1;
+            const aLabel = a.item.querySelector(".show-main-theatre")?.textContent || "";
+            const bLabel = b.item.querySelector(".show-main-theatre")?.textContent || "";
+            return aLabel.localeCompare(bLabel);
+          });
+
+          const list = document.querySelector(".film-showtimes-box .show-list");
+          scored.forEach(({ item }) => list?.appendChild(item));
+          setStatus("Sorted by distance using " + sourceLabel + ".");
+        }
+
+        async function geocodeZip(zip) {
+          const cleaned = String(zip || "").trim();
+          if (!/^\d{5}$/.test(cleaned)) {
+            throw new Error("Enter a valid 5-digit ZIP code.");
+          }
+          const response = await fetch("https://api.zippopotam.us/us/" + cleaned);
+          if (!response.ok) throw new Error("Could not find that ZIP code.");
+          const json = await response.json();
+          const place = Array.isArray(json?.places) ? json.places[0] : null;
+          const lat = Number(place?.latitude);
+          const lng = Number(place?.longitude);
+          if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error("ZIP lookup did not return coordinates.");
+          return { lat, lng, zip: cleaned };
+        }
+
+        useDeviceButton?.addEventListener("click", () => {
+          if (!navigator.geolocation) {
+            setStatus("Location is not supported in this browser.");
+            return;
+          }
+          setStatus("Getting your location...");
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const lat = Number(position.coords.latitude);
+              const lng = Number(position.coords.longitude);
+              saveLocation(lat, lng, "device", "");
+              sortByDistance(lat, lng, "device location");
+            },
+            () => {
+              setStatus("Could not get your location. You can enter ZIP instead.");
+            },
+            { enableHighAccuracy: true, timeout: 12000 }
+          );
+        });
+
+        zipForm?.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          try {
+            setStatus("Looking up ZIP...");
+            const geo = await geocodeZip(zipInput?.value || "");
+            saveLocation(geo.lat, geo.lng, "zip", geo.zip);
+            sortByDistance(geo.lat, geo.lng, "ZIP " + geo.zip);
+          } catch (error) {
+            setStatus(error instanceof Error ? error.message : "Could not use that ZIP code.");
+          }
+        });
+
+        const saved = readSavedLocation();
+        if (saved) {
+          sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
+        } else {
+          setStatus("Choose your location to sort theatres by distance.");
+        }
+      })();
+    </script>
   </body>
 </html>
