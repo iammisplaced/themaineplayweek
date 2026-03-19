@@ -1126,6 +1126,43 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   margin: 0.35rem 0 0;
 }
 
+.theatre-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.show-meta .theatre-row-actions {
+  margin-top: 0.35rem;
+}
+
+.show-item > .theatre-row-actions {
+  margin-top: 0.42rem;
+}
+
+.theatre-row-film-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #f8f2ea;
+  color: var(--accent-2);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.14rem 0.5rem;
+  text-decoration: none;
+}
+
+.theatre-row-film-link:hover,
+.theatre-row-film-link:focus-visible {
+  background: var(--hover-soft-2);
+  border-color: #c8beb1;
+}
+
 .show-schedule .film-expand-toggle.theatre-row-toggle {
   margin: 0.42rem 0 0;
 }
@@ -1592,6 +1629,18 @@ textarea {
 
 :root[data-theme="dark"] .film-expand-toggle.theatre-card-toggle {
   background: #1a2522;
+}
+
+:root[data-theme="dark"] .theatre-row-film-link {
+  border-color: #3c504a;
+  background: #1a2522;
+  color: #deeee9;
+}
+
+:root[data-theme="dark"] .theatre-row-film-link:hover,
+:root[data-theme="dark"] .theatre-row-film-link:focus-visible {
+  border-color: #4f665f;
+  background: #24312d;
 }
 
 :root[data-theme="dark"] .group-feature-link {
