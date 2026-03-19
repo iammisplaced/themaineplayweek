@@ -759,6 +759,19 @@ function renderFilmPage(film, slug, siteUrl) {
         font-size: 0.84rem;
         color: var(--muted);
       }
+      :root[data-theme="dark"] .film-showtimes-box .show-more-days-toggle,
+      :root[data-theme="dark"] .location-sort-actions button {
+        border-color: #3c504a;
+        background: #1a2522;
+        color: #deeee9;
+      }
+      :root[data-theme="dark"] .film-showtimes-box .show-more-days-toggle:hover,
+      :root[data-theme="dark"] .film-showtimes-box .show-more-days-toggle:focus-visible,
+      :root[data-theme="dark"] .location-sort-actions button:hover,
+      :root[data-theme="dark"] .location-sort-actions button:focus-visible {
+        border-color: #4f665f;
+        background: #24312d;
+      }
       @media (min-width: 860px) {
         .film-page-card .group-film-summary {
           grid-template-columns: minmax(0, 1fr) 124px;
@@ -1059,9 +1072,11 @@ function renderIndexPage(items, siteUrl) {
         film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
       }">
   <h2 class="group-title group-title-film">${escapeHtml(title)}</h2>
-  <a class="film-expand-toggle film-page-link" href="./${slug}/" aria-label="View page for ${escapeHtml(title)}">View Film Page</a>
+  <a class="film-expand-toggle film-page-link" href="./${slug}/" aria-label="View page for ${escapeHtml(title)}" target="_blank" rel="noopener noreferrer">View Film Page</a>
   <div class="group-film-summary">
-    <img class="group-film-poster" src="${escapeHtml(poster)}" alt="Poster for ${escapeHtml(title)}" loading="lazy" />
+    <a class="film-page-link film-page-poster-link" href="./${slug}/" aria-label="Open page for ${escapeHtml(title)}" target="_blank" rel="noopener noreferrer">
+      <img class="group-film-poster" src="${escapeHtml(poster)}" alt="Poster for ${escapeHtml(title)}" loading="lazy" />
+    </a>
     ${stampMarkup}
     <div class="group-film-details">
       <p class="group-film-facts hidden">${escapeHtml(description)}</p>
@@ -1111,6 +1126,9 @@ function renderIndexPage(items, siteUrl) {
       }
       .film-page-link {
         text-decoration: none;
+      }
+      .film-page-poster-link {
+        display: block;
       }
     </style>
   </head>

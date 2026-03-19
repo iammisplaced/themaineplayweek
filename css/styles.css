@@ -1543,23 +1543,32 @@ textarea {
   filter: saturate(0.9) brightness(0.92);
 }
 
+:root[data-theme="dark"] .tab,
+:root[data-theme="dark"] button:not(.theme-toggle):not(.ghost-btn),
+:root[data-theme="dark"] .upload-label {
+  border-color: #3c504a;
+  background: #1a2522;
+  color: #deeee9;
+}
+
 :root[data-theme="dark"] .film-featured-stamp {
   filter: saturate(0.92) brightness(0.9);
 }
 
 :root[data-theme="dark"] .film-expand-toggle {
-  border-color: var(--border);
-  color: var(--accent-2);
-  background: #22302c;
+  border-color: #3c504a;
+  color: #deeee9;
+  background: #1a2522;
 }
 
 :root[data-theme="dark"] .film-expand-toggle:hover,
 :root[data-theme="dark"] .film-expand-toggle:focus-visible {
-  border-color: #4a5f59;
+  border-color: #4f665f;
+  background: #24312d;
 }
 
 :root[data-theme="dark"] .film-expand-toggle.theatre-card-toggle {
-  background: #1e2b27;
+  background: #1a2522;
 }
 
 :root[data-theme="dark"] .group-feature-link {

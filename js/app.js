@@ -446,7 +446,10 @@ function bindEvents() {
     if (filmExpandToggle) {
       const filmPageUrl = String(filmExpandToggle.dataset.filmPageUrl || "").trim();
       if (filmPageUrl) {
-        window.location.href = filmPageUrl;
+        const newTab = window.open(filmPageUrl, "_blank", "noopener,noreferrer");
+        if (!newTab) {
+          window.location.href = filmPageUrl;
+        }
         return;
       }
       const key = filmExpandToggle.dataset.filmKey || filmExpandToggle.closest(".group-card")?.dataset.filmKey;
@@ -526,6 +529,14 @@ function bindEvents() {
 
     const poster = event.target.closest(".group-film-poster, .show-poster");
     if (!poster || poster.classList.contains("hidden")) return;
+    const posterFilmPageUrl = String(poster.dataset.filmPageUrl || "").trim();
+    if (posterFilmPageUrl) {
+      const newTab = window.open(posterFilmPageUrl, "_blank", "noopener,noreferrer");
+      if (!newTab) {
+        window.location.href = posterFilmPageUrl;
+      }
+      return;
+    }
     const src = poster.getAttribute("src");
     if (!src) return;
     openPosterLightbox(src, poster.getAttribute("alt") || "Poster preview");
@@ -3282,6 +3293,11 @@ function render() {
         groupFilmPoster.alt = group.filmInfo.posterUrl
           ? `Poster for ${group.filmInfo.film}`
           : `No poster available for ${group.filmInfo.film}`;
+        if (shouldLinkToFilmPage) {
+          groupFilmPoster.dataset.filmPageUrl = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+        } else {
+          groupFilmPoster.removeAttribute("data-film-page-url");
+        }
         groupFilmPoster.classList.remove("hidden");
       }
       if (facts.length) {
