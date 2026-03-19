@@ -585,6 +585,13 @@ function bindEvents() {
     openLocationChooserModal();
   });
 
+  elements.theatreSortStatus?.addEventListener("click", (event) => {
+    const trigger = event.target.closest('[data-action="change-location"]');
+    if (!trigger) return;
+    event.preventDefault();
+    openLocationChooserModal();
+  });
+
   elements.closeLocationChooser?.addEventListener("click", () => {
     state.locationChooserSeen = true;
     persistLocationChooserSeen();
@@ -4219,35 +4226,55 @@ function updateTheatreSortStatus() {
   el.classList.remove("hidden");
   const distanceCount = state.theatreDistanceByKey.size;
   if (state.theatreDistanceStatus === "loading") {
-    el.textContent = "Finding theatres near you...";
+    setTheatreSortStatus("Finding theatres near you...");
     return;
   }
   if (state.theatreDistanceStatus === "ready") {
     if (distanceCount > 0) {
       if (state.locationPreference.mode === "zip" && state.locationPreference.zip) {
-        el.textContent =
-          `Sorted by distance from ZIP ${state.locationPreference.zip} (${distanceCount} theatres).`;
+        setTheatreSortStatus(
+          `Sorted by distance from ZIP ${state.locationPreference.zip} (${distanceCount} theatres).`,
+          { includeChangeLocation: true }
+        );
       } else {
-        el.textContent = `Sorted by distance from your current location (${distanceCount} theatres).`;
+        setTheatreSortStatus(
+          `Sorted by distance from your current location (${distanceCount} theatres).`,
+          { includeChangeLocation: true }
+        );
       }
     } else {
-      el.textContent = "Could not calculate theatre distances. Showing theatres A-Z.";
+      setTheatreSortStatus("Could not calculate theatre distances. Showing theatres A-Z.", { includeChangeLocation: true });
     }
     return;
   }
   if (state.theatreDistanceStatus === "unavailable") {
     if (state.theatreDistanceError === "location-not-configured") {
-      el.textContent = "Set your location or ZIP code to sort theatres by distance.";
+      setTheatreSortStatus("Set your location or ZIP code to sort theatres by distance.", { includeChangeLocation: true });
       return;
     }
     if (state.theatreDistanceError === "zip-location-invalid") {
-      el.textContent = "Could not find that ZIP code. Try another ZIP or use current location.";
+      setTheatreSortStatus("Could not find that ZIP code. Try another ZIP or use current location.", { includeChangeLocation: true });
       return;
     }
-    el.textContent = "Location unavailable. Showing theatres A-Z.";
+    setTheatreSortStatus("Location unavailable. Showing theatres A-Z.", { includeChangeLocation: true });
     return;
   }
-  el.textContent = "Showing theatres A-Z. Set location to sort by distance.";
+  setTheatreSortStatus("Showing theatres A-Z. Set location to sort by distance.", { includeChangeLocation: true });
+}
+
+function setTheatreSortStatus(message, options = {}) {
+  const el = elements.theatreSortStatus;
+  if (!el) return;
+  const { includeChangeLocation = false } = options;
+  el.textContent = String(message || "");
+  if (!includeChangeLocation) return;
+  const changeLocationButton = document.createElement("a");
+  changeLocationButton.href = "#";
+  changeLocationButton.className = "theatre-sort-change-link";
+  changeLocationButton.dataset.action = "change-location";
+  changeLocationButton.textContent = "Change location";
+  el.appendChild(document.createTextNode(" "));
+  el.appendChild(changeLocationButton);
 }
 
 function stripDiacritics(value) {
