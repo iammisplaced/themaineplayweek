@@ -27,16 +27,12 @@
       "legacyTicketLink": "https://oldfilm.org/alamo-theatre/",
       "theatres": [
         "Alamo Theatre, Bucksport",
-        "Harbor Theater, Boothbay Harbor",
         "Lincoln Theater, Damariscotta",
         "Flagship Cinemas, Falmouth",
         "Flagship Cinemas, Auburn",
-        "Flagship Cinemas, Thomaston",
-        "Flagship Cinemas, Waterville",
         "Flagship Cinemas, Wells",
         "Apple Cinemas, Westbrook",
-        "Apple Cinemas, Saco",
-        "Bangor Mall Cinemas, Bangor"
+        "Apple Cinemas, Saco"
       ],
       "showings": [
         {
@@ -78,16 +74,6 @@
           "ticketLink": "https://oldfilm.org/alamo-theatre/",
           "latitude": 44.572681427002,
           "longitude": -68.7969818115234
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Harbor Theater",
-          "city": "Boothbay Harbor",
-          "theatreWebsite": "boothbaycinema.org",
-          "ticketLink": "https://boothbaycinema.org/wutheringheights/",
-          "latitude": 43.8613565,
-          "longitude": -69.6256982
         },
         {
           "date": "2026-03-27",
@@ -160,16 +146,6 @@
           "longitude": -69.5312042236328
         },
         {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/21981",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-03-20",
           "time": "9:05 PM",
           "theatre": "Flagship Cinemas",
@@ -220,16 +196,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/21981",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-03-20",
           "time": "9:10 PM",
           "theatre": "Flagship Cinemas",
@@ -260,36 +226,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/21981",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/21981",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/21981",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-03-20",
           "time": "6:55 PM",
           "theatre": "Flagship Cinemas",
@@ -348,26 +284,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/21981",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Wuthering-Heights---2026-/611fe9edf74bab2423301ee0/6966c730fd4a66729bbeacb9",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Wuthering-Heights---2026-/611fe9edf74bab2423301ee0/6966c730fd4a66729bbeacb9",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-03-20",
@@ -490,26 +406,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-03-19",
-          "time": "5:40 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Wuthering-Heights---2026-/611fea26f74bab2423301ee4/6966c730fd4a66729bbeacb9",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:50 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Wuthering-Heights---2026-/611fea26f74bab2423301ee4/6966c730fd4a66729bbeacb9",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-03-20",
           "time": "11:40 AM",
           "theatre": "Apple Cinemas",
@@ -628,16 +524,6 @@
           "ticketLink": "https://www.applecinemas.com/Wuthering-Heights---2026-/611fea26f74bab2423301ee4/6966c730fd4a66729bbeacb9",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:05 PM",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/21987",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         }
       ]
     },
@@ -768,21 +654,8 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-a-photographic-memory-with-filmmaker-rachel-elizabeth-seed/",
-      "theatres": [
-        "PMA Films, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-a-photographic-memory-with-filmmaker-rachel-elizabeth-seed/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        }
-      ]
+      "theatres": [],
+      "showings": []
     },
     {
       "title": "A Poet",
@@ -1420,8 +1293,32 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.applecinemas.com/Ben-Hur--2026-/611fe9edf74bab2423301ee0/697b7d294e6ff2ec3886ebc8",
-      "theatres": [],
-      "showings": []
+      "theatres": [
+        "Apple Cinemas, Westbrook",
+        "Apple Cinemas, Saco"
+      ],
+      "showings": [
+        {
+          "date": "2026-03-29",
+          "time": "7:00 PM",
+          "theatre": "Apple Cinemas",
+          "city": "Westbrook",
+          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
+          "ticketLink": "https://www.applecinemas.com/Ben-Hur--2026-/611fe9edf74bab2423301ee0/697b7d294e6ff2ec3886ebc8",
+          "latitude": 43.6505461,
+          "longitude": -70.3465631
+        },
+        {
+          "date": "2026-03-29",
+          "time": "7:00 PM",
+          "theatre": "Apple Cinemas",
+          "city": "Saco",
+          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
+          "ticketLink": "https://www.applecinemas.com/Ben-Hur--2026-/611fea26f74bab2423301ee4/697b7d294e6ff2ec3886ebc8",
+          "latitude": 43.5285596,
+          "longitude": -70.4242145
+        }
+      ]
     },
     {
       "title": "Best in Show",
@@ -1971,8 +1868,6 @@
       "legacyTicketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22425",
       "theatres": [
         "Alamo Theatre, Bucksport",
-        "Entertainment Luxury Cinemas, South Portland",
-        "Apple Cinemas, Westbrook",
         "Apple Cinemas, Saco"
       ],
       "showings": [
@@ -2015,46 +1910,6 @@
           "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22425",
           "latitude": 44.572681427002,
           "longitude": -68.7969818115234
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:45 PM",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22425",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Crime-101-/611fe9edf74bab2423301ee0/6973fb52e461242684acf310",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Crime-101-/611fea26f74bab2423301ee4/6973fb52e461242684acf310",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:45 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Crime-101-/611fea26f74bab2423301ee4/6973fb52e461242684acf310",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-03-20",
@@ -2287,16 +2142,6 @@
         "Apple Cinemas, Westbrook"
       ],
       "showings": [
-        {
-          "date": "2026-03-19",
-          "time": "8:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Dhurandhar-The-Revenge--Hindi-/611fe9edf74bab2423301ee0/69a1d6ea836680ff1bd74ed1",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
         {
           "date": "2026-03-20",
           "time": "3:30 PM",
@@ -2561,22 +2406,10 @@
       "featuredOnPlayweekUrl": "https://themaineplayweek.substack.com/p/a-theatrical-tribute-to-the-king",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/epic-elvis-presley-in-concert",
       "theatres": [
-        "Entertainment Luxury Cinemas, South Portland",
         "Eveningstar Cinema, Brunswick",
-        "Apple Cinemas, Westbrook",
-        "Apple Cinemas, Saco"
+        "Apple Cinemas, Westbrook"
       ],
       "showings": [
-        {
-          "date": "2026-03-19",
-          "time": "5:30 PM",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22741",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
         {
           "date": "2026-03-20",
           "time": "4:15 PM",
@@ -2608,16 +2441,6 @@
           "longitude": -69.9636894
         },
         {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/EPiC--Elvis-Presley-in-Concert/611fe9edf74bab2423301ee0/699089bd516edd9889d413b7",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-03-20",
           "time": "7:00 PM",
           "theatre": "Apple Cinemas",
@@ -2676,16 +2499,6 @@
           "ticketLink": "https://www.applecinemas.com/EPiC--Elvis-Presley-in-Concert/611fe9edf74bab2423301ee0/699089bd516edd9889d413b7",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "5:20 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/EPiC--Elvis-Presley-in-Concert/611fea26f74bab2423301ee4/699089bd516edd9889d413b7",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         }
       ]
     },
@@ -2823,16 +2636,6 @@
         "Maine Film Center, Waterville"
       ],
       "showings": [
-        {
-          "date": "2026-03-19",
-          "time": "7:10 PM",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/father-mother-sister-brother/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
         {
           "date": "2026-03-20",
           "time": "2:55 PM",
@@ -3514,16 +3317,6 @@
       ],
       "showings": [
         {
-          "date": "2026-03-19",
-          "time": "7:20 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22117",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-03-20",
           "time": "12:50 PM",
           "theatre": "Flagship Cinemas",
@@ -3654,16 +3447,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-03-19",
-          "time": "7:15 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22117",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-03-20",
           "time": "11:50 AM",
           "theatre": "Flagship Cinemas",
@@ -3932,16 +3715,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/22117",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:10 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22117",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-03-20",
@@ -4084,16 +3857,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-03-19",
-          "time": "7:15 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22117",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-03-20",
           "time": "7:15 PM",
           "theatre": "Flagship Cinemas",
@@ -4152,16 +3915,6 @@
           "ticketLink": "https://flagshipcinemas.com/waterville/movie/22117",
           "latitude": 44.5428402,
           "longitude": -69.6614214
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:05 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/22117",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
         },
         {
           "date": "2026-03-20",
@@ -4354,16 +4107,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-03-19",
-          "time": "6:15 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/GOAT--2026-/611fe9edf74bab2423301ee0/696162f4313ffdda39b0224a",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-03-20",
           "time": "11:20 AM",
           "theatre": "Apple Cinemas",
@@ -4512,16 +4255,6 @@
           "ticketLink": "https://www.applecinemas.com/GOAT--2026-/611fe9edf74bab2423301ee0/696162f4313ffdda39b0224a",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/GOAT--2026-/611fea26f74bab2423301ee4/696162f4313ffdda39b0224a",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-03-20",
@@ -4704,16 +4437,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-03-19",
-          "time": "6:15 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/GOAT",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-03-20",
           "time": "3:00 PM",
           "theatre": "Smitty's Cinema",
@@ -4804,16 +4527,6 @@
           "longitude": -70.4409439
         },
         {
-          "date": "2026-03-19",
-          "time": "7:15 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
           "date": "2026-03-20",
           "time": "12:20 PM",
           "theatre": "Regal Cinemas",
@@ -4992,16 +4705,6 @@
           "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:15 PM",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-03-20",
@@ -5584,13 +5287,10 @@
       "theatres": [
         "Black Bear Cinemas, Orono",
         "Center Theatre for the Performing Arts, Dover-Foxcroft",
-        "Colonial Theatre, Belfast",
         "Entertainment Luxury Cinemas, South Portland",
-        "Fort Kent Cinema, Fort Kent",
         "Magic Lantern Theater, Bridgton",
         "Reel Pizza Cinerama, Bar Harbor",
         "Spotlight Cinemas, Skowhegan",
-        "Temple Theatre, Houlton",
         "The Gem Theater, Bethel",
         "Flagship Cinemas, Falmouth",
         "Flagship Cinemas, Auburn",
@@ -5606,16 +5306,6 @@
         "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
-        {
-          "date": "2026-03-19",
-          "time": "6:10 PM",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/hoppers",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-03-20",
           "time": "1:15 PM",
@@ -5857,16 +5547,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Center Theatre for the Performing Arts",
-          "city": "Dover-Foxcroft",
-          "theatreWebsite": "centertheatre.org",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/259710",
-          "latitude": 45.183952,
-          "longitude": -69.2292565
-        },
-        {
           "date": "2026-03-20",
           "time": "7:00 PM",
           "theatre": "Center Theatre for the Performing Arts",
@@ -5955,36 +5635,6 @@
           "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/259710",
           "latitude": 45.183952,
           "longitude": -69.2292565
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:15 PM",
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "https://colonialtheatre.com/film-guide/?film-id=699c99d2398f93677dafa456",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22461",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:00 PM",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22461",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-03-20",
@@ -6447,36 +6097,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Fort Kent Cinema",
-          "city": "Fort Kent",
-          "theatreWebsite": "https://www.fortkentcinema.com/",
-          "ticketLink": "https://www.fortkentcinema.com/",
-          "latitude": 47.248953,
-          "longitude": -68.5984425
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:00 PM",
-          "theatre": "Fort Kent Cinema",
-          "city": "Fort Kent",
-          "theatreWebsite": "https://www.fortkentcinema.com/",
-          "ticketLink": "https://www.fortkentcinema.com/",
-          "latitude": 47.248953,
-          "longitude": -68.5984425
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Magic Lantern Theater",
-          "city": "Bridgton",
-          "theatreWebsite": "magiclanternmovies.com",
-          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
-          "latitude": 44.0541236,
-          "longitude": -70.7082496
-        },
-        {
           "date": "2026-03-20",
           "time": "4:00 PM",
           "theatre": "Magic Lantern Theater",
@@ -6647,16 +6267,6 @@
           "longitude": -68.2060749
         },
         {
-          "date": "2026-03-19",
-          "time": "7:15 PM",
-          "theatre": "Spotlight Cinemas",
-          "city": "Skowhegan",
-          "theatreWebsite": "https://spotlightcinemas.com/skowhegan/",
-          "ticketLink": "https://46027.formovietickets.com:2235/",
-          "latitude": 44.826376,
-          "longitude": -69.261877
-        },
-        {
           "date": "2026-03-20",
           "time": "1:15 PM",
           "theatre": "Spotlight Cinemas",
@@ -6745,16 +6355,6 @@
           "ticketLink": "https://46027.formovietickets.com:2235/",
           "latitude": 44.826376,
           "longitude": -69.261877
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Temple Theatre",
-          "city": "Houlton",
-          "theatreWebsite": "templehoulton.com",
-          "ticketLink": "https://templehoulton.com/amy_movie/hoppers/",
-          "latitude": 46.1259988,
-          "longitude": -67.8403909
         },
         {
           "date": "2026-03-20",
@@ -6865,16 +6465,6 @@
           "ticketLink": "https://thegemtheater.com/movies/hoppers/",
           "latitude": 44.4110853,
           "longitude": -70.7922593
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:05 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22276",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
         },
         {
           "date": "2026-03-20",
@@ -7317,16 +6907,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-03-19",
-          "time": "7:05 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22276",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-03-20",
           "time": "11:15 AM",
           "theatre": "Flagship Cinemas",
@@ -7797,16 +7377,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-03-19",
-          "time": "7:05 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22276",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-03-20",
           "time": "11:45 AM",
           "theatre": "Flagship Cinemas",
@@ -8175,16 +7745,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22276",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:05 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22276",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-03-20",
@@ -8597,16 +8157,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-03-19",
-          "time": "6:50 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/22276",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-03-20",
           "time": "12:50 PM",
           "theatre": "Flagship Cinemas",
@@ -8797,26 +8347,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Hoppers/611fe9edf74bab2423301ee0/6972eff0d7796c78f55139f6",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Hoppers/611fe9edf74bab2423301ee0/6972eff0d7796c78f55139f6",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-03-20",
           "time": "11:00 AM",
           "theatre": "Apple Cinemas",
@@ -9055,26 +8585,6 @@
           "ticketLink": "https://www.applecinemas.com/Hoppers/611fe9edf74bab2423301ee0/6972eff0d7796c78f55139f6",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "5:50 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Hoppers/611fea26f74bab2423301ee4/6972eff0d7796c78f55139f6",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:20 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Hoppers/611fea26f74bab2423301ee4/6972eff0d7796c78f55139f6",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-03-20",
@@ -9345,16 +8855,6 @@
           "ticketLink": "https://www.applecinemas.com/Hoppers/611fea26f74bab2423301ee4/6972eff0d7796c78f55139f6",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/HOPPERS",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-03-20",
@@ -9475,16 +8975,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/HOPPERS",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:15 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/HOPPERS",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-03-20",
@@ -9657,26 +9147,6 @@
           "longitude": -69.9812435
         },
         {
-          "date": "2026-03-19",
-          "time": "6:15 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/HOPPERS",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:15 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/HOPPERS",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-03-20",
           "time": "6:15 PM",
           "theatre": "Smitty's Cinema",
@@ -9877,16 +9347,6 @@
           "longitude": -70.4409439
         },
         {
-          "date": "2026-03-19",
-          "time": "6:25 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
           "date": "2026-03-20",
           "time": "12:10 PM",
           "theatre": "Regal Cinemas",
@@ -10085,16 +9545,6 @@
           "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:15 PM",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22767",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-03-20",
@@ -10493,21 +9943,8 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://colonialtheatre.com/film-guide/?film-id=699c9a2fa9ab303e0775ff6d",
-      "theatres": [
-        "Colonial Theatre, Belfast"
-      ],
-      "showings": [
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "https://colonialtheatre.com/film-guide/?film-id=699c9a2fa9ab303e0775ff6d",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
-        }
-      ]
+      "theatres": [],
+      "showings": []
     },
     {
       "title": "Hundreds of Beavers",
@@ -10938,8 +10375,28 @@
           "longitude": -70.4242145
         },
         {
+          "date": "2026-03-24",
+          "time": "4:15 PM",
+          "theatre": "Apple Cinemas",
+          "city": "Saco",
+          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
+          "ticketLink": "https://www.applecinemas.com/SUB-Kiki-s-Delivery-Service-35th-Anniversary/611fea26f74bab2423301ee4/65e25c4d4552187a75544386",
+          "latitude": 43.5285596,
+          "longitude": -70.4242145
+        },
+        {
           "date": "2026-03-25",
           "time": "3:15 PM",
+          "theatre": "Apple Cinemas",
+          "city": "Saco",
+          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
+          "ticketLink": "https://www.applecinemas.com/SUB-Kiki-s-Delivery-Service-35th-Anniversary/611fea26f74bab2423301ee4/65e25c4d4552187a75544386",
+          "latitude": 43.5285596,
+          "longitude": -70.4242145
+        },
+        {
+          "date": "2026-03-25",
+          "time": "5:15 PM",
           "theatre": "Apple Cinemas",
           "city": "Saco",
           "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
@@ -11413,8 +10870,7 @@
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.eveningstarcinema.com/movies/258704-midwinter-break/",
       "theatres": [
-        "Lincoln Theater, Damariscotta",
-        "Strand Theatre, Rockland"
+        "Lincoln Theater, Damariscotta"
       ],
       "showings": [
         {
@@ -11476,16 +10932,6 @@
           "ticketLink": "https://www.lincolntheater.org/films-events/midwinter-break-(pg-13)",
           "latitude": 44.032829284668,
           "longitude": -69.5312042236328
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Strand Theatre",
-          "city": "Rockland",
-          "theatreWebsite": "https://www.rocklandstrand.com/",
-          "ticketLink": "https://strandfilms.eventive.org/films/699f3307c6fe33f40134d4c1",
-          "latitude": 44.1031144,
-          "longitude": -69.1088235
         }
       ]
     },
@@ -12562,16 +12008,6 @@
       ],
       "showings": [
         {
-          "date": "2026-03-19",
-          "time": "6:50 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22720",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-03-20",
           "time": "6:40 PM",
           "theatre": "Flagship Cinemas",
@@ -12652,16 +12088,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-03-19",
-          "time": "6:50 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22720",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-03-20",
           "time": "9:20 PM",
           "theatre": "Flagship Cinemas",
@@ -12720,16 +12146,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/22720",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22769",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-03-20",
@@ -13125,26 +12541,6 @@
           "longitude": -69.62965
         },
         {
-          "date": "2026-03-19",
-          "time": "6:40 PM",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/pillion",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:10 PM",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/pillion",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-03-20",
           "time": "4:45 PM",
           "theatre": "Nickelodeon Cinemas",
@@ -13443,16 +12839,6 @@
           "longitude": -68.7969818115234
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/project-hail-mary",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-03-20",
           "time": "1:10 PM",
           "theatre": "Black Bear Cinemas",
@@ -13751,16 +13137,6 @@
           "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
           "latitude": 46.6871109008789,
           "longitude": -68.0131988525391
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Center Theatre for the Performing Arts",
-          "city": "Dover-Foxcroft",
-          "theatreWebsite": "centertheatre.org",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
-          "latitude": 45.183952,
-          "longitude": -69.2292565
         },
         {
           "date": "2026-03-20",
@@ -13971,16 +13347,6 @@
           "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
           "latitude": 45.183952,
           "longitude": -69.2292565
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:30 PM",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23192",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-03-20",
@@ -14783,36 +14149,6 @@
           "longitude": -70.7082496
         },
         {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/project-hail-mary",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:30 PM",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/project-hail-mary",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:30 PM",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/project-hail-mary",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-03-20",
           "time": "1:00 PM",
           "theatre": "Nickelodeon Cinemas",
@@ -15271,16 +14607,6 @@
           "ticketLink": "https://www.reelpizza.net/now-playing",
           "latitude": 44.3877387,
           "longitude": -68.2060749
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Spotlight Cinemas",
-          "city": "Skowhegan",
-          "theatreWebsite": "https://spotlightcinemas.com/skowhegan/",
-          "ticketLink": "https://46027.formovietickets.com:2235/?SelectedDate=20260306",
-          "latitude": 44.826376,
-          "longitude": -69.261877
         },
         {
           "date": "2026-03-20",
@@ -15623,16 +14949,6 @@
           "longitude": -70.7922593
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22812",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-03-20",
           "time": "12:00 PM",
           "theatre": "Flagship Cinemas",
@@ -16011,16 +15327,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22812",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22812",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-03-20",
@@ -16433,16 +15739,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22812",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-03-20",
           "time": "12:00 PM",
           "theatre": "Flagship Cinemas",
@@ -16691,16 +15987,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22812",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22812",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-03-20",
@@ -16983,16 +16269,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/22812",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-03-20",
           "time": "12:00 PM",
           "theatre": "Flagship Cinemas",
@@ -17183,46 +16459,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-03-19",
-          "time": "5:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-03-20",
           "time": "11:00 AM",
           "theatre": "Apple Cinemas",
@@ -17661,46 +16897,6 @@
           "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "5:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-03-20",
@@ -18511,16 +17707,6 @@
           "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:15 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/PROJECT-HAIL-MARY",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-03-20",
@@ -18701,16 +17887,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/PROJECT-HAIL-MARY",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/PROJECT-HAIL-MARY",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-03-20",
@@ -18853,26 +18029,6 @@
           "longitude": -69.9812435
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie-theater/windham",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie-theater/windham",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-03-20",
           "time": "6:00 PM",
           "theatre": "Smitty's Cinema",
@@ -19071,36 +18227,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie-theater/windham",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/project-hail-mary-ho00018964?date=03-19-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:30 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/project-hail-mary-ho00018964?date=03-19-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:00 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/project-hail-mary-ho00018964?date=03-19-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-03-20",
@@ -19531,16 +18657,6 @@
           "ticketLink": "https://www.regmovies.com/movies/project-hail-mary-ho00018964?date=03-19-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22822?date=2026-03-19",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-03-20",
@@ -20262,16 +19378,6 @@
       ],
       "showings": [
         {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/ready-or-not-2-here-i-come",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-03-20",
           "time": "1:25 PM",
           "theatre": "Black Bear Cinemas",
@@ -20500,16 +19606,6 @@
           "ticketLink": "https://www.blackbearcinemas.com/movie/ready-or-not-2-here-i-come",
           "latitude": 44.9059551,
           "longitude": -68.6911612
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:30 PM",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23191",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-03-20",
@@ -20792,26 +19888,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/ready-or-not-2-here-i-come",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:10 PM",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/ready-or-not-2-here-i-come",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-03-20",
           "time": "1:20 PM",
           "theatre": "Nickelodeon Cinemas",
@@ -21050,26 +20126,6 @@
           "ticketLink": "https://www.patriotcinemas.com/movie/ready-or-not-2-here-i-come",
           "latitude": 43.6575821,
           "longitude": -70.2558618
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23075",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:30 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23075",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
         },
         {
           "date": "2026-03-20",
@@ -21320,16 +20376,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23075",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23075",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-03-20",
@@ -21600,16 +20646,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/23075",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23075",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-03-20",
@@ -21802,16 +20838,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/23075",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-03-20",
           "time": "1:30 PM",
           "theatre": "Flagship Cinemas",
@@ -22032,16 +21058,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/23075",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-03-20",
           "time": "1:30 PM",
           "theatre": "Flagship Cinemas",
@@ -22232,26 +21248,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-03-19",
-          "time": "7:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fe9edf74bab2423301ee0/69ab93530403b340e9d0acca",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:15 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fe9edf74bab2423301ee0/69ab93530403b340e9d0acca",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-03-20",
           "time": "11:30 AM",
           "theatre": "Apple Cinemas",
@@ -22400,26 +21396,6 @@
           "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fe9edf74bab2423301ee0/69ab93530403b340e9d0acca",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:10 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fea26f74bab2423301ee4/69ab93530403b340e9d0acca",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:40 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fea26f74bab2423301ee4/69ab93530403b340e9d0acca",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-03-20",
@@ -22690,16 +21666,6 @@
           "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fea26f74bab2423301ee4/69ab93530403b340e9d0acca",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:30 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/READY-OR-NOT-2-HERE-I-COME",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-03-20",
@@ -22822,16 +21788,6 @@
           "longitude": -70.7506676
         },
         {
-          "date": "2026-03-19",
-          "time": "7:30 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/READY-OR-NOT-2",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-03-20",
           "time": "7:30 PM",
           "theatre": "Smitty's Cinema",
@@ -22930,26 +21886,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Windham/READY-OR-NOT-2",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/ready-or-not-2-here-i-come-ho00020338?date=03-19-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:20 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/ready-or-not-2-here-i-come-ho00020338?date=03-19-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-03-20",
@@ -23180,16 +22116,6 @@
           "ticketLink": "https://www.regmovies.com/movies/ready-or-not-2-here-i-come-ho00020338?date=03-19-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23055?date=2026-03-19",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-03-20",
@@ -23472,16 +22398,6 @@
       ],
       "showings": [
         {
-          "date": "2026-03-19",
-          "time": "6:20 PM",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/reminders-of-him",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-03-20",
           "time": "1:20 PM",
           "theatre": "Black Bear Cinemas",
@@ -23780,26 +22696,6 @@
           "ticketLink": "https://www.blackbearcinemas.com/movie/reminders-of-him",
           "latitude": 46.6871109008789,
           "longitude": -68.0131988525391
-        },
-        {
-          "date": "2026-03-19",
-          "time": "5:30 PM",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23190?date=2026-03-13",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:15 PM",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23190?date=2026-03-13",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-03-20",
@@ -24052,26 +22948,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Fort Kent Cinema",
-          "city": "Fort Kent",
-          "theatreWebsite": "https://www.fortkentcinema.com/",
-          "ticketLink": "https://www.fortkentcinema.com/",
-          "latitude": 47.248953,
-          "longitude": -68.5984425
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:00 PM",
-          "theatre": "Fort Kent Cinema",
-          "city": "Fort Kent",
-          "theatreWebsite": "https://www.fortkentcinema.com/",
-          "ticketLink": "https://www.fortkentcinema.com/",
-          "latitude": 47.248953,
-          "longitude": -68.5984425
-        },
-        {
           "date": "2026-03-20",
           "time": "5:00 PM",
           "theatre": "Fort Kent Cinema",
@@ -24182,16 +23058,6 @@
           "longitude": -68.5984425
         },
         {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Magic Lantern Theater",
-          "city": "Bridgton",
-          "theatreWebsite": "magiclanternmovies.com",
-          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
-          "latitude": 44.0541236,
-          "longitude": -70.7082496
-        },
-        {
           "date": "2026-03-20",
           "time": "4:00 PM",
           "theatre": "Magic Lantern Theater",
@@ -24260,16 +23126,6 @@
           "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
           "latitude": 44.0541236,
           "longitude": -70.7082496
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Spotlight Cinemas",
-          "city": "Skowhegan",
-          "theatreWebsite": "https://spotlightcinemas.com/skowhegan/",
-          "ticketLink": "https://46027.formovietickets.com:2235/",
-          "latitude": 44.826376,
-          "longitude": -69.261877
         },
         {
           "date": "2026-03-20",
@@ -24360,16 +23216,6 @@
           "ticketLink": "https://46027.formovietickets.com:2235/",
           "latitude": 44.826376,
           "longitude": -69.261877
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Temple Theatre",
-          "city": "Houlton",
-          "theatreWebsite": "templehoulton.com",
-          "ticketLink": "https://templehoulton.com/amy_movie/reminders-of-him/",
-          "latitude": 46.1259988,
-          "longitude": -67.8403909
         },
         {
           "date": "2026-03-20",
@@ -24540,16 +23386,6 @@
           "ticketLink": "https://www.blackbearcinemas.com/movie/reminders-of-him",
           "latitude": 44.4110853,
           "longitude": -70.7922593
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22846?date=2026-03-12",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
         },
         {
           "date": "2026-03-20",
@@ -24772,16 +23608,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22846",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-03-20",
           "time": "1:20 PM",
           "theatre": "Flagship Cinemas",
@@ -25002,16 +23828,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22846",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-03-20",
           "time": "1:10 PM",
           "theatre": "Flagship Cinemas",
@@ -25202,16 +24018,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22846",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-03-20",
           "time": "1:10 PM",
           "theatre": "Flagship Cinemas",
@@ -25432,16 +24238,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/22846",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-03-20",
           "time": "1:10 PM",
           "theatre": "Flagship Cinemas",
@@ -25622,16 +24418,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-03-19",
-          "time": "7:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fe9edf74bab2423301ee0/698cd192516edd9889d40895",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-03-20",
           "time": "11:00 AM",
           "theatre": "Apple Cinemas",
@@ -25780,26 +24566,6 @@
           "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fe9edf74bab2423301ee0/698cd192516edd9889d40895",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:10 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fea26f74bab2423301ee4/698cd192516edd9889d40895",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fea26f74bab2423301ee4/698cd192516edd9889d40895",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-03-20",
@@ -26070,16 +24836,6 @@
           "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fea26f74bab2423301ee4/698cd192516edd9889d40895",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:30 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/REMINDERS-OF-HIM#",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-03-20",
@@ -26202,16 +24958,6 @@
           "longitude": -70.7506676
         },
         {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/REMINDERS-OF-HIM#",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
           "date": "2026-03-20",
           "time": "7:20 PM",
           "theatre": "Smitty's Cinema",
@@ -26300,16 +25046,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Topsham/REMINDERS-OF-HIM#",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/REMINDERS-OF-HIM",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
         },
         {
           "date": "2026-03-20",
@@ -26412,26 +25148,6 @@
           "longitude": -70.4409439
         },
         {
-          "date": "2026-03-19",
-          "time": "6:50 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:35 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
           "date": "2026-03-20",
           "time": "12:45 PM",
           "theatre": "Regal Cinemas",
@@ -26630,16 +25346,6 @@
           "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22859?date=2026-03-12",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-03-20",
@@ -27007,8 +25713,6 @@
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/scream-7",
       "theatres": [
         "Black Bear Cinemas, Orono",
-        "Colonial Theatre, Belfast",
-        "Magic Lantern Theater, Bridgton",
         "Flagship Cinemas, Falmouth",
         "Flagship Cinemas, Auburn",
         "Flagship Cinemas, Thomaston",
@@ -27023,16 +25727,6 @@
       ],
       "showings": [
         {
-          "date": "2026-03-19",
-          "time": "6:50 PM",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/scream-7",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-03-20",
           "time": "1:35 PM",
           "theatre": "Black Bear Cinemas",
@@ -27263,36 +25957,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "https://colonialtheatre.com/film-guide/?film-id=699c992b8798f7f232400669",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Magic Lantern Theater",
-          "city": "Bridgton",
-          "theatreWebsite": "magiclanternmovies.com",
-          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
-          "latitude": 44.0541236,
-          "longitude": -70.7082496
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22501",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-03-20",
           "time": "1:20 PM",
           "theatre": "Flagship Cinemas",
@@ -27493,16 +26157,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-03-19",
-          "time": "6:55 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22501",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-03-20",
           "time": "11:00 AM",
           "theatre": "Flagship Cinemas",
@@ -27741,16 +26395,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/22501",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22501",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-03-20",
@@ -27813,16 +26457,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22501",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-03-20",
           "time": "1:00 PM",
           "theatre": "Flagship Cinemas",
@@ -28023,26 +26657,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Scream-7/611fe9edf74bab2423301ee0/6974276ee461242684acf3c0",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Scream-7/611fe9edf74bab2423301ee0/6974276ee461242684acf3c0",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-03-20",
           "time": "11:15 AM",
           "theatre": "Apple Cinemas",
@@ -28191,26 +26805,6 @@
           "ticketLink": "https://www.applecinemas.com/Scream-7/611fe9edf74bab2423301ee0/6974276ee461242684acf3c0",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Scream-7/611fea26f74bab2423301ee4/6974276ee461242684acf3c0",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:40 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Scream-7/611fea26f74bab2423301ee4/6974276ee461242684acf3c0",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-03-20",
@@ -28481,16 +27075,6 @@
           "ticketLink": "https://www.applecinemas.com/Scream-7/611fea26f74bab2423301ee4/6974276ee461242684acf3c0",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/SCREAM-7",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-03-20",
@@ -28613,16 +27197,6 @@
           "longitude": -70.7506676
         },
         {
-          "date": "2026-03-19",
-          "time": "7:10 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/SCREAM-7",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
           "date": "2026-03-20",
           "time": "3:40 PM",
           "theatre": "Smitty's Cinema",
@@ -28743,16 +27317,6 @@
           "longitude": -69.9812435
         },
         {
-          "date": "2026-03-19",
-          "time": "7:30 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/SCREAM-7",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-03-20",
           "time": "7:45 PM",
           "theatre": "Smitty's Cinema",
@@ -28853,16 +27417,6 @@
           "longitude": -70.4409439
         },
         {
-          "date": "2026-03-19",
-          "time": "7:40 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
           "date": "2026-03-20",
           "time": "12:50 PM",
           "theatre": "Regal Cinemas",
@@ -29061,16 +27615,6 @@
           "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22544",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-03-20",
@@ -29336,26 +27880,6 @@
         "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
-        {
-          "date": "2026-03-19",
-          "time": "6:15 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Send-Help--2026-/611fe9edf74bab2423301ee0/695fc088ee7038eddb53d5c5",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Send-Help--2026-/611fe9edf74bab2423301ee0/695fc088ee7038eddb53d5c5",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
         {
           "date": "2026-03-20",
           "time": "11:30 AM",
@@ -30005,21 +28529,8 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/slanted",
-      "theatres": [
-        "Flagship Cinemas, Falmouth"
-      ],
-      "showings": [
-        {
-          "date": "2026-03-19",
-          "time": "7:10 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23165",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        }
-      ]
+      "theatres": [],
+      "showings": []
     },
     {
       "title": "Solo Mio",
@@ -30449,41 +28960,9 @@
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/the-bride",
       "theatres": [
-        "Flagship Cinemas, Auburn",
-        "Apple Cinemas, Westbrook",
-        "Smitty's Cinema, Topsham"
+        "Apple Cinemas, Westbrook"
       ],
       "showings": [
-        {
-          "date": "2026-03-19",
-          "time": "6:40 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22773",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Bride--2026-/611fe9edf74bab2423301ee0/6984f65ff0605f60d5dbf325",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Bride--2026-/611fe9edf74bab2423301ee0/6984f65ff0605f60d5dbf325",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
         {
           "date": "2026-03-20",
           "time": "7:15 PM",
@@ -30543,16 +29022,6 @@
           "ticketLink": "https://www.applecinemas.com/The-Bride--2026-/611fe9edf74bab2423301ee0/6984f65ff0605f60d5dbf325",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/THE-BRIDE",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         }
       ]
     },
@@ -32687,16 +31156,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Pout-Pout-Fish/611fe9edf74bab2423301ee0/69a0ca18836680ff1bd74d10",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-03-20",
           "time": "11:00 AM",
           "theatre": "Apple Cinemas",
@@ -32845,16 +31304,6 @@
           "ticketLink": "https://www.applecinemas.com/The-Pout-Pout-Fish/611fe9edf74bab2423301ee0/69a0ca18836680ff1bd74d10",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Pout-Pout-Fish/611fea26f74bab2423301ee4/69a0ca18836680ff1bd74d10",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-03-20",
@@ -33087,16 +31536,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/POUT-POUT-FISH",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-03-20",
           "time": "4:00 PM",
           "theatre": "Smitty's Cinema",
@@ -33287,16 +31726,6 @@
           "longitude": -69.9812435
         },
         {
-          "date": "2026-03-19",
-          "time": "6:00 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/THE-POUT-POUT-FISH",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-03-20",
           "time": "6:00 PM",
           "theatre": "Smitty's Cinema",
@@ -33515,16 +31944,6 @@
           "ticketLink": "https://www.regmovies.com/movies/the-poutpout-fish-ho00020786?date=03-19-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23209?date=2026-03-19",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-03-20",
@@ -36303,16 +34722,6 @@
       ],
       "showings": [
         {
-          "date": "2026-03-19",
-          "time": "6:40 PM",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/undertone",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-03-20",
           "time": "1:40 PM",
           "theatre": "Black Bear Cinemas",
@@ -36521,26 +34930,6 @@
           "ticketLink": "https://www.blackbearcinemas.com/movie/undertone",
           "latitude": 44.9059551,
           "longitude": -68.6911612
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:15 PM",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:30 PM",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-03-20",
@@ -36823,26 +35212,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-03-19",
-          "time": "7:00 PM",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/undertone",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:00 PM",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/undertone",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-03-20",
           "time": "1:40 PM",
           "theatre": "Nickelodeon Cinemas",
@@ -37073,16 +35442,6 @@
           "longitude": -70.2558618
         },
         {
-          "date": "2026-03-19",
-          "time": "7:10 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22918",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-03-20",
           "time": "12:15 PM",
           "theatre": "Flagship Cinemas",
@@ -37293,16 +35652,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-03-19",
-          "time": "7:10 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22918",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-03-20",
           "time": "12:50 PM",
           "theatre": "Flagship Cinemas",
@@ -37513,16 +35862,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-03-19",
-          "time": "7:10 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22918",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-03-20",
           "time": "1:20 PM",
           "theatre": "Flagship Cinemas",
@@ -37701,16 +36040,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22918",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:10 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22918",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-03-20",
@@ -37903,16 +36232,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-03-19",
-          "time": "7:10 PM",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/22918",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-03-20",
           "time": "1:20 PM",
           "theatre": "Flagship Cinemas",
@@ -38093,26 +36412,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-03-19",
-          "time": "6:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Undertone/611fe9edf74bab2423301ee0/699f2130a52bdb49440d544a",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:15 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Undertone/611fe9edf74bab2423301ee0/699f2130a52bdb49440d544a",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-03-20",
           "time": "12:15 PM",
           "theatre": "Apple Cinemas",
@@ -38261,26 +36560,6 @@
           "ticketLink": "https://www.applecinemas.com/Undertone/611fe9edf74bab2423301ee0/699f2130a52bdb49440d544a",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "5:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-19",
-          "time": "8:00 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-03-20",
@@ -38553,16 +36832,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-03-19",
-          "time": "7:15 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/UNDERTONE#",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-03-21",
           "time": "7:00 PM",
           "theatre": "Smitty's Cinema",
@@ -38601,16 +36870,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/UNDERTONE#",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:20 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/UNDERTONE#",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-03-20",
@@ -38723,16 +36982,6 @@
           "longitude": -69.9812435
         },
         {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/UNDERTONE#",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-03-20",
           "time": "7:30 PM",
           "theatre": "Smitty's Cinema",
@@ -38781,16 +37030,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Windham/UNDERTONE#",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-03-19",
-          "time": "7:20 PM",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-03-20",
@@ -38991,16 +37230,6 @@
           "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:45 PM",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22911?date=2026-03-12",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-03-20",
@@ -39338,26 +37567,6 @@
       ],
       "showings": [
         {
-          "date": "2026-03-19",
-          "time": "6:20 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ustaad-Bhagat-Singh---Telugu---/611fe9edf74bab2423301ee0/69a595f1836680ff1bd75399",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-03-19",
-          "time": "9:30 PM",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ustaad-Bhagat-Singh---Telugu---/611fe9edf74bab2423301ee0/69a595f1836680ff1bd75399",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-03-20",
           "time": "9:30 PM",
           "theatre": "Apple Cinemas",
@@ -39660,16 +37869,6 @@
           "ticketLink": "https://oldfilm.org/alamo-theatre/",
           "latitude": 44.572681427002,
           "longitude": -68.7969818115234
-        },
-        {
-          "date": "2026-03-19",
-          "time": "6:50 PM",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/you-got-gold-a-celebration-of-john-prine/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
         },
         {
           "date": "2026-03-20",
