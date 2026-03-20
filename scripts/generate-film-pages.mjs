@@ -440,6 +440,7 @@ function renderFilmPage(film, slug, siteUrl) {
   const posterUrl = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 2);
   const mainAppUrl = "../..";
   const tmdbMovieUrl = buildTmdbMovieUrl(film.tmdbId);
+  const featuredArticleUrl = normalizeExternalUrl(film.featuredOnPlayweekUrl);
   const logoDarkSrc = resolveRelativeAssetPath("/assets/brand/TMP%20logo%20dark.png", 2);
   const logoLightSrc = resolveRelativeAssetPath("/assets/brand/TMP%20logo%20light.png", 2);
   const wordmarksDark = ONE_LINE_WORDMARKS.dark.map((filename) => resolveRelativeAssetPath(`/assets/brand/${filename}`, 2));
@@ -587,9 +588,45 @@ function renderFilmPage(film, slug, siteUrl) {
       .film-page-card .group-film-summary {
         grid-template-columns: minmax(0, 1fr) 104px;
       }
+      .film-page-card .group-film-details {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .film-page-card .film-page-poster-rail {
+        grid-column: 2;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.45rem;
+      }
       .film-page-card .group-film-poster {
+        grid-column: auto;
+        grid-row: auto;
+        justify-self: auto;
         width: 104px;
         height: 156px;
+      }
+      .film-page-card .film-page-feature-link {
+        margin-top: 0;
+        text-align: center;
+        justify-content: center;
+      }
+      .group-card.film-card.film-page-card:not(.film-card-collapsed) .film-favorite-stamp {
+        top: auto;
+        bottom: 0.45rem;
+      }
+      .group-card.film-card.film-page-card:not(.film-card-collapsed) .film-featured-stamp {
+        top: auto;
+        bottom: 0.45rem;
+      }
+      .group-card.film-card.film-page-card.film-card-staff-favorite.film-card-featured-playweek:not(.film-card-collapsed) .film-favorite-stamp {
+        top: auto;
+        bottom: 0.45rem;
+      }
+      .group-card.film-card.film-page-card.film-card-staff-favorite.film-card-featured-playweek:not(.film-card-collapsed) .film-featured-stamp {
+        top: auto;
+        bottom: 0.45rem;
       }
       .film-info-box {
         margin-bottom: 0.9rem;
@@ -801,7 +838,14 @@ function renderFilmPage(film, slug, siteUrl) {
       }">
         <h1 class="group-title group-title-film">${escapeHtml(filmDisplayTitle)}</h1>
         <div class="group-film-summary">
-          <img class="group-film-poster" src="${escapeHtml(posterUrl)}" alt="Poster for ${escapeHtml(filmDisplayTitle)}" loading="lazy" />
+          <div class="film-page-poster-rail">
+            <img class="group-film-poster" src="${escapeHtml(posterUrl)}" alt="Poster for ${escapeHtml(filmDisplayTitle)}" loading="lazy" />
+            ${
+              featuredArticleUrl
+                ? `<a class="group-feature-link film-page-feature-link" href="${escapeHtml(featuredArticleUrl)}" target="_blank" rel="noopener noreferrer">Read feature</a>`
+                : ""
+            }
+          </div>
           ${stampMarkup}
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
@@ -1359,6 +1403,13 @@ function buildTmdbMovieUrl(tmdbId) {
   const id = Number(tmdbId);
   if (!Number.isInteger(id) || id <= 0) return "";
   return `https://www.themoviedb.org/movie/${id}`;
+}
+
+function normalizeExternalUrl(value) {
+  const trimmed = String(value || "").trim();
+  if (!trimmed) return "";
+  if (!/^https?:\/\//i.test(trimmed)) return "";
+  return trimmed;
 }
 
 function buildFilmStampMarkup(film, depthToRoot) {

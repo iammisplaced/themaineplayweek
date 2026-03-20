@@ -871,6 +871,10 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   border-color: #c8beb1;
 }
 
+.group-view-film-link + .group-feature-link {
+  margin-left: 0.45rem;
+}
+
 .group-feature-link {
   display: inline-flex;
   align-items: center;
