@@ -1119,9 +1119,9 @@ function renderIndexPage(items, siteUrl) {
         film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
       }">
   <h2 class="group-title group-title-film">${escapeHtml(title)}</h2>
-  <a class="film-expand-toggle film-page-link" href="./${slug}/" aria-label="View page for ${escapeHtml(title)}" target="_blank" rel="noopener noreferrer">View Film Page</a>
+  <a class="film-expand-toggle film-page-link" href="./${slug}/" aria-label="View page for ${escapeHtml(title)}">View Film Page</a>
   <div class="group-film-summary">
-    <a class="film-page-link film-page-poster-link" href="./${slug}/" aria-label="Open page for ${escapeHtml(title)}" target="_blank" rel="noopener noreferrer">
+    <a class="film-page-link film-page-poster-link" href="./${slug}/" aria-label="Open page for ${escapeHtml(title)}">
       <img class="group-film-poster" src="${escapeHtml(poster)}" alt="Poster for ${escapeHtml(title)}" loading="lazy" />
     </a>
     ${stampMarkup}

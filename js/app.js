@@ -448,7 +448,7 @@ function bindEvents() {
     if (filmExpandToggle) {
       const filmPageUrl = String(filmExpandToggle.dataset.filmPageUrl || "").trim();
       if (filmPageUrl) {
-        window.open(filmPageUrl, "_blank", "noopener,noreferrer");
+        window.location.assign(filmPageUrl);
         return;
       }
       const key = filmExpandToggle.dataset.filmKey || filmExpandToggle.closest(".group-card")?.dataset.filmKey;
@@ -530,7 +530,7 @@ function bindEvents() {
     if (!poster || poster.classList.contains("hidden")) return;
     const posterFilmPageUrl = String(poster.dataset.filmPageUrl || "").trim();
     if (posterFilmPageUrl) {
-      window.open(posterFilmPageUrl, "_blank", "noopener,noreferrer");
+      window.location.assign(posterFilmPageUrl);
       return;
     }
     const src = poster.getAttribute("src");
