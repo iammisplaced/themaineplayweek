@@ -4,16 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ben-Hur 1959 | The Maine Playweek</title>
-    <meta name="description" content="In 26 AD, Judah Ben-Hur, a Jew in ancient Judea, opposes the occupying Roman empire.  Falsely accused by a Roman childhood friend-turned-overlord of trying to kill the Roman governor, he is put into slavery and his mother and sister are taken away as prisoners." />
+    <meta name="description" content="In ancient Judea, a Jewish aristocrat opposing Roman occupation of his homeland reunites with his childhood friend, now a Roman commander — setting in motion a saga of betrayal, adventure, tragedy, revenge, and faith." />
     <link rel="canonical" href="films/ben-hur-1959/" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Ben-Hur 1959 | The Maine Playweek" />
-    <meta property="og:description" content="In 26 AD, Judah Ben-Hur, a Jew in ancient Judea, opposes the occupying Roman empire.  Falsely accused by a Roman childhood friend-turned-overlord of trying to kill the Roman governor, he is put into slavery and his mother and sister are taken away as prisoners." />
+    <meta property="og:description" content="In ancient Judea, a Jewish aristocrat opposing Roman occupation of his homeland reunites with his childhood friend, now a Roman commander — setting in motion a saga of betrayal, adventure, tragedy, revenge, and faith." />
     <meta property="og:url" content="films/ben-hur-1959/" />
     <meta property="og:image" content="https://image.tmdb.org/t/p/w342/m4WQ1dBIrEIHZNCoAjdpxwSKWyH.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Ben-Hur 1959 | The Maine Playweek" />
-    <meta name="twitter:description" content="In 26 AD, Judah Ben-Hur, a Jew in ancient Judea, opposes the occupying Roman empire.  Falsely accused by a Roman childhood friend-turned-overlord of trying to kill the Roman governor, he is put into slavery and his mother and sister are taken away as prisoners." />
+    <meta name="twitter:description" content="In ancient Judea, a Jewish aristocrat opposing Roman occupation of his homeland reunites with his childhood friend, now a Roman commander — setting in motion a saga of betrayal, adventure, tragedy, revenge, and faith." />
     <meta name="twitter:image" content="https://image.tmdb.org/t/p/w342/m4WQ1dBIrEIHZNCoAjdpxwSKWyH.jpg" />
     <link rel="stylesheet" href="../../css/styles.css" />
     <style>
@@ -73,9 +73,45 @@
       .film-page-card .group-film-summary {
         grid-template-columns: minmax(0, 1fr) 104px;
       }
+      .film-page-card .group-film-details {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .film-page-card .film-page-poster-rail {
+        grid-column: 2;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.45rem;
+      }
       .film-page-card .group-film-poster {
+        grid-column: auto;
+        grid-row: auto;
+        justify-self: auto;
         width: 104px;
         height: 156px;
+      }
+      .film-page-card .film-page-feature-link {
+        margin-top: 0;
+        text-align: center;
+        justify-content: center;
+      }
+      .group-card.film-card.film-page-card:not(.film-card-collapsed) .film-favorite-stamp {
+        top: auto;
+        bottom: 0.45rem;
+      }
+      .group-card.film-card.film-page-card:not(.film-card-collapsed) .film-featured-stamp {
+        top: auto;
+        bottom: 0.45rem;
+      }
+      .group-card.film-card.film-page-card.film-card-staff-favorite.film-card-featured-playweek:not(.film-card-collapsed) .film-favorite-stamp {
+        top: auto;
+        bottom: 0.45rem;
+      }
+      .group-card.film-card.film-page-card.film-card-staff-favorite.film-card-featured-playweek:not(.film-card-collapsed) .film-featured-stamp {
+        top: auto;
+        bottom: 0.45rem;
       }
       .film-info-box {
         margin-bottom: 0.9rem;
@@ -273,7 +309,7 @@
         }
       }
     </style>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Ben-Hur 1959","description":"In 26 AD, Judah Ben-Hur, a Jew in ancient Judea, opposes the occupying Roman empire.  Falsely accused by a Roman childhood friend-turned-overlord of trying to kill the Roman governor, he is put into slavery and his mother and sister are taken away as prisoners.","image":"https://image.tmdb.org/t/p/w342/m4WQ1dBIrEIHZNCoAjdpxwSKWyH.jpg","datePublished":"1959-11-18","director":[{"@type":"Person","name":"William Wyler"}],"actor":[{"@type":"Person","name":"Charlton Heston"},{"@type":"Person","name":"Stephen Boyd"},{"@type":"Person","name":"Hugh Griffith"}],"genre":["History","Drama","Adventure"],"url":"films/ben-hur-1959/"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Ben-Hur 1959","description":"In ancient Judea, a Jewish aristocrat opposing Roman occupation of his homeland reunites with his childhood friend, now a Roman commander — setting in motion a saga of betrayal, adventure, tragedy, revenge, and faith.","image":"https://image.tmdb.org/t/p/w342/m4WQ1dBIrEIHZNCoAjdpxwSKWyH.jpg","datePublished":"1959-11-18","director":[{"@type":"Person","name":"William Wyler"}],"actor":[{"@type":"Person","name":"Charlton Heston"},{"@type":"Person","name":"Stephen Boyd"},{"@type":"Person","name":"Hugh Griffith"}],"genre":["History","Drama","Adventure"],"url":"films/ben-hur-1959/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
@@ -285,11 +321,14 @@
       <article class="group-card film-card film-page-card film-info-box">
         <h1 class="group-title group-title-film">Ben-Hur</h1>
         <div class="group-film-summary">
-          <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/m4WQ1dBIrEIHZNCoAjdpxwSKWyH.jpg" alt="Poster for Ben-Hur" loading="lazy" />
+          <div class="film-page-poster-rail">
+            <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/m4WQ1dBIrEIHZNCoAjdpxwSKWyH.jpg" alt="Poster for Ben-Hur" loading="lazy" />
+            
+          </div>
           
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
-              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">In 26 AD, Judah Ben-Hur, a Jew in ancient Judea, opposes the occupying Roman empire.  Falsely accused by a Roman childhood friend-turned-overlord of trying to kill the Roman governor, he is put into slavery and his mother and sister are taken away as prisoners.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">William Wyler</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">History, Drama, Adventure</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Charlton Heston, Stephen Boyd, Hugh Griffith</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">1959-11-18</span></div>
+              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">In ancient Judea, a Jewish aristocrat opposing Roman occupation of his homeland reunites with his childhood friend, now a Roman commander — setting in motion a saga of betrayal, adventure, tragedy, revenge, and faith.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">William Wyler</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">History, Drama, Adventure</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Charlton Heston, Stephen Boyd, Hugh Griffith</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">1959-11-18</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/665" target="_blank" rel="noopener noreferrer">View on TMDb</a>
           </div>
