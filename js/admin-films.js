@@ -173,7 +173,7 @@ async function loadCatalog() {
         "theatre_films"
       ),
       runWithTimeout(
-        fetchAllRows(() => supabase.from("showings").select("theatre_id,film_id,show_date,times")),
+        fetchAllRows(() => supabase.from("showings").select("theatre_id,film_id,show_date,times,premium_times")),
         "showings"
       ),
     ]);
@@ -281,7 +281,11 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
     let totalTimes = 0;
 
     showingRows.forEach((showing) => {
-      (showing.times || []).forEach((time) => {
+      const times = [
+        ...(Array.isArray(showing.times) ? showing.times : []),
+        ...(Array.isArray(showing.premium_times) ? showing.premium_times : []),
+      ];
+      times.forEach((time) => {
         totalTimes += 1;
         const dateTime = getShowDateTime(showing.show_date, time);
         if (dateTime && dateTime >= now) {

@@ -143,7 +143,7 @@ async function loadFilmSourceFromSupabase() {
       restBase,
       supabaseAnonKey,
       "showings",
-      "theatre_id,film_id,show_date,times",
+      "theatre_id,film_id,show_date,times,premium_times",
       "theatre_id.asc,film_id.asc,show_date.asc"
     ),
   ]);
@@ -203,14 +203,32 @@ async function loadFilmSourceFromSupabase() {
       film.theatres.push(theatreLabel);
     }
     const date = String(row.show_date || "").trim();
-    const times = Array.isArray(row.times) ? row.times : [];
-    times.forEach((time) => {
+    const standardTimes = Array.isArray(row.times) ? row.times : [];
+    const premiumTimes = Array.isArray(row.premium_times) ? row.premium_times : [];
+    standardTimes.forEach((time) => {
       const timeValue = String(time || "").trim();
       if (!date || !timeValue) return;
       const pairKey = `${row.theatre_id}::${row.film_id}`;
       film.showings.push({
         date,
         time: timeValue,
+        isPremium: false,
+        theatre: theatre.name || theatreLabel || "Theatre TBA",
+        city: theatre.city || "",
+        theatreWebsite: theatre.website || "",
+        ticketLink: ticketLinkByPair.get(pairKey) || theatre.website || film.legacyTicketLink || "",
+        latitude: Number.isFinite(Number(theatre.latitude)) ? Number(theatre.latitude) : undefined,
+        longitude: Number.isFinite(Number(theatre.longitude)) ? Number(theatre.longitude) : undefined,
+      });
+    });
+    premiumTimes.forEach((time) => {
+      const timeValue = String(time || "").trim();
+      if (!date || !timeValue) return;
+      const pairKey = `${row.theatre_id}::${row.film_id}`;
+      film.showings.push({
+        date,
+        time: timeValue,
+        isPremium: true,
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
@@ -317,6 +335,22 @@ function normalizeFilms(source) {
             film.showings.push({
               date,
               time,
+              isPremium: false,
+              theatre: theatreName,
+              city: theatreCity,
+              theatreWebsite: stringOrEmpty(theatre?.website),
+              ticketLink: stringOrEmpty(rawFilm?.ticketLink),
+              latitude: toNumber(theatre?.latitude),
+              longitude: toNumber(theatre?.longitude),
+            });
+          }
+          for (const time of showing?.premiumTimes || []) {
+            const t = stringOrEmpty(time);
+            if (!date || !t) continue;
+            film.showings.push({
+              date,
+              time: t,
+              isPremium: true,
               theatre: theatreName,
               city: theatreCity,
               theatreWebsite: stringOrEmpty(theatre?.website),
@@ -382,6 +416,11 @@ function normalizeFlatFilm(film) {
           .map((showing) => ({
             date: stringOrEmpty(showing?.date),
             time: stringOrEmpty(showing?.time),
+            isPremium: Boolean(
+              showing?.isPremium ??
+                showing?.is_premium ??
+                (stringOrEmpty(showing?.format).toLowerCase() === "premium")
+            ),
             theatre: stringOrEmpty(showing?.theatre),
             city: stringOrEmpty(showing?.city),
             theatreWebsite: stringOrEmpty(showing?.theatreWebsite),
@@ -462,6 +501,7 @@ function renderFilmPage(film, slug, siteUrl) {
                 <h3 class="show-schedule-day">${escapeHtml(formatIsoDateLabel(row.date))}</h3>
                 <div class="show-times-grid">
                   ${row.times.map((time) => `<span class="show-time-chip">${escapeHtml(time)}</span>`).join("")}
+                  ${row.premiumTimes.map((time) => `<span class="show-time-chip show-time-chip-premium">Premium ${escapeHtml(time)}</span>`).join("")}
                 </div>
               </article>`
           )
@@ -736,6 +776,10 @@ function renderFilmPage(film, slug, siteUrl) {
         font-weight: 600;
         line-height: 1;
         white-space: nowrap;
+      }
+      .film-showtimes-box .show-time-chip.show-time-chip-premium {
+        border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+        background: color-mix(in srgb, var(--accent) 12%, var(--panel));
       }
       .film-showtimes-box .show-item {
         align-self: stretch;
@@ -1463,17 +1507,23 @@ function buildShowtimesByTheatre(film) {
     }
     const byDate = entry.byDate;
     if (!byDate.has(showing.date)) {
-      byDate.set(showing.date, []);
+      byDate.set(showing.date, { times: [], premiumTimes: [] });
     }
-    byDate.get(showing.date).push(showing.time);
+    const slot = byDate.get(showing.date);
+    if (showing.isPremium) {
+      slot.premiumTimes.push(showing.time);
+    } else {
+      slot.times.push(showing.time);
+    }
   }
 
   const grouped = Array.from(byTheatre.values()).map((entry) => {
     const schedule = Array.from(entry.byDate.entries())
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([date, times]) => ({
+      .map(([date, value]) => ({
         date,
-        times: dedupeTimes(times),
+        times: dedupeTimes(value?.times || []),
+        premiumTimes: dedupeTimes(value?.premiumTimes || []),
       }));
     return {
       theatre: entry.theatre,

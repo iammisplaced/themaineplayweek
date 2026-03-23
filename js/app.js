@@ -229,6 +229,7 @@ const elements = {
   showingDateInput: document.getElementById("showingDateInput"),
   showingSpanDaysInput: document.getElementById("showingSpanDaysInput"),
   showingTimesInput: document.getElementById("showingTimesInput"),
+  showingPremiumTimesInput: document.getElementById("showingPremiumTimesInput"),
   addShowing: document.getElementById("addShowing"),
   showingsList: document.getElementById("showingsList"),
   promoSettingsList: document.getElementById("promoSettingsList"),
@@ -1192,8 +1193,9 @@ function bindEvents() {
     const date = elements.showingDateInput.value;
     const spanDays = clampSpanDays(elements.showingSpanDaysInput.value);
     const times = parseTimesInput(elements.showingTimesInput.value);
-    if (!date || !times.length) {
-      elements.adminMessage.textContent = "Add a date and at least one time.";
+    const premiumTimes = parseTimesInput(elements.showingPremiumTimesInput?.value || "");
+    if (!date || (!times.length && !premiumTimes.length)) {
+      elements.adminMessage.textContent = "Add a date and at least one standard or premium time.";
       return;
     }
 
@@ -1201,15 +1203,23 @@ function bindEvents() {
       const targetDate = addDaysIso(date, offset);
       const existing = film.showings.find((showing) => showing.date === targetDate);
       if (existing) {
-        existing.times = Array.from(new Set([...existing.times, ...times])).sort(compareTimes);
+        existing.times = dedupeSortTimes([...(existing.times || []), ...times]);
+        existing.premiumTimes = dedupeSortTimes([...(existing.premiumTimes || []), ...premiumTimes]);
       } else {
-        film.showings.push({ date: targetDate, times: [...times].sort(compareTimes) });
+        film.showings.push({
+          date: targetDate,
+          times: dedupeSortTimes(times),
+          premiumTimes: dedupeSortTimes(premiumTimes),
+        });
       }
     }
 
     film.showings.sort((a, b) => a.date.localeCompare(b.date));
     elements.showingDateInput.value = "";
     elements.showingTimesInput.value = "";
+    if (elements.showingPremiumTimesInput) {
+      elements.showingPremiumTimesInput.value = "";
+    }
     elements.showingSpanDaysInput.value = "1";
     syncAdminEditor();
     elements.adminMessage.textContent =
@@ -1279,6 +1289,7 @@ function bindEvents() {
       "film_title",
       "show_date",
       "show_times",
+      "premium_show_times",
       "ticket_link",
       "film_year",
       "film_tmdb_id",
@@ -1291,11 +1302,12 @@ function bindEvents() {
         "Anora",
         "2026-03-12",
         "6:30 PM|9:15 PM",
+        "",
         "https://tickets.example.com/anora",
         "",
         "",
       ],
-      ["Nickelodeon Cinema", "Portland", "Anora", "2026-03-13", "4:00 PM|7:45 PM", "", "", ""],
+      ["Nickelodeon Cinema", "Portland", "Anora", "2026-03-13", "4:00 PM|7:45 PM", "9:55 PM", "", "", ""],
     ];
     const csv = rows.map((row) => row.map((value) => toCsvCell(value)).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
@@ -1639,12 +1651,17 @@ function buildTheatreGroupsFromFilmPagesSource(source) {
 
       let filmShowing = theatreFilm._showingByDate.get(showDate);
       if (!filmShowing) {
-        filmShowing = { date: showDate, times: [] };
+        filmShowing = { date: showDate, times: [], premiumTimes: [] };
         theatreFilm._showingByDate.set(showDate, filmShowing);
         theatreFilm.showings.push(filmShowing);
       }
-      if (!filmShowing.times.includes(showTime)) {
-        filmShowing.times.push(showTime);
+      const isPremium = Boolean(
+        showing?.isPremium ||
+          String(showing?.format || "").trim().toLowerCase() === "premium"
+      );
+      const targetTimes = isPremium ? filmShowing.premiumTimes : filmShowing.times;
+      if (!targetTimes.includes(showTime)) {
+        targetTimes.push(showTime);
       }
     }
   }
@@ -1655,7 +1672,8 @@ function buildTheatreGroupsFromFilmPagesSource(source) {
     theatre.films.forEach((film) => {
       film.showings.sort((a, b) => a.date.localeCompare(b.date));
       film.showings.forEach((showing) => {
-        showing.times.sort(compareTimes);
+        showing.times = dedupeSortTimes(showing.times || []);
+        showing.premiumTimes = dedupeSortTimes(showing.premiumTimes || []);
       });
       delete film._showingByDate;
     });
@@ -1692,7 +1710,7 @@ async function loadDataFromSupabase() {
   const showings = await fetchAllRowsFromSupabase("showings", () =>
     state.supabase
       .from("showings")
-      .select("id,theatre_id,film_id,show_date,times")
+      .select("id,theatre_id,film_id,show_date,times,premium_times")
       .order("id", { ascending: true })
   );
   const promos = await fetchAllRowsFromSupabase("promos", () =>
@@ -1788,7 +1806,8 @@ async function loadDataFromSupabase() {
     if (!film) return;
     film.showings.push({
       date: showingRow.show_date,
-      times: Array.isArray(showingRow.times) ? showingRow.times : [],
+      times: dedupeSortTimes(Array.isArray(showingRow.times) ? showingRow.times : []),
+      premiumTimes: dedupeSortTimes(Array.isArray(showingRow.premium_times) ? showingRow.premium_times : []),
     });
   });
 
@@ -1895,15 +1914,31 @@ function validateData(data) {
         if (!getShowDateTime(showing.date, "12:00 PM")) {
           throw new Error(`A showing for "${film.title}" has invalid date value.`);
         }
-        if (!Array.isArray(showing?.times) || showing.times.length === 0) {
-          throw new Error(`A showing for "${film.title}" must include a non-empty times array.`);
+        if (typeof showing?.times !== "undefined" && !Array.isArray(showing.times)) {
+          throw new Error(`A showing for "${film.title}" has invalid times array.`);
         }
-        for (const time of showing.times) {
+        if (typeof showing?.premiumTimes !== "undefined" && !Array.isArray(showing.premiumTimes)) {
+          throw new Error(`A showing for "${film.title}" has invalid premiumTimes array.`);
+        }
+        const standardTimes = dedupeSortTimes(showing?.times || []);
+        const premiumTimes = dedupeSortTimes(showing?.premiumTimes || []);
+        if (standardTimes.length === 0 && premiumTimes.length === 0) {
+          throw new Error(`A showing for "${film.title}" must include at least one standard or premium time.`);
+        }
+        for (const time of standardTimes) {
           if (typeof time !== "string" || !time.trim()) {
             throw new Error(`A showing for "${film.title}" contains an empty time.`);
           }
           if (!to24HourTime(time)) {
             throw new Error(`A showing for "${film.title}" has invalid time format. Use h:mm AM/PM.`);
+          }
+        }
+        for (const time of premiumTimes) {
+          if (typeof time !== "string" || !time.trim()) {
+            throw new Error(`A showing for "${film.title}" contains an empty premium time.`);
+          }
+          if (!to24HourTime(time)) {
+            throw new Error(`A showing for "${film.title}" has invalid premium time format. Use h:mm AM/PM.`);
           }
         }
       }
@@ -2045,6 +2080,9 @@ function renderFilmOptions() {
   elements.refreshTmdb.disabled = !hasFilm || state.admin.isSaving || state.admin.isRefreshingTmdb;
   elements.showingDateInput.disabled = !hasFilm;
   elements.showingTimesInput.disabled = !hasFilm;
+  if (elements.showingPremiumTimesInput) {
+    elements.showingPremiumTimesInput.disabled = !hasFilm;
+  }
   elements.addShowing.disabled = !hasFilm;
   elements.saveAllAdmin.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
   if (elements.saveAllPromos) {
@@ -2078,7 +2116,16 @@ function renderShowingsList() {
     .forEach(({ showing, index }) => {
       const li = document.createElement("li");
       const label = document.createElement("span");
-      label.textContent = `${showing.date}: ${showing.times.join(", ")}`;
+      const standardTimes = dedupeSortTimes(showing.times || []);
+      const premiumTimes = dedupeSortTimes(showing.premiumTimes || []);
+      const timeLabelParts = [];
+      if (standardTimes.length) {
+        timeLabelParts.push(standardTimes.join(", "));
+      }
+      if (premiumTimes.length) {
+        timeLabelParts.push(`Premium: ${premiumTimes.join(", ")}`);
+      }
+      label.textContent = `${showing.date}: ${timeLabelParts.join(" | ")}`;
       const button = document.createElement("button");
       button.type = "button";
       button.className = "ghost-btn";
@@ -2228,6 +2275,10 @@ function parseTimesInput(input) {
     .filter(Boolean);
 }
 
+function dedupeSortTimes(times) {
+  return Array.from(new Set((times || []).map((entry) => String(entry || "").trim()).filter(Boolean))).sort(compareTimes);
+}
+
 function importShowtimesCsv(data, csvContent) {
   if (!data || !Array.isArray(data.theatreGroups)) {
     throw new Error("Current data is invalid. Reload before importing CSV.");
@@ -2239,10 +2290,13 @@ function importShowtimesCsv(data, csvContent) {
 
   const normalizedHeaders = rows[0].map(normalizeCsvHeader);
   const headerIndexByKey = new Map(normalizedHeaders.map((key, index) => [key, index]));
-  const requiredHeaders = ["theatre_name", "theatre_city", "film_title", "show_date", "show_times"];
+  const requiredHeaders = ["theatre_name", "theatre_city", "film_title", "show_date"];
   const missingHeaders = requiredHeaders.filter((key) => !headerIndexByKey.has(key));
   if (missingHeaders.length) {
     throw new Error(`Missing required CSV header(s): ${missingHeaders.join(", ")}`);
+  }
+  if (!headerIndexByKey.has("show_times") && !headerIndexByKey.has("premium_show_times")) {
+    throw new Error("Missing required CSV header: include show_times, premium_show_times, or both.");
   }
 
   const stats = {
@@ -2263,6 +2317,7 @@ function importShowtimesCsv(data, csvContent) {
     const ticketLinkRaw = readCsvValue(row, headerIndexByKey, "ticket_link");
     const showDate = readCsvValue(row, headerIndexByKey, "show_date");
     const showTimesRaw = readCsvValue(row, headerIndexByKey, "show_times");
+    const premiumShowTimesRaw = readCsvValue(row, headerIndexByKey, "premium_show_times");
 
     if (!theatreName) throw new Error(`Row ${rowNumber}: theatre_name is required.`);
     if (!theatreCity) throw new Error(`Row ${rowNumber}: theatre_city is required.`);
@@ -2279,12 +2334,17 @@ function importShowtimesCsv(data, csvContent) {
     }
 
     const parsedTimes = parseCsvTimesField(showTimesRaw);
-    if (!parsedTimes.length) {
-      throw new Error(`Row ${rowNumber}: show_times must include at least one time.`);
+    const parsedPremiumTimes = parseCsvTimesField(premiumShowTimesRaw);
+    if (!parsedTimes.length && !parsedPremiumTimes.length) {
+      throw new Error(`Row ${rowNumber}: include at least one value in show_times or premium_show_times.`);
     }
     const invalidTime = parsedTimes.find((time) => !to24HourTime(time));
     if (invalidTime) {
       throw new Error(`Row ${rowNumber}: invalid time "${invalidTime}". Use h:mm AM/PM.`);
+    }
+    const invalidPremiumTime = parsedPremiumTimes.find((time) => !to24HourTime(time));
+    if (invalidPremiumTime) {
+      throw new Error(`Row ${rowNumber}: invalid premium time "${invalidPremiumTime}". Use h:mm AM/PM.`);
     }
 
     const theatreMatches = data.theatreGroups.filter(
@@ -2335,15 +2395,19 @@ function importShowtimesCsv(data, csvContent) {
     if (!Array.isArray(film.showings)) film.showings = [];
     const showing = film.showings.find((entry) => entry.date === showDate);
     if (showing) {
-      const beforeCount = Array.isArray(showing.times) ? showing.times.length : 0;
-      showing.times = Array.from(new Set([...(showing.times || []), ...parsedTimes])).sort(compareTimes);
-      if (showing.times.length !== beforeCount) {
+      const beforeCount = (Array.isArray(showing.times) ? showing.times.length : 0) +
+        (Array.isArray(showing.premiumTimes) ? showing.premiumTimes.length : 0);
+      showing.times = dedupeSortTimes([...(showing.times || []), ...parsedTimes]);
+      showing.premiumTimes = dedupeSortTimes([...(showing.premiumTimes || []), ...parsedPremiumTimes]);
+      const afterCount = showing.times.length + showing.premiumTimes.length;
+      if (afterCount !== beforeCount) {
         stats.showingDatesUpdated += 1;
       }
     } else {
       film.showings.push({
         date: showDate,
-        times: Array.from(new Set(parsedTimes)).sort(compareTimes),
+        times: dedupeSortTimes(parsedTimes),
+        premiumTimes: dedupeSortTimes(parsedPremiumTimes),
       });
       film.showings.sort((a, b) => a.date.localeCompare(b.date));
       stats.showingDatesUpdated += 1;
@@ -2480,9 +2544,17 @@ function prunePastShowtimes(data) {
             const dt = getShowDateTime(showing.date, time);
             return dt && dt >= now;
           });
-          return { ...showing, times: remainingTimes };
+          const remainingPremiumTimes = (showing.premiumTimes || []).filter((time) => {
+            const dt = getShowDateTime(showing.date, time);
+            return dt && dt >= now;
+          });
+          return {
+            ...showing,
+            times: dedupeSortTimes(remainingTimes),
+            premiumTimes: dedupeSortTimes(remainingPremiumTimes),
+          };
         })
-        .filter((showing) => showing.times.length > 0)
+        .filter((showing) => showing.times.length > 0 || showing.premiumTimes.length > 0)
         .sort((a, b) => a.date.localeCompare(b.date));
     });
   });
@@ -2910,7 +2982,8 @@ function buildReplacePayload(data, promotedCards) {
           theatre_key: theatreKey,
           film_key: filmKey,
           show_date: showing.date,
-          times: Array.from(new Set(showing.times || [])).sort(compareTimes),
+          times: dedupeSortTimes(showing.times || []),
+          premium_times: dedupeSortTimes(showing.premiumTimes || []),
         });
       });
     });
@@ -3109,6 +3182,7 @@ function buildShowingsDelta(previousRows, nextRows) {
         film_db_id: nextEntry.filmDbId,
         show_date: showing.show_date,
         times: showing.times,
+        premium_times: showing.premium_times,
       });
     });
   });
@@ -3153,7 +3227,8 @@ function indexShowingsByPair(rows) {
     const entry = index.get(pairKey);
     entry.showings.push({
       show_date: String(row?.show_date || ""),
-      times: Array.from(new Set(row?.times || [])).sort(compareTimes),
+      times: dedupeSortTimes(row?.times || []),
+      premium_times: dedupeSortTimes(row?.premium_times || []),
     });
   });
 
@@ -3582,7 +3657,7 @@ function render() {
           meta.textContent = "";
 
           if (state.view === "theatres") {
-            renderSchedule(schedule, show.dates);
+            renderSchedule(schedule, show.dates, show.premiumDates);
           }
 
           if (!rowExpanded) {
@@ -3615,7 +3690,7 @@ function render() {
         } else {
           main.textContent = `${show.theatre}`;
           meta.textContent = `${show.city}`;
-          renderSchedule(schedule, show.dates);
+          renderSchedule(schedule, show.dates, show.premiumDates);
           const ticketUrl = normalizeOutboundUrl(show.ticketLink);
           if (ticketUrl) {
             link.href = ticketUrl;
@@ -4621,8 +4696,12 @@ function registerSortDebugTools() {
 
 function countGroupUpcomingTimes(group) {
   return (group?.shows || []).reduce((total, show) => {
-    const times = Object.values(show?.dates || {}).reduce((count, dateTimes) => count + (dateTimes?.length || 0), 0);
-    return total + times;
+    const standardCount = Object.values(show?.dates || {}).reduce((count, dateTimes) => count + (dateTimes?.length || 0), 0);
+    const premiumCount = Object.values(show?.premiumDates || {}).reduce(
+      (count, dateTimes) => count + (dateTimes?.length || 0),
+      0
+    );
+    return total + standardCount + premiumCount;
   }, 0);
 }
 
@@ -4670,6 +4749,14 @@ function parseIsoDateLike(value) {
 function getRowEarliestShowtimeTimestamp(row) {
   let earliest = Number.POSITIVE_INFINITY;
   Object.entries(row?.dates || {}).forEach(([date, times]) => {
+    (times || []).forEach((time) => {
+      const dateTime = getShowDateTime(date, time);
+      if (!dateTime) return;
+      const value = dateTime.getTime();
+      if (value < earliest) earliest = value;
+    });
+  });
+  Object.entries(row?.premiumDates || {}).forEach(([date, times]) => {
     (times || []).forEach((time) => {
       const dateTime = getShowDateTime(date, time);
       if (!dateTime) return;
@@ -4758,6 +4845,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
       const metadata = extractFilmMetadata(film);
       const year = Number.isInteger(Number(film.year)) ? Number(film.year) : null;
       const times = [];
+      const premiumTimes = [];
 
       (film.showings || []).forEach((showing) => {
         if (showing.date !== selectedDate) return;
@@ -4766,10 +4854,16 @@ function buildSingleDayGroups(theatres, selectedDate) {
           if (!showDateTime || showDateTime < now) return;
           times.push(time);
         });
+        (showing.premiumTimes || []).forEach((time) => {
+          const showDateTime = getShowDateTime(showing.date, time);
+          if (!showDateTime || showDateTime < now) return;
+          premiumTimes.push(time);
+        });
       });
 
-      if (!times.length) return;
+      if (!times.length && !premiumTimes.length) return;
       times.sort(compareTimes);
+      premiumTimes.sort(compareTimes);
 
       const filmKey = buildFilmGroupKey(film.title, year);
       const groupKey = `film::${filmKey}`;
@@ -4808,6 +4902,9 @@ function buildSingleDayGroups(theatres, selectedDate) {
         ticketLink: film.ticketLink,
         dates: {
           [selectedDate]: times,
+        },
+        premiumDates: {
+          [selectedDate]: premiumTimes,
         },
       });
     });
@@ -4852,18 +4949,25 @@ function buildGroups(theatres, view) {
         releaseDate: metadata.releaseDate,
         matchedAt: metadata.matchedAt,
         dates: {},
+        premiumDates: {},
       };
 
       film.showings.forEach((showing) => {
-        showing.times.forEach((time) => {
+        (showing.times || []).forEach((time) => {
           const showDateTime = getShowDateTime(showing.date, time);
           if (!showDateTime || showDateTime < now) return;
           if (!row.dates[showing.date]) row.dates[showing.date] = [];
           row.dates[showing.date].push(time);
         });
+        (showing.premiumTimes || []).forEach((time) => {
+          const showDateTime = getShowDateTime(showing.date, time);
+          if (!showDateTime || showDateTime < now) return;
+          if (!row.premiumDates[showing.date]) row.premiumDates[showing.date] = [];
+          row.premiumDates[showing.date].push(time);
+        });
       });
 
-      if (Object.keys(row.dates).length) {
+      if (Object.keys(row.dates).length || Object.keys(row.premiumDates).length) {
         rowsByFilm[film.title] = row;
       }
     });
@@ -4872,7 +4976,10 @@ function buildGroups(theatres, view) {
       Object.keys(row.dates).forEach((date) => {
         row.dates[date].sort(compareTimes);
       });
-      if (!Object.keys(row.dates).length) return;
+      Object.keys(row.premiumDates).forEach((date) => {
+        row.premiumDates[date].sort(compareTimes);
+      });
+      if (!Object.keys(row.dates).length && !Object.keys(row.premiumDates).length) return;
 
       if (view === "films") {
         const key = `film::${buildFilmGroupKey(row.film, row.year)}`;
@@ -4903,7 +5010,10 @@ function buildGroups(theatres, view) {
       }
 
       if (view === "days") {
-        Object.entries(row.dates).forEach(([date, times]) => {
+        const dateKeys = new Set([...Object.keys(row.dates), ...Object.keys(row.premiumDates)]);
+        dateKeys.forEach((date) => {
+          const times = row.dates[date] || [];
+          const premiumTimes = row.premiumDates[date] || [];
           if (!grouped[date]) {
             grouped[date] = {
               theatreInfo: null,
@@ -4924,6 +5034,7 @@ function buildGroups(theatres, view) {
               stars: row.stars,
               genres: row.genres,
               theatres: {},
+              premiumTheatres: {},
             };
             grouped[date].byFilm[filmKey] = dayRow;
             grouped[date].shows.push(dayRow);
@@ -4932,6 +5043,8 @@ function buildGroups(theatres, view) {
           const theatreKey = `${row.theatre} · ${row.city}`;
           if (!dayRow.theatres[theatreKey]) dayRow.theatres[theatreKey] = [];
           dayRow.theatres[theatreKey].push(...times);
+          if (!dayRow.premiumTheatres[theatreKey]) dayRow.premiumTheatres[theatreKey] = [];
+          dayRow.premiumTheatres[theatreKey].push(...premiumTimes);
         });
         return;
       }
@@ -4943,6 +5056,9 @@ function buildGroups(theatres, view) {
       group.shows.forEach((show) => {
         Object.keys(show.theatres).forEach((theatreKey) => {
           show.theatres[theatreKey].sort(compareTimes);
+        });
+        Object.keys(show.premiumTheatres || {}).forEach((theatreKey) => {
+          show.premiumTheatres[theatreKey].sort(compareTimes);
         });
       });
       delete group.byFilm;
@@ -4993,16 +5109,18 @@ function buildExpandRowKey(view, group, show) {
   return `${view}-row::${filmKey}`;
 }
 
-function renderSchedule(container, dates) {
+function renderSchedule(container, dates, premiumDates = {}) {
   container.innerHTML = "";
-  const dateEntries = Object.entries(dates);
-  dateEntries.sort(([a], [b]) => a.localeCompare(b));
+  const dateKeys = new Set([...Object.keys(dates || {}), ...Object.keys(premiumDates || {})]);
+  const dateEntries = Array.from(dateKeys)
+    .sort((a, b) => a.localeCompare(b))
+    .map((date) => [date, dates?.[date] || [], premiumDates?.[date] || []]);
 
   const visibleEntries = dateEntries.slice(0, 2);
   const hiddenEntries = dateEntries.slice(2);
 
-  visibleEntries.forEach(([date, times]) => {
-    container.appendChild(createScheduleRow(date, times));
+  visibleEntries.forEach(([date, times, premiumTimes]) => {
+    container.appendChild(createScheduleRow(date, times, premiumTimes));
   });
 
   if (hiddenEntries.length) {
@@ -5015,8 +5133,8 @@ function renderSchedule(container, dates) {
     details.appendChild(summary);
 
     const extra = document.createElement("div");
-    hiddenEntries.forEach(([date, times]) => {
-      extra.appendChild(createScheduleRow(date, times));
+    hiddenEntries.forEach(([date, times, premiumTimes]) => {
+      extra.appendChild(createScheduleRow(date, times, premiumTimes));
     });
     details.appendChild(extra);
 
@@ -5024,7 +5142,7 @@ function renderSchedule(container, dates) {
   }
 }
 
-function createScheduleRow(date, times) {
+function createScheduleRow(date, times, premiumTimes = []) {
   const row = document.createElement("div");
   row.className = "show-schedule-row";
 
@@ -5034,7 +5152,29 @@ function createScheduleRow(date, times) {
 
   const value = document.createElement("span");
   value.className = "show-schedule-times";
-  value.textContent = times.join(", ");
+  const mergedTimes = [
+    ...(times || []).filter(Boolean).map((time) => ({ time, isPremium: false })),
+    ...(premiumTimes || []).filter(Boolean).map((time) => ({ time, isPremium: true })),
+  ].sort((a, b) => {
+    const byTime = compareTimes(a.time, b.time);
+    if (byTime !== 0) return byTime;
+    if (a.isPremium === b.isPremium) return 0;
+    return a.isPremium ? 1 : -1;
+  });
+
+  mergedTimes.forEach((entry, index) => {
+    if (index > 0) {
+      value.appendChild(document.createTextNode(", "));
+    }
+    if (!entry.isPremium) {
+      value.appendChild(document.createTextNode(entry.time));
+      return;
+    }
+    const pill = document.createElement("span");
+    pill.className = "show-premium-pill";
+    pill.textContent = `Premium ${entry.time}`;
+    value.appendChild(pill);
+  });
 
   row.appendChild(label);
   row.appendChild(value);
