@@ -439,6 +439,71 @@
       "showings": []
     },
     {
+      "title": "A Foreign Affair",
+      "year": 1948,
+      "tmdbId": "61650",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/3kVxhtmvAIjcqj6LP7pAp5aId97.jpg",
+      "director": "Billy Wilder",
+      "genres": [
+        "Romance",
+        "Comedy",
+        "Drama"
+      ],
+      "stars": [
+        "Jean Arthur",
+        "Marlene Dietrich",
+        "John Lund"
+      ],
+      "releaseDate": "1948-08-20",
+      "popularity": 1.4103,
+      "voteAverage": 7.094,
+      "voteCount": 154,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/a-foreign-affair",
+      "theatres": [
+        "Kinonik, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-04-15",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/a-foreign-affair",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-04-18",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/a-foreign-affair",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-04-18",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/a-foreign-affair",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        }
+      ]
+    },
+    {
       "title": "A Magnificent Life",
       "year": 2026,
       "tmdbId": "840873",
@@ -4867,17 +4932,6 @@
         },
         {
           "date": "2026-03-24",
-          "time": "2:10 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22117",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-03-24",
           "time": "4:45 PM",
           "isPremium": false,
           "theatre": "Flagship Cinemas",
@@ -6300,6 +6354,71 @@
       ]
     },
     {
+      "title": "Hobson's Choice",
+      "year": 1954,
+      "tmdbId": "16410",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/kbP7EgoiOw2bIypai50JWRsqP7p.jpg",
+      "director": "David Lean",
+      "genres": [
+        "Comedy",
+        "Drama",
+        "Romance"
+      ],
+      "stars": [
+        "Charles Laughton",
+        "John Mills",
+        "Brenda De Banzie"
+      ],
+      "releaseDate": "1954-04-19",
+      "popularity": 1.0203,
+      "voteAverage": 7.4,
+      "voteCount": 159,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/hobsons-choice",
+      "theatres": [
+        "Kinonik, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-04-22",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/hobsons-choice",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-04-25",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/hobsons-choice",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-04-25",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/hobsons-choice",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        }
+      ]
+    },
+    {
       "title": "Hop",
       "year": 2011,
       "tmdbId": "50359",
@@ -6823,17 +6942,6 @@
           "ticketLink": "https://www.blackbearcinemas.com/movie/hoppers",
           "latitude": 44.9059551,
           "longitude": -68.6911612
-        },
-        {
-          "date": "2026-03-24",
-          "time": "2:00 PM",
-          "isPremium": false,
-          "theatre": "Center Theatre for the Performing Arts",
-          "city": "Dover-Foxcroft",
-          "theatreWebsite": "centertheatre.org",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/259710",
-          "latitude": 45.183952,
-          "longitude": -69.2292565
         },
         {
           "date": "2026-03-24",
@@ -10884,6 +10992,70 @@
       ]
     },
     {
+      "title": "Lola",
+      "year": 1961,
+      "tmdbId": "40641",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/uVLkdkTVV10fLrTPyOCBE6alwLD.jpg",
+      "director": "Jacques Demy",
+      "genres": [
+        "Drama",
+        "Romance"
+      ],
+      "stars": [
+        "Anouk Aimée",
+        "Marc Michel",
+        "Jacques Harden"
+      ],
+      "releaseDate": "1961-03-03",
+      "popularity": 1.7418,
+      "voteAverage": 7.1,
+      "voteCount": 292,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/lola",
+      "theatres": [
+        "Kinonik, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-04-29",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/lola",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-05-02",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/lola",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-05-02",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/lola",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        }
+      ]
+    },
+    {
       "title": "Maine Underground Film Festival",
       "year": 2026,
       "tmdbId": "",
@@ -11402,6 +11574,135 @@
           "ticketLink": "https://www.portlandmuseum.org/event/pma-films-miroirs-no-3/",
           "latitude": 43.6544005,
           "longitude": -70.2633108
+        }
+      ]
+    },
+    {
+      "title": "Modesty Blaise",
+      "year": 1966,
+      "tmdbId": "36645",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/rpQRLEcQeWe2T8TbSJ0zJ0Avqij.jpg",
+      "director": "Joseph Losey",
+      "genres": [
+        "Comedy",
+        "Crime",
+        "Action",
+        "Thriller"
+      ],
+      "stars": [
+        "Monica Vitti",
+        "Terence Stamp",
+        "Dirk Bogarde"
+      ],
+      "releaseDate": "1966-05-01",
+      "popularity": 1.0514,
+      "voteAverage": 5.3,
+      "voteCount": 72,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/modesty-blaise",
+      "theatres": [
+        "Kinonik, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-20",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/modesty-blaise",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-05-23",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/modesty-blaise",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-05-23",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/modesty-blaise",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        }
+      ]
+    },
+    {
+      "title": "Mon Oncle",
+      "year": 1958,
+      "tmdbId": "427",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/wH6RyPiXFy8INLbViVkchLVOmBc.jpg",
+      "director": "Jacques Tati",
+      "genres": [
+        "Comedy"
+      ],
+      "stars": [
+        "Jacques Tati",
+        "Jean-Pierre Zola",
+        "Adrienne Servantie"
+      ],
+      "releaseDate": "1958-05-10",
+      "popularity": 1.0813,
+      "voteAverage": 7.4,
+      "voteCount": 608,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/mon-oncle",
+      "theatres": [
+        "Kinonik, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-06",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/mon-oncle",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-05-09",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/mon-oncle",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-05-09",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/mon-oncle",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
         }
       ]
     },
@@ -14252,17 +14553,6 @@
           "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
           "latitude": 44.0541236,
           "longitude": -70.7082496
-        },
-        {
-          "date": "2026-03-24",
-          "time": "2:00 PM",
-          "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/project-hail-mary",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
         },
         {
           "date": "2026-03-24",
@@ -17500,17 +17790,6 @@
         },
         {
           "date": "2026-03-24",
-          "time": "2:10 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-03-24",
           "time": "3:30 PM",
           "isPremium": false,
           "theatre": "Apple Cinemas",
@@ -19894,17 +20173,6 @@
         },
         {
           "date": "2026-03-24",
-          "time": "2:00 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23075",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-03-24",
           "time": "4:30 PM",
           "isPremium": false,
           "theatre": "Flagship Cinemas",
@@ -20254,17 +20522,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23075",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-03-24",
-          "time": "2:00 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23075",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-03-24",
@@ -25055,6 +25312,70 @@
           "ticketLink": "https://www.portlandmuseum.org/event/pma-films-salt-marsh-with-artist-mitchell-rasor/",
           "latitude": 43.6544005,
           "longitude": -70.2633108
+        }
+      ]
+    },
+    {
+      "title": "Saturday Night & Sunday Morning",
+      "year": 1960,
+      "tmdbId": "37230",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/ifhjfo8lZoJ9dvDQiWcnc3GeFK4.jpg",
+      "director": "Karel Reisz",
+      "genres": [
+        "Drama",
+        "Romance"
+      ],
+      "stars": [
+        "Albert Finney",
+        "Shirley Anne Field",
+        "Rachel Roberts"
+      ],
+      "releaseDate": "1960-10-27",
+      "popularity": 1.2051,
+      "voteAverage": 7,
+      "voteCount": 155,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/saturday-night-and-sunday-morning",
+      "theatres": [
+        "Kinonik, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-13",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/saturday-night-and-sunday-morning",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-05-16",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/saturday-night-and-sunday-morning",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-05-16",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/saturday-night-and-sunday-morning",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
         }
       ]
     },
@@ -32881,6 +33202,70 @@
       "showings": []
     },
     {
+      "title": "The Virgin Spring",
+      "year": 1960,
+      "tmdbId": "11656",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/z70YM3Y4pNYZATMhFMKonngaeMC.jpg",
+      "director": "Ingmar Bergman",
+      "genres": [
+        "Drama",
+        "History"
+      ],
+      "stars": [
+        "Max von Sydow",
+        "Birgitta Valberg",
+        "Gunnel Lindblom"
+      ],
+      "releaseDate": "1960-02-08",
+      "popularity": 1.4306,
+      "voteAverage": 7.847,
+      "voteCount": 668,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/the-virgin-spring",
+      "theatres": [
+        "Kinonik, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-04-08",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-virgin-spring",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-04-11",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-virgin-spring",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-04-11",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-virgin-spring",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        }
+      ]
+    },
+    {
       "title": "The Voice of Hind Rajab",
       "year": 2025,
       "tmdbId": "1480382",
@@ -32906,6 +33291,133 @@
       "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-the-voice-of-hind-rajab-encore-screening/",
       "theatres": [],
       "showings": []
+    },
+    {
+      "title": "The White Hell of Pitz Palu",
+      "year": 1929,
+      "tmdbId": "29043",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/b70oc25pi85XI0R4mSPuG78BNoQ.jpg",
+      "director": "G.W. Pabst",
+      "genres": [
+        "Drama",
+        "Adventure"
+      ],
+      "stars": [
+        "Gustav Diessl",
+        "Leni Riefenstahl",
+        "Ernst Petersen"
+      ],
+      "releaseDate": "1929-10-10",
+      "popularity": 0.346,
+      "voteAverage": 6.865,
+      "voteCount": 26,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/the-white-hell-pitz-palu",
+      "theatres": [
+        "Kinonik, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-04-01",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-white-hell-pitz-palu",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-04-04",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-white-hell-pitz-palu",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-04-04",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-white-hell-pitz-palu",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        }
+      ]
+    },
+    {
+      "title": "The Witch",
+      "year": 1966,
+      "tmdbId": "62947",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/hZOsf2BKTMjxnQyugZcOJ4QSwW1.jpg",
+      "director": "Damiano Damiani",
+      "genres": [
+        "Horror"
+      ],
+      "stars": [
+        "Richard Johnson",
+        "Rosanna Schiaffino",
+        "Gian Maria Volonté"
+      ],
+      "releaseDate": "1966-09-16",
+      "popularity": 0.5553,
+      "voteAverage": 6.4,
+      "voteCount": 22,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.zeffy.com/en-US/ticketing/the-witch",
+      "theatres": [
+        "Kinonik, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-27",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-witch",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-05-30",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-witch",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        },
+        {
+          "date": "2026-05-30",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Kinonik",
+          "city": "Portland",
+          "theatreWebsite": "kinonik.org",
+          "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-witch",
+          "latitude": 43.6425626,
+          "longitude": -70.2775744
+        }
+      ]
     },
     {
       "title": "The Wizard of Oz",
