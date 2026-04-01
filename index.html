@@ -36,6 +36,16 @@
       </div>
     </div>
 
+    <section class="beta-banner" role="status" aria-label="Beta notice" aria-live="polite">
+      <p class="beta-banner-line">
+        <strong>Beta:</strong>
+        <span id="betaBannerMessage" class="beta-banner-message">Listings and distance sorting are actively being tuned.</span>
+      </p>
+      <p class="beta-banner-line">
+        See something off? Email <a href="mailto:hello@themaineplayweek.com">hello@themaineplayweek.com</a>.
+      </p>
+    </section>
+
     <header class="site-header">
       <div class="brand-wordmark-wrap">
         <img
@@ -54,7 +64,10 @@
     <main>
       <section class="controls" aria-label="View controls">
         <div class="tabs" role="tablist" aria-label="Showtimes view type">
-          <button class="tab active" role="tab" data-view="days" aria-selected="true">Near You</button>
+          <button class="tab active" role="tab" data-view="days" aria-selected="true">
+            Near You
+            <span class="tab-beta-chip">Beta</span>
+          </button>
           <button class="tab" role="tab" data-view="theatres" aria-selected="false">Theatres</button>
           <button class="tab" role="tab" data-view="films" aria-selected="false">All Films</button>
         </div>
@@ -81,6 +94,7 @@
         <div id="locationChooserTriggerWrap" class="location-chooser-trigger-wrap hidden">
           <button id="openLocationChooser" class="location-control-btn" type="button" aria-label="Set location">
             <img id="locationControlIcon" src="assets/icons/location.png" alt="" aria-hidden="true" />
+            <span class="control-beta-chip">Beta</span>
           </button>
         </div>
       </section>

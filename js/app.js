@@ -47,6 +47,12 @@ const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
 const LOCATION_PREFERENCE_STORAGE_KEY = "tmp-location-preference-v1";
 const LOCATION_CHOOSER_SEEN_STORAGE_KEY = "tmp-location-chooser-seen-v1";
+const BETA_BANNER_ROTATION_MS = 5200;
+const BETA_BANNER_MESSAGES = Object.freeze([
+  "Listings and distance sorting are actively being tuned.",
+  "Showtimes update throughout the day while we refine the feed.",
+  "Near You results are beta and may shift as location data improves.",
+]);
 
 const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
 const SUPABASE_ANON_KEY =
@@ -135,6 +141,7 @@ const state = {
 
 const elements = {
   appLoader: document.getElementById("appLoader"),
+  betaBannerMessage: document.getElementById("betaBannerMessage"),
   themeColorMeta: document.querySelector('meta[name="theme-color"]'),
   themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
@@ -244,6 +251,7 @@ const elements = {
 
 let resizeRenderTimeout = null;
 let logoSpinResetTimeout = null;
+let betaBannerRotationInterval = null;
 let lastViewportWidth = window.innerWidth;
 let appBootComplete = false;
 let pageLoadComplete = document.readyState === "complete";
@@ -281,6 +289,7 @@ function setLoadingState(isLoading) {
 }
 
 async function init() {
+  initializeBetaBanner();
   initializeBrandWordmarkVariant();
   initializeTheme();
   initializeViewPreference();
@@ -303,6 +312,33 @@ async function init() {
   updateTheatreSortStatus();
   render();
   registerSortDebugTools();
+}
+
+function initializeBetaBanner() {
+  const messageNode = elements.betaBannerMessage;
+  if (!messageNode || !BETA_BANNER_MESSAGES.length) return;
+
+  if (betaBannerRotationInterval) {
+    clearInterval(betaBannerRotationInterval);
+    betaBannerRotationInterval = null;
+  }
+
+  let messageIndex = 0;
+  swapBetaBannerMessage(messageNode, BETA_BANNER_MESSAGES[messageIndex]);
+
+  if (BETA_BANNER_MESSAGES.length === 1) return;
+  betaBannerRotationInterval = window.setInterval(() => {
+    messageIndex = (messageIndex + 1) % BETA_BANNER_MESSAGES.length;
+    swapBetaBannerMessage(messageNode, BETA_BANNER_MESSAGES[messageIndex]);
+  }, BETA_BANNER_ROTATION_MS);
+}
+
+function swapBetaBannerMessage(messageNode, nextMessage) {
+  messageNode.classList.remove("is-swapping");
+  messageNode.textContent = nextMessage;
+  requestAnimationFrame(() => {
+    messageNode.classList.add("is-swapping");
+  });
 }
 
 async function loadLatestSubstackPost() {
