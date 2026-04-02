@@ -31,17 +31,6 @@
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Lincoln Theater",
-          "city": "Damariscotta",
-          "theatreWebsite": "lincolntheatre.org",
-          "ticketLink": "https://www.lincolntheater.org/films-events/wuthering-heights-(r)-",
-          "latitude": 44.032829284668,
-          "longitude": -69.5312042236328
-        },
-        {
           "date": "2026-04-02",
           "time": "2:00 PM",
           "isPremium": false,
@@ -51,39 +40,6 @@
           "ticketLink": "https://www.lincolntheater.org/films-events/wuthering-heights-(r)-",
           "latitude": 44.032829284668,
           "longitude": -69.5312042236328
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Wuthering-Heights---2026-/611fe9edf74bab2423301ee0/6966c730fd4a66729bbeacb9",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "10:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Wuthering-Heights---2026-/611fe9edf74bab2423301ee0/6966c730fd4a66729bbeacb9",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:00 AM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Wuthering-Heights---2026-/611fe9edf74bab2423301ee0/6966c730fd4a66729bbeacb9",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-04-02",
@@ -2069,17 +2025,6 @@
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Strand Theatre",
-          "city": "Rockland",
-          "theatreWebsite": "https://www.rocklandstrand.com/",
-          "ticketLink": "https://strandfilms.eventive.org/films/69bda78d6a273622946e75ff",
-          "latitude": 44.1031144,
-          "longitude": -69.1088235
-        },
-        {
           "date": "2026-04-02",
           "time": "1:00 PM",
           "isPremium": false,
@@ -2622,17 +2567,6 @@
         "Black Bear Cinemas, Orono"
       ],
       "showings": [
-        {
-          "date": "2026-04-01",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/ben-hur-2026",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-04-02",
           "time": "6:00 PM",
@@ -3509,22 +3443,8 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/donnie-darko",
-      "theatres": [
-        "Nickelodeon Cinemas, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/donnie-darko",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        }
-      ]
+      "theatres": [],
+      "showings": []
     },
     {
       "title": "Dracula",
@@ -4204,32 +4124,9 @@
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/forbidden-fruits",
       "theatres": [
         "Nickelodeon Cinemas, Portland",
-        "Flagship Cinemas, Wells",
         "Apple Cinemas, Westbrook"
       ],
       "showings": [
-        {
-          "date": "2026-04-01",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/forbidden-fruits",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/forbidden-fruits",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
         {
           "date": "2026-04-02",
           "time": "6:40 PM",
@@ -4317,28 +4214,6 @@
           "ticketLink": "https://www.patriotcinemas.com/movie/forbidden-fruits",
           "latitude": 43.6575821,
           "longitude": -70.2558618
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/23422?date=2026-03-26",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:30 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Forbidden-Fruits/611fe9edf74bab2423301ee0/69c1b9d1d81280e20a0dda70",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-04-02",
@@ -4466,17 +4341,6 @@
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "4:40 PM",
-          "isPremium": false,
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/mainefilmcenter/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
           "date": "2026-04-02",
           "time": "4:40 PM",
           "isPremium": false,
@@ -4517,6 +4381,7 @@
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/goat",
       "theatres": [
         "Harbor Theater, Boothbay Harbor",
+        "Narrow Gauge Cinema, Farmington",
         "Flagship Cinemas, Falmouth",
         "Flagship Cinemas, Auburn",
         "Flagship Cinemas, Thomaston",
@@ -4579,6 +4444,61 @@
           "ticketLink": "https://www.blackbearcinemas.com/movie/goat",
           "latitude": 43.8613565,
           "longitude": -69.6256982
+        },
+        {
+          "date": "2026-04-03",
+          "time": "1:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "11:00 AM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "1:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "11:00 AM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "1:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
         },
         {
           "date": "2026-04-03",
@@ -4645,17 +4565,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22117",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "4:45 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22117",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-04-02",
@@ -5668,17 +5577,6 @@
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/hoppers",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-04-02",
           "time": "1:20 PM",
           "isPremium": false,
@@ -5954,39 +5852,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-04-01",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22461",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-04-01",
-          "time": "8:30 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22461",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:30 AM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22461",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
           "date": "2026-04-02",
           "time": "1:00 PM",
           "isPremium": false,
@@ -6337,17 +6202,6 @@
           "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/22461",
           "latitude": 43.6312987,
           "longitude": -70.3244985
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Magic Lantern Theater",
-          "city": "Bridgton",
-          "theatreWebsite": "magiclanternmovies.com",
-          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
-          "latitude": 44.0541236,
-          "longitude": -70.7082496
         },
         {
           "date": "2026-04-02",
@@ -6372,17 +6226,6 @@
           "longitude": -70.7082496
         },
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-04-02",
           "time": "4:15 PM",
           "isPremium": false,
@@ -6405,15 +6248,191 @@
           "longitude": -70.1528244018555
         },
         {
-          "date": "2026-04-01",
-          "time": "6:35 PM",
+          "date": "2026-04-03",
+          "time": "1:00 PM",
           "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22276",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-03",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-03",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "10:45 AM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "10:45 AM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
         },
         {
           "date": "2026-04-02",
@@ -6689,28 +6708,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22276",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "4:40 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22276",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:05 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22276",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-04-02",
@@ -7054,17 +7051,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22276",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-04-02",
           "time": "1:00 PM",
           "isPremium": false,
@@ -7305,28 +7291,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22276",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-04-01",
-          "time": "4:40 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22276",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22276",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-04-02",
@@ -7659,17 +7623,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/22276",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-04-02",
           "time": "12:50 PM",
           "isPremium": false,
@@ -7923,39 +7876,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-04-01",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Hoppers/611fe9edf74bab2423301ee0/6972eff0d7796c78f55139f6",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Hoppers/611fe9edf74bab2423301ee0/6972eff0d7796c78f55139f6",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:30 AM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Hoppers/611fe9edf74bab2423301ee0/6972eff0d7796c78f55139f6",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-04-02",
           "time": "11:30 AM",
           "isPremium": false,
@@ -8407,28 +8327,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-04-01",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Hoppers/611fea26f74bab2423301ee4/6972eff0d7796c78f55139f6",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:40 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Hoppers/611fea26f74bab2423301ee4/6972eff0d7796c78f55139f6",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-04-02",
           "time": "10:50 AM",
           "isPremium": false,
@@ -8779,17 +8677,6 @@
           "ticketLink": "https://www.applecinemas.com/Hoppers/611fea26f74bab2423301ee4/6972eff0d7796c78f55139f6",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/HOPPERS",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-04-02",
@@ -8933,17 +8820,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/HOPPERS",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/HOPPERS",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-04-02",
@@ -9100,17 +8976,6 @@
           "longitude": -69.9812435
         },
         {
-          "date": "2026-04-01",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/HOPPERS",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-04-03",
           "time": "6:30 PM",
           "isPremium": false,
@@ -9219,17 +9084,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Windham/HOPPERS",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:20 PM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-04-02",
@@ -9494,17 +9348,6 @@
           "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:05 PM",
-          "isPremium": false,
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22767",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-04-02",
@@ -10314,17 +10157,6 @@
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/marc-by-sofia/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
           "date": "2026-04-02",
           "time": "6:50 PM",
           "isPremium": false,
@@ -10968,22 +10800,45 @@
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.patriotcinemas.com/movie/mr-nobody-against-putin",
+      "legacyTicketLink": "https://www.eveningstarcinema.com/movies/1000017055-mr-nobody-against-putin/",
       "theatres": [
+        "Eveningstar Cinema, Brunswick",
         "Nickelodeon Cinemas, Portland",
         "Strand Theatre, Rockland"
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "5:10 PM",
+          "date": "2026-04-10",
+          "time": "1:30 PM",
           "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/mr-nobody-against-putin",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
+          "theatre": "Eveningstar Cinema",
+          "city": "Brunswick",
+          "theatreWebsite": "eveningstarcinema.com",
+          "ticketLink": "https://www.eveningstarcinema.com/movies/1000017055-mr-nobody-against-putin/",
+          "latitude": 43.9148381,
+          "longitude": -69.9636894
+        },
+        {
+          "date": "2026-04-11",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Eveningstar Cinema",
+          "city": "Brunswick",
+          "theatreWebsite": "eveningstarcinema.com",
+          "ticketLink": "https://www.eveningstarcinema.com/movies/1000017055-mr-nobody-against-putin/",
+          "latitude": 43.9148381,
+          "longitude": -69.9636894
+        },
+        {
+          "date": "2026-04-12",
+          "time": "1:30 PM",
+          "isPremium": false,
+          "theatre": "Eveningstar Cinema",
+          "city": "Brunswick",
+          "theatreWebsite": "eveningstarcinema.com",
+          "ticketLink": "https://www.eveningstarcinema.com/movies/1000017055-mr-nobody-against-putin/",
+          "latitude": 43.9148381,
+          "longitude": -69.9636894
         },
         {
           "date": "2026-04-02",
@@ -11535,28 +11390,6 @@
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "4:45 PM",
-          "isPremium": false,
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/pillion/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/pillion/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
           "date": "2026-04-02",
           "time": "2:30 PM",
           "isPremium": false,
@@ -12045,17 +11878,6 @@
           "longitude": -68.7969818115234
         },
         {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/project-hail-mary",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-04-02",
           "time": "1:10 PM",
           "isPremium": false,
@@ -12342,17 +12164,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
           "date": "2026-04-02",
           "time": "7:00 PM",
           "isPremium": false,
@@ -12398,17 +12209,6 @@
         },
         {
           "date": "2026-04-05",
-          "time": "2:00 PM",
-          "isPremium": false,
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
-          "date": "2026-04-05",
           "time": "7:00 PM",
           "isPremium": false,
           "theatre": "Braden Theater",
@@ -12419,15 +12219,26 @@
           "longitude": -68.0131988525391
         },
         {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
+          "date": "2026-04-08",
+          "time": "7:00 PM",
           "isPremium": false,
-          "theatre": "Center Theatre for the Performing Arts",
-          "city": "Dover-Foxcroft",
-          "theatreWebsite": "centertheatre.org",
+          "theatre": "Braden Theater",
+          "city": "Presque Isle",
+          "theatreWebsite": "bradentheater.com",
           "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
-          "latitude": 45.183952,
-          "longitude": -69.2292565
+          "latitude": 46.6871109008789,
+          "longitude": -68.0131988525391
+        },
+        {
+          "date": "2026-04-09",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Braden Theater",
+          "city": "Presque Isle",
+          "theatreWebsite": "bradentheater.com",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 46.6871109008789,
+          "longitude": -68.0131988525391
         },
         {
           "date": "2026-04-02",
@@ -12439,17 +12250,6 @@
           "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
           "latitude": 45.183952,
           "longitude": -69.2292565
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
         },
         {
           "date": "2026-04-02",
@@ -12626,17 +12426,6 @@
           "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
           "latitude": 44.4267641,
           "longitude": -69.0075715
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23192",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-04-02",
@@ -13046,28 +12835,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-04-01",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "theatre": "Fort Kent Cinema",
-          "city": "Fort Kent",
-          "theatreWebsite": "https://www.fortkentcinema.com/",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
-          "latitude": 47.248953,
-          "longitude": -68.5984425
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "theatre": "Fort Kent Cinema",
-          "city": "Fort Kent",
-          "theatreWebsite": "https://www.fortkentcinema.com/",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
-          "latitude": 47.248953,
-          "longitude": -68.5984425
-        },
-        {
           "date": "2026-04-02",
           "time": "6:00 PM",
           "isPremium": false,
@@ -13288,17 +13055,6 @@
           "longitude": -69.5312042236328
         },
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Magic Lantern Theater",
-          "city": "Bridgton",
-          "theatreWebsite": "magiclanternmovies.com",
-          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
-          "latitude": 44.0541236,
-          "longitude": -70.7082496
-        },
-        {
           "date": "2026-04-02",
           "time": "4:00 PM",
           "isPremium": false,
@@ -13321,15 +13077,103 @@
           "longitude": -70.7082496
         },
         {
-          "date": "2026-04-01",
+          "date": "2026-04-03",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-03",
           "time": "7:00 PM",
           "isPremium": false,
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-04",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-04",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-04",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-05",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-05",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-09",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-09",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
         },
         {
           "date": "2026-04-02",
@@ -13354,37 +13198,169 @@
           "longitude": -70.1528244018555
         },
         {
-          "date": "2026-04-01",
-          "time": "5:15 PM",
+          "date": "2026-04-03",
+          "time": "12:30 PM",
           "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/project-hail-mary",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
         },
         {
-          "date": "2026-04-01",
-          "time": "7:30 PM",
+          "date": "2026-04-03",
+          "time": "3:45 PM",
           "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/project-hail-mary",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
         },
         {
-          "date": "2026-04-01",
-          "time": "8:30 PM",
+          "date": "2026-04-03",
+          "time": "7:00 PM",
           "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/project-hail-mary",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "12:30 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "12:30 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260689",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
         },
         {
           "date": "2026-04-02",
@@ -14102,17 +14078,6 @@
           "longitude": -67.2808756
         },
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Temple Theatre",
-          "city": "Houlton",
-          "theatreWebsite": "templehoulton.com",
-          "ticketLink": "https://templehoulton.com/amy_movie/reminders-of-him/",
-          "latitude": 46.1259988,
-          "longitude": -67.8403909
-        },
-        {
           "date": "2026-04-02",
           "time": "7:00 PM",
           "isPremium": false,
@@ -14188,17 +14153,6 @@
           "ticketLink": "https://thegemtheater.com/movies/project-hail-mary/",
           "latitude": 44.4110853,
           "longitude": -70.7922593
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22812",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
         },
         {
           "date": "2026-04-02",
@@ -14551,17 +14505,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22812",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22812",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-04-02",
@@ -14850,17 +14793,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22812",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-04-02",
           "time": "12:30 PM",
           "isPremium": false,
@@ -15092,17 +15024,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22812",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-04-02",
           "time": "12:00 PM",
           "isPremium": false,
@@ -15354,17 +15275,6 @@
           "ticketLink": "https://flagshipcinemas.com/waterville/movie/22812",
           "latitude": 44.5428402,
           "longitude": -69.6614214
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/22812",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
         },
         {
           "date": "2026-04-02",
@@ -15598,50 +15508,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-04-01",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "10:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-04-02",
           "time": "11:00 AM",
           "isPremium": false,
@@ -16190,39 +16056,6 @@
           "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:45 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:45 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:10 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-04-02",
@@ -16599,17 +16432,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/PROJECT-HAIL-MARY",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-04-02",
           "time": "6:15 PM",
           "isPremium": false,
@@ -16753,17 +16575,6 @@
           "longitude": -70.7506676
         },
         {
-          "date": "2026-04-01",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/PROJECT-HAIL-MARY",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
           "date": "2026-04-02",
           "time": "7:00 PM",
           "isPremium": false,
@@ -16916,17 +16727,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Topsham/PROJECT-HAIL-MARY",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie-theater/windham",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
         },
         {
           "date": "2026-04-03",
@@ -17147,28 +16947,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie-theater/windham",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/project-hail-mary-ho00018964?date=03-19-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:50 PM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/project-hail-mary-ho00018964?date=03-19-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-04-02",
@@ -17433,28 +17211,6 @@
           "ticketLink": "https://www.regmovies.com/movies/project-hail-mary-ho00018964?date=03-19-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22822?date=2026-03-19",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22822?date=2026-03-19",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-04-02",
@@ -18062,22 +17818,10 @@
         "Apple Cinemas, Westbrook",
         "Apple Cinemas, Saco",
         "Smitty's Cinema, Sanford",
-        "Smitty's Cinema, Windham",
         "Regal Cinemas, Augusta",
         "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/ready-or-not-2-here-i-come",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-04-02",
           "time": "1:35 PM",
@@ -18211,28 +17955,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-04-01",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23191",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-04-01",
-          "time": "8:45 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23191",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
           "date": "2026-04-02",
           "time": "10:45 AM",
           "isPremium": false,
@@ -18288,17 +18010,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "narrowgaugecinema.net",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-04-02",
           "time": "3:45 PM",
           "isPremium": false,
@@ -18319,17 +18030,6 @@
           "ticketLink": "narrowgaugecinema.net",
           "latitude": 44.6694183349609,
           "longitude": -70.1528244018555
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:10 PM",
-          "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/ready-or-not-2-here-i-come",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
         },
         {
           "date": "2026-04-02",
@@ -18409,17 +18109,6 @@
           "longitude": -70.2558618
         },
         {
-          "date": "2026-04-01",
-          "time": "7:05 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23075",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-04-02",
           "time": "11:25 AM",
           "isPremium": false,
@@ -18429,17 +18118,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23075",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23075",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-04-02",
@@ -18640,17 +18318,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-04-01",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23075",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-04-02",
           "time": "1:00 PM",
           "isPremium": false,
@@ -18660,28 +18327,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23075",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fe9edf74bab2423301ee0/69ab93530403b340e9d0acca",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fe9edf74bab2423301ee0/69ab93530403b340e9d0acca",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-04-02",
@@ -19036,39 +18681,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-04-01",
-          "time": "4:55 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fea26f74bab2423301ee4/69ab93530403b340e9d0acca",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:25 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fea26f74bab2423301ee4/69ab93530403b340e9d0acca",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "10:10 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fea26f74bab2423301ee4/69ab93530403b340e9d0acca",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-04-02",
           "time": "11:45 AM",
           "isPremium": false,
@@ -19419,17 +19031,6 @@
           "ticketLink": "https://www.applecinemas.com/Ready-or-Not-2--Here-I-Come/611fea26f74bab2423301ee4/69ab93530403b340e9d0acca",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/READY-OR-NOT-2-HERE-I-COME",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-04-02",
@@ -19441,28 +19042,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/READY-OR-NOT-2-HERE-I-COME",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/READY-OR-NOT-2",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:05 PM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/ready-or-not-2-here-i-come-ho00020338?date=03-19-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-04-02",
@@ -19628,17 +19207,6 @@
           "ticketLink": "https://www.regmovies.com/movies/ready-or-not-2-here-i-come-ho00020338?date=03-19-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23055?date=2026-03-19",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-04-02",
@@ -20027,28 +19595,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23190?date=2026-03-13",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-04-01",
-          "time": "8:00 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23190?date=2026-03-13",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
           "date": "2026-04-02",
           "time": "11:00 AM",
           "isPremium": false,
@@ -20203,17 +19749,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-04-02",
           "time": "4:00 PM",
           "isPremium": false,
@@ -20236,15 +19771,136 @@
           "longitude": -70.1528244018555
         },
         {
-          "date": "2026-04-01",
-          "time": "6:25 PM",
+          "date": "2026-04-03",
+          "time": "4:00 PM",
           "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22846?date=2026-03-12",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-03",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
         },
         {
           "date": "2026-04-02",
@@ -20432,17 +20088,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22846?date=2026-03-12",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:20 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22846",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-04-02",
@@ -20709,17 +20354,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-04-01",
-          "time": "6:35 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22846",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-04-02",
           "time": "12:40 PM",
           "isPremium": false,
@@ -20949,17 +20583,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22846",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:35 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22846",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-04-02",
@@ -21215,17 +20838,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-04-01",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/22846",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-04-02",
           "time": "1:10 PM",
           "isPremium": false,
@@ -21479,28 +21091,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fe9edf74bab2423301ee0/698cd192516edd9889d40895",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fe9edf74bab2423301ee0/698cd192516edd9889d40895",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-04-02",
           "time": "11:15 AM",
           "isPremium": false,
@@ -21853,39 +21443,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fea26f74bab2423301ee4/698cd192516edd9889d40895",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:50 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fea26f74bab2423301ee4/698cd192516edd9889d40895",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:40 AM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fea26f74bab2423301ee4/698cd192516edd9889d40895",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-04-02",
           "time": "1:20 PM",
           "isPremium": false,
@@ -22225,17 +21782,6 @@
           "ticketLink": "https://www.applecinemas.com/Reminders-of-Him/611fea26f74bab2423301ee4/698cd192516edd9889d40895",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/REMINDERS-OF-HIM#",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-04-03",
@@ -22313,17 +21859,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/REMINDERS-OF-HIM#",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/REMINDERS-OF-HIM#",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-04-02",
@@ -22480,17 +22015,6 @@
           "longitude": -69.9812435
         },
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/REMINDERS-OF-HIM",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-04-04",
           "time": "1:00 PM",
           "isPremium": false,
@@ -22533,17 +22057,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Windham/REMINDERS-OF-HIM",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-04-02",
@@ -22753,17 +22266,6 @@
           "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22859?date=2026-03-12",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-04-02",
@@ -23248,17 +22750,6 @@
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-04-02",
           "time": "4:15 PM",
           "isPremium": false,
@@ -23281,15 +22772,70 @@
           "longitude": -70.1528244018555
         },
         {
-          "date": "2026-04-01",
-          "time": "7:10 PM",
+          "date": "2026-04-03",
+          "time": "7:15 PM",
           "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22501",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
         },
         {
           "date": "2026-04-02",
@@ -23400,17 +22946,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/22501",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:05 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22501",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-04-02",
@@ -23600,17 +23135,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Scream-7/611fea26f74bab2423301ee4/6974276ee461242684acf3c0",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-04-02",
           "time": "5:00 PM",
           "isPremium": false,
@@ -23620,17 +23144,6 @@
           "ticketLink": "https://www.applecinemas.com/Scream-7/611fea26f74bab2423301ee4/6974276ee461242684acf3c0",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-04-02",
@@ -23642,17 +23155,6 @@
           "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22544",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-04-03",
@@ -24272,28 +23774,6 @@
           "longitude": -69.9636894
         },
         {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": false,
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/the-ai-doc-or-how-i-became-an-apocaloptimist/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/the-ai-doc-or-how-i-became-an-apocaloptimist/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
           "date": "2026-04-02",
           "time": "2:50 PM",
           "isPremium": false,
@@ -24578,28 +24058,6 @@
           "ticketLink": "https://www.watervillecreates.org/shows/the-ai-doc-or-how-i-became-an-apocaloptimist/",
           "latitude": 44.5498745,
           "longitude": -69.62965
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/the-ai-doc-or-how-i-became-an-apocaloptimist",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-04-01",
-          "time": "8:45 PM",
-          "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/the-ai-doc-or-how-i-became-an-apocaloptimist",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
         },
         {
           "date": "2026-04-02",
@@ -24732,17 +24190,6 @@
           "ticketLink": "https://www.patriotcinemas.com/movie/the-ai-doc-or-how-i-became-an-apocaloptimist",
           "latitude": 43.6575821,
           "longitude": -70.2558618
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23424?date=2026-03-26",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
         },
         {
           "date": "2026-04-02",
@@ -24932,28 +24379,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-AI-Doc--Or-How-I-Became-an-Apocaloptimist/611fe9edf74bab2423301ee0/6999b156410291d021d9377d",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-AI-Doc--Or-How-I-Became-an-Apocaloptimist/611fe9edf74bab2423301ee0/6999b156410291d021d9377d",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-04-02",
           "time": "11:15 AM",
           "isPremium": false,
@@ -25304,39 +24729,6 @@
           "ticketLink": "https://www.applecinemas.com/The-AI-Doc--Or-How-I-Became-an-Apocaloptimist/611fe9edf74bab2423301ee0/6999b156410291d021d9377d",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-AI-Doc--Or-How-I-Became-an-Apocaloptimist/611fea26f74bab2423301ee4/6999b156410291d021d9377d",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:20 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-AI-Doc--Or-How-I-Became-an-Apocaloptimist/611fea26f74bab2423301ee4/6999b156410291d021d9377d",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:25 AM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-AI-Doc--Or-How-I-Became-an-Apocaloptimist/611fea26f74bab2423301ee4/6999b156410291d021d9377d",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-04-02",
@@ -25925,10 +25317,13 @@
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/the-drama",
       "theatres": [
         "Black Bear Cinemas, Orono",
+        "Braden Theater, Presque Isle",
         "Colonial Theatre, Belfast",
         "Entertainment Luxury Cinemas, South Portland",
         "Fort Kent Cinema, Fort Kent",
+        "Magic Lantern Theater, Bridgton",
         "Maine Film Center, Waterville",
+        "Narrow Gauge Cinema, Farmington",
         "Nickelodeon Cinemas, Portland",
         "Reel Pizza Cinerama, Bar Harbor",
         "Spotlight Cinemas, Skowhegan",
@@ -26221,6 +25616,72 @@
           "ticketLink": "https://www.blackbearcinemas.com/movie/the-drama",
           "latitude": 44.9059551,
           "longitude": -68.6911612
+        },
+        {
+          "date": "2026-04-03",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Braden Theater",
+          "city": "Presque Isle",
+          "theatreWebsite": "bradentheater.com",
+          "ticketLink": "bradentheater.com",
+          "latitude": 46.6871109008789,
+          "longitude": -68.0131988525391
+        },
+        {
+          "date": "2026-04-04",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "theatre": "Braden Theater",
+          "city": "Presque Isle",
+          "theatreWebsite": "bradentheater.com",
+          "ticketLink": "bradentheater.com",
+          "latitude": 46.6871109008789,
+          "longitude": -68.0131988525391
+        },
+        {
+          "date": "2026-04-04",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Braden Theater",
+          "city": "Presque Isle",
+          "theatreWebsite": "bradentheater.com",
+          "ticketLink": "bradentheater.com",
+          "latitude": 46.6871109008789,
+          "longitude": -68.0131988525391
+        },
+        {
+          "date": "2026-04-05",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Braden Theater",
+          "city": "Presque Isle",
+          "theatreWebsite": "bradentheater.com",
+          "ticketLink": "bradentheater.com",
+          "latitude": 46.6871109008789,
+          "longitude": -68.0131988525391
+        },
+        {
+          "date": "2026-04-08",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Braden Theater",
+          "city": "Presque Isle",
+          "theatreWebsite": "bradentheater.com",
+          "ticketLink": "bradentheater.com",
+          "latitude": 46.6871109008789,
+          "longitude": -68.0131988525391
+        },
+        {
+          "date": "2026-04-09",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Braden Theater",
+          "city": "Presque Isle",
+          "theatreWebsite": "bradentheater.com",
+          "ticketLink": "bradentheater.com",
+          "latitude": 46.6871109008789,
+          "longitude": -68.0131988525391
         },
         {
           "date": "2026-04-03",
@@ -26796,6 +26257,105 @@
         },
         {
           "date": "2026-04-03",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-03",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-04",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-04",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-04",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-05",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-05",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-09",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-09",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Magic Lantern Theater",
+          "city": "Bridgton",
+          "theatreWebsite": "magiclanternmovies.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=0zghfjgrywvn90hxexs17yxjxr",
+          "latitude": 44.0541236,
+          "longitude": -70.7082496
+        },
+        {
+          "date": "2026-04-03",
           "time": "12:00 PM",
           "isPremium": false,
           "theatre": "Maine Film Center",
@@ -27024,6 +26584,171 @@
           "ticketLink": "https://www.watervillecreates.org/shows/the-drama/",
           "latitude": 44.5498745,
           "longitude": -69.62965
+        },
+        {
+          "date": "2026-04-03",
+          "time": "12:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-03",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-03",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "12:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "12:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "3:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "6:45 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20260402",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
         },
         {
           "date": "2026-04-02",
@@ -30580,58 +30305,8 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://flagshipcinemas.com/falmouth/movie/22701",
-      "theatres": [
-        "Flagship Cinemas, Falmouth",
-        "Flagship Cinemas, Auburn",
-        "Flagship Cinemas, Thomaston",
-        "Flagship Cinemas, Waterville"
-      ],
-      "showings": [
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22701",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22701",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22701",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22701",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        }
-      ]
+      "theatres": [],
+      "showings": []
     },
     {
       "title": "The Optimist",
@@ -30790,78 +30465,11 @@
         "Flagship Cinemas, Wells",
         "Apple Cinemas, Westbrook",
         "Apple Cinemas, Saco",
-        "Smitty's Cinema, Sanford",
-        "Smitty's Cinema, Windham"
+        "Smitty's Cinema, Sanford"
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "bradentheater.com",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
           "date": "2026-04-02",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "bradentheater.com",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
-          "date": "2026-04-03",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "bradentheater.com",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
-          "date": "2026-04-04",
-          "time": "2:00 PM",
-          "isPremium": false,
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "bradentheater.com",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
-          "date": "2026-04-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "bradentheater.com",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
-          "date": "2026-04-05",
-          "time": "2:00 PM",
-          "isPremium": false,
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "bradentheater.com",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
-          "date": "2026-04-05",
           "time": "7:00 PM",
           "isPremium": false,
           "theatre": "Braden Theater",
@@ -31024,39 +30632,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/23184",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:10 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Pout-Pout-Fish/611fe9edf74bab2423301ee0/69a0ca18836680ff1bd74d10",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Pout-Pout-Fish/611fe9edf74bab2423301ee0/69a0ca18836680ff1bd74d10",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:30 AM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Pout-Pout-Fish/611fe9edf74bab2423301ee0/69a0ca18836680ff1bd74d10",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-04-02",
@@ -31302,17 +30877,6 @@
         },
         {
           "date": "2026-04-02",
-          "time": "10:10 AM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Pout-Pout-Fish/611fea26f74bab2423301ee4/69a0ca18836680ff1bd74d10",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-02",
           "time": "12:30 PM",
           "isPremium": false,
           "theatre": "Apple Cinemas",
@@ -31387,17 +30951,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/POUT-POUT-FISH",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/THE-POUT-POUT-FISH",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
         }
       ]
     },
@@ -31955,17 +31508,6 @@
         "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
-        {
-          "date": "2026-04-01",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/the-super-mario-galaxy-movie",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-04-02",
           "time": "1:15 PM",
@@ -32693,17 +32235,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260993",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
           "date": "2026-04-02",
           "time": "7:00 PM",
           "isPremium": false,
@@ -32749,17 +32280,6 @@
         },
         {
           "date": "2026-04-05",
-          "time": "2:00 PM",
-          "isPremium": false,
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260993",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
-          "date": "2026-04-05",
           "time": "7:00 PM",
           "isPremium": false,
           "theatre": "Braden Theater",
@@ -32770,15 +32290,26 @@
           "longitude": -68.0131988525391
         },
         {
-          "date": "2026-04-01",
+          "date": "2026-04-08",
           "time": "7:00 PM",
           "isPremium": false,
-          "theatre": "Center Theatre for the Performing Arts",
-          "city": "Dover-Foxcroft",
-          "theatreWebsite": "centertheatre.org",
+          "theatre": "Braden Theater",
+          "city": "Presque Isle",
+          "theatreWebsite": "bradentheater.com",
           "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260993",
-          "latitude": 45.183952,
-          "longitude": -69.2292565
+          "latitude": 46.6871109008789,
+          "longitude": -68.0131988525391
+        },
+        {
+          "date": "2026-04-09",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "theatre": "Braden Theater",
+          "city": "Presque Isle",
+          "theatreWebsite": "bradentheater.com",
+          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260993",
+          "latitude": 46.6871109008789,
+          "longitude": -68.0131988525391
         },
         {
           "date": "2026-04-02",
@@ -33232,17 +32763,6 @@
           "longitude": -69.2292565
         },
         {
-          "date": "2026-04-01",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "https://colonialtheatre.com/film-guide/?film-id=69b044382dc77621490d7490",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
-        },
-        {
           "date": "2026-04-02",
           "time": "3:30 PM",
           "isPremium": false,
@@ -33428,61 +32948,6 @@
           "ticketLink": "https://colonialtheatre.com/film-guide/?film-id=69b044382dc77621490d7490",
           "latitude": 44.4267641,
           "longitude": -69.0075715
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23189",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23189",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23189",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:45 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23189",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-04-01",
-          "time": "8:30 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23189",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-04-02",
@@ -34321,28 +33786,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-04-01",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "theatre": "Fort Kent Cinema",
-          "city": "Fort Kent",
-          "theatreWebsite": "https://www.fortkentcinema.com/",
-          "ticketLink": "https://www.fortkentcinema.com/",
-          "latitude": 47.248953,
-          "longitude": -68.5984425
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "theatre": "Fort Kent Cinema",
-          "city": "Fort Kent",
-          "theatreWebsite": "https://www.fortkentcinema.com/",
-          "ticketLink": "https://www.fortkentcinema.com/",
-          "latitude": 47.248953,
-          "longitude": -68.5984425
-        },
-        {
           "date": "2026-04-02",
           "time": "6:00 PM",
           "isPremium": false,
@@ -34475,17 +33918,6 @@
           "longitude": -68.5984425
         },
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Magic Lantern Theater",
-          "city": "Bridgton",
-          "theatreWebsite": "magiclanternmovies.com",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260993",
-          "latitude": 44.0541236,
-          "longitude": -70.7082496
-        },
-        {
           "date": "2026-04-02",
           "time": "4:00 PM",
           "isPremium": false,
@@ -34605,17 +34037,6 @@
           "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260993",
           "latitude": 44.0541236,
           "longitude": -70.7082496
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
         },
         {
           "date": "2026-04-02",
@@ -34632,6 +34053,292 @@
           "date": "2026-04-02",
           "time": "7:15 PM",
           "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-03",
+          "time": "1:30 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-03",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-03",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-03",
+          "time": "12:45 PM",
+          "isPremium": true,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-03",
+          "time": "3:45 PM",
+          "isPremium": true,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "10:45 AM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "1:30 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "12:45 PM",
+          "isPremium": true,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-04",
+          "time": "3:45 PM",
+          "isPremium": true,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "10:45 AM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "1:30 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "12:45 PM",
+          "isPremium": true,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-05",
+          "time": "3:45 PM",
+          "isPremium": true,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-06",
+          "time": "3:45 PM",
+          "isPremium": true,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-07",
+          "time": "3:45 PM",
+          "isPremium": true,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "4:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "7:15 PM",
+          "isPremium": false,
+          "theatre": "Narrow Gauge Cinema",
+          "city": "Farmington",
+          "theatreWebsite": "narrowgaugecinema.net",
+          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
+          "latitude": 44.6694183349609,
+          "longitude": -70.1528244018555
+        },
+        {
+          "date": "2026-04-08",
+          "time": "3:45 PM",
+          "isPremium": true,
           "theatre": "Narrow Gauge Cinema",
           "city": "Farmington",
           "theatreWebsite": "narrowgaugecinema.net",
@@ -34781,17 +34488,6 @@
           "ticketLink": "https://www.statecinemascalais.com/",
           "latitude": 45.1886654,
           "longitude": -67.2808756
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Temple Theatre",
-          "city": "Houlton",
-          "theatreWebsite": "templehoulton.com",
-          "ticketLink": "https://templehoulton.com/amy_movie/the-super-mario-galaxy-movie/",
-          "latitude": 46.1259988,
-          "longitude": -67.8403909
         },
         {
           "date": "2026-04-02",
@@ -34937,50 +34633,6 @@
           "longitude": -70.7922593
         },
         {
-          "date": "2026-04-01",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23105",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23105",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23105",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": true,
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23105",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-04-02",
           "time": "11:00 AM",
           "isPremium": false,
@@ -35738,50 +35390,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23105",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23105",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23105",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23105",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": true,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23105",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-04-02",
@@ -36653,50 +36261,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-04-01",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23105",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23105",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23105",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": true,
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23105",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-04-02",
           "time": "11:30 AM",
           "isPremium": false,
@@ -37091,50 +36655,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23105",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/23105",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/23105",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/23105",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": true,
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/23105",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-04-02",
@@ -37588,39 +37108,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-04-01",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/23105",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/23105",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": true,
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/23105",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-04-02",
           "time": "11:30 AM",
           "isPremium": false,
@@ -37973,116 +37460,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-04-01",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "8:30 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "4:45 PM",
-          "isPremium": true,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:15 PM",
-          "isPremium": true,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": true,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:30 PM",
-          "isPremium": true,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:30 PM",
-          "isPremium": true,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "10:00 PM",
-          "isPremium": true,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-04-02",
           "time": "11:00 AM",
           "isPremium": false,
@@ -38185,28 +37562,6 @@
           "date": "2026-04-02",
           "time": "9:00 PM",
           "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:00 AM",
-          "isPremium": true,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:30 AM",
-          "isPremium": true,
           "theatre": "Apple Cinemas",
           "city": "Westbrook",
           "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
@@ -39577,149 +38932,6 @@
           "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "8:45 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "10:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "10:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": true,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:30 PM",
-          "isPremium": true,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:15 AM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:30 AM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-04-02",
@@ -39890,17 +39102,6 @@
           "date": "2026-04-02",
           "time": "10:15 PM",
           "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:00 AM",
-          "isPremium": true,
           "theatre": "Apple Cinemas",
           "city": "Saco",
           "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
@@ -41480,39 +40681,6 @@
           "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/THE-SUPER-MARIO-GALAXY-MOVIE#",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/THE-SUPER-MARIO-GALAXY-MOVIE#",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:45 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/THE-SUPER-MARIO-GALAXY-MOVIE#",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-04-02",
@@ -41856,28 +41024,6 @@
           "longitude": -70.7506676
         },
         {
-          "date": "2026-04-01",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/THE-SUPER-MARIO-GALAXY-MOVIE#",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/THE-SUPER-MARIO-GALAXY-MOVIE#",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
           "date": "2026-04-02",
           "time": "6:30 PM",
           "isPremium": false,
@@ -42164,39 +41310,6 @@
           "longitude": -69.9812435
         },
         {
-          "date": "2026-04-01",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/THE-SUPER-MARIO-GALAXY",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/THE-SUPER-MARIO-GALAXY",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/THE-SUPER-MARIO-GALAXY",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-04-02",
           "time": "6:00 PM",
           "isPremium": false,
@@ -42558,72 +41671,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Windham/THE-SUPER-MARIO-GALAXY",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/the-super-mario-galaxy-movie-ho00020250?date=04-01-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/the-super-mario-galaxy-movie-ho00020250?date=04-01-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/the-super-mario-galaxy-movie-ho00020250?date=04-01-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": true,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/the-super-mario-galaxy-movie-ho00020250?date=04-01-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "8:00 PM",
-          "isPremium": true,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/the-super-mario-galaxy-movie-ho00020250?date=04-01-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:00 AM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/the-super-mario-galaxy-movie-ho00020250?date=04-01-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-04-02",
@@ -43647,39 +42694,6 @@
           "ticketLink": "https://www.regmovies.com/movies/the-super-mario-galaxy-movie-ho00020250?date=04-01-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23127?date=2026-04-01",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23127?date=2026-04-01",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23127?date=2026-04-01",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-04-02",
@@ -44449,17 +43463,6 @@
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Kinonik",
-          "city": "Portland",
-          "theatreWebsite": "kinonik.org",
-          "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-white-hell-pitz-palu",
-          "latitude": 43.6425626,
-          "longitude": -70.2775744
-        },
-        {
           "date": "2026-04-04",
           "time": "2:00 PM",
           "isPremium": false,
@@ -44677,17 +43680,6 @@
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "6:20 PM",
-          "isPremium": false,
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/they-will-kill-you",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-04-02",
           "time": "1:30 PM",
           "isPremium": false,
@@ -44895,28 +43887,6 @@
           "ticketLink": "https://www.blackbearcinemas.com/movie/they-will-kill-you",
           "latitude": 44.9059551,
           "longitude": -68.6911612
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23411",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-04-01",
-          "time": "8:45 PM",
-          "isPremium": false,
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/23411",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-04-02",
@@ -45150,28 +44120,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-04-01",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/they-will-kill-you",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:10 PM",
-          "isPremium": false,
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/they-will-kill-you",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-04-02",
           "time": "1:40 PM",
           "isPremium": false,
@@ -45390,17 +44338,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23197",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23197",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-04-02",
@@ -45788,17 +44725,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-04-01",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/23197",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-04-02",
           "time": "1:15 PM",
           "isPremium": false,
@@ -45898,50 +44824,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-04-01",
-          "time": "5:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/They-Will-Kill-You-/611fe9edf74bab2423301ee0/69b2169327773838a793df75",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/They-Will-Kill-You-/611fe9edf74bab2423301ee0/69b2169327773838a793df75",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:30 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/They-Will-Kill-You-/611fe9edf74bab2423301ee0/69b2169327773838a793df75",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:15 AM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/They-Will-Kill-You-/611fe9edf74bab2423301ee0/69b2169327773838a793df75",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-04-02",
           "time": "12:30 PM",
           "isPremium": false,
@@ -46360,50 +45242,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-04-01",
-          "time": "5:30 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/They-Will-Kill-You-/611fea26f74bab2423301ee4/69b2169327773838a793df75",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "8:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/They-Will-Kill-You-/611fea26f74bab2423301ee4/69b2169327773838a793df75",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "10:20 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/They-Will-Kill-You-/611fea26f74bab2423301ee4/69b2169327773838a793df75",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-02",
-          "time": "10:20 AM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/They-Will-Kill-You-/611fea26f74bab2423301ee4/69b2169327773838a793df75",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-04-02",
           "time": "12:55 PM",
           "isPremium": false,
@@ -46787,17 +45625,6 @@
           "ticketLink": "https://www.applecinemas.com/They-Will-Kill-You-/611fea26f74bab2423301ee4/69b2169327773838a793df75",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/THEY-WILL-KILL-YOU#",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-04-02",
@@ -46930,17 +45757,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/THEY-WILL-KILL-YOU#",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/THEY-WILL-KILL-YOU#",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-04-02",
@@ -47097,17 +45913,6 @@
           "longitude": -69.9812435
         },
         {
-          "date": "2026-04-01",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/THEY-WILL-KILL-YOU",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-04-03",
           "time": "7:45 PM",
           "isPremium": false,
@@ -47172,17 +45977,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Windham/THEY-WILL-KILL-YOU",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/they-will-kill-you-ho00020597?date=03-26-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-04-02",
@@ -47315,17 +46109,6 @@
           "ticketLink": "https://www.regmovies.com/movies/they-will-kill-you-ho00020597?date=03-26-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-04-01",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23301",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-04-02",
@@ -47621,17 +46404,6 @@
       ],
       "showings": [
         {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "colonialtheatre.com",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
-        },
-        {
           "date": "2026-04-02",
           "time": "6:30 PM",
           "isPremium": false,
@@ -47751,28 +46523,6 @@
           "ticketLink": "https://templehoulton.com/amy_movie/the-undertone/",
           "latitude": 46.1259988,
           "longitude": -67.8403909
-        },
-        {
-          "date": "2026-04-01",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Undertone/611fe9edf74bab2423301ee0/699f2130a52bdb49440d544a",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-04-01",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Undertone/611fe9edf74bab2423301ee0/699f2130a52bdb49440d544a",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-04-02",
