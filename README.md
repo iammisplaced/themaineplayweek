@@ -191,6 +191,14 @@ Notes:
 ## Schema update note
 Ticket links are theatre-specific. Re-run `supabase/schema.sql` so `public.theatre_films` exists.
 
+`public.theatre_films` is now intended to be sparse (only theatre+film rows with non-empty `ticket_link`). Film presence should come from `public.showings`.
+One-time cleanup (safe with current app logic):
+
+```sql
+delete from public.theatre_films
+where nullif(trim(ticket_link), '') is null;
+```
+
 Film metadata source hardening now uses `public.films.metadata_source` (`tmdb` or `manual`). Re-run `supabase/schema.sql` to install the column + constraint.
 
 Film synopsis is now stored in `public.films.synopsis` and synchronized from TMDb `overview` by `scripts/enrich-tmdb-supabase.mjs`. Re-run `supabase/schema.sql` to install the new column and RPC updates.

@@ -3005,13 +3005,16 @@ function buildReplacePayload(data, promotedCards) {
         }
       }
 
-      theatreFilms.push({
-        theatre_key: theatreKey,
-        film_key: filmKey,
-        theatre_db_id: Number.isInteger(Number(theatre._dbId)) ? Number(theatre._dbId) : null,
-        film_db_id: Number.isInteger(Number(film._dbId)) ? Number(film._dbId) : null,
-        ticket_link: film.ticketLink || "",
-      });
+      const theatreFilmTicketLink = String(film.ticketLink || "").trim();
+      if (theatreFilmTicketLink) {
+        theatreFilms.push({
+          theatre_key: theatreKey,
+          film_key: filmKey,
+          theatre_db_id: Number.isInteger(Number(theatre._dbId)) ? Number(theatre._dbId) : null,
+          film_db_id: Number.isInteger(Number(film._dbId)) ? Number(film._dbId) : null,
+          ticket_link: theatreFilmTicketLink,
+        });
+      }
 
       (film.showings || []).forEach((showing) => {
         showings.push({
