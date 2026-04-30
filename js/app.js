@@ -48,6 +48,8 @@ const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
 const LOCATION_PREFERENCE_STORAGE_KEY = "tmp-location-preference-v1";
 const LOCATION_CHOOSER_SEEN_STORAGE_KEY = "tmp-location-chooser-seen-v1";
 const BETA_BANNER_ROTATION_MS = 5200;
+const SEARCH_INPUT_DEBOUNCE_MS = 180;
+const MAX_ADMIN_SEARCH_RESULTS = 120;
 const BETA_BANNER_MESSAGES = Object.freeze([
   "Listings and distance sorting are actively being tuned.",
   "Showtimes update throughout the day while we refine the feed.",
@@ -597,6 +599,10 @@ function bindEvents() {
     });
   });
 
+  const debouncedPublicSearchRender = debounce(() => {
+    render();
+  }, SEARCH_INPUT_DEBOUNCE_MS);
+
   elements.publicSearchInput?.addEventListener("input", () => {
     const value = elements.publicSearchInput.value || "";
     if (state.view === "films") {
@@ -604,7 +610,7 @@ function bindEvents() {
     } else if (state.view === "theatres") {
       state.publicSearch.theatres = value;
     }
-    render();
+    debouncedPublicSearchRender();
   });
 
   elements.dayPrevButton?.addEventListener("click", () => {
@@ -2054,10 +2060,13 @@ function renderTheatreOptions() {
   const query = normalizeSearchText(state.admin.theatreQuery);
   const duplicateCountByNameCity = buildAdminDuplicateCountByNameCity(theatres);
   let visibleCount = 0;
-  theatres.forEach((theatre, index) => {
+  const fragment = document.createDocumentFragment();
+  for (let index = 0; index < theatres.length; index += 1) {
+    if (visibleCount >= MAX_ADMIN_SEARCH_RESULTS) break;
+    const theatre = theatres[index];
     const label = buildAdminTheatreLabel(theatre, index, duplicateCountByNameCity);
     const searchable = buildAdminTheatreSearchText(theatre, label);
-    if (query && !searchable.includes(query)) return;
+    if (query && !searchable.includes(query)) continue;
     const highlightIndex = state.admin.theatreHighlight;
     const li = document.createElement("li");
     const button = document.createElement("button");
@@ -2067,9 +2076,10 @@ function renderTheatreOptions() {
     if (index === state.admin.theatreIndex) button.classList.add("selected");
     if (visibleCount === highlightIndex) button.classList.add("active");
     li.appendChild(button);
-    elements.adminTheatreResults.appendChild(li);
+    fragment.appendChild(li);
     visibleCount += 1;
-  });
+  }
+  elements.adminTheatreResults.appendChild(fragment);
   if (visibleCount > 0) {
     state.admin.theatreHighlight = Math.min(state.admin.theatreHighlight, visibleCount - 1);
   } else {
@@ -2088,9 +2098,12 @@ function renderFilmOptions() {
   if (hasFilm && state.admin.filmSearching) {
     const query = normalizeSearchText(state.admin.filmQuery);
     let visibleCount = 0;
-    films.forEach((film, index) => {
+    const fragment = document.createDocumentFragment();
+    for (let index = 0; index < films.length; index += 1) {
+      if (visibleCount >= MAX_ADMIN_SEARCH_RESULTS) break;
+      const film = films[index];
       const label = buildFilmGroupKey(film.title, film.year);
-      if (query && !normalizeSearchText(label).includes(query)) return;
+      if (query && !normalizeSearchText(label).includes(query)) continue;
       const highlightIndex = state.admin.filmHighlight;
       const li = document.createElement("li");
       const button = document.createElement("button");
@@ -2100,9 +2113,10 @@ function renderFilmOptions() {
       if (index === state.admin.filmIndex) button.classList.add("selected");
       if (visibleCount === highlightIndex) button.classList.add("active");
       li.appendChild(button);
-      elements.adminFilmResults.appendChild(li);
+      fragment.appendChild(li);
       visibleCount += 1;
-    });
+    }
+    elements.adminFilmResults.appendChild(fragment);
     if (visibleCount > 0) {
       state.admin.filmHighlight = Math.min(state.admin.filmHighlight, visibleCount - 1);
     } else {
@@ -4628,6 +4642,17 @@ function stripDiacritics(value) {
   const text = String(value || "");
   if (typeof text.normalize !== "function") return text;
   return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function debounce(fn, waitMs = 150) {
+  let timeoutId = null;
+  return (...args) => {
+    if (timeoutId) window.clearTimeout(timeoutId);
+    timeoutId = window.setTimeout(() => {
+      timeoutId = null;
+      fn(...args);
+    }, Math.max(0, Number(waitMs) || 0));
+  };
 }
 
 function normalizeSortTitle(value) {

@@ -7,6 +7,8 @@ const SUPABASE_ANON_KEY =
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const QUERY_TIMEOUT_MS = 30000;
 const QUERY_PAGE_SIZE = 1000;
+const SEARCH_INPUT_DEBOUNCE_MS = 180;
+const MAX_CATALOG_RENDER_ROWS = 300;
 
 const state = {
   query: "",
@@ -80,9 +82,13 @@ function bindEvents() {
     await loadCatalog();
   });
 
+  const debouncedCatalogRender = debounce(() => {
+    renderCatalog();
+  }, SEARCH_INPUT_DEBOUNCE_MS);
+
   elements.filmSearch.addEventListener("input", () => {
     state.query = normalize(elements.filmSearch.value);
-    renderCatalog();
+    debouncedCatalogRender();
   });
 
   elements.catalogList.addEventListener("change", (event) => {
@@ -327,6 +333,7 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
     return {
       id: film.id,
       title: film.title,
+      normalizedTitle: normalize(film.title || ""),
       year: film.year,
       tmdbId: film.tmdb_id,
       tmdb: film.tmdb_json || {},
@@ -371,7 +378,8 @@ function renderSummary() {
 }
 
 function renderCatalog() {
-  const filtered = state.films.filter((film) => normalize(film.title).includes(state.query));
+  const filtered = state.films.filter((film) => String(film.normalizedTitle || "").includes(state.query));
+  const visibleRows = filtered.slice(0, MAX_CATALOG_RENDER_ROWS);
   elements.catalogList.innerHTML = "";
 
   if (!filtered.length) {
@@ -403,7 +411,7 @@ function renderCatalog() {
   `;
 
   const tbody = table.querySelector("tbody");
-  filtered.forEach((film) => {
+  visibleRows.forEach((film) => {
     const tmdb = film.tmdb || {};
     const director = String(tmdb.director || "").trim();
     const stars = Array.isArray(tmdb.stars) ? tmdb.stars.filter(Boolean) : [];
@@ -498,6 +506,12 @@ function renderCatalog() {
 
   const wrap = document.createElement("div");
   wrap.className = "table-wrap panel";
+  if (filtered.length > visibleRows.length) {
+    const note = document.createElement("p");
+    note.className = "muted-inline";
+    note.textContent = `Showing first ${visibleRows.length} of ${filtered.length} matching films. Refine search to narrow results.`;
+    wrap.appendChild(note);
+  }
   wrap.appendChild(table);
   elements.catalogList.appendChild(wrap);
 }
@@ -697,4 +711,15 @@ function parseIsoDate(dateIso) {
   }
   date.setHours(0, 0, 0, 0);
   return date;
+}
+
+function debounce(fn, waitMs = 150) {
+  let timeoutId = null;
+  return (...args) => {
+    if (timeoutId) window.clearTimeout(timeoutId);
+    timeoutId = window.setTimeout(() => {
+      timeoutId = null;
+      fn(...args);
+    }, Math.max(0, Number(waitMs) || 0));
+  };
 }
