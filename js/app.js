@@ -257,6 +257,7 @@ let betaBannerRotationInterval = null;
 let lastViewportWidth = window.innerWidth;
 let appBootComplete = false;
 let pageLoadComplete = document.readyState === "complete";
+let adminJsonSyncTimeout = null;
 
 setLoadingState(true);
 
@@ -273,6 +274,7 @@ if (!pageLoadComplete) {
 
 try {
   await init();
+  await waitForNextPaint();
 } finally {
   appBootComplete = true;
   syncLoadingState();
@@ -290,6 +292,14 @@ function setLoadingState(isLoading) {
   elements.appLoader.setAttribute("aria-hidden", String(!isLoading));
 }
 
+function waitForNextPaint() {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(resolve);
+    });
+  });
+}
+
 async function init() {
   initializeBetaBanner();
   initializeBrandWordmarkVariant();
@@ -303,8 +313,6 @@ async function init() {
   await refreshAuthState();
   await loadData();
   initializeAdminState();
-  loadAdminSettings();
-  syncAdminEditor();
   syncPublicSearchUI();
   refreshLocationChooser();
   maybeShowLocationChooserOnFirstVisit();
@@ -1731,37 +1739,39 @@ function buildTheatreGroupsFromFilmPagesSource(source) {
 }
 
 async function loadDataFromSupabase() {
-  const theatres = await fetchAllRowsFromSupabase("theatres", () =>
-    state.supabase.from("theatres").select("id,name,city,address,website,latitude,longitude").order("id", { ascending: true })
-  );
-  const films = await fetchAllRowsFromSupabase("films", () =>
-    state.supabase
-      .from("films")
-      .select(
-        "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json"
-      )
-      .order("id", { ascending: true })
-  );
-  const theatreFilms = await fetchAllRowsFromSupabase("theatre_films", () =>
-    state.supabase
-      .from("theatre_films")
-      .select("theatre_id,film_id,ticket_link")
-      .order("theatre_id", { ascending: true })
-      .order("film_id", { ascending: true })
-  );
-  const showings = await fetchAllRowsFromSupabase("showings", () =>
-    state.supabase
-      .from("showings")
-      .select("id,theatre_id,film_id,show_date,times,premium_times")
-      .order("id", { ascending: true })
-  );
-  const promos = await fetchAllRowsFromSupabase("promos", () =>
-    state.supabase
-      .from("promos")
-      .select("id,title,button_url,image_path,image_alt,image_name,button_label,enabled,sort_order")
-      .order("sort_order", { ascending: true })
-      .order("id", { ascending: true })
-  );
+  const [theatres, films, theatreFilms, showings, promos] = await Promise.all([
+    fetchAllRowsFromSupabase("theatres", () =>
+      state.supabase.from("theatres").select("id,name,city,address,website,latitude,longitude").order("id", { ascending: true })
+    ),
+    fetchAllRowsFromSupabase("films", () =>
+      state.supabase
+        .from("films")
+        .select(
+          "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json"
+        )
+        .order("id", { ascending: true })
+    ),
+    fetchAllRowsFromSupabase("theatre_films", () =>
+      state.supabase
+        .from("theatre_films")
+        .select("theatre_id,film_id,ticket_link")
+        .order("theatre_id", { ascending: true })
+        .order("film_id", { ascending: true })
+    ),
+    fetchAllRowsFromSupabase("showings", () =>
+      state.supabase
+        .from("showings")
+        .select("id,theatre_id,film_id,show_date,times,premium_times")
+        .order("id", { ascending: true })
+    ),
+    fetchAllRowsFromSupabase("promos", () =>
+      state.supabase
+        .from("promos")
+        .select("id,title,button_url,image_path,image_alt,image_name,button_label,enabled,sort_order")
+        .order("sort_order", { ascending: true })
+        .order("id", { ascending: true })
+    ),
+  ]);
 
   const theatreById = new Map();
   const filmById = new Map();
@@ -2004,7 +2014,20 @@ function syncAdminEditor() {
   fillSelectedTicketLink();
   renderShowingsList();
   renderPromoSettingsEditor();
-  elements.adminJson.value = JSON.stringify(stripInternalFields(state.data), null, 2);
+  if (!elements.adminPanel?.classList.contains("open")) return;
+  scheduleAdminJsonSync();
+}
+
+function scheduleAdminJsonSync() {
+  if (!elements.adminJson) return;
+  if (adminJsonSyncTimeout) {
+    clearTimeout(adminJsonSyncTimeout);
+    adminJsonSyncTimeout = null;
+  }
+  adminJsonSyncTimeout = setTimeout(() => {
+    adminJsonSyncTimeout = null;
+    elements.adminJson.value = JSON.stringify(stripInternalFields(state.data), null, 2);
+  }, 0);
 }
 
 function initializeAdminState() {
