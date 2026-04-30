@@ -25,6 +25,7 @@ create table if not exists public.films (
   staff_favorite_by text not null default '',
   featured_on_playweek boolean not null default false,
   featured_on_playweek_url text not null default '',
+  ranking_override boolean not null default false,
   metadata_source text not null default 'manual',
   tmdb_json jsonb,
   created_at timestamptz not null default now()
@@ -34,6 +35,7 @@ alter table public.films add column if not exists staff_favorite boolean not nul
 alter table public.films add column if not exists staff_favorite_by text not null default '';
 alter table public.films add column if not exists featured_on_playweek boolean not null default false;
 alter table public.films add column if not exists featured_on_playweek_url text not null default '';
+alter table public.films add column if not exists ranking_override boolean not null default false;
 alter table public.films add column if not exists synopsis text;
 alter table public.films add column if not exists metadata_source text;
 
@@ -385,6 +387,7 @@ begin
       staff_favorite_by,
       featured_on_playweek,
       featured_on_playweek_url,
+      ranking_override,
       tmdb_json
     )
     values (
@@ -405,6 +408,7 @@ begin
       coalesce(film_item->>'staff_favorite_by', ''),
       coalesce((film_item->>'featured_on_playweek')::boolean, false),
       coalesce(film_item->>'featured_on_playweek_url', ''),
+      coalesce((film_item->>'ranking_override')::boolean, false),
       film_item->'tmdb_json'
     )
     returning id into v_film_id;
@@ -565,6 +569,7 @@ begin
         staff_favorite_by = coalesce(film_item->>'staff_favorite_by', ''),
         featured_on_playweek = coalesce((film_item->>'featured_on_playweek')::boolean, false),
         featured_on_playweek_url = coalesce(film_item->>'featured_on_playweek_url', ''),
+        ranking_override = coalesce((film_item->>'ranking_override')::boolean, false),
         tmdb_json = film_item->'tmdb_json'
       where id = nullif(film_item->>'db_id', '')::bigint
       returning id into v_film_id;
@@ -582,6 +587,7 @@ begin
         staff_favorite_by,
         featured_on_playweek,
         featured_on_playweek_url,
+        ranking_override,
         tmdb_json
       )
       values (
@@ -602,6 +608,7 @@ begin
         coalesce(film_item->>'staff_favorite_by', ''),
         coalesce((film_item->>'featured_on_playweek')::boolean, false),
         coalesce(film_item->>'featured_on_playweek_url', ''),
+        coalesce((film_item->>'ranking_override')::boolean, false),
         film_item->'tmdb_json'
       )
       returning id into v_film_id;

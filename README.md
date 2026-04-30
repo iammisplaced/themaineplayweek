@@ -201,6 +201,8 @@ where nullif(trim(ticket_link), '') is null;
 
 Film metadata source hardening now uses `public.films.metadata_source` (`tmdb` or `manual`). Re-run `supabase/schema.sql` to install the column + constraint.
 
+Film ranking override now uses `public.films.ranking_override` (boolean). Re-run `supabase/schema.sql` to install the column and RPC support.
+
 Film synopsis is now stored in `public.films.synopsis` and synchronized from TMDb `overview` by `scripts/enrich-tmdb-supabase.mjs`. Re-run `supabase/schema.sql` to install the new column and RPC updates.
 
 If you see `DELETE requires a WHERE clause`, re-run `supabase/schema.sql` to install the updated `replace_showtimes_data` function.

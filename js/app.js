@@ -1118,6 +1118,7 @@ function bindEvents() {
       staffFavoriteBy: "",
       featuredOnPlayweek: false,
       featuredOnPlayweekUrl: "",
+      rankingOverride: false,
       metadataSource: "manual",
       showings: [],
     };
@@ -1678,6 +1679,7 @@ function buildTheatreGroupsFromFilmPagesSource(source) {
           staffFavoriteBy: String(filmEntry?.staffFavoriteBy || "").trim(),
           featuredOnPlayweek: Boolean(filmEntry?.featuredOnPlayweek),
           featuredOnPlayweekUrl: String(filmEntry?.featuredOnPlayweekUrl || "").trim(),
+          rankingOverride: Boolean(filmEntry?.rankingOverride || filmEntry?.ranking_override),
           metadataSource: normalizeMetadataSource("tmdb", { tmdbId }),
           tmdb: {
             overview: String(filmEntry?.description || "").trim(),
@@ -1747,7 +1749,7 @@ async function loadDataFromSupabase() {
       state.supabase
         .from("films")
         .select(
-          "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json"
+          "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,ranking_override,metadata_source,tmdb_json"
         )
         .order("id", { ascending: true })
     ),
@@ -1808,6 +1810,7 @@ async function loadDataFromSupabase() {
       staffFavoriteBy: String(filmRow.staff_favorite_by || "").trim(),
       featuredOnPlayweek: Boolean(filmRow.featured_on_playweek),
       featuredOnPlayweekUrl: String(filmRow.featured_on_playweek_url || "").trim(),
+      rankingOverride: Boolean(filmRow.ranking_override),
       metadataSource: normalizeMetadataSource(filmRow.metadata_source, { tmdbId: filmRow.tmdb_id }),
       tmdb: tmdbJson,
       _dbId: filmRow.id,
@@ -1827,6 +1830,7 @@ async function loadDataFromSupabase() {
         staffFavoriteBy: String(filmTemplate.staffFavoriteBy || ""),
         featuredOnPlayweek: Boolean(filmTemplate.featuredOnPlayweek),
         featuredOnPlayweekUrl: String(filmTemplate.featuredOnPlayweekUrl || ""),
+        rankingOverride: Boolean(filmTemplate.rankingOverride),
         metadataSource: normalizeMetadataSource(filmTemplate.metadataSource, filmTemplate),
         tmdb: filmTemplate.tmdb,
         showings: [],
@@ -2997,6 +3001,7 @@ function buildReplacePayload(data, promotedCards) {
           staff_favorite_by: String(film.staffFavoriteBy || "").trim(),
           featured_on_playweek: Boolean(film.featuredOnPlayweek),
           featured_on_playweek_url: String(film.featuredOnPlayweekUrl || "").trim(),
+          ranking_override: Boolean(film.rankingOverride),
           tmdb_json: film.tmdb || null,
         });
         filmPayloadIndexByKey.set(filmKey, films.length - 1);
@@ -3030,6 +3035,9 @@ function buildReplacePayload(data, promotedCards) {
           if (!films[existingFilmIndex].featured_on_playweek_url) {
             films[existingFilmIndex].featured_on_playweek_url = String(film.featuredOnPlayweekUrl || "").trim();
           }
+        }
+        if (typeof existingFilmIndex === "number" && Boolean(film.rankingOverride)) {
+          films[existingFilmIndex].ranking_override = true;
         }
         if (filmTicketLink) {
           if (typeof existingFilmIndex === "number" && !films[existingFilmIndex].ticket_link) {
@@ -3204,6 +3212,7 @@ function hasFilmRowChanges(previousRow, nextRow) {
     String(previousRow?.staff_favorite_by || "") !== String(nextRow?.staff_favorite_by || "") ||
     Boolean(previousRow?.featured_on_playweek) !== Boolean(nextRow?.featured_on_playweek) ||
     String(previousRow?.featured_on_playweek_url || "") !== String(nextRow?.featured_on_playweek_url || "") ||
+    Boolean(previousRow?.ranking_override) !== Boolean(nextRow?.ranking_override) ||
     !areJsonValuesEqual(previousRow?.tmdb_json, nextRow?.tmdb_json)
   );
 }
@@ -3452,6 +3461,10 @@ function render() {
 
   if (isFilmStyleView) {
     entries.sort(([, groupA], [, groupB]) => {
+      const overrideA = Boolean(groupA?.filmInfo?.rankingOverride);
+      const overrideB = Boolean(groupB?.filmInfo?.rankingOverride);
+      if (overrideA !== overrideB) return overrideA ? -1 : 1;
+
       const scoreA = getFilmGroupSortScore(groupA);
       const scoreB = getFilmGroupSortScore(groupB);
       if (scoreA !== scoreB) return scoreB - scoreA;
@@ -4970,6 +4983,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
             staffFavoriteBy: metadata.staffFavoriteBy,
             featuredOnPlayweek: metadata.featuredOnPlayweek,
             featuredOnPlayweekUrl: metadata.featuredOnPlayweekUrl,
+            rankingOverride: metadata.rankingOverride,
             popularity: metadata.popularity,
             voteAverage: metadata.voteAverage,
             voteCount: metadata.voteCount,
@@ -5030,6 +5044,7 @@ function buildGroups(theatres, view) {
         staffFavoriteBy: metadata.staffFavoriteBy,
         featuredOnPlayweek: metadata.featuredOnPlayweek,
         featuredOnPlayweekUrl: metadata.featuredOnPlayweekUrl,
+        rankingOverride: metadata.rankingOverride,
         popularity: metadata.popularity,
         voteAverage: metadata.voteAverage,
         voteCount: metadata.voteCount,
@@ -5310,6 +5325,9 @@ function extractFilmMetadata(film) {
   const featuredOnPlayweekUrl = String(
     film.featuredOnPlayweekUrl || tmdb.featuredOnPlayweekUrl || tmdb.featured_on_playweek_url || ""
   ).trim();
+  const rankingOverride = Boolean(
+    film.rankingOverride ?? film.ranking_override ?? tmdb.rankingOverride ?? tmdb.ranking_override
+  );
   const popularity = toFiniteNumber(popularityRaw);
   const voteAverage = toFiniteNumber(voteAverageRaw);
   const voteCount = toFiniteNumber(voteCountRaw);
@@ -5322,6 +5340,7 @@ function extractFilmMetadata(film) {
     staffFavoriteBy,
     featuredOnPlayweek,
     featuredOnPlayweekUrl,
+    rankingOverride,
     popularity,
     voteAverage,
     voteCount,

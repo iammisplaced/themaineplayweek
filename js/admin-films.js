@@ -17,8 +17,10 @@ const state = {
   isAuthed: false,
   staffFavoriteSupported: true,
   featuredOnPlayweekSupported: true,
+  rankingOverrideSupported: true,
   favoriteSaveBusy: new Set(),
   featuredSaveBusy: new Set(),
+  rankingOverrideSaveBusy: new Set(),
 };
 
 const elements = {
@@ -120,10 +122,18 @@ function bindEvents() {
     }
 
     const saveFeaturedButton = event.target.closest('button[data-action="save-featured"]');
-    if (!saveFeaturedButton) return;
-    const row = saveFeaturedButton.closest("tr[data-film-id]");
+    if (saveFeaturedButton) {
+      const row = saveFeaturedButton.closest("tr[data-film-id]");
+      if (!row) return;
+      await saveFeaturedOnPlayweek(row);
+      return;
+    }
+
+    const saveRankingOverrideButton = event.target.closest('button[data-action="save-ranking-override"]');
+    if (!saveRankingOverrideButton) return;
+    const row = saveRankingOverrideButton.closest("tr[data-film-id]");
     if (!row) return;
-    await saveFeaturedOnPlayweek(row);
+    await saveRankingOverride(row);
   });
 }
 
@@ -145,6 +155,7 @@ async function loadCatalog() {
     let warnings = [];
     state.staffFavoriteSupported = true;
     state.featuredOnPlayweekSupported = true;
+    state.rankingOverrideSupported = true;
     let filmsResult = { data: null, error: null };
     for (let attempt = 0; attempt < 3; attempt += 1) {
       filmsResult = await runWithTimeout(
@@ -162,6 +173,11 @@ async function loadCatalog() {
       if (state.featuredOnPlayweekSupported && isFeaturedOnPlayweekSchemaMissing(filmsResult.error)) {
         state.featuredOnPlayweekSupported = false;
         warnings.push("films: featured-on-playweek fields missing; run latest supabase/schema.sql");
+        changed = true;
+      }
+      if (state.rankingOverrideSupported && isRankingOverrideSchemaMissing(filmsResult.error)) {
+        state.rankingOverrideSupported = false;
+        warnings.push("films: ranking-override field missing; run latest supabase/schema.sql");
         changed = true;
       }
       if (!changed) break;
@@ -244,6 +260,11 @@ function isFeaturedOnPlayweekSchemaMissing(error) {
   return message.includes("featured_on_playweek") || message.includes("featured_on_playweek_url");
 }
 
+function isRankingOverrideSchemaMissing(error) {
+  const message = String(error?.message || "").toLowerCase();
+  return message.includes("ranking_override");
+}
+
 function buildFilmSelectColumns() {
   const columns = ["id", "title", "year", "tmdb_id", "ticket_link", "tmdb_json"];
   if (state.staffFavoriteSupported) {
@@ -251,6 +272,9 @@ function buildFilmSelectColumns() {
   }
   if (state.featuredOnPlayweekSupported) {
     columns.push("featured_on_playweek", "featured_on_playweek_url");
+  }
+  if (state.rankingOverrideSupported) {
+    columns.push("ranking_override");
   }
   return columns.join(",");
 }
@@ -341,6 +365,7 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
       staffFavoriteBy: String(film.staff_favorite_by || "").trim(),
       featuredOnPlayweek: Boolean(film.featured_on_playweek),
       featuredOnPlayweekUrl: String(film.featured_on_playweek_url || "").trim(),
+      rankingOverride: Boolean(film.ranking_override),
       totalTimes,
       futureTimes,
       links,
@@ -363,6 +388,7 @@ function renderSummary() {
   const withAnyTicketLinks = state.films.filter((film) => film.links.some((entry) => entry.ticketLink)).length;
   const staffFavorites = state.films.filter((film) => film.staffFavorite).length;
   const featuredOnPlayweek = state.films.filter((film) => film.featuredOnPlayweek).length;
+  const rankingOverrides = state.films.filter((film) => film.rankingOverride).length;
 
   elements.summary.innerHTML = `
     <strong>${total}</strong> films total
@@ -374,6 +400,8 @@ function renderSummary() {
     <strong>${staffFavorites}</strong> marked as staff favorites
     <br />
     <strong>${featuredOnPlayweek}</strong> featured on Playweek
+    <br />
+    <strong>${rankingOverrides}</strong> ranking overrides enabled
   `;
 }
 
@@ -404,6 +432,7 @@ function renderCatalog() {
         <th>Genre</th>
         <th>Staff Favorite</th>
         <th>Featured On Playweek</th>
+        <th>Ranking Override</th>
         <th>DB Rows</th>
       </tr>
     </thead>
@@ -420,6 +449,7 @@ function renderCatalog() {
     const statusText = film.futureTimes > 0 ? "Showing" : "No upcoming";
     const isFavoriteBusy = state.favoriteSaveBusy.has(String(film.id));
     const isFeaturedBusy = state.featuredSaveBusy.has(String(film.id));
+    const isRankingOverrideBusy = state.rankingOverrideSaveBusy.has(String(film.id));
     const favoriteBadge = film.staffFavorite
       ? film.staffFavoriteBy
         ? `Yes (${escapeHtml(film.staffFavoriteBy)})`
@@ -492,6 +522,23 @@ function renderCatalog() {
           </div>
         `
               : `<span class="badge ${film.featuredOnPlayweek ? "badge-on" : "badge-off"}">${featuredBadge}</span>`
+        }
+      </td>
+      <td>
+        ${
+          !state.rankingOverrideSupported
+            ? '<span class="muted-inline">Schema update required</span>'
+            : state.isAuthed
+              ? `
+          <div class="featured-controls">
+            <label class="featured-toggle-wrap">
+              <input data-role="ranking-override-toggle" type="checkbox" ${film.rankingOverride ? "checked" : ""} ${isRankingOverrideBusy ? "disabled" : ""} />
+              Pin to top
+            </label>
+            <button type="button" data-action="save-ranking-override" class="featured-save" ${isRankingOverrideBusy ? "disabled" : ""}>Save</button>
+          </div>
+        `
+              : `<span class="badge ${film.rankingOverride ? "badge-on" : "badge-off"}">${film.rankingOverride ? "Yes" : "No"}</span>`
         }
       </td>
       <td>
@@ -620,6 +667,54 @@ async function saveFeaturedOnPlayweek(row) {
     setStatus(`Save failed: ${error.message}`);
   } finally {
     state.featuredSaveBusy.delete(busyKey);
+    renderSummary();
+    renderCatalog();
+  }
+}
+
+async function saveRankingOverride(row) {
+  if (!state.isAuthed) {
+    setStatus("Sign in first to edit ranking overrides.");
+    return;
+  }
+  if (!state.rankingOverrideSupported) {
+    setStatus("Ranking override column is missing. Run latest supabase/schema.sql first.");
+    return;
+  }
+
+  const filmId = Number(row.dataset.filmId);
+  if (!Number.isInteger(filmId) || filmId <= 0) return;
+
+  const rankingOverrideToggle = row.querySelector('input[data-role="ranking-override-toggle"]');
+  if (!rankingOverrideToggle) return;
+
+  const rankingOverride = Boolean(rankingOverrideToggle.checked);
+  const busyKey = String(filmId);
+  state.rankingOverrideSaveBusy.add(busyKey);
+  renderCatalog();
+
+  try {
+    const { error } = await supabase
+      .from("films")
+      .update({
+        ranking_override: rankingOverride,
+      })
+      .eq("id", filmId);
+    if (error) throw error;
+
+    const film = state.films.find((entry) => Number(entry.id) === filmId);
+    if (film) {
+      film.rankingOverride = rankingOverride;
+    }
+    setStatus(
+      rankingOverride
+        ? `Enabled ranking override for film ${filmId}.`
+        : `Disabled ranking override for film ${filmId}.`
+    );
+  } catch (error) {
+    setStatus(`Save failed: ${error.message}`);
+  } finally {
+    state.rankingOverrideSaveBusy.delete(busyKey);
     renderSummary();
     renderCatalog();
   }
