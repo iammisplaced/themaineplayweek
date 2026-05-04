@@ -143,7 +143,7 @@ async function loadFilmSourceFromSupabase() {
       restBase,
       supabaseAnonKey,
       "showings",
-      "theatre_id,film_id,festival_id,show_date,times,premium_times",
+      "theatre_id,film_id,festival_id,show_date,room,times,premium_times",
       "theatre_id.asc,film_id.asc,show_date.asc"
     ),
     fetchAllFromSupabase(
@@ -226,6 +226,7 @@ async function loadFilmSourceFromSupabase() {
         time: timeValue,
         isPremium: false,
         festivalName: festivalNameById.get(Number(row.festival_id)) || "",
+        room: String(row.room || "").trim(),
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
@@ -243,6 +244,7 @@ async function loadFilmSourceFromSupabase() {
         time: timeValue,
         isPremium: true,
         festivalName: festivalNameById.get(Number(row.festival_id)) || "",
+        room: String(row.room || "").trim(),
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
@@ -358,6 +360,7 @@ function normalizeFilms(source) {
               festivalName:
                 festivalNameById.get(Number(showing?.festivalId)) ||
                 stringOrEmpty(showing?.festivalName),
+              room: stringOrEmpty(showing?.room),
               theatre: theatreName,
               city: theatreCity,
               theatreWebsite: stringOrEmpty(theatre?.website),
@@ -376,6 +379,7 @@ function normalizeFilms(source) {
               festivalName:
                 festivalNameById.get(Number(showing?.festivalId)) ||
                 stringOrEmpty(showing?.festivalName),
+              room: stringOrEmpty(showing?.room),
               theatre: theatreName,
               city: theatreCity,
               theatreWebsite: stringOrEmpty(theatre?.website),
@@ -450,6 +454,7 @@ function normalizeFlatFilm(film, festivalNameById = new Map()) {
               stringOrEmpty(showing?.festivalName || showing?.festival_name) ||
               festivalNameById.get(Number(showing?.festivalId ?? showing?.festival_id)) ||
               "",
+            room: stringOrEmpty(showing?.room),
             theatre: stringOrEmpty(showing?.theatre),
             city: stringOrEmpty(showing?.city),
             theatreWebsite: stringOrEmpty(showing?.theatreWebsite),
@@ -528,6 +533,7 @@ function renderFilmPage(film, slug, siteUrl) {
             (row) =>
               `<article class="show-day-card">
                 <h3 class="show-schedule-day">${escapeHtml(formatIsoDateLabel(row.date))}</h3>
+                ${row.room ? `<div class="show-room-label">Room: ${escapeHtml(row.room)}</div>` : ""}
                 <div class="show-times-grid">
                   ${row.times.map((time) => `<span class="show-time-chip">${escapeHtml(time)}</span>`).join("")}
                   ${row.premiumTimes.map((time) => `<span class="show-time-chip show-time-chip-premium">Premium ${escapeHtml(time)}</span>`).join("")}
@@ -784,6 +790,12 @@ function renderFilmPage(film, slug, siteUrl) {
         display: flex;
         flex-wrap: wrap;
         gap: 0.34rem;
+      }
+      .film-showtimes-box .show-room-label {
+        margin: 0 0 0.34rem;
+        color: var(--accent-2);
+        font-size: 0.78rem;
+        font-weight: 600;
       }
       .film-showtimes-box .show-more-days {
         margin-top: 0.5rem;
@@ -1573,9 +1585,12 @@ function buildShowtimesByTheatre(film) {
     }
     const byDate = entry.byDate;
     if (!byDate.has(showing.date)) {
-      byDate.set(showing.date, { times: [], premiumTimes: [] });
+      byDate.set(showing.date, { room: String(showing.room || "").trim(), times: [], premiumTimes: [] });
     }
     const slot = byDate.get(showing.date);
+    if (!slot.room) {
+      slot.room = String(showing.room || "").trim();
+    }
     if (showing.isPremium) {
       slot.premiumTimes.push(showing.time);
     } else {
@@ -1588,6 +1603,7 @@ function buildShowtimesByTheatre(film) {
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([date, value]) => ({
         date,
+        room: String(value?.room || "").trim(),
         times: dedupeTimes(value?.times || []),
         premiumTimes: dedupeTimes(value?.premiumTimes || []),
       }));

@@ -254,6 +254,7 @@ const elements = {
   showingSpanDaysInput: document.getElementById("showingSpanDaysInput"),
   showingTimesInput: document.getElementById("showingTimesInput"),
   showingPremiumTimesInput: document.getElementById("showingPremiumTimesInput"),
+  showingRoomInput: document.getElementById("showingRoomInput"),
   showingFestivalSelect: document.getElementById("showingFestivalSelect"),
   addShowing: document.getElementById("addShowing"),
   showingsList: document.getElementById("showingsList"),
@@ -1263,6 +1264,7 @@ function bindEvents() {
     const spanDays = clampSpanDays(elements.showingSpanDaysInput.value);
     const times = parseTimesInput(elements.showingTimesInput.value);
     const premiumTimes = parseTimesInput(elements.showingPremiumTimesInput?.value || "");
+    const room = String(elements.showingRoomInput?.value || "").trim();
     const selectedFestivalIdRaw = String(elements.showingFestivalSelect?.value || "").trim();
     const selectedFestivalId = Number(selectedFestivalIdRaw);
     const showingFestivalId =
@@ -1281,9 +1283,11 @@ function bindEvents() {
         existing.times = dedupeSortTimes([...(existing.times || []), ...times]);
         existing.premiumTimes = dedupeSortTimes([...(existing.premiumTimes || []), ...premiumTimes]);
         existing.festivalId = showingFestivalId;
+        existing.room = room;
       } else {
         film.showings.push({
           date: targetDate,
+          room,
           festivalId: showingFestivalId,
           times: dedupeSortTimes(times),
           premiumTimes: dedupeSortTimes(premiumTimes),
@@ -1296,6 +1300,9 @@ function bindEvents() {
     elements.showingTimesInput.value = "";
     if (elements.showingPremiumTimesInput) {
       elements.showingPremiumTimesInput.value = "";
+    }
+    if (elements.showingRoomInput) {
+      elements.showingRoomInput.value = "";
     }
     if (elements.showingFestivalSelect) {
       elements.showingFestivalSelect.value = "";
@@ -1513,6 +1520,7 @@ function bindEvents() {
       "show_date",
       "show_times",
       "premium_show_times",
+      "room",
       "festival_name",
       "ticket_link",
       "film_year",
@@ -1528,11 +1536,12 @@ function bindEvents() {
         "6:30 PM|9:15 PM",
         "",
         "",
+        "",
         "https://tickets.example.com/anora",
         "",
         "",
       ],
-      ["Nickelodeon Cinema", "Portland", "Anora", "2026-03-13", "4:00 PM|7:45 PM", "9:55 PM", "", "", "", ""],
+      ["Nickelodeon Cinema", "Portland", "Anora", "2026-03-13", "4:00 PM|7:45 PM", "9:55 PM", "", "", "", "", ""],
     ];
     const csv = rows.map((row) => row.map((value) => toCsvCell(value)).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
@@ -1566,7 +1575,7 @@ function bindEvents() {
       syncAdminEditor();
       render();
       elements.adminMessage.textContent =
-        `Imported CSV: ${result.rowsProcessed} rows, ${result.showingDatesUpdated} showing date entries updated. ` +
+        `Imported CSV: ${result.rowsProcessed} rows, ${result.showingDatesUpdated} showing date entries updated, ${result.filmsCreated || 0} films created. ` +
         "Click Save All Changes to sync Supabase.";
       elements.uploadCsv.value = "";
     } catch (error) {
@@ -1886,7 +1895,7 @@ function buildTheatreGroupsFromFilmPagesSource(source) {
 
       let filmShowing = theatreFilm._showingByDate.get(showDate);
       if (!filmShowing) {
-        filmShowing = { date: showDate, times: [], premiumTimes: [] };
+        filmShowing = { date: showDate, room: String(showing?.room || "").trim(), times: [], premiumTimes: [] };
         theatreFilm._showingByDate.set(showDate, filmShowing);
         theatreFilm.showings.push(filmShowing);
       }
@@ -1946,7 +1955,7 @@ async function loadDataFromSupabase() {
     fetchAllRowsFromSupabase("showings", () =>
       state.supabase
         .from("showings")
-        .select("id,theatre_id,film_id,festival_id,show_date,times,premium_times")
+        .select("id,theatre_id,film_id,festival_id,show_date,room,times,premium_times")
         .order("id", { ascending: true })
     ),
     fetchAllRowsFromSupabase("promos", () =>
@@ -2077,6 +2086,7 @@ async function loadDataFromSupabase() {
 
     film.showings.push({
       date: showingRow.show_date,
+      room: String(showingRow.room || "").trim(),
       festivalId: Number.isInteger(Number(resolvedFestivalId)) ? Number(resolvedFestivalId) : null,
       times: dedupeSortTimes(Array.isArray(showingRow.times) ? showingRow.times : []),
       premiumTimes: dedupeSortTimes(Array.isArray(showingRow.premium_times) ? showingRow.premium_times : []),
@@ -2412,6 +2422,9 @@ function renderFilmOptions() {
   if (elements.showingPremiumTimesInput) {
     elements.showingPremiumTimesInput.disabled = !hasFilm;
   }
+  if (elements.showingRoomInput) {
+    elements.showingRoomInput.disabled = !hasFilm;
+  }
   if (elements.showingFestivalSelect) {
     elements.showingFestivalSelect.disabled = !hasFilm;
   }
@@ -2501,7 +2514,8 @@ function renderShowingsList() {
         ? (state.data.festivals || []).find((entry) => Number(entry?.id) === festivalId)
         : null;
       const festivalLabel = festival?.name ? ` [Festival: ${festival.name}]` : "";
-      label.textContent = `${showing.date}${festivalLabel}: ${timeLabelParts.join(" | ")}`;
+      const roomLabel = String(showing?.room || "").trim();
+      label.textContent = `${showing.date}${festivalLabel}${roomLabel ? ` [Room: ${roomLabel}]` : ""}: ${timeLabelParts.join(" | ")}`;
       const button = document.createElement("button");
       button.type = "button";
       button.className = "ghost-btn";
@@ -2810,6 +2824,7 @@ function importShowtimesCsv(data, csvContent) {
   const stats = {
     rowsProcessed: 0,
     showingDatesUpdated: 0,
+    filmsCreated: 0,
   };
 
   for (let rowIndex = 1; rowIndex < rows.length; rowIndex += 1) {
@@ -2823,6 +2838,7 @@ function importShowtimesCsv(data, csvContent) {
     const filmYearRaw = readCsvValue(row, headerIndexByKey, "film_year");
     const filmTmdbIdRaw = readCsvValue(row, headerIndexByKey, "film_tmdb_id");
     const ticketLinkRaw = readCsvValue(row, headerIndexByKey, "ticket_link");
+    const roomRaw = readCsvValue(row, headerIndexByKey, "room");
     const festivalNameRaw = readCsvValue(row, headerIndexByKey, "festival_name");
     const showDate = readCsvValue(row, headerIndexByKey, "show_date");
     const showTimesRaw = readCsvValue(row, headerIndexByKey, "show_times");
@@ -2885,18 +2901,29 @@ function importShowtimesCsv(data, csvContent) {
       if (filmYear !== null) return Number(entry?.year) === filmYear;
       return true;
     });
+    let film = filmMatches[0];
     if (!filmMatches.length) {
-      throw new Error(
-        `Row ${rowNumber}: film "${filmTitle}" was not found at theatre "${theatre.name}". Add the film first.`
-      );
-    }
-    if (filmMatches.length > 1 && filmTmdbId === null && filmYear === null) {
+      film = {
+        title: filmTitle,
+        ticketLink: "",
+        staffFavorite: false,
+        staffFavoriteBy: "",
+        featuredOnPlayweek: false,
+        featuredOnPlayweekUrl: "",
+        rankingOverride: false,
+        metadataSource: filmTmdbId !== null ? "tmdb" : "manual",
+        showings: [],
+      };
+      if (filmYear !== null) film.year = filmYear;
+      if (filmTmdbId !== null) film.tmdbId = filmTmdbId;
+      theatre.films.push(film);
+      sortFilms(theatre.films);
+      stats.filmsCreated += 1;
+    } else if (filmMatches.length > 1 && filmTmdbId === null && filmYear === null) {
       throw new Error(
         `Row ${rowNumber}: multiple "${filmTitle}" entries at "${theatre.name}". Include film_year or film_tmdb_id.`
       );
     }
-
-    const film = filmMatches[0];
     let resolvedFestivalId = null;
     if (festivalNameRaw) {
       const matchedFestival = (data.festivals || []).find(
@@ -2924,6 +2951,7 @@ function importShowtimesCsv(data, csvContent) {
         (Array.isArray(showing.premiumTimes) ? showing.premiumTimes.length : 0);
       showing.times = dedupeSortTimes([...(showing.times || []), ...parsedTimes]);
       showing.premiumTimes = dedupeSortTimes([...(showing.premiumTimes || []), ...parsedPremiumTimes]);
+      showing.room = roomRaw;
       if (resolvedFestivalId) {
         showing.festivalId = resolvedFestivalId;
       }
@@ -2934,6 +2962,7 @@ function importShowtimesCsv(data, csvContent) {
     } else {
       film.showings.push({
         date: showDate,
+        room: roomRaw,
         festivalId: resolvedFestivalId,
         times: dedupeSortTimes(parsedTimes),
         premiumTimes: dedupeSortTimes(parsedPremiumTimes),
@@ -3550,6 +3579,7 @@ function buildReplacePayload(data, promotedCards) {
           festival_id: showingFestivalId,
           festival_slug: showingFestivalId ? (festivalSlugByDbId.get(showingFestivalId) || "") : "",
           show_date: showing.date,
+          room: String(showing?.room || "").trim(),
           times: dedupeSortTimes(showing.times || []),
           premium_times: dedupeSortTimes(showing.premiumTimes || []),
         });
@@ -3787,6 +3817,7 @@ function buildShowingsDelta(previousRows, nextRows) {
         film_db_id: nextEntry.filmDbId,
         festival_id: showing.festival_id,
         show_date: showing.show_date,
+        room: showing.room,
         times: showing.times,
         premium_times: showing.premium_times,
       });
@@ -3834,6 +3865,7 @@ function indexShowingsByPair(rows) {
     entry.showings.push({
       festival_id: nullableInt(row?.festival_id),
       show_date: String(row?.show_date || ""),
+      room: String(row?.room || ""),
       times: dedupeSortTimes(row?.times || []),
       premium_times: dedupeSortTimes(row?.premium_times || []),
     });
@@ -4332,7 +4364,12 @@ function render() {
             ribbon.textContent = festivalBadgeLabel;
             main.prepend(ribbon);
           }
-          meta.textContent = "";
+          const showDateKeys = Object.keys(show?.dates || {});
+          const singleDateRoom =
+            showDateKeys.length === 1
+              ? String(show?.roomByDate?.[showDateKeys[0]] || "").trim()
+              : "";
+          meta.textContent = singleDateRoom ? `Room: ${singleDateRoom}` : "";
 
           if (state.view === "theatres") {
             renderSchedule(schedule, show.dates, show.premiumDates);
@@ -4369,14 +4406,20 @@ function render() {
           if (state.view === "festivals") {
             item.classList.add("festival-show-item");
             main.textContent = show.film || show.theatre || "Showtime";
-            meta.textContent = [show.theatre || "", show.city || ""].filter(Boolean).join(", ");
+            meta.textContent = [show.theatre || "", show.city || "", show.room ? `Room: ${show.room}` : ""]
+              .filter(Boolean)
+              .join(", ");
             const ribbon = document.createElement("span");
             ribbon.className = "festival-entry-ribbon";
             ribbon.textContent = "Festival Selection";
             main.prepend(ribbon);
           } else {
             main.textContent = `${show.theatre}`;
-            meta.textContent = `${show.city}`;
+            const theatreKey = `${show.theatre} · ${show.city}`;
+            const roomValue =
+              String(show?.room || "").trim() ||
+              String(show?.roomByTheatre?.[theatreKey] || "").trim();
+            meta.textContent = [show.city || "", roomValue ? `Room: ${roomValue}` : ""].filter(Boolean).join(" · ");
             if (showFestivalIds.length) {
               const ribbon = document.createElement("span");
               ribbon.className = "festival-entry-ribbon festival-entry-ribbon-inline";
@@ -5579,6 +5622,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
       const times = [];
       const premiumTimes = [];
       const festivalIds = new Set();
+      let room = "";
 
       (film.showings || []).forEach((showing) => {
         if (showing.date !== selectedDate) return;
@@ -5586,6 +5630,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
           const showDateTime = getShowDateTime(showing.date, time);
           if (!showDateTime || showDateTime < now) return;
           times.push(time);
+          if (!room) room = String(showing?.room || "").trim();
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) festivalIds.add(festivalId);
         });
@@ -5593,6 +5638,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
           const showDateTime = getShowDateTime(showing.date, time);
           if (!showDateTime || showDateTime < now) return;
           premiumTimes.push(time);
+          if (!room) room = String(showing?.room || "").trim();
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) festivalIds.add(festivalId);
         });
@@ -5637,6 +5683,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
         address: theatre.address,
         film: film.title,
         year,
+        room,
         festivalIds: Array.from(festivalIds.values()),
         ticketLink: film.ticketLink,
         dates: {
@@ -5703,6 +5750,7 @@ function buildFestivalGroups(theatres, festivals) {
         grouped[groupKey].shows.push({
           theatre: theatre.name,
           city: theatre.city,
+          room: String(showing?.room || "").trim(),
           film: film.title,
           year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
           ticketLink: film.ticketLink,
@@ -5762,6 +5810,7 @@ function buildGroups(theatres, view) {
         matchedAt: metadata.matchedAt,
         dates: {},
         premiumDates: {},
+        roomByDate: {},
         festivalIdsSet: new Set(),
       };
 
@@ -5771,6 +5820,7 @@ function buildGroups(theatres, view) {
           if (!showDateTime || showDateTime < now) return;
           if (!row.dates[showing.date]) row.dates[showing.date] = [];
           row.dates[showing.date].push(time);
+          if (!row.roomByDate[showing.date]) row.roomByDate[showing.date] = String(showing?.room || "").trim();
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) row.festivalIdsSet.add(festivalId);
         });
@@ -5779,6 +5829,7 @@ function buildGroups(theatres, view) {
           if (!showDateTime || showDateTime < now) return;
           if (!row.premiumDates[showing.date]) row.premiumDates[showing.date] = [];
           row.premiumDates[showing.date].push(time);
+          if (!row.roomByDate[showing.date]) row.roomByDate[showing.date] = String(showing?.room || "").trim();
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) row.festivalIdsSet.add(festivalId);
         });
@@ -5853,6 +5904,7 @@ function buildGroups(theatres, view) {
               stars: row.stars,
               genres: row.genres,
               festivalIds: [],
+              roomByTheatre: {},
               theatres: {},
               premiumTheatres: {},
             };
@@ -5871,6 +5923,9 @@ function buildGroups(theatres, view) {
             });
           }
           const theatreKey = `${row.theatre} · ${row.city}`;
+          if (!dayRow.roomByTheatre[theatreKey] && row.roomByDate[date]) {
+            dayRow.roomByTheatre[theatreKey] = row.roomByDate[date];
+          }
           if (!dayRow.theatres[theatreKey]) dayRow.theatres[theatreKey] = [];
           dayRow.theatres[theatreKey].push(...times);
           if (!dayRow.premiumTheatres[theatreKey]) dayRow.premiumTheatres[theatreKey] = [];

@@ -96,6 +96,7 @@ create table if not exists public.showings (
   film_id bigint not null references public.films(id) on delete cascade,
   festival_id bigint,
   show_date date not null,
+  room text not null default '',
   times text[] not null,
   premium_times text[] not null default '{}'::text[],
   created_at timestamptz not null default now()
@@ -126,6 +127,7 @@ create table if not exists public.festival_films (
 
 alter table public.showings add column if not exists premium_times text[] not null default '{}'::text[];
 alter table public.showings add column if not exists festival_id bigint;
+alter table public.showings add column if not exists room text not null default '';
 do $$
 begin
   if not exists (
@@ -536,7 +538,7 @@ begin
     v_film_id := nullif(film_id_map->>(showing_item->>'film_key'), '')::bigint;
 
     if v_theatre_id is not null and v_film_id is not null then
-      insert into public.showings (theatre_id, film_id, festival_id, show_date, times, premium_times)
+      insert into public.showings (theatre_id, film_id, festival_id, show_date, room, times, premium_times)
       values (
         v_theatre_id,
         v_film_id,
@@ -551,6 +553,7 @@ begin
           null
         ),
         (showing_item->>'show_date')::date,
+        coalesce(showing_item->>'room', ''),
         array(select jsonb_array_elements_text(coalesce(showing_item->'times', '[]'::jsonb))),
         array(select jsonb_array_elements_text(coalesce(showing_item->'premium_times', '[]'::jsonb)))
       );
@@ -858,7 +861,7 @@ begin
     );
 
     if resolved_theatre_id is not null and resolved_film_id is not null then
-      insert into public.showings (theatre_id, film_id, festival_id, show_date, times, premium_times)
+      insert into public.showings (theatre_id, film_id, festival_id, show_date, room, times, premium_times)
       values (
         resolved_theatre_id,
         resolved_film_id,
@@ -873,6 +876,7 @@ begin
           null
         ),
         (showing_item->>'show_date')::date,
+        coalesce(showing_item->>'room', ''),
         array(select jsonb_array_elements_text(coalesce(showing_item->'times', '[]'::jsonb))),
         array(select jsonb_array_elements_text(coalesce(showing_item->'premium_times', '[]'::jsonb)))
       );
