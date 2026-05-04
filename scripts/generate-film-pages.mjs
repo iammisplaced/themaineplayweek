@@ -117,7 +117,7 @@ async function loadFilmSourceFromSupabase() {
   }
 
   const restBase = `${supabaseUrl.replace(/\/+$/, "")}/rest/v1`;
-  const [theatres, films, theatreFilms, showings] = await Promise.all([
+  const [theatres, films, theatreFilms, showings, festivals] = await Promise.all([
     fetchAllFromSupabase(
       restBase,
       supabaseAnonKey,
@@ -143,10 +143,22 @@ async function loadFilmSourceFromSupabase() {
       restBase,
       supabaseAnonKey,
       "showings",
-      "theatre_id,film_id,show_date,times,premium_times",
+      "theatre_id,film_id,festival_id,show_date,times,premium_times",
       "theatre_id.asc,film_id.asc,show_date.asc"
     ),
+    fetchAllFromSupabase(
+      restBase,
+      supabaseAnonKey,
+      "festivals",
+      "id,name",
+      "id.asc"
+    ),
   ]);
+  const festivalNameById = new Map(
+    festivals
+      .map((row) => [Number(row.id), String(row.name || "").trim()])
+      .filter(([id, name]) => Number.isInteger(id) && Boolean(name))
+  );
 
   const theatreById = new Map();
   theatres.forEach((row) => {
@@ -213,6 +225,7 @@ async function loadFilmSourceFromSupabase() {
         date,
         time: timeValue,
         isPremium: false,
+        festivalName: festivalNameById.get(Number(row.festival_id)) || "",
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
@@ -229,6 +242,7 @@ async function loadFilmSourceFromSupabase() {
         date,
         time: timeValue,
         isPremium: true,
+        festivalName: festivalNameById.get(Number(row.festival_id)) || "",
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
@@ -276,8 +290,13 @@ async function fetchAllFromSupabase(restBase, apiKey, table, select, orderBy = "
 }
 
 function normalizeFilms(source) {
+  const festivalNameById = new Map(
+    (Array.isArray(source?.festivals) ? source.festivals : [])
+      .map((festival) => [Number(festival?.id), String(festival?.name || "").trim()])
+      .filter(([id, name]) => Number.isInteger(id) && Boolean(name))
+  );
   if (Array.isArray(source?.films)) {
-    return source.films.map(normalizeFlatFilm).filter(Boolean);
+    return source.films.map((film) => normalizeFlatFilm(film, festivalNameById)).filter(Boolean);
   }
 
   if (Array.isArray(source?.theatreGroups)) {
@@ -336,6 +355,9 @@ function normalizeFilms(source) {
               date,
               time,
               isPremium: false,
+              festivalName:
+                festivalNameById.get(Number(showing?.festivalId)) ||
+                stringOrEmpty(showing?.festivalName),
               theatre: theatreName,
               city: theatreCity,
               theatreWebsite: stringOrEmpty(theatre?.website),
@@ -351,6 +373,9 @@ function normalizeFilms(source) {
               date,
               time: t,
               isPremium: true,
+              festivalName:
+                festivalNameById.get(Number(showing?.festivalId)) ||
+                stringOrEmpty(showing?.festivalName),
               theatre: theatreName,
               city: theatreCity,
               theatreWebsite: stringOrEmpty(theatre?.website),
@@ -369,7 +394,7 @@ function normalizeFilms(source) {
   return [];
 }
 
-function normalizeFlatFilm(film) {
+function normalizeFlatFilm(film, festivalNameById = new Map()) {
   const title = stringOrEmpty(film?.title);
   if (!title) return null;
   return {
@@ -421,6 +446,10 @@ function normalizeFlatFilm(film) {
                 showing?.is_premium ??
                 (stringOrEmpty(showing?.format).toLowerCase() === "premium")
             ),
+            festivalName:
+              stringOrEmpty(showing?.festivalName || showing?.festival_name) ||
+              festivalNameById.get(Number(showing?.festivalId ?? showing?.festival_id)) ||
+              "",
             theatre: stringOrEmpty(showing?.theatre),
             city: stringOrEmpty(showing?.city),
             theatreWebsite: stringOrEmpty(showing?.theatreWebsite),
@@ -528,6 +557,9 @@ function renderFilmPage(film, slug, siteUrl) {
             data-theatre-lat="${Number.isFinite(Number(group.latitude)) ? String(group.latitude) : ""}"
             data-theatre-lng="${Number.isFinite(Number(group.longitude)) ? String(group.longitude) : ""}"
           >
+            ${group.festivalNames.length
+              ? `<span class="film-page-festival-ribbon">${escapeHtml(group.festivalNames.join(" · "))}</span>`
+              : ""}
             <div class="show-main show-main-theatre">
               ${escapeHtml(group.theatre)}${group.city ? `<span class="show-main-city">, ${escapeHtml(group.city)}</span>` : ""}
             </div>
@@ -703,6 +735,22 @@ function renderFilmPage(film, slug, siteUrl) {
       .film-showtimes-box .show-main {
         margin-bottom: 0.5rem;
       }
+      .film-showtimes-box .film-page-festival-ribbon {
+        width: fit-content;
+        display: inline-flex;
+        align-items: center;
+        margin: 0 0 0.34rem;
+        border-radius: 999px;
+        padding: 0.16rem 0.54rem;
+        font-size: 0.62rem;
+        line-height: 1;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: #fff9ec;
+        background: var(--accent);
+        box-shadow: 0 2px 6px rgba(29, 31, 31, 0.18);
+      }
       .film-showtimes-box .show-main-theatre {
         font-size: 1rem;
         font-weight: 700;
@@ -852,6 +900,9 @@ function renderFilmPage(film, slug, siteUrl) {
         border-color: #3c504a;
         background: #1a2522;
         color: #deeee9;
+      }
+      :root[data-theme="dark"] .film-showtimes-box .film-page-festival-ribbon {
+        color: #141615;
       }
       :root[data-theme="dark"] .film-showtimes-box .show-more-days-toggle:hover,
       :root[data-theme="dark"] .film-showtimes-box .show-more-days-toggle:focus-visible,
@@ -1500,12 +1551,17 @@ function buildShowtimesByTheatre(film) {
         theatre,
         city,
         ticketLink: String(showing.ticketLink || showing.theatreWebsite || "").trim(),
+        festivalNamesSet: new Set(),
         latitude: Number.isFinite(Number(showing.latitude)) ? Number(showing.latitude) : undefined,
         longitude: Number.isFinite(Number(showing.longitude)) ? Number(showing.longitude) : undefined,
         byDate: new Map(),
       });
     }
     const entry = byTheatre.get(key);
+    const festivalName = String(showing.festivalName || "").trim();
+    if (festivalName) {
+      entry.festivalNamesSet.add(festivalName);
+    }
     if (!entry.ticketLink && (showing.ticketLink || showing.theatreWebsite)) {
       entry.ticketLink = String(showing.ticketLink || showing.theatreWebsite).trim();
     }
@@ -1539,6 +1595,7 @@ function buildShowtimesByTheatre(film) {
       theatre: entry.theatre,
       city: entry.city,
       ticketLink: entry.ticketLink,
+      festivalNames: Array.from(entry.festivalNamesSet.values()).sort((a, b) => a.localeCompare(b)),
       latitude: entry.latitude,
       longitude: entry.longitude,
       schedule,
@@ -1552,6 +1609,7 @@ function buildShowtimesByTheatre(film) {
         theatre: theatreName?.trim() || "Theatre TBA",
         city: rest.join(",").trim(),
         ticketLink: "",
+        festivalNames: [],
         latitude: undefined,
         longitude: undefined,
         schedule: [],

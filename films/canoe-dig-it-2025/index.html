@@ -148,6 +148,22 @@
       .film-showtimes-box .show-main {
         margin-bottom: 0.5rem;
       }
+      .film-showtimes-box .film-page-festival-ribbon {
+        width: fit-content;
+        display: inline-flex;
+        align-items: center;
+        margin: 0 0 0.34rem;
+        border-radius: 999px;
+        padding: 0.16rem 0.54rem;
+        font-size: 0.62rem;
+        line-height: 1;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: #fff9ec;
+        background: var(--accent);
+        box-shadow: 0 2px 6px rgba(29, 31, 31, 0.18);
+      }
       .film-showtimes-box .show-main-theatre {
         font-size: 1rem;
         font-weight: 700;
@@ -298,6 +314,9 @@
         background: #1a2522;
         color: #deeee9;
       }
+      :root[data-theme="dark"] .film-showtimes-box .film-page-festival-ribbon {
+        color: #141615;
+      }
       :root[data-theme="dark"] .film-showtimes-box .show-more-days-toggle:hover,
       :root[data-theme="dark"] .film-showtimes-box .show-more-days-toggle:focus-visible,
       :root[data-theme="dark"] .location-sort-actions button:hover,
@@ -364,6 +383,7 @@
             data-theatre-lat="45.183952"
             data-theatre-lng="-69.2292565"
           >
+            
             <div class="show-main show-main-theatre">
               Center Theatre for the Performing Arts<span class="show-main-city">, Dover-Foxcroft</span>
             </div>
@@ -413,6 +433,7 @@
             data-theatre-lat="43.2504514"
             data-theatre-lng="-70.6004205"
           >
+            
             <div class="show-main show-main-theatre">
               Leavitt Theatre<span class="show-main-city">, Ogunquit</span>
             </div>
@@ -433,6 +454,7 @@
             data-theatre-lat="46.1259988"
             data-theatre-lng="-67.8403909"
           >
+            
             <div class="show-main show-main-theatre">
               Temple Theatre<span class="show-main-city">, Houlton</span>
             </div>
