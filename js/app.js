@@ -91,10 +91,10 @@ const THEME_COLOR_MAP = {
   [LIGHT_THEME]: "#ECE5E0",
   [DARK_THEME]: "#121816",
 };
-const VALID_VIEWS = new Set(["films", "theatres", "days"]);
+const VALID_VIEWS = new Set(["films", "theatres", "days", "festivals"]);
 
 const state = {
-  data: { theatreGroups: [] },
+  data: { theatreGroups: [], festivals: [] },
   view: "days",
   source: "json",
   loadedFromSupabaseThisSession: false,
@@ -114,6 +114,7 @@ const state = {
   publicSearch: {
     films: "",
     theatres: "",
+    festivals: "",
   },
   selectedDay: "",
   daysViewRadiusMiles: DEFAULT_DAYS_VIEW_RADIUS_MILES,
@@ -239,6 +240,7 @@ const elements = {
   showingSpanDaysInput: document.getElementById("showingSpanDaysInput"),
   showingTimesInput: document.getElementById("showingTimesInput"),
   showingPremiumTimesInput: document.getElementById("showingPremiumTimesInput"),
+  showingFestivalSelect: document.getElementById("showingFestivalSelect"),
   addShowing: document.getElementById("addShowing"),
   showingsList: document.getElementById("showingsList"),
   promoSettingsList: document.getElementById("promoSettingsList"),
@@ -617,6 +619,8 @@ function bindEvents() {
       state.publicSearch.films = value;
     } else if (state.view === "theatres") {
       state.publicSearch.theatres = value;
+    } else if (state.view === "festivals") {
+      state.publicSearch.festivals = value;
     }
     debouncedPublicSearchRender();
   });
@@ -1245,6 +1249,12 @@ function bindEvents() {
     const spanDays = clampSpanDays(elements.showingSpanDaysInput.value);
     const times = parseTimesInput(elements.showingTimesInput.value);
     const premiumTimes = parseTimesInput(elements.showingPremiumTimesInput?.value || "");
+    const selectedFestivalIdRaw = String(elements.showingFestivalSelect?.value || "").trim();
+    const selectedFestivalId = Number(selectedFestivalIdRaw);
+    const showingFestivalId =
+      selectedFestivalIdRaw && Number.isInteger(selectedFestivalId) && selectedFestivalId > 0
+        ? selectedFestivalId
+        : null;
     if (!date || (!times.length && !premiumTimes.length)) {
       elements.adminMessage.textContent = "Add a date and at least one standard or premium time.";
       return;
@@ -1256,9 +1266,11 @@ function bindEvents() {
       if (existing) {
         existing.times = dedupeSortTimes([...(existing.times || []), ...times]);
         existing.premiumTimes = dedupeSortTimes([...(existing.premiumTimes || []), ...premiumTimes]);
+        existing.festivalId = showingFestivalId;
       } else {
         film.showings.push({
           date: targetDate,
+          festivalId: showingFestivalId,
           times: dedupeSortTimes(times),
           premiumTimes: dedupeSortTimes(premiumTimes),
         });
@@ -1270,6 +1282,9 @@ function bindEvents() {
     elements.showingTimesInput.value = "";
     if (elements.showingPremiumTimesInput) {
       elements.showingPremiumTimesInput.value = "";
+    }
+    if (elements.showingFestivalSelect) {
+      elements.showingFestivalSelect.value = "";
     }
     elements.showingSpanDaysInput.value = "1";
     syncAdminEditor();
@@ -1546,8 +1561,8 @@ async function loadData() {
     try {
       const fromDb = await loadDataFromSupabase();
       if (fromDb.theatreGroups.length) {
-        validateData({ theatreGroups: fromDb.theatreGroups });
-        state.data = { theatreGroups: fromDb.theatreGroups };
+        validateData({ theatreGroups: fromDb.theatreGroups, festivals: fromDb.festivals || [] });
+        state.data = { theatreGroups: fromDb.theatreGroups, festivals: fromDb.festivals || [] };
         state.promotedCards = fromDb.promotedCards;
         state.source = "supabase";
         state.loadedFromSupabaseThisSession = true;
@@ -1569,7 +1584,10 @@ async function loadData() {
     try {
       const parsed = JSON.parse(localData);
       validateData(parsed);
-      state.data = parsed;
+      state.data = {
+        theatreGroups: Array.isArray(parsed?.theatreGroups) ? parsed.theatreGroups : [],
+        festivals: Array.isArray(parsed?.festivals) ? parsed.festivals : [],
+      };
       state.source = "local";
       state.loadedFromSupabaseThisSession = false;
       state.supabaseBaselinePayload = null;
@@ -1586,7 +1604,10 @@ async function loadData() {
     }
     const json = await response.json();
     validateData(json);
-    state.data = json;
+    state.data = {
+      theatreGroups: Array.isArray(json?.theatreGroups) ? json.theatreGroups : [],
+      festivals: Array.isArray(json?.festivals) ? json.festivals : [],
+    };
     state.source = "json";
     state.loadedFromSupabaseThisSession = false;
     state.supabaseBaselinePayload = null;
@@ -1596,7 +1617,10 @@ async function loadData() {
     if (!fallbackData) {
       throw error;
     }
-    state.data = fallbackData;
+    state.data = {
+      theatreGroups: Array.isArray(fallbackData?.theatreGroups) ? fallbackData.theatreGroups : [],
+      festivals: Array.isArray(fallbackData?.festivals) ? fallbackData.festivals : [],
+    };
     state.source = "film-pages-json";
     state.loadedFromSupabaseThisSession = false;
     state.supabaseBaselinePayload = null;
@@ -1612,7 +1636,7 @@ async function loadFallbackDataFromFilmPagesSource() {
       const source = await response.json();
       const theatreGroups = buildTheatreGroupsFromFilmPagesSource(source);
       if (!theatreGroups.length) continue;
-      const normalized = { theatreGroups };
+      const normalized = { theatreGroups, festivals: [] };
       validateData(normalized);
       return normalized;
     } catch {
@@ -1741,7 +1765,7 @@ function buildTheatreGroupsFromFilmPagesSource(source) {
 }
 
 async function loadDataFromSupabase() {
-  const [theatres, films, theatreFilms, showings, promos] = await Promise.all([
+  const [theatres, films, theatreFilms, showings, promos, festivals, festivalFilms] = await Promise.all([
     fetchAllRowsFromSupabase("theatres", () =>
       state.supabase.from("theatres").select("id,name,city,address,website,latitude,longitude").order("id", { ascending: true })
     ),
@@ -1763,7 +1787,7 @@ async function loadDataFromSupabase() {
     fetchAllRowsFromSupabase("showings", () =>
       state.supabase
         .from("showings")
-        .select("id,theatre_id,film_id,show_date,times,premium_times")
+        .select("id,theatre_id,film_id,festival_id,show_date,times,premium_times")
         .order("id", { ascending: true })
     ),
     fetchAllRowsFromSupabase("promos", () =>
@@ -1773,10 +1797,34 @@ async function loadDataFromSupabase() {
         .order("sort_order", { ascending: true })
         .order("id", { ascending: true })
     ),
+    fetchAllRowsFromSupabase("festivals", () =>
+      state.supabase
+        .from("festivals")
+        .select("id,slug,name,description,website,start_date,end_date,enabled,sort_order")
+        .order("sort_order", { ascending: true })
+        .order("name", { ascending: true })
+    ),
+    fetchAllRowsFromSupabase("festival_films", () =>
+      state.supabase
+        .from("festival_films")
+        .select("festival_id,film_id")
+        .order("festival_id", { ascending: true })
+        .order("film_id", { ascending: true })
+    ),
   ]);
 
   const theatreById = new Map();
   const filmById = new Map();
+  const festivalIdsByFilmId = new Map();
+  (festivalFilms || []).forEach((row) => {
+    const filmId = Number(row?.film_id);
+    const festivalId = Number(row?.festival_id);
+    if (!Number.isInteger(filmId) || !Number.isInteger(festivalId)) return;
+    if (!festivalIdsByFilmId.has(filmId)) {
+      festivalIdsByFilmId.set(filmId, new Set());
+    }
+    festivalIdsByFilmId.get(filmId).add(festivalId);
+  });
   const theatreGroups = theatres.map((theatreRow) => {
     const entry = {
       name: theatreRow.name,
@@ -1860,8 +1908,17 @@ async function loadDataFromSupabase() {
     const filmKey = String(showingRow.film_id);
     const film = theatre._filmMap.get(filmKey);
     if (!film) return;
+    const explicitFestivalId = Number(showingRow.festival_id);
+    const fallbackFestivalIds = festivalIdsByFilmId.get(Number(showingRow.film_id));
+    const inferredFestivalId =
+      fallbackFestivalIds && fallbackFestivalIds.size === 1
+        ? Array.from(fallbackFestivalIds)[0]
+        : null;
+    const resolvedFestivalId = Number.isInteger(explicitFestivalId) ? explicitFestivalId : inferredFestivalId;
+
     film.showings.push({
       date: showingRow.show_date,
+      festivalId: Number.isInteger(Number(resolvedFestivalId)) ? Number(resolvedFestivalId) : null,
       times: dedupeSortTimes(Array.isArray(showingRow.times) ? showingRow.times : []),
       premiumTimes: dedupeSortTimes(Array.isArray(showingRow.premium_times) ? showingRow.premium_times : []),
     });
@@ -1877,6 +1934,17 @@ async function loadDataFromSupabase() {
 
   return {
     theatreGroups,
+    festivals: (festivals || []).map((row) => ({
+      id: Number(row.id),
+      slug: String(row.slug || "").trim(),
+      name: String(row.name || "").trim(),
+      description: String(row.description || "").trim(),
+      website: String(row.website || "").trim(),
+      startDate: String(row.start_date || "").trim(),
+      endDate: String(row.end_date || "").trim(),
+      enabled: Boolean(row.enabled ?? true),
+      sortOrder: Number.isInteger(Number(row.sort_order)) ? Number(row.sort_order) : 0,
+    })),
     promotedCards: buildPromotedCardsFromSupabaseRows(promos),
   };
 }
@@ -1902,6 +1970,15 @@ function validateData(data) {
   if (!data || !Array.isArray(data.theatreGroups)) {
     throw new Error("Expected object with theatreGroups array.");
   }
+  if (typeof data.festivals !== "undefined" && !Array.isArray(data.festivals)) {
+    throw new Error("Expected festivals to be an array when provided.");
+  }
+
+  const knownFestivalIds = new Set(
+    (data.festivals || [])
+      .map((festival) => Number(festival?.id))
+      .filter((id) => Number.isInteger(id) && id > 0)
+  );
 
   for (const theatre of data.theatreGroups) {
     if (typeof theatre?.name !== "string" || !theatre.name.trim()) {
@@ -1976,6 +2053,16 @@ function validateData(data) {
         if (typeof showing?.premiumTimes !== "undefined" && !Array.isArray(showing.premiumTimes)) {
           throw new Error(`A showing for "${film.title}" has invalid premiumTimes array.`);
         }
+        const rawFestivalId = showing?.festivalId;
+        const normalizedFestivalId = normalizeNullablePositiveInt(rawFestivalId);
+        if (typeof showing === "object" && showing) {
+          showing.festivalId = normalizedFestivalId;
+        }
+        if (normalizedFestivalId !== null && knownFestivalIds.size > 0 && !knownFestivalIds.has(normalizedFestivalId)) {
+          if (typeof showing === "object" && showing) {
+            showing.festivalId = null;
+          }
+        }
         const standardTimes = dedupeSortTimes(showing?.times || []);
         const premiumTimes = dedupeSortTimes(showing?.premiumTimes || []);
         if (standardTimes.length === 0 && premiumTimes.length === 0) {
@@ -2015,6 +2102,7 @@ function syncAdminEditor() {
 
   renderTheatreOptions();
   renderFilmOptions();
+  renderShowingFestivalOptions();
   fillSelectedTicketLink();
   renderShowingsList();
   renderPromoSettingsEditor();
@@ -2160,6 +2248,9 @@ function renderFilmOptions() {
   if (elements.showingPremiumTimesInput) {
     elements.showingPremiumTimesInput.disabled = !hasFilm;
   }
+  if (elements.showingFestivalSelect) {
+    elements.showingFestivalSelect.disabled = !hasFilm;
+  }
   elements.addShowing.disabled = !hasFilm;
   elements.saveAllAdmin.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
   if (elements.saveAllPromos) {
@@ -2175,6 +2266,42 @@ function fillSelectedTicketLink() {
   elements.saveSelectedTicketLink.disabled =
     disabled || state.admin.isSaving || state.admin.isRefreshingTmdb;
   elements.selectedTicketLinkInput.value = film?.ticketLink || "";
+}
+
+function renderShowingFestivalOptions() {
+  const select = elements.showingFestivalSelect;
+  if (!select) return;
+  const previousValue = String(select.value || "");
+  select.innerHTML = "";
+
+  const noneOption = document.createElement("option");
+  noneOption.value = "";
+  noneOption.textContent = "None";
+  select.appendChild(noneOption);
+
+  const festivals = (state.data.festivals || [])
+    .filter((festival) => Boolean(festival?.enabled ?? true))
+    .sort((a, b) => {
+      const orderA = Number.isInteger(Number(a?.sortOrder)) ? Number(a.sortOrder) : 0;
+      const orderB = Number.isInteger(Number(b?.sortOrder)) ? Number(b.sortOrder) : 0;
+      if (orderA !== orderB) return orderA - orderB;
+      return String(a?.name || "").localeCompare(String(b?.name || ""));
+    });
+
+  festivals.forEach((festival) => {
+    const id = Number(festival?.id);
+    if (!Number.isInteger(id) || id <= 0) return;
+    const option = document.createElement("option");
+    option.value = String(id);
+    option.textContent = String(festival?.name || `Festival ${id}`);
+    select.appendChild(option);
+  });
+
+  if (previousValue && Array.from(select.options).some((option) => option.value === previousValue)) {
+    select.value = previousValue;
+  } else {
+    select.value = "";
+  }
 }
 
 function renderShowingsList() {
@@ -2202,7 +2329,12 @@ function renderShowingsList() {
       if (premiumTimes.length) {
         timeLabelParts.push(`Premium: ${premiumTimes.join(", ")}`);
       }
-      label.textContent = `${showing.date}: ${timeLabelParts.join(" | ")}`;
+      const festivalId = Number(showing?.festivalId);
+      const festival = Number.isInteger(festivalId)
+        ? (state.data.festivals || []).find((entry) => Number(entry?.id) === festivalId)
+        : null;
+      const festivalLabel = festival?.name ? ` [Festival: ${festival.name}]` : "";
+      label.textContent = `${showing.date}${festivalLabel}: ${timeLabelParts.join(" | ")}`;
       const button = document.createElement("button");
       button.type = "button";
       button.className = "ghost-btn";
@@ -2771,8 +2903,8 @@ async function persistData() {
   }
   await saveDataToSupabase();
   const refreshed = await loadDataFromSupabase();
-  validateData({ theatreGroups: refreshed.theatreGroups });
-  state.data = { theatreGroups: refreshed.theatreGroups };
+  validateData({ theatreGroups: refreshed.theatreGroups, festivals: refreshed.festivals || [] });
+  state.data = { theatreGroups: refreshed.theatreGroups, festivals: refreshed.festivals || [] };
   state.promotedCards = refreshed.promotedCards;
   state.source = "supabase";
   state.loadedFromSupabaseThisSession = true;
@@ -2833,6 +2965,7 @@ async function verifySupabaseSchema(supabase) {
     supabase.from("showings").select("id").limit(1),
     supabase.from("theatre_films").select("theatre_id").limit(1),
     supabase.from("promos").select("id").limit(1),
+    supabase.from("festivals").select("id").limit(1),
   ]);
   const failed = checks.find((result) => result.error);
   if (failed?.error) {
@@ -2962,11 +3095,36 @@ function buildReplacePayload(data, promotedCards) {
   const films = [];
   const theatreFilms = [];
   const showings = [];
+  const festivals = [];
+  const festivalSlugByDbId = new Map();
 
   const filmKeyByUniq = new Map();
   const filmPayloadIndexByKey = new Map();
   let theatreCounter = 0;
   let filmCounter = 0;
+  const festivalDbIdByName = new Map();
+
+  (data.festivals || []).forEach((festival, index) => {
+    const name = String(festival?.name || "").trim();
+    const slug = String(festival?.slug || "").trim();
+    if (!name || !slug) return;
+    const dbId = Number.isInteger(Number(festival?.id)) ? Number(festival.id) : null;
+    festivals.push({
+      id: dbId,
+      slug,
+      name,
+      description: String(festival?.description || "").trim(),
+      website: String(festival?.website || "").trim(),
+      start_date: String(festival?.startDate || "").trim() || null,
+      end_date: String(festival?.endDate || "").trim() || null,
+      enabled: Boolean(festival?.enabled ?? true),
+      sort_order: Number.isInteger(Number(festival?.sortOrder)) ? Number(festival.sortOrder) : index,
+    });
+    festivalDbIdByName.set(normalizeSearchText(name), dbId);
+    if (dbId) {
+      festivalSlugByDbId.set(dbId, slug);
+    }
+  });
 
   data.theatreGroups.forEach((theatre) => {
     const theatreKey = `t_${theatreCounter++}`;
@@ -3062,9 +3220,14 @@ function buildReplacePayload(data, promotedCards) {
       }
 
       (film.showings || []).forEach((showing) => {
+        const showingFestivalId = Number.isInteger(Number(showing?.festivalId))
+          ? Number(showing.festivalId)
+          : (festivalDbIdByName.get(normalizeSearchText(showing?.festivalName || "")) ?? null);
         showings.push({
           theatre_key: theatreKey,
           film_key: filmKey,
+          festival_id: showingFestivalId,
+          festival_slug: showingFestivalId ? (festivalSlugByDbId.get(showingFestivalId) || "") : "",
           show_date: showing.date,
           times: dedupeSortTimes(showing.times || []),
           premium_times: dedupeSortTimes(showing.premiumTimes || []),
@@ -3076,6 +3239,7 @@ function buildReplacePayload(data, promotedCards) {
   return {
     theatres,
     films,
+    festivals,
     theatre_films: theatreFilms,
     showings,
     promos: buildPromosReplacePayload(promotedCards),
@@ -3083,6 +3247,25 @@ function buildReplacePayload(data, promotedCards) {
 }
 
 function buildShowtimesDeltaPayload(previousPayload, nextPayload) {
+  const prevFestivalsById = new Map(
+    (previousPayload?.festivals || [])
+      .filter((row) => Number.isInteger(Number(row?.id)))
+      .map((row) => [Number(row.id), row])
+  );
+  const nextFestivalsById = new Map(
+    (nextPayload?.festivals || [])
+      .filter((row) => Number.isInteger(Number(row?.id)))
+      .map((row) => [Number(row.id), row])
+  );
+  const festivalsUpsert = (nextPayload?.festivals || []).filter((row) => {
+    const id = Number(row?.id);
+    if (!Number.isInteger(id)) return true;
+    const prev = prevFestivalsById.get(id);
+    if (!prev) return true;
+    return hasFestivalRowChanges(prev, row);
+  });
+  const festivalsDeleteIds = Array.from(prevFestivalsById.keys()).filter((id) => !nextFestivalsById.has(id));
+
   const prevTheatresById = new Map(
     (previousPayload?.theatres || [])
       .filter((row) => Number.isInteger(Number(row?.db_id)))
@@ -3161,6 +3344,8 @@ function buildShowtimesDeltaPayload(previousPayload, nextPayload) {
   const promosDeleteIds = Array.from(prevPromosById.keys()).filter((id) => !nextPromosById.has(id));
 
   return {
+    festivals_upsert: festivalsUpsert,
+    festivals_delete_ids: festivalsDeleteIds,
     theatres_upsert: theatresUpsert,
     theatres_delete_ids: theatresDeleteIds,
     films_upsert: filmsUpsert,
@@ -3197,6 +3382,19 @@ function hasTheatreRowChanges(previousRow, nextRow) {
     String(previousRow?.website || "") !== String(nextRow?.website || "") ||
     nullableNumber(previousRow?.latitude) !== nullableNumber(nextRow?.latitude) ||
     nullableNumber(previousRow?.longitude) !== nullableNumber(nextRow?.longitude)
+  );
+}
+
+function hasFestivalRowChanges(previousRow, nextRow) {
+  return (
+    String(previousRow?.slug || "") !== String(nextRow?.slug || "") ||
+    String(previousRow?.name || "") !== String(nextRow?.name || "") ||
+    String(previousRow?.description || "") !== String(nextRow?.description || "") ||
+    String(previousRow?.website || "") !== String(nextRow?.website || "") ||
+    String(previousRow?.start_date || "") !== String(nextRow?.start_date || "") ||
+    String(previousRow?.end_date || "") !== String(nextRow?.end_date || "") ||
+    Boolean(previousRow?.enabled) !== Boolean(nextRow?.enabled) ||
+    nullableInt(previousRow?.sort_order) !== nullableInt(nextRow?.sort_order)
   );
 }
 
@@ -3265,6 +3463,7 @@ function buildShowingsDelta(previousRows, nextRows) {
         film_key: nextEntry.filmKey,
         theatre_db_id: nextEntry.theatreDbId,
         film_db_id: nextEntry.filmDbId,
+        festival_id: showing.festival_id,
         show_date: showing.show_date,
         times: showing.times,
         premium_times: showing.premium_times,
@@ -3311,6 +3510,7 @@ function indexShowingsByPair(rows) {
     }
     const entry = index.get(pairKey);
     entry.showings.push({
+      festival_id: nullableInt(row?.festival_id),
       show_date: String(row?.show_date || ""),
       times: dedupeSortTimes(row?.times || []),
       premium_times: dedupeSortTimes(row?.premium_times || []),
@@ -3334,6 +3534,15 @@ function areJsonValuesEqual(a, b) {
 function nullableInt(value) {
   const parsed = Number(value);
   return Number.isInteger(parsed) ? parsed : null;
+}
+
+function normalizeNullablePositiveInt(value) {
+  if (value === null || typeof value === "undefined") return null;
+  const text = String(value).trim();
+  if (!text) return null;
+  const parsed = Number(text);
+  if (!Number.isInteger(parsed) || parsed <= 0) return null;
+  return parsed;
 }
 
 function nullableNumber(value) {
@@ -3425,7 +3634,9 @@ function render() {
     grouped = filterSingleDayGroupsByDistance(grouped, selectedRadiusMiles);
   } else {
     syncDayPickerUI("");
-    grouped = buildGroups(state.data.theatreGroups, state.view);
+    grouped = state.view === "festivals"
+      ? buildFestivalGroups(state.data.theatreGroups, state.data.festivals || [])
+      : buildGroups(state.data.theatreGroups, state.view);
   }
 
   elements.results.classList.add("results-masonry");
@@ -3441,6 +3652,8 @@ function render() {
       entries = entries.filter(([, group]) => doesFilmStyleGroupMatchSearch(group, searchQuery));
     } else if (state.view === "theatres") {
       entries = entries.filter(([groupName, group]) => doesTheatreGroupMatchSearch(groupName, group, searchQuery));
+    } else if (state.view === "festivals") {
+      entries = entries.filter(([groupName, group]) => doesFestivalGroupMatchSearch(groupName, group, searchQuery));
     }
   }
   if (!entries.length) {
@@ -3448,6 +3661,8 @@ function render() {
       ? "No films found..."
       : state.view === "theatres"
         ? "No theatres found..."
+        : state.view === "festivals"
+          ? "No festivals found..."
         : state.theatreDistanceStatus === "loading"
           ? "Finding nearby showtimes..."
           : state.theatreDistanceError === "location-not-configured"
@@ -3495,6 +3710,15 @@ function render() {
       const labelB = `${groupB?.theatreInfo?.name || ""} ${groupB?.theatreInfo?.city || ""}`;
       return labelA.localeCompare(labelB);
     });
+  } else if (state.view === "festivals") {
+    entries.sort(([, groupA], [, groupB]) => {
+      const orderA = Number(groupA?.festivalInfo?.sortOrder ?? 0);
+      const orderB = Number(groupB?.festivalInfo?.sortOrder ?? 0);
+      if (orderA !== orderB) return orderA - orderB;
+      const nameA = String(groupA?.festivalInfo?.name || "");
+      const nameB = String(groupB?.festivalInfo?.name || "");
+      return nameA.localeCompare(nameB);
+    });
   } else {
     entries.sort(([a], [b]) => a.localeCompare(b));
   }
@@ -3537,7 +3761,9 @@ function render() {
         card.appendChild(featuredStamp);
       }
     } else {
-      groupTitle.textContent = groupName;
+      groupTitle.textContent = state.view === "festivals"
+        ? String(group?.festivalInfo?.name || groupName)
+        : groupName;
     }
     const subtitle = card.querySelector(".group-subtitle");
     const groupLink = card.querySelector(".group-link");
@@ -3572,6 +3798,19 @@ function render() {
           : `Show all (+${hiddenFilmCount})`;
         filmExpandToggle.setAttribute("aria-expanded", String(theatreGroupExpanded));
         filmExpandToggle.classList.remove("hidden");
+      }
+    }
+    if (group.festivalInfo && state.view === "festivals") {
+      const details = [group.festivalInfo.startDate, group.festivalInfo.endDate]
+        .filter(Boolean)
+        .join(" - ");
+      subtitle.textContent = details || "Festival showtimes";
+      subtitle.classList.remove("hidden");
+      const festivalWebsite = normalizeOutboundUrl(group.festivalInfo.website);
+      if (festivalWebsite) {
+        groupLink.href = festivalWebsite;
+        groupLink.textContent = "Visit festival website";
+        groupLink.classList.remove("hidden");
       }
     }
     if (isFilmsView) {
@@ -3777,8 +4016,13 @@ function render() {
             item.appendChild(rowActions);
           }
         } else {
-          main.textContent = `${show.theatre}`;
-          meta.textContent = `${show.city}`;
+          if (state.view === "festivals") {
+            main.textContent = show.film || show.theatre || "Showtime";
+            meta.textContent = [show.theatre || "", show.city || ""].filter(Boolean).join(", ");
+          } else {
+            main.textContent = `${show.theatre}`;
+            meta.textContent = `${show.city}`;
+          }
           renderSchedule(schedule, show.dates, show.premiumDates);
           const ticketUrl = normalizeOutboundUrl(show.ticketLink);
           if (ticketUrl) {
@@ -4196,6 +4440,10 @@ function syncPublicSearchUI() {
     elements.publicSearchWrap.classList.remove("hidden");
     elements.publicSearchInput.placeholder = "Search theatres, town, or film...";
     elements.publicSearchInput.value = state.publicSearch.theatres;
+  } else if (state.view === "festivals") {
+    elements.publicSearchWrap.classList.remove("hidden");
+    elements.publicSearchInput.placeholder = "Search festivals, films, or theatres...";
+    elements.publicSearchInput.value = state.publicSearch.festivals;
   } else {
     elements.publicSearchWrap.classList.add("hidden");
     elements.publicSearchInput.value = "";
@@ -4212,6 +4460,7 @@ function syncLatestPostVisibility() {
 function getPublicSearchQueryForView(view) {
   if (view === "films") return normalizeSearchText(state.publicSearch.films);
   if (view === "theatres") return normalizeSearchText(state.publicSearch.theatres);
+  if (view === "festivals") return normalizeSearchText(state.publicSearch.festivals);
   return "";
 }
 
@@ -4230,6 +4479,28 @@ function doesTheatreGroupMatchSearch(groupName, group, query) {
     return true;
   }
   return (group?.shows || []).some((show) => normalizeSearchText(show?.film || "").includes(query));
+}
+
+function doesFestivalGroupMatchSearch(groupName, group, query) {
+  if (!query) return true;
+  const festivalName = group?.festivalInfo?.name || groupName;
+  const festivalDescription = group?.festivalInfo?.description || "";
+  if (
+    normalizeSearchText(festivalName).includes(query) ||
+    normalizeSearchText(festivalDescription).includes(query)
+  ) {
+    return true;
+  }
+  return (group?.shows || []).some((show) => {
+    const haystack = [
+      show?.film || "",
+      show?.theatre || "",
+      show?.city || "",
+    ]
+      .map((value) => normalizeSearchText(value))
+      .join(" ");
+    return haystack.includes(query);
+  });
 }
 
 function normalizeSearchText(value) {
@@ -5007,6 +5278,77 @@ function buildSingleDayGroups(theatres, selectedDate) {
         premiumDates: {
           [selectedDate]: premiumTimes,
         },
+      });
+    });
+  });
+
+  return grouped;
+}
+
+function buildFestivalGroups(theatres, festivals) {
+  const grouped = {};
+  const now = new Date();
+  const festivalById = new Map(
+    (festivals || [])
+      .filter((festival) => Number.isInteger(Number(festival?.id)))
+      .map((festival) => [Number(festival.id), festival])
+  );
+
+  theatres.forEach((theatre) => {
+    (theatre.films || []).forEach((film) => {
+      const metadata = extractFilmMetadata(film);
+      (film.showings || []).forEach((showing) => {
+        const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
+        if (!festivalId) return;
+        const times = (showing.times || []).filter((time) => {
+          const showDateTime = getShowDateTime(showing.date, time);
+          return Boolean(showDateTime && showDateTime >= now);
+        });
+        const premiumTimes = (showing.premiumTimes || []).filter((time) => {
+          const showDateTime = getShowDateTime(showing.date, time);
+          return Boolean(showDateTime && showDateTime >= now);
+        });
+        if (!times.length && !premiumTimes.length) return;
+
+        const festival = festivalById.get(festivalId);
+        if (festival && !festival.enabled) return;
+        const festivalName = String(festival?.name || `Festival ${festivalId}`).trim();
+        const groupKey = `festival::${festivalId}`;
+        if (!grouped[groupKey]) {
+          grouped[groupKey] = {
+            festivalInfo: {
+              id: festivalId,
+              name: festivalName,
+              description: String(festival?.description || "").trim(),
+              website: String(festival?.website || "").trim(),
+              startDate: String(festival?.startDate || "").trim(),
+              endDate: String(festival?.endDate || "").trim(),
+              sortOrder: Number.isInteger(Number(festival?.sortOrder)) ? Number(festival.sortOrder) : 0,
+            },
+            theatreInfo: null,
+            dayInfo: null,
+            filmInfo: null,
+            shows: [],
+          };
+        }
+
+        grouped[groupKey].shows.push({
+          theatre: theatre.name,
+          city: theatre.city,
+          film: film.title,
+          year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
+          ticketLink: film.ticketLink,
+          posterUrl: metadata.posterUrl,
+          director: metadata.director,
+          stars: metadata.stars,
+          genres: metadata.genres,
+          dates: {
+            [showing.date]: dedupeSortTimes(times),
+          },
+          premiumDates: {
+            [showing.date]: dedupeSortTimes(premiumTimes),
+          },
+        });
       });
     });
   });

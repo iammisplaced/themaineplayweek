@@ -203,6 +203,8 @@ Film metadata source hardening now uses `public.films.metadata_source` (`tmdb` o
 
 Film ranking override now uses `public.films.ranking_override` (boolean). Re-run `supabase/schema.sql` to install the column and RPC support.
 
+Film festivals are now supported via `public.festivals` and `public.showings.festival_id` (optional per showing). Re-run `supabase/schema.sql` to install festival tables/relations and RPC support.
+
 Film synopsis is now stored in `public.films.synopsis` and synchronized from TMDb `overview` by `scripts/enrich-tmdb-supabase.mjs`. Re-run `supabase/schema.sql` to install the new column and RPC updates.
 
 If you see `DELETE requires a WHERE clause`, re-run `supabase/schema.sql` to install the updated `replace_showtimes_data` function.

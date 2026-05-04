@@ -70,6 +70,7 @@
           </button>
           <button class="tab" role="tab" data-view="theatres" aria-selected="false">Theatres</button>
           <button class="tab" role="tab" data-view="films" aria-selected="false">All Films</button>
+          <button class="tab" role="tab" data-view="festivals" aria-selected="false">Festivals</button>
         </div>
         <div id="publicSearchWrap" class="public-search">
           <input id="publicSearchInput" type="search" placeholder="Search films..." aria-label="Search listings" />
@@ -210,6 +211,10 @@
                 <input id="showingTimesInput" type="text" placeholder="1:30 PM, 6:50 PM" />
                 <label for="showingPremiumTimesInput">Premium Times (comma separated)</label>
                 <input id="showingPremiumTimesInput" type="text" placeholder="4:10 PM, 7:40 PM" />
+                <label for="showingFestivalSelect">Festival (optional)</label>
+                <select id="showingFestivalSelect">
+                  <option value="">None</option>
+                </select>
                 <div class="admin-inline-actions">
                   <button id="addShowing">+ Add Showing</button>
                 </div>
