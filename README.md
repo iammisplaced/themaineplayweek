@@ -75,23 +75,26 @@ Required headers:
 Optional headers:
 - `film_year` (only needed if multiple films with same title exist in a theatre)
 - `film_tmdb_id` (only needed if multiple films with same title exist in a theatre)
+- `room` (optional room/screen label, for example `Main Hall`)
 - `festival_name` (must match an existing festival name)
 - `ticket_link`
 
 Notes:
 - Theatre must already exist in admin data. Match is by `theatre_name + theatre_city` (case-insensitive).
-- Film must already exist under that theatre. Match is by `film_title` (case-insensitive), with optional `film_year`/`film_tmdb_id` disambiguation.
+- Film is matched by `film_title` (case-insensitive), with optional `film_year`/`film_tmdb_id` disambiguation.
+- If no film match exists, CSV import will create the film under the matched theatre automatically.
 - Film title matching is tolerant of punctuation/casing differences (for example `Spider-Man` vs `spider man`).
 - Existing showings on the same date are merged and deduplicated.
+- If `room` is provided, it is stored on the showing for that date.
 - If `festival_name` is provided, the showing is linked to that existing festival.
 - Blank `ticket_link` values do not clear or overwrite existing ticket links.
 
 Example CSV:
 
 ```csv
-theatre_name,theatre_city,film_title,show_date,show_times,festival_name,ticket_link
-Nickelodeon Cinema,Portland,Anora,2026-03-12,6:30 PM|9:15 PM,Portland Film Festival,https://tickets.example.com/anora
-Nickelodeon Cinema,Portland,Anora,2026-03-13,"4:00 PM, 7:45 PM",,
+theatre_name,theatre_city,film_title,show_date,show_times,room,festival_name,ticket_link
+Nickelodeon Cinema,Portland,Anora,2026-03-12,6:30 PM|9:15 PM,Main Hall,Portland Film Festival,https://tickets.example.com/anora
+Nickelodeon Cinema,Portland,Anora,2026-03-13,"4:00 PM, 7:45 PM",,,
 ```
 
 ## Fallback behavior
