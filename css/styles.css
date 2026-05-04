@@ -704,6 +704,10 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   gap: 0.75rem;
 }
 
+.results.results-masonry[data-view="festivals"] {
+  grid-template-columns: 1fr;
+}
+
 .results.results-masonry[data-view="films"] .group-card.film-card:not(.film-card-collapsed),
 .results.results-masonry[data-view="days"] .group-card.film-card:not(.film-card-collapsed) {
   grid-column: span 2;
@@ -726,6 +730,46 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   border-radius: var(--radius);
   padding: 0.9rem;
   box-shadow: 0 7px 18px rgba(29, 31, 31, 0.06);
+}
+
+.group-card.festival-card {
+  --festival-accent: #c54828;
+  position: relative;
+  padding: 1.15rem 1.2rem;
+  border-color: #cbb692;
+  background:
+    linear-gradient(180deg, rgba(255, 249, 235, 0.98) 0%, rgba(250, 241, 225, 0.98) 100%),
+    var(--panel);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.72) inset,
+    0 10px 24px rgba(83, 62, 30, 0.12);
+  border-top: 4px solid var(--festival-accent);
+}
+
+.group-card.festival-card .group-title {
+  margin-right: 10.5rem;
+  font-size: 1.32rem;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.festival-date-stamp {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--festival-accent) 48%, #ffffff 52%);
+  background: color-mix(in srgb, var(--festival-accent) 16%, #fff9eb 84%);
+  color: color-mix(in srgb, var(--festival-accent) 78%, #3c2613 22%);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 0.28rem 0.54rem;
 }
 
 .group-card.film-card {
@@ -1172,6 +1216,13 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   gap: 0.6rem;
 }
 
+@media (min-width: 900px) {
+  .results.results-masonry[data-view="festivals"] .group-card.festival-card .show-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
 .show-item {
   border: 1px dashed var(--border);
   border-radius: 10px;
@@ -1217,6 +1268,39 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
 
 .show-main {
   font-weight: 600;
+}
+
+.results.results-masonry[data-view="festivals"] .festival-show-item .show-main {
+  display: grid;
+  gap: 0.34rem;
+  font-size: 1.08rem;
+  line-height: 1.22;
+  font-weight: 700;
+}
+
+.festival-entry-ribbon {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.16rem 0.54rem;
+  font-size: 0.62rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #fff9ec;
+  background: var(--festival-accent, var(--accent));
+  box-shadow: 0 2px 6px rgba(29, 31, 31, 0.18);
+}
+
+.festival-entry-ribbon-inline {
+  display: flex;
+  margin-bottom: 0.28rem;
+}
+
+.results.results-masonry[data-view="festivals"] .festival-show-item .show-meta {
+  margin-top: 0.22rem;
 }
 
 .show-meta {
@@ -1720,6 +1804,41 @@ textarea {
     0 1px 0 rgba(255, 255, 255, 0.05) inset,
     0 0 0 1px rgba(141, 210, 193, 0.12) inset,
     0 10px 20px rgba(0, 0, 0, 0.35);
+}
+
+:root[data-theme="dark"] .group-card.festival-card {
+  border-color: rgba(237, 198, 130, 0.34);
+  background:
+    linear-gradient(180deg, rgba(53, 42, 24, 0.86) 0%, rgba(36, 30, 22, 0.92) 100%),
+    var(--panel);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 10px 24px rgba(0, 0, 0, 0.36);
+}
+
+:root[data-theme="dark"] .festival-date-stamp {
+  border-color: color-mix(in srgb, var(--festival-accent) 55%, #f2e0c4 45%);
+  background: color-mix(in srgb, var(--festival-accent) 24%, #261d12 76%);
+  color: color-mix(in srgb, var(--festival-accent) 68%, #ffe8c7 32%);
+}
+
+@media (max-width: 700px) {
+  .group-card.festival-card .group-title {
+    margin-right: 0;
+    padding-top: 1.95rem;
+  }
+
+  .festival-date-stamp {
+    top: 0.55rem;
+    right: 0.6rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    padding: 0.24rem 0.46rem;
+  }
+}
+
+:root[data-theme="dark"] .festival-entry-ribbon {
+  color: #141615;
 }
 
 :root[data-theme="dark"] .film-favorite-stamp {

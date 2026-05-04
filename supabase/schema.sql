@@ -107,12 +107,15 @@ create table if not exists public.festivals (
   name text not null,
   description text not null default '',
   website text not null default '',
+  primary_color text not null default '',
   start_date date,
   end_date date,
   enabled boolean not null default true,
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
 );
+
+alter table public.festivals add column if not exists primary_color text not null default '';
 
 create table if not exists public.festival_films (
   festival_id bigint not null references public.festivals(id) on delete cascade,
@@ -425,6 +428,7 @@ begin
       name,
       description,
       website,
+      primary_color,
       start_date,
       end_date,
       enabled,
@@ -435,6 +439,7 @@ begin
       coalesce(festival_item->>'name', ''),
       coalesce(festival_item->>'description', ''),
       coalesce(festival_item->>'website', ''),
+      coalesce(festival_item->>'primary_color', ''),
       nullif(festival_item->>'start_date', '')::date,
       nullif(festival_item->>'end_date', '')::date,
       coalesce((festival_item->>'enabled')::boolean, true),
@@ -632,6 +637,7 @@ begin
         name = coalesce(festival_item->>'name', ''),
         description = coalesce(festival_item->>'description', ''),
         website = coalesce(festival_item->>'website', ''),
+        primary_color = coalesce(festival_item->>'primary_color', ''),
         start_date = nullif(festival_item->>'start_date', '')::date,
         end_date = nullif(festival_item->>'end_date', '')::date,
         enabled = coalesce((festival_item->>'enabled')::boolean, true),
@@ -646,6 +652,7 @@ begin
         name,
         description,
         website,
+        primary_color,
         start_date,
         end_date,
         enabled,
@@ -656,6 +663,7 @@ begin
         coalesce(festival_item->>'name', ''),
         coalesce(festival_item->>'description', ''),
         coalesce(festival_item->>'website', ''),
+        coalesce(festival_item->>'primary_color', ''),
         nullif(festival_item->>'start_date', '')::date,
         nullif(festival_item->>'end_date', '')::date,
         coalesce((festival_item->>'enabled')::boolean, true),

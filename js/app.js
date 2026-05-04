@@ -189,6 +189,7 @@ const elements = {
   adminSectionTabs: Array.from(document.querySelectorAll(".admin-section-tab")),
   adminMoviesPanel: document.getElementById("adminMoviesPanel"),
   adminPromosPanel: document.getElementById("adminPromosPanel"),
+  adminFestivalsPanel: document.getElementById("adminFestivalsPanel"),
   adminEmailInput: document.getElementById("adminEmailInput"),
   adminLoginButton: document.getElementById("adminLoginButton"),
   openFilmCatalogButton: document.getElementById("openFilmCatalogButton"),
@@ -216,6 +217,19 @@ const elements = {
   modalPromoTitleInput: document.getElementById("modalPromoTitleInput"),
   modalPromoButtonUrlInput: document.getElementById("modalPromoButtonUrlInput"),
   cancelAddPromo: document.getElementById("cancelAddPromo"),
+  openAddFestivalModalButton: document.getElementById("openAddFestivalModalButton"),
+  festivalSettingsList: document.getElementById("festivalSettingsList"),
+  saveAllFestivals: document.getElementById("saveAllFestivals"),
+  addFestivalModal: document.getElementById("addFestivalModal"),
+  addFestivalForm: document.getElementById("addFestivalForm"),
+  modalFestivalNameInput: document.getElementById("modalFestivalNameInput"),
+  modalFestivalSlugInput: document.getElementById("modalFestivalSlugInput"),
+  modalFestivalWebsiteInput: document.getElementById("modalFestivalWebsiteInput"),
+  modalFestivalPrimaryColorInput: document.getElementById("modalFestivalPrimaryColorInput"),
+  modalFestivalStartDateInput: document.getElementById("modalFestivalStartDateInput"),
+  modalFestivalEndDateInput: document.getElementById("modalFestivalEndDateInput"),
+  modalFestivalDescriptionInput: document.getElementById("modalFestivalDescriptionInput"),
+  cancelAddFestival: document.getElementById("cancelAddFestival"),
   addFilm: document.getElementById("addFilm"),
   editFilmMetadata: document.getElementById("editFilmMetadata"),
   addFilmModal: document.getElementById("addFilmModal"),
@@ -1332,6 +1346,149 @@ function bindEvents() {
 
   elements.saveAllAdmin.addEventListener("click", handleSaveAllChanges);
   elements.saveAllPromos?.addEventListener("click", handleSaveAllChanges);
+  elements.saveAllFestivals?.addEventListener("click", handleSaveAllChanges);
+
+  elements.festivalSettingsList?.addEventListener("change", (event) => {
+    if (!requireAdminAuth()) return;
+    const control = event.target.closest("[data-festival-index]");
+    if (!control) return;
+    const festivalIndex = Number(control.dataset.festivalIndex);
+    if (Number.isNaN(festivalIndex) || festivalIndex < 0 || festivalIndex >= (state.data.festivals || []).length) return;
+    const festival = state.data.festivals[festivalIndex];
+    if (!festival) return;
+
+    if (control.dataset.field === "name") {
+      festival.name = String(control.value || "").trim();
+      if (!String(festival.slug || "").trim()) {
+        festival.slug = slugifyTextSegment(festival.name);
+      }
+    } else if (control.dataset.field === "slug") {
+      festival.slug = slugifyTextSegment(control.value);
+    } else if (control.dataset.field === "website") {
+      festival.website = String(control.value || "").trim();
+    } else if (control.dataset.field === "primaryColor") {
+      festival.primaryColor = String(control.value || "").trim();
+    } else if (control.dataset.field === "startDate") {
+      festival.startDate = String(control.value || "").trim();
+    } else if (control.dataset.field === "endDate") {
+      festival.endDate = String(control.value || "").trim();
+    } else if (control.dataset.field === "description") {
+      festival.description = String(control.value || "");
+    } else if (control.dataset.field === "enabled") {
+      festival.enabled = Boolean(control.checked);
+    } else if (control.dataset.field === "sortOrder") {
+      const parsed = Number(control.value);
+      festival.sortOrder = Number.isInteger(parsed) ? parsed : 0;
+    }
+
+    renderFestivalSettingsEditor();
+    renderShowingFestivalOptions();
+    render();
+    elements.adminMessage.textContent = "Festival updated.";
+  });
+
+  elements.festivalSettingsList?.addEventListener("click", (event) => {
+    if (!requireAdminAuth()) return;
+    const removeButton = event.target.closest("button[data-remove-festival-index]");
+    if (!removeButton) return;
+    const festivalIndex = Number(removeButton.dataset.removeFestivalIndex);
+    if (Number.isNaN(festivalIndex) || festivalIndex < 0 || festivalIndex >= (state.data.festivals || []).length) return;
+    const festival = state.data.festivals[festivalIndex];
+    const label = String(festival?.name || "this festival").trim();
+    const confirmed = window.confirm(`Delete ${label}?`);
+    if (!confirmed) return;
+    const removeFestivalId = Number(festival?.id);
+    state.data.festivals.splice(festivalIndex, 1);
+    if (Number.isInteger(removeFestivalId) && removeFestivalId > 0) {
+      state.data.theatreGroups.forEach((theatre) => {
+        (theatre?.films || []).forEach((film) => {
+          (film?.showings || []).forEach((showing) => {
+            if (Number(showing?.festivalId) === removeFestivalId) {
+              showing.festivalId = null;
+            }
+          });
+        });
+      });
+    }
+    syncAdminEditor();
+    render();
+    elements.adminMessage.textContent = "Festival removed.";
+  });
+
+  elements.openAddFestivalModalButton?.addEventListener("click", () => {
+    if (!requireAdminAuth()) return;
+    elements.addFestivalForm?.reset();
+    elements.addFestivalModal?.showModal();
+  });
+
+  elements.cancelAddFestival?.addEventListener("click", () => {
+    elements.addFestivalModal?.close();
+  });
+
+  elements.addFestivalForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!requireAdminAuth()) return;
+    const name = String(elements.modalFestivalNameInput?.value || "").trim();
+    const slugInput = String(elements.modalFestivalSlugInput?.value || "").trim();
+    const slug = slugifyTextSegment(slugInput || name);
+    if (!name) {
+      elements.adminMessage.textContent = "Festival name is required.";
+      return;
+    }
+    if (!slug) {
+      elements.adminMessage.textContent = "Festival slug is required.";
+      return;
+    }
+    const duplicateSlug = (state.data.festivals || []).some(
+      (festival) => String(festival?.slug || "").trim().toLowerCase() === slug.toLowerCase()
+    );
+    if (duplicateSlug) {
+      elements.adminMessage.textContent = `Festival slug "${slug}" already exists.`;
+      return;
+    }
+    const primaryColor = String(elements.modalFestivalPrimaryColorInput?.value || "").trim();
+    if (primaryColor && !isValidCssColor(primaryColor)) {
+      elements.adminMessage.textContent = "Primary color is invalid. Use hex like #C54828.";
+      return;
+    }
+    const startDate = String(elements.modalFestivalStartDateInput?.value || "").trim();
+    const endDate = String(elements.modalFestivalEndDateInput?.value || "").trim();
+    if (startDate && !parseIsoDate(startDate)) {
+      elements.adminMessage.textContent = "Start date must be YYYY-MM-DD.";
+      return;
+    }
+    if (endDate && !parseIsoDate(endDate)) {
+      elements.adminMessage.textContent = "End date must be YYYY-MM-DD.";
+      return;
+    }
+    if (startDate && endDate && startDate > endDate) {
+      elements.adminMessage.textContent = "End date must be on or after start date.";
+      return;
+    }
+
+    const nextSortOrder = (state.data.festivals || []).length
+      ? Math.max(
+          ...state.data.festivals.map((festival) => (
+            Number.isInteger(Number(festival?.sortOrder)) ? Number(festival.sortOrder) : 0
+          ))
+        ) + 1
+      : 0;
+    state.data.festivals.push({
+      name,
+      slug,
+      description: String(elements.modalFestivalDescriptionInput?.value || "").trim(),
+      website: String(elements.modalFestivalWebsiteInput?.value || "").trim(),
+      primaryColor,
+      startDate,
+      endDate,
+      enabled: true,
+      sortOrder: nextSortOrder,
+    });
+    elements.addFestivalModal?.close();
+    syncAdminEditor();
+    render();
+    elements.adminMessage.textContent = "Festival added.";
+  });
 
   elements.applyJson.addEventListener("click", () => {
     if (!requireAdminAuth()) return;
@@ -1356,6 +1513,7 @@ function bindEvents() {
       "show_date",
       "show_times",
       "premium_show_times",
+      "festival_name",
       "ticket_link",
       "film_year",
       "film_tmdb_id",
@@ -1369,11 +1527,12 @@ function bindEvents() {
         "2026-03-12",
         "6:30 PM|9:15 PM",
         "",
+        "",
         "https://tickets.example.com/anora",
         "",
         "",
       ],
-      ["Nickelodeon Cinema", "Portland", "Anora", "2026-03-13", "4:00 PM|7:45 PM", "9:55 PM", "", "", ""],
+      ["Nickelodeon Cinema", "Portland", "Anora", "2026-03-13", "4:00 PM|7:45 PM", "9:55 PM", "", "", "", ""],
     ];
     const csv = rows.map((row) => row.map((value) => toCsvCell(value)).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
@@ -1800,7 +1959,7 @@ async function loadDataFromSupabase() {
     fetchAllRowsFromSupabase("festivals", () =>
       state.supabase
         .from("festivals")
-        .select("id,slug,name,description,website,start_date,end_date,enabled,sort_order")
+        .select("id,slug,name,description,website,primary_color,start_date,end_date,enabled,sort_order")
         .order("sort_order", { ascending: true })
         .order("name", { ascending: true })
     ),
@@ -1940,6 +2099,7 @@ async function loadDataFromSupabase() {
       name: String(row.name || "").trim(),
       description: String(row.description || "").trim(),
       website: String(row.website || "").trim(),
+      primaryColor: String(row.primary_color || "").trim(),
       startDate: String(row.start_date || "").trim(),
       endDate: String(row.end_date || "").trim(),
       enabled: Boolean(row.enabled ?? true),
@@ -2106,6 +2266,7 @@ function syncAdminEditor() {
   fillSelectedTicketLink();
   renderShowingsList();
   renderPromoSettingsEditor();
+  renderFestivalSettingsEditor();
   if (!elements.adminPanel?.classList.contains("open")) return;
   scheduleAdminJsonSync();
 }
@@ -2148,13 +2309,15 @@ function updateAdminAuthUI() {
 }
 
 function setAdminSection(section) {
-  const normalized = section === "promos" ? "promos" : "movies";
+  const normalized = section === "promos" || section === "festivals" ? section : "movies";
   state.admin.section = normalized;
   syncAdminSectionUI();
 }
 
 function syncAdminSectionUI() {
-  const section = state.admin.section === "promos" ? "promos" : "movies";
+  const section = state.admin.section === "promos" || state.admin.section === "festivals"
+    ? state.admin.section
+    : "movies";
   elements.adminSectionTabs.forEach((button) => {
     const selected = button.dataset.adminSection === section;
     button.classList.toggle("active", selected);
@@ -2162,6 +2325,7 @@ function syncAdminSectionUI() {
   });
   elements.adminMoviesPanel?.classList.toggle("hidden", section !== "movies");
   elements.adminPromosPanel?.classList.toggle("hidden", section !== "promos");
+  elements.adminFestivalsPanel?.classList.toggle("hidden", section !== "festivals");
 }
 
 function renderTheatreOptions() {
@@ -2255,6 +2419,9 @@ function renderFilmOptions() {
   elements.saveAllAdmin.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
   if (elements.saveAllPromos) {
     elements.saveAllPromos.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
+  }
+  if (elements.saveAllFestivals) {
+    elements.saveAllFestivals.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
   }
   elements.saveSelectedTicketLink.disabled = !hasFilm || state.admin.isSaving || state.admin.isRefreshingTmdb;
 }
@@ -2413,6 +2580,138 @@ function renderPromoSettingsEditor() {
   });
 }
 
+function renderFestivalSettingsEditor() {
+  if (!elements.festivalSettingsList) return;
+  elements.festivalSettingsList.innerHTML = "";
+
+  const festivals = state.data.festivals || [];
+  festivals.forEach((festival, index) => {
+    const item = document.createElement("article");
+    item.className = "promo-settings-item";
+
+    const heading = document.createElement("p");
+    heading.className = "promo-settings-heading";
+    heading.textContent = String(festival?.name || "festival").trim() || "festival";
+
+    const enabledWrap = document.createElement("label");
+    enabledWrap.className = "promo-settings-toggle";
+    const enabledInput = document.createElement("input");
+    enabledInput.type = "checkbox";
+    enabledInput.dataset.festivalIndex = String(index);
+    enabledInput.dataset.field = "enabled";
+    enabledInput.checked = Boolean(festival?.enabled ?? true);
+    enabledWrap.appendChild(enabledInput);
+    enabledWrap.append(document.createTextNode(" Enabled"));
+
+    const fieldsWrap = document.createElement("div");
+    fieldsWrap.className = "promo-settings-fields-wrap";
+
+    const nameLabel = document.createElement("label");
+    nameLabel.className = "promo-settings-fields";
+    nameLabel.textContent = "Name";
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.value = String(festival?.name || "");
+    nameInput.dataset.festivalIndex = String(index);
+    nameInput.dataset.field = "name";
+    nameLabel.appendChild(nameInput);
+
+    const slugLabel = document.createElement("label");
+    slugLabel.className = "promo-settings-fields";
+    slugLabel.textContent = "Slug";
+    const slugInput = document.createElement("input");
+    slugInput.type = "text";
+    slugInput.value = String(festival?.slug || "");
+    slugInput.dataset.festivalIndex = String(index);
+    slugInput.dataset.field = "slug";
+    slugLabel.appendChild(slugInput);
+
+    const websiteLabel = document.createElement("label");
+    websiteLabel.className = "promo-settings-fields";
+    websiteLabel.textContent = "Website";
+    const websiteInput = document.createElement("input");
+    websiteInput.type = "url";
+    websiteInput.value = String(festival?.website || "");
+    websiteInput.placeholder = "https://...";
+    websiteInput.dataset.festivalIndex = String(index);
+    websiteInput.dataset.field = "website";
+    websiteLabel.appendChild(websiteInput);
+
+    const colorLabel = document.createElement("label");
+    colorLabel.className = "promo-settings-fields";
+    colorLabel.textContent = "Primary Color";
+    const colorInput = document.createElement("input");
+    colorInput.type = "text";
+    colorInput.value = String(festival?.primaryColor || "");
+    colorInput.placeholder = "#C54828";
+    colorInput.dataset.festivalIndex = String(index);
+    colorInput.dataset.field = "primaryColor";
+    colorLabel.appendChild(colorInput);
+
+    const startDateLabel = document.createElement("label");
+    startDateLabel.className = "promo-settings-fields";
+    startDateLabel.textContent = "Start Date";
+    const startDateInput = document.createElement("input");
+    startDateInput.type = "date";
+    startDateInput.value = String(festival?.startDate || "");
+    startDateInput.dataset.festivalIndex = String(index);
+    startDateInput.dataset.field = "startDate";
+    startDateLabel.appendChild(startDateInput);
+
+    const endDateLabel = document.createElement("label");
+    endDateLabel.className = "promo-settings-fields";
+    endDateLabel.textContent = "End Date";
+    const endDateInput = document.createElement("input");
+    endDateInput.type = "date";
+    endDateInput.value = String(festival?.endDate || "");
+    endDateInput.dataset.festivalIndex = String(index);
+    endDateInput.dataset.field = "endDate";
+    endDateLabel.appendChild(endDateInput);
+
+    const sortOrderLabel = document.createElement("label");
+    sortOrderLabel.className = "promo-settings-fields";
+    sortOrderLabel.textContent = "Sort Order";
+    const sortOrderInput = document.createElement("input");
+    sortOrderInput.type = "number";
+    sortOrderInput.step = "1";
+    sortOrderInput.value = String(Number.isInteger(Number(festival?.sortOrder)) ? Number(festival.sortOrder) : 0);
+    sortOrderInput.dataset.festivalIndex = String(index);
+    sortOrderInput.dataset.field = "sortOrder";
+    sortOrderLabel.appendChild(sortOrderInput);
+
+    const descriptionLabel = document.createElement("label");
+    descriptionLabel.className = "promo-settings-fields";
+    descriptionLabel.textContent = "Description";
+    const descriptionInput = document.createElement("textarea");
+    descriptionInput.rows = 3;
+    descriptionInput.value = String(festival?.description || "");
+    descriptionInput.dataset.festivalIndex = String(index);
+    descriptionInput.dataset.field = "description";
+    descriptionLabel.appendChild(descriptionInput);
+
+    fieldsWrap.appendChild(nameLabel);
+    fieldsWrap.appendChild(slugLabel);
+    fieldsWrap.appendChild(websiteLabel);
+    fieldsWrap.appendChild(colorLabel);
+    fieldsWrap.appendChild(startDateLabel);
+    fieldsWrap.appendChild(endDateLabel);
+    fieldsWrap.appendChild(sortOrderLabel);
+    fieldsWrap.appendChild(descriptionLabel);
+
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "ghost-btn promo-remove-btn";
+    removeButton.dataset.removeFestivalIndex = String(index);
+    removeButton.textContent = "Delete Festival";
+
+    item.appendChild(heading);
+    item.appendChild(enabledWrap);
+    item.appendChild(fieldsWrap);
+    item.appendChild(removeButton);
+    elements.festivalSettingsList.appendChild(item);
+  });
+}
+
 function getSelectedTheatre() {
   return state.data.theatreGroups[state.admin.theatreIndex] || null;
 }
@@ -2524,6 +2823,7 @@ function importShowtimesCsv(data, csvContent) {
     const filmYearRaw = readCsvValue(row, headerIndexByKey, "film_year");
     const filmTmdbIdRaw = readCsvValue(row, headerIndexByKey, "film_tmdb_id");
     const ticketLinkRaw = readCsvValue(row, headerIndexByKey, "ticket_link");
+    const festivalNameRaw = readCsvValue(row, headerIndexByKey, "festival_name");
     const showDate = readCsvValue(row, headerIndexByKey, "show_date");
     const showTimesRaw = readCsvValue(row, headerIndexByKey, "show_times");
     const premiumShowTimesRaw = readCsvValue(row, headerIndexByKey, "premium_show_times");
@@ -2597,6 +2897,22 @@ function importShowtimesCsv(data, csvContent) {
     }
 
     const film = filmMatches[0];
+    let resolvedFestivalId = null;
+    if (festivalNameRaw) {
+      const matchedFestival = (data.festivals || []).find(
+        (festival) => normalizeSearchText(festival?.name) === normalizeSearchText(festivalNameRaw)
+      );
+      if (!matchedFestival) {
+        throw new Error(
+          `Row ${rowNumber}: festival "${festivalNameRaw}" was not found. Add it first in festivals admin.`
+        );
+      }
+      const festivalId = Number(matchedFestival?.id);
+      if (!Number.isInteger(festivalId) || festivalId <= 0) {
+        throw new Error(`Row ${rowNumber}: festival "${festivalNameRaw}" is missing a valid id.`);
+      }
+      resolvedFestivalId = festivalId;
+    }
     if (ticketLinkRaw) {
       film.ticketLink = normalizeOutboundUrl(ticketLinkRaw);
     }
@@ -2608,6 +2924,9 @@ function importShowtimesCsv(data, csvContent) {
         (Array.isArray(showing.premiumTimes) ? showing.premiumTimes.length : 0);
       showing.times = dedupeSortTimes([...(showing.times || []), ...parsedTimes]);
       showing.premiumTimes = dedupeSortTimes([...(showing.premiumTimes || []), ...parsedPremiumTimes]);
+      if (resolvedFestivalId) {
+        showing.festivalId = resolvedFestivalId;
+      }
       const afterCount = showing.times.length + showing.premiumTimes.length;
       if (afterCount !== beforeCount) {
         stats.showingDatesUpdated += 1;
@@ -2615,6 +2934,7 @@ function importShowtimesCsv(data, csvContent) {
     } else {
       film.showings.push({
         date: showDate,
+        festivalId: resolvedFestivalId,
         times: dedupeSortTimes(parsedTimes),
         premiumTimes: dedupeSortTimes(parsedPremiumTimes),
       });
@@ -3115,6 +3435,7 @@ function buildReplacePayload(data, promotedCards) {
       name,
       description: String(festival?.description || "").trim(),
       website: String(festival?.website || "").trim(),
+      primary_color: String(festival?.primaryColor || "").trim(),
       start_date: String(festival?.startDate || "").trim() || null,
       end_date: String(festival?.endDate || "").trim() || null,
       enabled: Boolean(festival?.enabled ?? true),
@@ -3391,6 +3712,7 @@ function hasFestivalRowChanges(previousRow, nextRow) {
     String(previousRow?.name || "") !== String(nextRow?.name || "") ||
     String(previousRow?.description || "") !== String(nextRow?.description || "") ||
     String(previousRow?.website || "") !== String(nextRow?.website || "") ||
+    String(previousRow?.primary_color || "") !== String(nextRow?.primary_color || "") ||
     String(previousRow?.start_date || "") !== String(nextRow?.start_date || "") ||
     String(previousRow?.end_date || "") !== String(nextRow?.end_date || "") ||
     Boolean(previousRow?.enabled) !== Boolean(nextRow?.enabled) ||
@@ -3801,11 +4123,25 @@ function render() {
       }
     }
     if (group.festivalInfo && state.view === "festivals") {
-      const details = [group.festivalInfo.startDate, group.festivalInfo.endDate]
-        .filter(Boolean)
-        .join(" - ");
-      subtitle.textContent = details || "Festival showtimes";
-      subtitle.classList.remove("hidden");
+      card.classList.add("festival-card");
+      const festivalPrimaryColor = String(group.festivalInfo.primaryColor || "").trim();
+      if (festivalPrimaryColor) {
+        card.style.setProperty("--festival-accent", festivalPrimaryColor);
+      } else {
+        card.style.removeProperty("--festival-accent");
+      }
+      const details = formatFestivalDateRange(group.festivalInfo.startDate, group.festivalInfo.endDate);
+      subtitle.textContent = "";
+      subtitle.classList.add("hidden");
+      if (details) {
+        let dateStamp = card.querySelector(".festival-date-stamp");
+        if (!dateStamp) {
+          dateStamp = document.createElement("span");
+          dateStamp.className = "festival-date-stamp";
+          card.insertBefore(dateStamp, subtitle);
+        }
+        dateStamp.textContent = details;
+      }
       const festivalWebsite = normalizeOutboundUrl(group.festivalInfo.website);
       if (festivalWebsite) {
         groupLink.href = festivalWebsite;
@@ -3959,6 +4295,14 @@ function render() {
         const poster = item.querySelector(".show-poster");
         const link = item.querySelector(".show-link");
         const filmLabel = show.film;
+        const showFestivalIds = Array.isArray(show?.festivalIds) ? show.festivalIds : [];
+        const showFestivalNames = showFestivalIds
+          .map((id) => (state.data.festivals || []).find((festival) => Number(festival?.id) === Number(id))?.name || "")
+          .map((name) => String(name).trim())
+          .filter(Boolean);
+        const festivalBadgeLabel = showFestivalNames.length
+          ? showFestivalNames[0]
+          : "Festival Selection";
 
         if (state.view === "theatres") {
           const rowExpandKey = buildExpandRowKey(state.view, group, show);
@@ -3982,6 +4326,12 @@ function render() {
           poster.classList.remove("hidden");
 
           main.textContent = filmLabel;
+          if (showFestivalIds.length) {
+            const ribbon = document.createElement("span");
+            ribbon.className = "festival-entry-ribbon festival-entry-ribbon-inline";
+            ribbon.textContent = festivalBadgeLabel;
+            main.prepend(ribbon);
+          }
           meta.textContent = "";
 
           if (state.view === "theatres") {
@@ -4017,11 +4367,22 @@ function render() {
           }
         } else {
           if (state.view === "festivals") {
+            item.classList.add("festival-show-item");
             main.textContent = show.film || show.theatre || "Showtime";
             meta.textContent = [show.theatre || "", show.city || ""].filter(Boolean).join(", ");
+            const ribbon = document.createElement("span");
+            ribbon.className = "festival-entry-ribbon";
+            ribbon.textContent = "Festival Selection";
+            main.prepend(ribbon);
           } else {
             main.textContent = `${show.theatre}`;
             meta.textContent = `${show.city}`;
+            if (showFestivalIds.length) {
+              const ribbon = document.createElement("span");
+              ribbon.className = "festival-entry-ribbon festival-entry-ribbon-inline";
+              ribbon.textContent = festivalBadgeLabel;
+              main.prepend(ribbon);
+            }
           }
           renderSchedule(schedule, show.dates, show.premiumDates);
           const ticketUrl = normalizeOutboundUrl(show.ticketLink);
@@ -5217,6 +5578,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
       const year = Number.isInteger(Number(film.year)) ? Number(film.year) : null;
       const times = [];
       const premiumTimes = [];
+      const festivalIds = new Set();
 
       (film.showings || []).forEach((showing) => {
         if (showing.date !== selectedDate) return;
@@ -5224,11 +5586,15 @@ function buildSingleDayGroups(theatres, selectedDate) {
           const showDateTime = getShowDateTime(showing.date, time);
           if (!showDateTime || showDateTime < now) return;
           times.push(time);
+          const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
+          if (festivalId) festivalIds.add(festivalId);
         });
         (showing.premiumTimes || []).forEach((time) => {
           const showDateTime = getShowDateTime(showing.date, time);
           if (!showDateTime || showDateTime < now) return;
           premiumTimes.push(time);
+          const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
+          if (festivalId) festivalIds.add(festivalId);
         });
       });
 
@@ -5271,6 +5637,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
         address: theatre.address,
         film: film.title,
         year,
+        festivalIds: Array.from(festivalIds.values()),
         ticketLink: film.ticketLink,
         dates: {
           [selectedDate]: times,
@@ -5321,6 +5688,7 @@ function buildFestivalGroups(theatres, festivals) {
               name: festivalName,
               description: String(festival?.description || "").trim(),
               website: String(festival?.website || "").trim(),
+              primaryColor: String(festival?.primaryColor || "").trim(),
               startDate: String(festival?.startDate || "").trim(),
               endDate: String(festival?.endDate || "").trim(),
               sortOrder: Number.isInteger(Number(festival?.sortOrder)) ? Number(festival.sortOrder) : 0,
@@ -5394,6 +5762,7 @@ function buildGroups(theatres, view) {
         matchedAt: metadata.matchedAt,
         dates: {},
         premiumDates: {},
+        festivalIdsSet: new Set(),
       };
 
       film.showings.forEach((showing) => {
@@ -5402,16 +5771,22 @@ function buildGroups(theatres, view) {
           if (!showDateTime || showDateTime < now) return;
           if (!row.dates[showing.date]) row.dates[showing.date] = [];
           row.dates[showing.date].push(time);
+          const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
+          if (festivalId) row.festivalIdsSet.add(festivalId);
         });
         (showing.premiumTimes || []).forEach((time) => {
           const showDateTime = getShowDateTime(showing.date, time);
           if (!showDateTime || showDateTime < now) return;
           if (!row.premiumDates[showing.date]) row.premiumDates[showing.date] = [];
           row.premiumDates[showing.date].push(time);
+          const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
+          if (festivalId) row.festivalIdsSet.add(festivalId);
         });
       });
 
       if (Object.keys(row.dates).length || Object.keys(row.premiumDates).length) {
+        row.festivalIds = Array.from(row.festivalIdsSet.values());
+        delete row.festivalIdsSet;
         rowsByFilm[film.title] = row;
       }
     });
@@ -5477,6 +5852,7 @@ function buildGroups(theatres, view) {
               director: row.director,
               stars: row.stars,
               genres: row.genres,
+              festivalIds: [],
               theatres: {},
               premiumTheatres: {},
             };
@@ -5484,6 +5860,16 @@ function buildGroups(theatres, view) {
             grouped[date].shows.push(dayRow);
           }
           const dayRow = grouped[date].byFilm[filmKey];
+          if (Array.isArray(row.festivalIds) && row.festivalIds.length) {
+            const seenFestivalIds = new Set(dayRow.festivalIds);
+            row.festivalIds.forEach((id) => {
+              if (!Number.isInteger(Number(id))) return;
+              const parsedId = Number(id);
+              if (seenFestivalIds.has(parsedId)) return;
+              seenFestivalIds.add(parsedId);
+              dayRow.festivalIds.push(parsedId);
+            });
+          }
           const theatreKey = `${row.theatre} · ${row.city}`;
           if (!dayRow.theatres[theatreKey]) dayRow.theatres[theatreKey] = [];
           dayRow.theatres[theatreKey].push(...times);
@@ -5709,19 +6095,25 @@ function buildFilmGroupKey(title, year) {
 }
 
 function buildFilmPageUrl(title, year) {
-  const slug = slugifyFilmPageSegment(
+  const slug = slugifyTextSegment(
     Number.isInteger(Number(year)) ? `${String(title || "")}-${Number(year)}` : String(title || "")
   );
   return `films/${slug}/`;
 }
 
-function slugifyFilmPageSegment(value) {
+function slugifyTextSegment(value) {
   return String(value || "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .replace(/--+/g, "-")
     .slice(0, 80);
+}
+
+function isValidCssColor(value) {
+  const raw = String(value || "").trim();
+  if (!raw) return true;
+  return /^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(raw);
 }
 
 function compareTimes(a, b) {
@@ -5756,6 +6148,16 @@ function formatLongDisplayDate(dateIso) {
     day: "numeric",
     year: "numeric",
   }).format(date);
+}
+
+function formatFestivalDateRange(startDateIso, endDateIso) {
+  const start = parseIsoDate(startDateIso);
+  const end = parseIsoDate(endDateIso);
+  const fmt = (date) => new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric" }).format(date);
+  if (start && end) return `${fmt(start)} - ${fmt(end)}`;
+  if (start) return fmt(start);
+  if (end) return fmt(end);
+  return "";
 }
 
 function toIsoDate(value) {

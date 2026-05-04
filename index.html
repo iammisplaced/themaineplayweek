@@ -172,6 +172,16 @@
             >
               Promos
             </button>
+            <button
+              id="adminFestivalsTab"
+              class="admin-section-tab"
+              type="button"
+              role="tab"
+              data-admin-section="festivals"
+              aria-selected="false"
+            >
+              Festivals
+            </button>
           </div>
 
           <section id="adminMoviesPanel" class="admin-section-panel" role="tabpanel" aria-labelledby="adminMoviesTab">
@@ -260,6 +270,27 @@
             </div>
           </section>
 
+          <section
+            id="adminFestivalsPanel"
+            class="admin-section-panel hidden"
+            role="tabpanel"
+            aria-labelledby="adminFestivalsTab"
+          >
+            <div class="admin-grid">
+              <section class="admin-card admin-card-wide">
+                <h3>Festivals</h3>
+                <p class="admin-help">Add/edit festivals used by showings CSV and manual showing assignment.</p>
+                <div class="admin-inline-actions">
+                  <button id="openAddFestivalModalButton" type="button">+ Add Festival</button>
+                </div>
+                <div id="festivalSettingsList" class="promo-settings-list"></div>
+                <div class="admin-inline-actions">
+                  <button id="saveAllFestivals">Save All Changes</button>
+                </div>
+              </section>
+            </div>
+          </section>
+
         <dialog id="addFilmModal" class="admin-modal">
           <form id="addFilmForm" method="dialog" class="admin-modal-body">
             <h3>Add Film</h3>
@@ -335,6 +366,30 @@
             <div class="admin-inline-actions">
               <button id="confirmAddPromo" value="confirm">Add Promo</button>
               <button id="cancelAddPromo" class="ghost-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </dialog>
+
+        <dialog id="addFestivalModal" class="admin-modal">
+          <form id="addFestivalForm" method="dialog" class="admin-modal-body">
+            <h3>Add Festival</h3>
+            <label for="modalFestivalNameInput">Name</label>
+            <input id="modalFestivalNameInput" type="text" required />
+            <label for="modalFestivalSlugInput">Slug (optional)</label>
+            <input id="modalFestivalSlugInput" type="text" placeholder="auto-from-name" />
+            <label for="modalFestivalWebsiteInput">Website (optional)</label>
+            <input id="modalFestivalWebsiteInput" type="url" placeholder="https://..." />
+            <label for="modalFestivalPrimaryColorInput">Primary Color (optional, hex)</label>
+            <input id="modalFestivalPrimaryColorInput" type="text" placeholder="#C54828" />
+            <label for="modalFestivalStartDateInput">Start Date (optional)</label>
+            <input id="modalFestivalStartDateInput" type="date" />
+            <label for="modalFestivalEndDateInput">End Date (optional)</label>
+            <input id="modalFestivalEndDateInput" type="date" />
+            <label for="modalFestivalDescriptionInput">Description (optional)</label>
+            <textarea id="modalFestivalDescriptionInput" rows="3"></textarea>
+            <div class="admin-inline-actions">
+              <button id="confirmAddFestival" value="confirm">Add Festival</button>
+              <button id="cancelAddFestival" class="ghost-btn" type="button">Cancel</button>
             </div>
           </form>
         </dialog>
