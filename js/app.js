@@ -245,6 +245,7 @@ const elements = {
   metadataStarsInput: document.getElementById("metadataStarsInput"),
   metadataGenresInput: document.getElementById("metadataGenresInput"),
   metadataReleaseDateInput: document.getElementById("metadataReleaseDateInput"),
+  metadataFestivalOnlyInput: document.getElementById("metadataFestivalOnlyInput"),
   cancelEditFilmMetadata: document.getElementById("cancelEditFilmMetadata"),
   cancelAddFilm: document.getElementById("cancelAddFilm"),
   cancelAddTheatre: document.getElementById("cancelAddTheatre"),
@@ -1050,6 +1051,9 @@ function bindEvents() {
     elements.metadataStarsInput.value = metadata.stars.join(", ");
     elements.metadataGenresInput.value = metadata.genres.join(", ");
     elements.metadataReleaseDateInput.value = metadata.releaseDate;
+    if (elements.metadataFestivalOnlyInput) {
+      elements.metadataFestivalOnlyInput.checked = Boolean(film.festivalOnly);
+    }
     elements.editFilmMetadataModal.showModal();
   });
 
@@ -1138,6 +1142,7 @@ function bindEvents() {
       featuredOnPlayweek: false,
       featuredOnPlayweekUrl: "",
       rankingOverride: false,
+      festivalOnly: false,
       metadataSource: "manual",
       showings: [],
     };
@@ -1176,6 +1181,7 @@ function bindEvents() {
     const stars = parseCommaSeparatedList(elements.metadataStarsInput.value);
     const genres = parseCommaSeparatedList(elements.metadataGenresInput.value);
     const releaseDate = String(elements.metadataReleaseDateInput.value || "").trim();
+    const festivalOnly = Boolean(elements.metadataFestivalOnlyInput?.checked);
 
     if (releaseDate && !parseIsoDate(releaseDate)) {
       elements.adminMessage.textContent = "Release date must be YYYY-MM-DD.";
@@ -1195,6 +1201,7 @@ function bindEvents() {
 
     film.tmdb = nextMetadata;
     film.metadataSource = "manual";
+    film.festivalOnly = festivalOnly;
     syncFilmMetadataAcrossTheatres(film);
     elements.editFilmMetadataModal.close();
     syncAdminEditor();
@@ -1872,6 +1879,7 @@ function buildTheatreGroupsFromFilmPagesSource(source) {
           featuredOnPlayweek: Boolean(filmEntry?.featuredOnPlayweek),
           featuredOnPlayweekUrl: String(filmEntry?.featuredOnPlayweekUrl || "").trim(),
           rankingOverride: Boolean(filmEntry?.rankingOverride || filmEntry?.ranking_override),
+          festivalOnly: Boolean(filmEntry?.festivalOnly || filmEntry?.festival_only),
           metadataSource: normalizeMetadataSource("tmdb", { tmdbId }),
           tmdb: {
             overview: String(filmEntry?.description || "").trim(),
@@ -1941,7 +1949,7 @@ async function loadDataFromSupabase() {
       state.supabase
         .from("films")
         .select(
-          "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,ranking_override,metadata_source,tmdb_json"
+          "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,ranking_override,festival_only,metadata_source,tmdb_json"
         )
         .order("id", { ascending: true })
     ),
@@ -2027,6 +2035,7 @@ async function loadDataFromSupabase() {
       featuredOnPlayweek: Boolean(filmRow.featured_on_playweek),
       featuredOnPlayweekUrl: String(filmRow.featured_on_playweek_url || "").trim(),
       rankingOverride: Boolean(filmRow.ranking_override),
+      festivalOnly: Boolean(filmRow.festival_only),
       metadataSource: normalizeMetadataSource(filmRow.metadata_source, { tmdbId: filmRow.tmdb_id }),
       tmdb: tmdbJson,
       _dbId: filmRow.id,
@@ -2047,6 +2056,7 @@ async function loadDataFromSupabase() {
         featuredOnPlayweek: Boolean(filmTemplate.featuredOnPlayweek),
         featuredOnPlayweekUrl: String(filmTemplate.featuredOnPlayweekUrl || ""),
         rankingOverride: Boolean(filmTemplate.rankingOverride),
+        festivalOnly: Boolean(filmTemplate.festivalOnly),
         metadataSource: normalizeMetadataSource(filmTemplate.metadataSource, filmTemplate),
         tmdb: filmTemplate.tmdb,
         showings: [],
@@ -2197,6 +2207,9 @@ function validateData(data) {
       }
       if (typeof film?.featuredOnPlayweekUrl !== "undefined" && typeof film?.featuredOnPlayweekUrl !== "string") {
         throw new Error(`Film "${film.title}" at "${theatre.name}" has invalid featuredOnPlayweekUrl.`);
+      }
+      if (typeof film?.festivalOnly !== "undefined" && typeof film?.festivalOnly !== "boolean") {
+        throw new Error(`Film "${film.title}" at "${theatre.name}" has invalid festivalOnly.`);
       }
       if (typeof film?.metadataSource !== "undefined") {
         const metadataSource = String(film.metadataSource || "").trim().toLowerCase();
@@ -2911,6 +2924,7 @@ function importShowtimesCsv(data, csvContent) {
         featuredOnPlayweek: false,
         featuredOnPlayweekUrl: "",
         rankingOverride: false,
+        festivalOnly: false,
         metadataSource: filmTmdbId !== null ? "tmdb" : "manual",
         showings: [],
       };
@@ -3180,6 +3194,7 @@ function addFilmToAllTheatres(baseFilm) {
         staffFavoriteBy: String(baseFilm.staffFavoriteBy || ""),
         featuredOnPlayweek: Boolean(baseFilm.featuredOnPlayweek),
         featuredOnPlayweekUrl: String(baseFilm.featuredOnPlayweekUrl || ""),
+        festivalOnly: Boolean(baseFilm.festivalOnly),
         metadataSource: normalizeMetadataSource(baseFilm.metadataSource, baseFilm),
         tmdb: baseFilm.tmdb,
         showings: [],
@@ -3201,6 +3216,7 @@ function syncFilmMetadataAcrossTheatres(sourceFilm) {
       if (!filmsMatch(film, sourceFilm)) return;
       film.tmdb = sourceFilm.tmdb;
       film.metadataSource = normalizeMetadataSource(sourceFilm.metadataSource, sourceFilm);
+      film.festivalOnly = Boolean(sourceFilm.festivalOnly);
       if (sourceFilm.tmdbId) film.tmdbId = sourceFilm.tmdbId;
       if (sourceFilm.year) film.year = sourceFilm.year;
     });
@@ -3510,6 +3526,7 @@ function buildReplacePayload(data, promotedCards) {
           featured_on_playweek: Boolean(film.featuredOnPlayweek),
           featured_on_playweek_url: String(film.featuredOnPlayweekUrl || "").trim(),
           ranking_override: Boolean(film.rankingOverride),
+          festival_only: Boolean(film.festivalOnly),
           tmdb_json: film.tmdb || null,
         });
         filmPayloadIndexByKey.set(filmKey, films.length - 1);
@@ -3546,6 +3563,9 @@ function buildReplacePayload(data, promotedCards) {
         }
         if (typeof existingFilmIndex === "number" && Boolean(film.rankingOverride)) {
           films[existingFilmIndex].ranking_override = true;
+        }
+        if (typeof existingFilmIndex === "number" && Boolean(film.festivalOnly)) {
+          films[existingFilmIndex].festival_only = true;
         }
         if (filmTicketLink) {
           if (typeof existingFilmIndex === "number" && !films[existingFilmIndex].ticket_link) {
@@ -3763,6 +3783,7 @@ function hasFilmRowChanges(previousRow, nextRow) {
     Boolean(previousRow?.featured_on_playweek) !== Boolean(nextRow?.featured_on_playweek) ||
     String(previousRow?.featured_on_playweek_url || "") !== String(nextRow?.featured_on_playweek_url || "") ||
     Boolean(previousRow?.ranking_override) !== Boolean(nextRow?.ranking_override) ||
+    Boolean(previousRow?.festival_only) !== Boolean(nextRow?.festival_only) ||
     !areJsonValuesEqual(previousRow?.tmdb_json, nextRow?.tmdb_json)
   );
 }
@@ -5655,6 +5676,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
 
   theatres.forEach((theatre) => {
     (theatre.films || []).forEach((film) => {
+      if (Boolean(film?.festivalOnly)) return;
       const metadata = extractFilmMetadata(film);
       const year = Number.isInteger(Number(film.year)) ? Number(film.year) : null;
       const times = [];
@@ -5824,6 +5846,7 @@ function buildGroups(theatres, view) {
 
     const rowsByFilm = {};
     theatre.films.forEach((film) => {
+      if (Boolean(film?.festivalOnly)) return;
       const metadata = extractFilmMetadata(film);
       const row = {
         theatre: theatre.name,
