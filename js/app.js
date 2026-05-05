@@ -4413,13 +4413,21 @@ function render() {
             showDateKeys.length === 1
               ? String(show?.roomByDate?.[showDateKeys[0]] || "").trim()
               : "";
-          meta.textContent = singleDateRoom ? `Room: ${singleDateRoom}` : "";
+          meta.textContent = "";
+          if (singleDateRoom) {
+            const roomLine = document.createElement("span");
+            roomLine.textContent = singleDateRoom;
+            meta.appendChild(roomLine);
+          }
 
           if (state.view === "theatres") {
             renderSchedule(schedule, show.dates, show.premiumDates);
           }
 
           if (!rowExpanded) {
+            if (singleDateRoom) {
+              meta.appendChild(document.createElement("br"));
+            }
             meta.appendChild(rowToggle);
             schedule.classList.add("hidden");
           } else {
