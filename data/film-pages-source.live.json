@@ -274,19 +274,6 @@
           "longitude": -68.7969818115234
         },
         {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "narrowgaugecinema.net",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-05-05",
           "time": "6:45 PM",
           "isPremium": false,
@@ -905,19 +892,6 @@
       ],
       "showings": [
         {
-          "date": "2026-05-04",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/animal-farm",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-05-05",
           "time": "1:15 PM",
           "isPremium": false,
@@ -1269,19 +1243,6 @@
           "longitude": -67.8807597
         },
         {
-          "date": "2026-05-04",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-05-05",
           "time": "4:30 PM",
           "isPremium": false,
@@ -1332,32 +1293,6 @@
           "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
           "latitude": 44.6694183349609,
           "longitude": -70.1528244018555
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/animal-farm",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-04",
-          "time": "9:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/animal-farm",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
         },
         {
           "date": "2026-05-05",
@@ -1464,19 +1399,6 @@
           "longitude": -70.2558618
         },
         {
-          "date": "2026-05-04",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/24079",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-05-05",
           "time": "11:20 AM",
           "isPremium": false,
@@ -1581,19 +1503,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-05-04",
-          "time": "6:35 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/24079",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-05-05",
           "time": "11:20 AM",
           "isPremium": false,
@@ -1696,19 +1605,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/24079",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/24079",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-05-05",
@@ -1815,19 +1711,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-05-04",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/24079",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-05-05",
           "time": "11:30 AM",
           "isPremium": false,
@@ -1932,19 +1815,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/24079",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-05-05",
           "time": "12:40 PM",
           "isPremium": false,
@@ -2021,19 +1891,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/24079",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Animal-Farm--2026-/611fe9edf74bab2423301ee0/699f3c9fa52bdb49440d5535",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-05-05",
@@ -2114,19 +1971,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-05-04",
-          "time": "5:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Animal-Farm--2026-/611fea26f74bab2423301ee4/699f3c9fa52bdb49440d5535",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-05-05",
           "time": "12:05 PM",
           "isPremium": false,
@@ -2205,19 +2049,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/ANIMAL-FARM",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-05-05",
           "time": "6:45 PM",
           "isPremium": false,
@@ -2242,19 +2073,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/ANIMAL-FARM",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/ANIMAL-FARM",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
         },
         {
           "date": "2026-05-05",
@@ -2372,19 +2190,6 @@
           "ticketLink": "https://www.regmovies.com/movies/animal-farm-ho00020836",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23953",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-05-05",
@@ -3735,8 +3540,7 @@
       "legacyTicketLink": "https://www.blackbearcinemas.com/movie/canoe-dig-it",
       "theatres": [
         "Center Theatre for the Performing Arts, Dover-Foxcroft",
-        "Leavitt Theatre, Ogunquit",
-        "Temple Theatre, Houlton"
+        "Leavitt Theatre, Ogunquit"
       ],
       "showings": [
         {
@@ -3855,19 +3659,6 @@
           "ticketLink": "https://www.leavittheatre.com/event-details-registration/canoe-dig-it-2025",
           "latitude": 43.2504514,
           "longitude": -70.6004205
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Temple Theatre",
-          "city": "Houlton",
-          "theatreWebsite": "templehoulton.com",
-          "ticketLink": "https://templehoulton.com/amy_movie/canoe-dig-it/",
-          "latitude": 46.1259988,
-          "longitude": -67.8403909
         }
       ]
     },
@@ -3931,19 +3722,6 @@
       ],
       "showings": [
         {
-          "date": "2026-05-04",
-          "time": "8:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Casa-Grande/611fe9edf74bab2423301ee0/69efe546d67ad26e2c480ce7",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-05-05",
           "time": "8:30 PM",
           "isPremium": false,
@@ -3968,19 +3746,6 @@
           "ticketLink": "https://www.applecinemas.com/Casa-Grande/611fe9edf74bab2423301ee0/69efe546d67ad26e2c480ce7",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Casa-Grande/611fea26f74bab2423301ee4/69efe546d67ad26e2c480ce7",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-05-05",
@@ -4317,19 +4082,6 @@
       ],
       "showings": [
         {
-          "date": "2026-05-04",
-          "time": "6:55 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/24080",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-05-05",
           "time": "6:55 PM",
           "isPremium": false,
@@ -4356,19 +4108,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-05-04",
-          "time": "6:55 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/24080",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-05-05",
           "time": "6:55 PM",
           "isPremium": false,
@@ -4393,19 +4132,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/24080",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/24080",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-05-05",
@@ -4434,32 +4160,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Deep-Water/611fe9edf74bab2423301ee0/69e92d08d67ad26e2c480242",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "8:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Deep-Water/611fe9edf74bab2423301ee0/69e92d08d67ad26e2c480242",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-05-05",
           "time": "12:30 PM",
           "isPremium": false,
@@ -4564,32 +4264,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-05-04",
-          "time": "5:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Deep-Water/611fea26f74bab2423301ee4/69e92d08d67ad26e2c480242",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "8:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Deep-Water/611fea26f74bab2423301ee4/69e92d08d67ad26e2c480242",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-05-05",
           "time": "12:40 PM",
           "isPremium": false,
@@ -4692,19 +4366,6 @@
           "ticketLink": "https://www.applecinemas.com/Deep-Water/611fea26f74bab2423301ee4/69e92d08d67ad26e2c480242",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/DEEP-WATER",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
         },
         {
           "date": "2026-05-05",
@@ -4744,19 +4405,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Windham/DEEP-WATER",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:05 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/deep-water-ho00021221",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-05-05",
@@ -5347,32 +4995,6 @@
         "SPACE Gallery, Portland"
       ],
       "showings": [
-        {
-          "date": "2026-05-04",
-          "time": "5:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/erupcja/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/erupcja/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
         {
           "date": "2026-05-05",
           "time": "2:05 PM",
@@ -6655,19 +6277,6 @@
       ],
       "showings": [
         {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/hokum",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-05-05",
           "time": "1:40 PM",
           "isPremium": false,
@@ -6785,32 +6394,6 @@
           "longitude": -69.0075715
         },
         {
-          "date": "2026-05-04",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/hokum",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-04",
-          "time": "9:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/hokum",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-05-05",
           "time": "1:30 PM",
           "isPremium": false,
@@ -6915,19 +6498,6 @@
           "longitude": -70.2558618
         },
         {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/24020",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-05-05",
           "time": "11:15 AM",
           "isPremium": false,
@@ -7032,19 +6602,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/24020",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-05-05",
           "time": "11:15 AM",
           "isPremium": false,
@@ -7147,19 +6704,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/24020",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/24020",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-05-05",
@@ -7240,19 +6784,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/24020",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-05-05",
           "time": "11:15 AM",
           "isPremium": false,
@@ -7357,19 +6888,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-05-04",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/24020",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-05-05",
           "time": "1:20 PM",
           "isPremium": false,
@@ -7446,32 +6964,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/24020",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Hokum/611fe9edf74bab2423301ee0/69efed74d67ad26e2c480d89",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Hokum/611fe9edf74bab2423301ee0/69efed74d67ad26e2c480d89",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-05-05",
@@ -7578,32 +7070,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-05-04",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Hokum/611fea26f74bab2423301ee4/69efed74d67ad26e2c480d89",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "8:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Hokum/611fea26f74bab2423301ee4/69efed74d67ad26e2c480d89",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-05-05",
           "time": "1:10 PM",
           "isPremium": false,
@@ -7708,19 +7174,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-05-04",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/hokum-ho00021392",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
           "date": "2026-05-05",
           "time": "1:10 PM",
           "isPremium": false,
@@ -7836,19 +7289,6 @@
           "ticketLink": "https://www.regmovies.com/movies/hokum-ho00021392",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/24002",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-05-05",
@@ -8463,19 +7903,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-05-04",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/HOPPERS",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-05-05",
           "time": "6:15 PM",
           "isPremium": false,
@@ -8502,19 +7929,6 @@
           "longitude": -70.7506676
         },
         {
-          "date": "2026-05-04",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/HOPPERS",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
           "date": "2026-05-05",
           "time": "4:15 PM",
           "isPremium": false,
@@ -8539,19 +7953,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Topsham/HOPPERS",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/HOPPERS",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
         },
         {
           "date": "2026-05-05",
@@ -8591,19 +7992,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Windham/HOPPERS",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-05-05",
@@ -8934,19 +8322,6 @@
           "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/24019?date=2026-04-24",
           "latitude": 43.6312987,
           "longitude": -70.3244985
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/i-swear/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
         },
         {
           "date": "2026-05-05",
@@ -9550,19 +8925,6 @@
       ],
       "showings": [
         {
-          "date": "2026-05-04",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/lee-cronins-the-mummy",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-05-05",
           "time": "3:50 PM",
           "isPremium": false,
@@ -9589,19 +8951,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-05-05",
           "time": "6:45 PM",
           "isPremium": false,
@@ -9626,19 +8975,6 @@
           "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
           "latitude": 44.6694183349609,
           "longitude": -70.1528244018555
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23592?date=2026-04-16",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-05-05",
@@ -9693,19 +9029,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-05-04",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/23592?date=2026-04-16",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-05-05",
           "time": "6:40 PM",
           "isPremium": false,
@@ -9730,32 +9053,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/23592?date=2026-04-16",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/LEE-CRONIN-S-THE-MUMMY-/611fe9edf74bab2423301ee0/69c58098f82f7fd6bebf96aa",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/LEE-CRONIN-S-THE-MUMMY-/611fe9edf74bab2423301ee0/69c58098f82f7fd6bebf96aa",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-05-05",
@@ -9834,19 +9131,6 @@
           "ticketLink": "https://www.applecinemas.com/LEE-CRONIN-S-THE-MUMMY-/611fe9edf74bab2423301ee0/69c58098f82f7fd6bebf96aa",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23613?date=2026-04-16",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-05-05",
@@ -10478,7 +9762,6 @@
         "Reel Pizza Cinerama, Bar Harbor",
         "State Cinemas, Calais",
         "Temple Theatre, Houlton",
-        "The Gem Theater, Bethel",
         "Flagship Cinemas, Falmouth",
         "Flagship Cinemas, Auburn",
         "Flagship Cinemas, Thomaston",
@@ -10494,19 +9777,6 @@
       ],
       "showings": [
         {
-          "date": "2026-05-04",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/michael",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-05-05",
           "time": "1:25 PM",
           "isPremium": false,
@@ -10648,19 +9918,6 @@
           "ticketLink": "bradentheater.com",
           "latitude": 46.6871109008789,
           "longitude": -68.0131988525391
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Center Theatre for the Performing Arts",
-          "city": "Dover-Foxcroft",
-          "theatreWebsite": "centertheatre.org",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/260755",
-          "latitude": 45.183952,
-          "longitude": -69.2292565
         },
         {
           "date": "2026-05-05",
@@ -11300,19 +10557,6 @@
           "longitude": -70.7082496
         },
         {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-05-05",
           "time": "4:00 PM",
           "isPremium": false,
@@ -11363,32 +10607,6 @@
           "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
           "latitude": 44.6694183349609,
           "longitude": -70.1528244018555
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/michael",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-04",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/michael",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
         },
         {
           "date": "2026-05-05",
@@ -11493,19 +10711,6 @@
           "ticketLink": "https://www.patriotcinemas.com/movie/michael",
           "latitude": 43.6575821,
           "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Reel Pizza Cinerama",
-          "city": "Bar Harbor",
-          "theatreWebsite": "reelpizza.net",
-          "ticketLink": "https://www.reelpizza.net/now-playing",
-          "latitude": 44.3877387,
-          "longitude": -68.2060749
         },
         {
           "date": "2026-05-05",
@@ -11573,45 +10778,6 @@
           "longitude": -67.8403909
         },
         {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "The Gem Theater",
-          "city": "Bethel",
-          "theatreWebsite": "thegemtheater.com",
-          "ticketLink": "https://thegemtheater.com/movies/michael/",
-          "latitude": 44.4110853,
-          "longitude": -70.7922593
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23490?date=2026-04-23",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23490?date=2026-04-23",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-05-05",
           "time": "12:45 PM",
           "isPremium": false,
@@ -11768,32 +10934,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23490?date=2026-04-23",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23490?date=2026-04-23",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-05-05",
           "time": "12:45 PM",
           "isPremium": false,
@@ -11948,19 +11088,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/23490?date=2026-04-23",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23490?date=2026-04-23",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-05-05",
@@ -12039,32 +11166,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23490?date=2026-04-23",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/23490?date=2026-04-23",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/23490?date=2026-04-23",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-05-05",
@@ -12158,19 +11259,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/23490?date=2026-04-23",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-05-05",
           "time": "12:50 PM",
           "isPremium": false,
@@ -12247,58 +11335,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/23490?date=2026-04-23",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Michael--2026-/611fe9edf74bab2423301ee0/69977aa8410291d021d92e54",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Michael--2026-/611fe9edf74bab2423301ee0/69977aa8410291d021d92e54",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Michael--2026-/611fe9edf74bab2423301ee0/69977aa8410291d021d92e54",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "9:00 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Michael--2026-/611fe9edf74bab2423301ee0/69977aa8410291d021d92e54",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-05-05",
@@ -12507,45 +11543,6 @@
           "ticketLink": "https://www.applecinemas.com/Michael--2026-/611fe9edf74bab2423301ee0/69977aa8410291d021d92e54",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Michael--2026-/611fea26f74bab2423301ee4/69977aa8410291d021d92e54",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "8:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Michael--2026-/611fea26f74bab2423301ee4/69977aa8410291d021d92e54",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Michael--2026-/611fea26f74bab2423301ee4/69977aa8410291d021d92e54",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-05-05",
@@ -12780,19 +11777,6 @@
           "ticketLink": "https://www.applecinemas.com/Michael--2026-/611fea26f74bab2423301ee4/69977aa8410291d021d92e54",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/MICHAEL",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-05-05",
@@ -12832,19 +11816,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/MICHAEL",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/MICHAEL",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-05-05",
@@ -12897,32 +11868,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Topsham/MICHAEL",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/MICHAEL",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/MICHAEL",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
         },
         {
           "date": "2026-05-05",
@@ -12990,19 +11935,6 @@
           "longitude": -70.4409439
         },
         {
-          "date": "2026-05-04",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/michael-ho00020974",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
           "date": "2026-05-05",
           "time": "12:10 PM",
           "isPremium": false,
@@ -13170,32 +12102,6 @@
           "ticketLink": "https://www.regmovies.com/movies/michael-ho00020974",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:05 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23496?date=2026-04-23",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23496?date=2026-04-23",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-05-05",
@@ -14264,24 +13170,8 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://www.leavittheatre.com/event-details-registration/nacho-libre-2006-1",
-      "theatres": [
-        "Leavitt Theatre, Ogunquit"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-04",
-          "time": "5:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Leavitt Theatre",
-          "city": "Ogunquit",
-          "theatreWebsite": "leavittheatre.com",
-          "ticketLink": "https://www.leavittheatre.com/event-details-registration/nacho-libre-2006-1",
-          "latitude": 43.2504514,
-          "longitude": -70.6004205
-        }
-      ]
+      "theatres": [],
+      "showings": []
     },
     {
       "title": "Narrative Fiction Shorts",
@@ -14794,32 +13684,6 @@
       ],
       "showings": [
         {
-          "date": "2026-05-04",
-          "time": "5:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Over-Your-Dead-Body/611fea26f74bab2423301ee4/69e6c44108779a3045e916af",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Over-Your-Dead-Body/611fea26f74bab2423301ee4/69e6c44108779a3045e916af",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-05-05",
           "time": "5:15 PM",
           "isPremium": false,
@@ -15186,7 +14050,6 @@
         "Entertainment Luxury Cinemas, South Portland",
         "Narrow Gauge Cinema, Farmington",
         "Nickelodeon Cinemas, Portland",
-        "The Gem Theater, Bethel",
         "Flagship Cinemas, Falmouth",
         "Flagship Cinemas, Auburn",
         "Flagship Cinemas, Thomaston",
@@ -15202,19 +14065,6 @@
       ],
       "showings": [
         {
-          "date": "2026-05-04",
-          "time": "6:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/project-hail-mary",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-05-05",
           "time": "1:10 PM",
           "isPremium": false,
@@ -15475,19 +14325,6 @@
           "longitude": -70.1528244018555
         },
         {
-          "date": "2026-05-04",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/project-hail-mary",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-05-05",
           "time": "1:00 PM",
           "isPremium": false,
@@ -15564,32 +14401,6 @@
           "ticketLink": "https://www.patriotcinemas.com/movie/project-hail-mary",
           "latitude": 43.6575821,
           "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "The Gem Theater",
-          "city": "Bethel",
-          "theatreWebsite": "thegemtheater.com",
-          "ticketLink": "https://thegemtheater.com/movies/project-hail-mary/",
-          "latitude": 44.4110853,
-          "longitude": -70.7922593
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/22812",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
         },
         {
           "date": "2026-05-05",
@@ -15670,19 +14481,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-05-04",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/22812",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-05-05",
           "time": "11:30 AM",
           "isPremium": false,
@@ -15759,19 +14557,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/22812",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/22812",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-05-05",
@@ -15852,19 +14637,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-05-04",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/22812",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-05-05",
           "time": "11:40 AM",
           "isPremium": false,
@@ -15943,19 +14715,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/22812",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-05-05",
           "time": "12:30 PM",
           "isPremium": false,
@@ -16032,32 +14791,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/22812",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "8:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fe9edf74bab2423301ee0/69906f7b516edd9889d4135f",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-05-05",
@@ -16242,19 +14975,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-05-05",
           "time": "12:00 PM",
           "isPremium": false,
@@ -16331,19 +15051,6 @@
           "ticketLink": "https://www.applecinemas.com/Project-Hail-Mary/611fea26f74bab2423301ee4/69906f7b516edd9889d4135f",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/PROJECT-HAIL-MARY",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-05-05",
@@ -16383,19 +15090,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/PROJECT-HAIL-MARY",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/PROJECT-HAIL-MARY",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-05-05",
@@ -16450,19 +15144,6 @@
           "longitude": -69.9812435
         },
         {
-          "date": "2026-05-04",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie-theater/windham",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
           "date": "2026-05-05",
           "time": "3:15 PM",
           "isPremium": false,
@@ -16502,19 +15183,6 @@
           "longitude": -70.4409439
         },
         {
-          "date": "2026-05-04",
-          "time": "8:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/project-hail-mary-ho00018964?date=03-19-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
           "date": "2026-05-05",
           "time": "12:30 PM",
           "isPremium": false,
@@ -16591,19 +15259,6 @@
           "ticketLink": "https://www.regmovies.com/movies/project-hail-mary-ho00018964?date=03-19-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/22822?date=2026-03-19",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-05-05",
@@ -18657,19 +17312,6 @@
           "longitude": -69.62965
         },
         {
-          "date": "2026-05-04",
-          "time": "8:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/the-christophers",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-05-05",
           "time": "8:30 PM",
           "isPremium": false,
@@ -18820,7 +17462,6 @@
         "Reel Pizza Cinerama, Bar Harbor",
         "State Cinemas, Calais",
         "Temple Theatre, Houlton",
-        "The Gem Theater, Bethel",
         "Flagship Cinemas, Falmouth",
         "Flagship Cinemas, Auburn",
         "Flagship Cinemas, Thomaston",
@@ -18835,19 +17476,6 @@
         "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/the-devil-wears-prada-2",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-05-05",
           "time": "1:20 PM",
@@ -19655,19 +18283,6 @@
           "longitude": -70.7082496
         },
         {
-          "date": "2026-05-04",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/the-devil-wears-prada-2/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
           "date": "2026-05-05",
           "time": "2:25 PM",
           "isPremium": false,
@@ -19783,19 +18398,6 @@
           "ticketLink": "https://www.watervillecreates.org/shows/the-devil-wears-prada-2/",
           "latitude": 44.5498745,
           "longitude": -69.62965
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
         },
         {
           "date": "2026-05-05",
@@ -19876,32 +18478,6 @@
           "longitude": -70.1528244018555
         },
         {
-          "date": "2026-05-04",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/the-devil-wears-prada-2",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-04",
-          "time": "9:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/the-devil-wears-prada-2",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-05-05",
           "time": "1:15 PM",
           "isPremium": false,
@@ -20056,19 +18632,6 @@
           "ticketLink": "https://www.patriotcinemas.com/movie/the-devil-wears-prada-2",
           "latitude": 43.6575821,
           "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Reel Pizza Cinerama",
-          "city": "Bar Harbor",
-          "theatreWebsite": "reelpizza.net",
-          "ticketLink": "reelpizza.net",
-          "latitude": 44.3877387,
-          "longitude": -68.2060749
         },
         {
           "date": "2026-05-05",
@@ -20136,45 +18699,6 @@
           "longitude": -67.8403909
         },
         {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "The Gem Theater",
-          "city": "Bethel",
-          "theatreWebsite": "thegemtheater.com",
-          "ticketLink": "https://thegemtheater.com/movies/the-devil-wears-prada-2/",
-          "latitude": 44.4110853,
-          "longitude": -70.7922593
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23212",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23212",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-05-05",
           "time": "11:10 AM",
           "isPremium": false,
@@ -20357,32 +18881,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-05-04",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23212",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23212",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-05-05",
           "time": "11:10 AM",
           "isPremium": false,
@@ -20563,32 +19061,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/23212",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23212",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23212",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-05-05",
@@ -20745,32 +19217,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23212",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/23212",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/23212",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-05-05",
@@ -20916,19 +19362,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-05-04",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/23212",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-05-05",
           "time": "1:10 PM",
           "isPremium": false,
@@ -21005,71 +19438,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/23212",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Devil-Wears-Prada-2/611fe9edf74bab2423301ee0/69b5b0f227773838a793e365",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Devil-Wears-Prada-2/611fe9edf74bab2423301ee0/69b5b0f227773838a793e365",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "8:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Devil-Wears-Prada-2/611fe9edf74bab2423301ee0/69b5b0f227773838a793e365",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Devil-Wears-Prada-2/611fe9edf74bab2423301ee0/69b5b0f227773838a793e365",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "9:10 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Devil-Wears-Prada-2/611fe9edf74bab2423301ee0/69b5b0f227773838a793e365",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-05-05",
@@ -21410,58 +19778,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-05-04",
-          "time": "5:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Devil-Wears-Prada-2/611fea26f74bab2423301ee4/69b5b0f227773838a793e365",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Devil-Wears-Prada-2/611fea26f74bab2423301ee4/69b5b0f227773838a793e365",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Devil-Wears-Prada-2/611fea26f74bab2423301ee4/69b5b0f227773838a793e365",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "8:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Devil-Wears-Prada-2/611fea26f74bab2423301ee4/69b5b0f227773838a793e365",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-05-05",
           "time": "12:30 PM",
           "isPremium": false,
@@ -21681,32 +19997,6 @@
           "ticketLink": "https://www.applecinemas.com/The-Devil-Wears-Prada-2/611fea26f74bab2423301ee4/69b5b0f227773838a793e365",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/DEVIL-WEARS-PRADA-2",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/DEVIL-WEARS-PRADA-2",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-05-05",
@@ -21772,32 +20062,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/DEVIL-WEARS-PRADA-2",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/DEVIL-WEARS-PRADA-2",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/DEVIL-WEARS-PRADA-2",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-05-05",
@@ -21902,32 +20166,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Topsham/DEVIL-WEARS-PRADA-2",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/DEVIL-WEARS-PRADA-2",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/DEVIL-WEARS-PRADA-2",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
         },
         {
           "date": "2026-05-05",
@@ -22006,32 +20244,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Windham/DEVIL-WEARS-PRADA-2",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/the-devil-wears-prada-2-ho00020256",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/the-devil-wears-prada-2-ho00020256",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-05-05",
@@ -22344,32 +20556,6 @@
           "ticketLink": "https://www.regmovies.com/movies/the-devil-wears-prada-2-ho00020256",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23219",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23219",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-05-05",
@@ -22836,19 +21022,6 @@
           "longitude": -69.5312042236328
         },
         {
-          "date": "2026-05-04",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/the-drama",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-05-05",
           "time": "1:10 PM",
           "isPremium": false,
@@ -22886,32 +21059,6 @@
           "ticketLink": "https://www.patriotcinemas.com/movie/the-drama",
           "latitude": 43.6575821,
           "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/-The-Drama-/611fe9edf74bab2423301ee0/69c44114d81280e20a0df26e",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/-The-Drama-/611fe9edf74bab2423301ee0/69c44114d81280e20a0df26e",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-05-05",
@@ -23117,7 +21264,7 @@
           "time": "2:30 PM",
           "isPremium": false,
           "festivalName": "Bates Film Festival",
-          "room": "",
+          "room": "Olin 104",
           "theatre": "Bates College",
           "city": "Lewiston",
           "theatreWebsite": "https://www.bates.edu",
@@ -24553,19 +22700,6 @@
       ],
       "showings": [
         {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/the-super-mario-galaxy-movie",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
           "date": "2026-05-05",
           "time": "1:30 PM",
           "isPremium": false,
@@ -24878,19 +23012,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-05-04",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule&SelectedDate=20250213",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-05-05",
           "time": "4:15 PM",
           "isPremium": false,
@@ -24954,32 +23075,6 @@
           "ticketLink": "https://www.statecinemascalais.com/",
           "latitude": 45.1886654,
           "longitude": -67.2808756
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23105",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://flagshipcinemas.com/falmouth",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/23105",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
         },
         {
           "date": "2026-05-05",
@@ -25164,19 +23259,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-05-04",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://flagshipcinemas.com/auburn/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/23105",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-05-05",
           "time": "11:00 AM",
           "isPremium": false,
@@ -25307,19 +23389,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-05-04",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://flagshipcinemas.com/thomaston/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23105",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-05-05",
           "time": "12:20 PM",
           "isPremium": false,
@@ -25422,19 +23491,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/23105",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-05-04",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://flagshipcinemas.com/waterville/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/23105",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-05-05",
@@ -25606,19 +23662,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-05-04",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://flagshipcinemas.com/wells/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/23105",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-05-05",
           "time": "1:30 PM",
           "isPremium": false,
@@ -25695,32 +23738,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/23105",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "8:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-05-05",
@@ -25877,58 +23894,6 @@
           "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fe9edf74bab2423301ee0/69977d61410291d021d92eaf",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-05-04",
-          "time": "5:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "8:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-05-05",
@@ -26137,19 +24102,6 @@
           "ticketLink": "https://www.applecinemas.com/The-Super-Mario-Galaxy-Movie--2026-/611fea26f74bab2423301ee4/69977d61410291d021d92eaf",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/THE-SUPER-MARIO-GALAXY-MOVIE#",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
         },
         {
           "date": "2026-05-05",
@@ -26189,19 +24141,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/THE-SUPER-MARIO-GALAXY-MOVIE#",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/THE-SUPER-MARIO-GALAXY-MOVIE#",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-05-05",
@@ -26254,19 +24193,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Topsham/THE-SUPER-MARIO-GALAXY-MOVIE#",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Smitty's Cinema",
-          "city": "Windham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/windham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Windham/THE-SUPER-MARIO-GALAXY",
-          "latitude": 43.8396584,
-          "longitude": -70.4409439
         },
         {
           "date": "2026-05-05",
@@ -26321,19 +24247,6 @@
           "longitude": -70.4409439
         },
         {
-          "date": "2026-05-04",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/the-super-mario-galaxy-movie-ho00020250?date=04-01-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
           "date": "2026-05-05",
           "time": "12:50 PM",
           "isPremium": false,
@@ -26410,32 +24323,6 @@
           "ticketLink": "https://www.regmovies.com/movies/the-super-mario-galaxy-movie-ho00020250?date=04-01-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:05 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23127?date=2026-04-01",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
-          "date": "2026-05-04",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/23127?date=2026-04-01",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-05-05",
@@ -27210,9 +25097,23 @@
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "",
       "theatres": [
+        "Nickelodeon Cinemas, Portland",
         "Bates College, Lewiston"
       ],
       "showings": [
+        {
+          "date": "2026-05-25",
+          "time": "1:00 AM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Nickelodeon Cinemas",
+          "city": "Portland",
+          "theatreWebsite": "patriotcinemas.com",
+          "ticketLink": "patriotcinemas.com",
+          "latitude": 43.6575821,
+          "longitude": -70.2558618
+        },
         {
           "date": "2026-05-12",
           "time": "7:00 PM",
