@@ -74,6 +74,58 @@
       ]
     },
     {
+      "title": "2026 Maine Mayhem Film Festival",
+      "year": 2026,
+      "tmdbId": "",
+      "description": "",
+      "posterUrl": "https://www.portlandmuseum.org/wp-content/uploads/2026/04/Fireside-Chat-SMCC-1.avif",
+      "director": "Various",
+      "genres": [
+        "Student"
+      ],
+      "stars": [],
+      "releaseDate": "",
+      "popularity": 0,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.patriotcinemas.com/movie/2026-maine-mayhem-film-festival",
+      "theatres": [
+        "Nickelodeon Cinemas, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-07",
+          "time": "6:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Nickelodeon Cinemas",
+          "city": "Portland",
+          "theatreWebsite": "patriotcinemas.com",
+          "ticketLink": "https://www.patriotcinemas.com/movie/2026-maine-mayhem-film-festival",
+          "latitude": 43.6575821,
+          "longitude": -70.2558618
+        },
+        {
+          "date": "2026-05-07",
+          "time": "9:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Nickelodeon Cinemas",
+          "city": "Portland",
+          "theatreWebsite": "patriotcinemas.com",
+          "ticketLink": "https://www.patriotcinemas.com/movie/2026-maine-mayhem-film-festival",
+          "latitude": 43.6575821,
+          "longitude": -70.2558618
+        }
+      ]
+    },
+    {
       "title": "2026 Oscar Nominated Shorts - Animation",
       "year": 2026,
       "tmdbId": "1639779",
@@ -7266,6 +7318,56 @@
       "showings": []
     },
     {
+      "title": "Iron Maiden: Burning Ambition",
+      "year": 0,
+      "tmdbId": "1642859",
+      "description": "",
+      "posterUrl": "",
+      "director": "",
+      "genres": [],
+      "stars": [],
+      "releaseDate": "",
+      "popularity": 0,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.patriotcinemas.com/movie/iron-maiden-burning-ambition",
+      "theatres": [
+        "Nickelodeon Cinemas, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-07",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Nickelodeon Cinemas",
+          "city": "Portland",
+          "theatreWebsite": "patriotcinemas.com",
+          "ticketLink": "https://www.patriotcinemas.com/movie/iron-maiden-burning-ambition",
+          "latitude": 43.6575821,
+          "longitude": -70.2558618
+        },
+        {
+          "date": "2026-05-09",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Nickelodeon Cinemas",
+          "city": "Portland",
+          "theatreWebsite": "patriotcinemas.com",
+          "ticketLink": "https://www.patriotcinemas.com/movie/iron-maiden-burning-ambition",
+          "latitude": 43.6575821,
+          "longitude": -70.2558618
+        }
+      ]
+    },
+    {
       "title": "It's A Wonderful Life",
       "year": 1946,
       "tmdbId": "1585",
@@ -12035,6 +12137,43 @@
           "ticketLink": "https://colonialtheatre.com/film-guide/?film-id=69dee671800f532d7bef2208",
           "latitude": 44.4267641,
           "longitude": -69.0075715
+        }
+      ]
+    },
+    {
+      "title": "Paris, Texas",
+      "year": 0,
+      "tmdbId": "655",
+      "description": "",
+      "posterUrl": "",
+      "director": "",
+      "genres": [],
+      "stars": [],
+      "releaseDate": "",
+      "popularity": 0,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.patriotcinemas.com/movie/paris-texas",
+      "theatres": [
+        "Nickelodeon Cinemas, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-13",
+          "time": "6:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Nickelodeon Cinemas",
+          "city": "Portland",
+          "theatreWebsite": "patriotcinemas.com",
+          "ticketLink": "https://www.patriotcinemas.com/movie/paris-texas",
+          "latitude": 43.6575821,
+          "longitude": -70.2558618
         }
       ]
     },
@@ -21811,143 +21950,6 @@
           "ticketLink": "space538.org",
           "latitude": 43.655603,
           "longitude": -70.2613361
-        }
-      ]
-    },
-    {
-      "title": "2026 Maine Mayhem Film Festival",
-      "year": 2026,
-      "tmdbId": "",
-      "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
-      "popularity": 0,
-      "voteAverage": 0,
-      "voteCount": 0,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.patriotcinemas.com/movie/2026-maine-mayhem-film-festival",
-      "theatres": [
-        "Nickelodeon Cinemas, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-07",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/2026-maine-mayhem-film-festival",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-07",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/2026-maine-mayhem-film-festival",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        }
-      ]
-    },
-    {
-      "title": "Iron Maiden: Burning Ambition",
-      "year": 0,
-      "tmdbId": "1642859",
-      "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
-      "popularity": 0,
-      "voteAverage": 0,
-      "voteCount": 0,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.patriotcinemas.com/movie/iron-maiden-burning-ambition",
-      "theatres": [
-        "Nickelodeon Cinemas, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-07",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/iron-maiden-burning-ambition",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-09",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/iron-maiden-burning-ambition",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        }
-      ]
-    },
-    {
-      "title": "Paris, Texas",
-      "year": 0,
-      "tmdbId": "655",
-      "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
-      "popularity": 0,
-      "voteAverage": 0,
-      "voteCount": 0,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.patriotcinemas.com/movie/paris-texas",
-      "theatres": [
-        "Nickelodeon Cinemas, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-13",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/paris-texas",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
         }
       ]
     }
