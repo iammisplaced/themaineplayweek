@@ -954,3 +954,5 @@ $$;
 
 revoke all on function public.apply_showtimes_delta(jsonb) from public;
 grant execute on function public.apply_showtimes_delta(jsonb) to authenticated;
+
+alter table public.showings add column if not exists notes text not null default '';

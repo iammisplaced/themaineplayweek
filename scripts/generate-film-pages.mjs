@@ -143,7 +143,7 @@ async function loadFilmSourceFromSupabase() {
       restBase,
       supabaseAnonKey,
       "showings",
-      "theatre_id,film_id,festival_id,show_date,room,times,premium_times",
+      "theatre_id,film_id,festival_id,show_date,room,notes,times,premium_times",
       "theatre_id.asc,film_id.asc,show_date.asc"
     ),
     fetchAllFromSupabase(
@@ -227,6 +227,7 @@ async function loadFilmSourceFromSupabase() {
         isPremium: false,
         festivalName: festivalNameById.get(Number(row.festival_id)) || "",
         room: String(row.room || "").trim(),
+        notes: String(row.notes || "").trim(),
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
@@ -245,6 +246,7 @@ async function loadFilmSourceFromSupabase() {
         isPremium: true,
         festivalName: festivalNameById.get(Number(row.festival_id)) || "",
         room: String(row.room || "").trim(),
+        notes: String(row.notes || "").trim(),
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
@@ -361,6 +363,7 @@ function normalizeFilms(source) {
                 festivalNameById.get(Number(showing?.festivalId)) ||
                 stringOrEmpty(showing?.festivalName),
               room: stringOrEmpty(showing?.room),
+              notes: stringOrEmpty(showing?.notes),
               theatre: theatreName,
               city: theatreCity,
               theatreWebsite: stringOrEmpty(theatre?.website),
@@ -380,6 +383,7 @@ function normalizeFilms(source) {
                 festivalNameById.get(Number(showing?.festivalId)) ||
                 stringOrEmpty(showing?.festivalName),
               room: stringOrEmpty(showing?.room),
+              notes: stringOrEmpty(showing?.notes),
               theatre: theatreName,
               city: theatreCity,
               theatreWebsite: stringOrEmpty(theatre?.website),
@@ -455,6 +459,7 @@ function normalizeFlatFilm(film, festivalNameById = new Map()) {
               festivalNameById.get(Number(showing?.festivalId ?? showing?.festival_id)) ||
               "",
             room: stringOrEmpty(showing?.room),
+            notes: stringOrEmpty(showing?.notes),
             theatre: stringOrEmpty(showing?.theatre),
             city: stringOrEmpty(showing?.city),
             theatreWebsite: stringOrEmpty(showing?.theatreWebsite),
@@ -537,6 +542,7 @@ function renderFilmPage(film, slug, siteUrl) {
                 <div class="show-times-grid">
                   ${row.times.map((time) => `<span class="show-time-chip">${escapeHtml(time)}</span>`).join("")}
                   ${row.premiumTimes.map((time) => `<span class="show-time-chip show-time-chip-premium">Premium ${escapeHtml(time)}</span>`).join("")}
+                  ${row.notes ? `<span class="special-notes-pill special-notes-pill-inline">${escapeHtml(row.notes)}</span>` : ""}
                 </div>
               </article>`
           )
@@ -1585,11 +1591,14 @@ function buildShowtimesByTheatre(film) {
     }
     const byDate = entry.byDate;
     if (!byDate.has(showing.date)) {
-      byDate.set(showing.date, { room: String(showing.room || "").trim(), times: [], premiumTimes: [] });
+      byDate.set(showing.date, { room: String(showing.room || "").trim(), notes: String(showing.notes || "").trim(), times: [], premiumTimes: [] });
     }
     const slot = byDate.get(showing.date);
     if (!slot.room) {
       slot.room = String(showing.room || "").trim();
+    }
+    if (!slot.notes) {
+      slot.notes = String(showing.notes || "").trim();
     }
     if (showing.isPremium) {
       slot.premiumTimes.push(showing.time);
@@ -1604,6 +1613,7 @@ function buildShowtimesByTheatre(film) {
       .map(([date, value]) => ({
         date,
         room: String(value?.room || "").trim(),
+        notes: String(value?.notes || "").trim(),
         times: dedupeTimes(value?.times || []),
         premiumTimes: dedupeTimes(value?.premiumTimes || []),
       }));
