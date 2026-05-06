@@ -47,14 +47,8 @@ const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
 const LOCATION_PREFERENCE_STORAGE_KEY = "tmp-location-preference-v1";
 const LOCATION_CHOOSER_SEEN_STORAGE_KEY = "tmp-location-chooser-seen-v1";
-const BETA_BANNER_ROTATION_MS = 5200;
 const SEARCH_INPUT_DEBOUNCE_MS = 180;
 const MAX_ADMIN_SEARCH_RESULTS = 120;
-const BETA_BANNER_MESSAGES = Object.freeze([
-  "Listings and distance sorting are actively being tuned.",
-  "Showtimes update throughout the day while we refine the feed.",
-  "Near You results are beta and may shift as location data improves.",
-]);
 
 const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
 const SUPABASE_ANON_KEY =
@@ -92,6 +86,12 @@ const THEME_COLOR_MAP = {
   [DARK_THEME]: "#121816",
 };
 const VALID_VIEWS = new Set(["films", "theatres", "days", "festivals"]);
+const NAV_VIEW_LABELS = Object.freeze({
+  days: "Near You",
+  theatres: "Theatres",
+  films: "All Films",
+  festivals: "Festivals",
+});
 
 const state = {
   data: { theatreGroups: [], festivals: [] },
@@ -144,16 +144,21 @@ const state = {
 
 const elements = {
   appLoader: document.getElementById("appLoader"),
-  betaBannerMessage: document.getElementById("betaBannerMessage"),
   themeColorMeta: document.querySelector('meta[name="theme-color"]'),
   themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
   brandWordmark: document.getElementById("brandWordmark"),
+  navMenuWrap: document.getElementById("navMenuWrap"),
+  navMenu: document.getElementById("navMenu"),
+  navMenuLabel: document.getElementById("navMenuLabel"),
+  navMenuItems: Array.from(document.querySelectorAll(".nav-menu-item")),
   publicSearchWrap: document.getElementById("publicSearchWrap"),
   publicSearchInput: document.getElementById("publicSearchInput"),
   dayPickerWrap: document.getElementById("dayPickerWrap"),
+  dayPickerDateGroup: document.getElementById("dayPickerDateGroup"),
   dayPickerInput: document.getElementById("dayPickerInput"),
-  dayRadiusInput: document.getElementById("dayRadiusInput"),
+  dayPickerDisplayLabel: document.getElementById("dayPickerDisplayLabel"),
+  radiusButtonGroup: document.getElementById("radiusButtonGroup"),
   dayPrevButton: document.getElementById("dayPrevButton"),
   dayNextButton: document.getElementById("dayNextButton"),
   locationChooserModal: document.getElementById("locationChooserModal"),
@@ -271,7 +276,6 @@ const elements = {
 
 let resizeRenderTimeout = null;
 let logoSpinResetTimeout = null;
-let betaBannerRotationInterval = null;
 let lastViewportWidth = window.innerWidth;
 let appBootComplete = false;
 let pageLoadComplete = document.readyState === "complete";
@@ -319,7 +323,6 @@ function waitForNextPaint() {
 }
 
 async function init() {
-  initializeBetaBanner();
   initializeBrandWordmarkVariant();
   initializeTheme();
   initializeViewPreference();
@@ -342,32 +345,6 @@ async function init() {
   registerSortDebugTools();
 }
 
-function initializeBetaBanner() {
-  const messageNode = elements.betaBannerMessage;
-  if (!messageNode || !BETA_BANNER_MESSAGES.length) return;
-
-  if (betaBannerRotationInterval) {
-    clearInterval(betaBannerRotationInterval);
-    betaBannerRotationInterval = null;
-  }
-
-  let messageIndex = 0;
-  swapBetaBannerMessage(messageNode, BETA_BANNER_MESSAGES[messageIndex]);
-
-  if (BETA_BANNER_MESSAGES.length === 1) return;
-  betaBannerRotationInterval = window.setInterval(() => {
-    messageIndex = (messageIndex + 1) % BETA_BANNER_MESSAGES.length;
-    swapBetaBannerMessage(messageNode, BETA_BANNER_MESSAGES[messageIndex]);
-  }, BETA_BANNER_ROTATION_MS);
-}
-
-function swapBetaBannerMessage(messageNode, nextMessage) {
-  messageNode.classList.remove("is-swapping");
-  messageNode.textContent = nextMessage;
-  requestAnimationFrame(() => {
-    messageNode.classList.add("is-swapping");
-  });
-}
 
 async function loadLatestSubstackPost() {
   if (!elements.latestPost) return;
@@ -616,6 +593,7 @@ function bindEvents() {
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
     closePosterLightbox();
+    closeNavMenu();
   });
 
   elements.tabs.forEach((tab) => {
@@ -623,6 +601,22 @@ function bindEvents() {
       const view = tab.dataset.view;
       setView(view, { persist: true });
     });
+  });
+
+  elements.navMenu?.addEventListener("click", (event) => {
+    const item = event.target.closest(".nav-menu-item");
+    if (!item) return;
+    const view = item.dataset.view;
+    if (view) {
+      setView(view, { persist: true });
+      closeNavMenu();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (elements.navMenuWrap && !elements.navMenuWrap.contains(event.target)) {
+      closeNavMenu();
+    }
   });
 
   const debouncedPublicSearchRender = debounce(() => {
@@ -649,18 +643,30 @@ function bindEvents() {
     shiftSelectedDay(1);
   });
 
+  elements.dayPickerDateGroup?.addEventListener("click", (e) => {
+    if (e.target.closest(".day-picker-nav")) return;
+    try {
+      elements.dayPickerInput.showPicker();
+    } catch (_) {
+      elements.dayPickerInput.focus();
+    }
+  });
+
   elements.dayPickerInput?.addEventListener("change", () => {
     const requested = String(elements.dayPickerInput.value || "").trim();
     state.selectedDay = requested || toIsoDate(new Date());
     render();
   });
 
-  elements.dayRadiusInput?.addEventListener("change", () => {
-    const requestedRadius = Number(elements.dayRadiusInput.value);
+  elements.radiusButtonGroup?.addEventListener("click", (e) => {
+    const btn = e.target.closest(".radius-option");
+    if (!btn) return;
+    const requestedRadius = Number(btn.dataset.value);
     state.daysViewRadiusMiles =
       Number.isFinite(requestedRadius) && requestedRadius > 0
         ? requestedRadius
         : DEFAULT_DAYS_VIEW_RADIUS_MILES;
+    syncRadiusButtons();
     render();
   });
 
@@ -1532,6 +1538,7 @@ function bindEvents() {
       "ticket_link",
       "film_year",
       "film_tmdb_id",
+      "film_synopsis",
     ];
     const rows = [
       header,
@@ -1547,8 +1554,9 @@ function bindEvents() {
         "https://tickets.example.com/anora",
         "",
         "",
+        "",
       ],
-      ["Nickelodeon Cinema", "Portland", "Anora", "2026-03-13", "4:00 PM|7:45 PM", "9:55 PM", "", "", "", "", ""],
+      ["Nickelodeon Cinema", "Portland", "Anora", "2026-03-13", "4:00 PM|7:45 PM", "9:55 PM", "", "", "", "", "", ""],
     ];
     const csv = rows.map((row) => row.map((value) => toCsvCell(value)).join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
@@ -1618,11 +1626,22 @@ function initializeViewPreference() {
   syncViewTabSelection();
 }
 
+
+function closeNavMenu() {
+  elements.navMenuWrap?.removeAttribute("open");
+}
+
 function syncViewTabSelection() {
   elements.tabs.forEach((button) => {
     const selected = button.dataset.view === state.view;
     button.classList.toggle("active", selected);
     button.setAttribute("aria-selected", String(selected));
+  });
+  if (elements.navMenuLabel) {
+    elements.navMenuLabel.textContent = NAV_VIEW_LABELS[state.view] || state.view;
+  }
+  elements.navMenuItems.forEach((item) => {
+    item.classList.toggle("active", item.dataset.view === state.view);
   });
 }
 
@@ -2851,6 +2870,7 @@ function importShowtimesCsv(data, csvContent) {
     const filmYearRaw = readCsvValue(row, headerIndexByKey, "film_year");
     const filmTmdbIdRaw = readCsvValue(row, headerIndexByKey, "film_tmdb_id");
     const ticketLinkRaw = readCsvValue(row, headerIndexByKey, "ticket_link");
+    const filmSynopsisRaw = readCsvValue(row, headerIndexByKey, "film_synopsis");
     const roomRaw = readCsvValue(row, headerIndexByKey, "room");
     const festivalNameRaw = readCsvValue(row, headerIndexByKey, "festival_name");
     const showDate = readCsvValue(row, headerIndexByKey, "show_date");
@@ -2956,6 +2976,9 @@ function importShowtimesCsv(data, csvContent) {
     }
     if (ticketLinkRaw) {
       film.ticketLink = normalizeOutboundUrl(ticketLinkRaw);
+    }
+    if (filmSynopsisRaw) {
+      film.synopsis = filmSynopsisRaw;
     }
 
     if (!Array.isArray(film.showings)) film.showings = [];
@@ -4401,13 +4424,17 @@ function render() {
             : `No poster available for ${show.film}`;
           poster.classList.remove("hidden");
 
-          main.textContent = filmLabel;
+          main.textContent = "";
           if (showFestivalIds.length) {
+            const ribbonWrap = document.createElement("div");
+            ribbonWrap.className = "festival-entry-ribbon-inline";
             const ribbon = document.createElement("span");
-            ribbon.className = "festival-entry-ribbon festival-entry-ribbon-inline";
+            ribbon.className = "festival-entry-ribbon";
             ribbon.textContent = festivalBadgeLabel;
-            main.prepend(ribbon);
+            ribbonWrap.appendChild(ribbon);
+            main.appendChild(ribbonWrap);
           }
+          main.appendChild(document.createTextNode(filmLabel));
           const showDateKeys = Object.keys(show?.dates || {});
           const singleDateRoom =
             showDateKeys.length === 1
@@ -4421,7 +4448,7 @@ function render() {
           }
 
           if (state.view === "theatres") {
-            renderSchedule(schedule, show.dates, show.premiumDates);
+            renderSchedule(schedule, show.dates, show.premiumDates, {});
           }
 
           if (!rowExpanded) {
@@ -4461,10 +4488,6 @@ function render() {
             meta.textContent = [show.theatre || "", show.room || show.city || ""]
               .filter(Boolean)
               .join(", ");
-            const ribbon = document.createElement("span");
-            ribbon.className = "festival-entry-ribbon";
-            ribbon.textContent = "Festival Selection";
-            main.prepend(ribbon);
           } else {
             main.textContent = `${show.theatre}`;
             const theatreKey = `${show.theatre} · ${show.city}`;
@@ -4502,6 +4525,13 @@ function render() {
           }
         }
         list.appendChild(item);
+      }
+
+      if (state.view === "festivals" && shows.length === 0) {
+        const placeholder = document.createElement("li");
+        placeholder.className = "festival-empty-placeholder";
+        placeholder.textContent = "Programming coming soon.";
+        list.appendChild(placeholder);
       }
     }
 
@@ -5649,6 +5679,14 @@ function shiftSelectedDay(direction) {
   render();
 }
 
+function syncRadiusButtons() {
+  if (!elements.radiusButtonGroup) return;
+  const current = String(getDaysViewRadiusMiles());
+  elements.radiusButtonGroup.querySelectorAll(".radius-option").forEach((btn) => {
+    btn.classList.toggle("is-selected", btn.dataset.value === current);
+  });
+}
+
 function syncDayPickerUI(activeDay) {
   if (!elements.dayPickerWrap || !elements.dayPickerInput) return;
 
@@ -5659,16 +5697,14 @@ function syncDayPickerUI(activeDay) {
 
   elements.dayPickerWrap.classList.remove("hidden");
   elements.dayPickerInput.disabled = false;
-  if (elements.dayRadiusInput) {
-    elements.dayRadiusInput.disabled = false;
-    elements.dayRadiusInput.value = String(getDaysViewRadiusMiles());
-  }
+  syncRadiusButtons();
   elements.dayPrevButton.disabled = false;
   elements.dayNextButton.disabled = false;
 
   if (!activeDay) {
     elements.dayPickerInput.value = "";
     elements.dayPickerInput.title = "Select a date";
+    if (elements.dayPickerDisplayLabel) elements.dayPickerDisplayLabel.textContent = "";
     elements.dayPrevButton.disabled = true;
     elements.dayNextButton.disabled = true;
     return;
@@ -5676,6 +5712,12 @@ function syncDayPickerUI(activeDay) {
 
   elements.dayPickerInput.value = activeDay;
   elements.dayPickerInput.title = formatLongDisplayDate(activeDay);
+  if (elements.dayPickerDisplayLabel) {
+    const isNarrow = window.matchMedia("(max-width: 640px)").matches;
+    elements.dayPickerDisplayLabel.textContent = isNarrow
+      ? formatShortDate(activeDay)
+      : formatDisplayDate(activeDay);
+  }
 }
 
 function buildSingleDayGroups(theatres, selectedDate) {
@@ -5836,6 +5878,29 @@ function buildFestivalGroups(theatres, festivals) {
       });
     });
   });
+
+  for (const [festivalId, festival] of festivalById) {
+    if (festival && !festival.enabled) continue;
+    const groupKey = `festival::${festivalId}`;
+    if (grouped[groupKey]) continue;
+    const festivalName = String(festival?.name || `Festival ${festivalId}`).trim();
+    grouped[groupKey] = {
+      festivalInfo: {
+        id: festivalId,
+        name: festivalName,
+        description: String(festival?.description || "").trim(),
+        website: String(festival?.website || "").trim(),
+        primaryColor: String(festival?.primaryColor || "").trim(),
+        startDate: String(festival?.startDate || "").trim(),
+        endDate: String(festival?.endDate || "").trim(),
+        sortOrder: Number.isInteger(Number(festival?.sortOrder)) ? Number(festival.sortOrder) : 0,
+      },
+      theatreInfo: null,
+      dayInfo: null,
+      filmInfo: null,
+      shows: [],
+    };
+  }
 
   return grouped;
 }
@@ -6063,7 +6128,7 @@ function buildExpandRowKey(view, group, show) {
   return `${view}-row::${filmKey}`;
 }
 
-function renderSchedule(container, dates, premiumDates = {}) {
+function renderSchedule(container, dates, premiumDates = {}, options = {}) {
   container.innerHTML = "";
   const dateKeys = new Set([...Object.keys(dates || {}), ...Object.keys(premiumDates || {})]);
   const dateEntries = Array.from(dateKeys)
@@ -6074,7 +6139,7 @@ function renderSchedule(container, dates, premiumDates = {}) {
   const hiddenEntries = dateEntries.slice(2);
 
   visibleEntries.forEach(([date, times, premiumTimes]) => {
-    container.appendChild(createScheduleRow(date, times, premiumTimes));
+    container.appendChild(createScheduleRow(date, times, premiumTimes, options));
   });
 
   if (hiddenEntries.length) {
@@ -6088,7 +6153,7 @@ function renderSchedule(container, dates, premiumDates = {}) {
 
     const extra = document.createElement("div");
     hiddenEntries.forEach(([date, times, premiumTimes]) => {
-      extra.appendChild(createScheduleRow(date, times, premiumTimes));
+      extra.appendChild(createScheduleRow(date, times, premiumTimes, options));
     });
     details.appendChild(extra);
 
@@ -6096,13 +6161,25 @@ function renderSchedule(container, dates, premiumDates = {}) {
   }
 }
 
-function createScheduleRow(date, times, premiumTimes = []) {
+function createScheduleRow(date, times, premiumTimes = [], options = {}) {
   const row = document.createElement("div");
   row.className = "show-schedule-row";
+
+  const heading = document.createElement("span");
+  heading.className = "show-schedule-heading";
 
   const label = document.createElement("span");
   label.className = "show-schedule-day";
   label.textContent = formatDisplayDate(date);
+  heading.appendChild(label);
+
+  const dateBadgeLabel = String(options?.dateBadgeLabel || "").trim();
+  if (dateBadgeLabel) {
+    const badge = document.createElement("span");
+    badge.className = "festival-entry-ribbon festival-entry-ribbon-date";
+    badge.textContent = dateBadgeLabel;
+    heading.appendChild(badge);
+  }
 
   const value = document.createElement("span");
   value.className = "show-schedule-times";
@@ -6130,7 +6207,7 @@ function createScheduleRow(date, times, premiumTimes = []) {
     value.appendChild(pill);
   });
 
-  row.appendChild(label);
+  row.appendChild(heading);
   row.appendChild(value);
   return row;
 }
@@ -6298,6 +6375,18 @@ function formatDisplayDate(dateIso) {
     day: "numeric",
     ...(showYear ? { year: "numeric" } : {}),
   }).format(date);
+}
+
+function formatShortDate(dateIso) {
+  const date = parseIsoDate(dateIso);
+  if (!date) return dateIso;
+  const dayDiff = getDayDifferenceFromToday(date);
+  if (dayDiff === 0) return "Today";
+  if (dayDiff === 1) return "Tomorrow";
+  if (dayDiff > 1 && dayDiff <= 6) {
+    return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(date);
+  }
+  return new Intl.DateTimeFormat("en-US", { month: "numeric", day: "numeric" }).format(date);
 }
 
 function formatLongDisplayDate(dateIso) {

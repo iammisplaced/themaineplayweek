@@ -37,10 +37,7 @@
     </div>
 
     <section class="beta-banner" role="status" aria-label="Beta notice" aria-live="polite">
-      <p class="beta-banner-line">
-        <strong>Beta:</strong>
-        <span id="betaBannerMessage" class="beta-banner-message">Listings and distance sorting are actively being tuned.</span>
-      </p>
+      <p class="beta-banner-line"><strong>Currently in Beta</strong></p>
       <p class="beta-banner-line">
         See something off? Email <a href="mailto:hello@themaineplayweek.com">hello@themaineplayweek.com</a>.
       </p>
@@ -72,24 +69,28 @@
           <button class="tab" role="tab" data-view="films" aria-selected="false">All Films</button>
           <button class="tab" role="tab" data-view="festivals" aria-selected="false">Festivals</button>
         </div>
+        <details class="nav-menu-wrap" id="navMenuWrap">
+          <summary id="navMenuButton" class="nav-menu-button">
+            <span id="navMenuLabel" class="nav-menu-label">Near You</span>
+          </summary>
+          <div id="navMenu" class="nav-menu" role="menu">
+            <button class="nav-menu-item active" role="menuitem" data-view="days" type="button">Near You <span class="nav-menu-beta-chip">Beta</span></button>
+            <button class="nav-menu-item" role="menuitem" data-view="theatres" type="button">Theatres</button>
+            <button class="nav-menu-item" role="menuitem" data-view="films" type="button">All Films</button>
+            <button class="nav-menu-item" role="menuitem" data-view="festivals" type="button">Festivals</button>
+          </div>
+        </details>
         <div id="publicSearchWrap" class="public-search">
           <input id="publicSearchInput" type="search" placeholder="Search films..." aria-label="Search listings" />
         </div>
         <div id="dayPickerWrap" class="day-picker hidden" aria-label="Date selection">
-          <div class="day-picker-date-group">
-            <button id="dayPrevButton" class="day-picker-nav" type="button" aria-label="Previous date">Prev</button>
+          <div id="dayPickerDateGroup" class="day-picker-date-group">
+            <button id="dayPrevButton" class="day-picker-nav" type="button" aria-label="Previous date"><span class="day-picker-nav-label">Prev</span><span class="day-picker-nav-chevron" aria-hidden="true">‹</span></button>
             <div class="day-picker-main">
               <input id="dayPickerInput" class="day-picker-input" type="date" aria-label="Select date" />
+              <span id="dayPickerDisplayLabel" class="day-picker-display-label" aria-hidden="true"></span>
             </div>
-            <button id="dayNextButton" class="day-picker-nav" type="button" aria-label="Next date">Next</button>
-          </div>
-          <div class="day-radius-group">
-            <select id="dayRadiusInput" class="day-radius-input" aria-label="Search radius">
-              <option value="10">10 mi</option>
-              <option value="25">25 mi</option>
-              <option value="50" selected>50 mi</option>
-              <option value="100">100 mi</option>
-            </select>
+            <button id="dayNextButton" class="day-picker-nav" type="button" aria-label="Next date"><span class="day-picker-nav-label">Next</span><span class="day-picker-nav-chevron" aria-hidden="true">›</span></button>
           </div>
         </div>
         <div id="locationChooserTriggerWrap" class="location-chooser-trigger-wrap hidden">
@@ -406,8 +407,10 @@
 
       <dialog id="locationChooserModal" class="admin-modal location-chooser-modal">
         <div class="admin-modal-body location-chooser-modal-body">
-          <h3 class="location-chooser-title">Sort nearby showtimes by:</h3>
-          <p class="location-chooser-copy">Use your location once, or set a ZIP code.</p>
+          <div class="location-chooser-header">
+            <h3 class="location-chooser-title">Find showtimes near you</h3>
+            <button id="closeLocationChooser" class="location-chooser-close" type="button" aria-label="Close">&#x2715;</button>
+          </div>
           <div class="location-chooser-actions">
             <button id="useDeviceLocation" type="button">Use My Location</button>
             <form id="zipLocationForm" class="location-chooser-zip-form">
@@ -420,12 +423,17 @@
                 placeholder="ZIP code"
                 pattern="[0-9]{5}(-[0-9]{4})?"
               />
-              <button id="useZipLocation" class="ghost-btn" type="submit">Use ZIP</button>
+              <button id="useZipLocation" class="ghost-btn" type="submit">Go</button>
             </form>
           </div>
           <p id="locationChooserMessage" class="location-chooser-message"></p>
-          <div class="admin-actions">
-            <button id="closeLocationChooser" class="ghost-btn" type="button">Not Now</button>
+          <div class="location-chooser-radius-row">
+            <span class="location-chooser-radius-label">Search radius</span>
+            <div id="radiusButtonGroup" class="radius-button-group" role="group" aria-label="Search radius">
+              <button type="button" class="radius-option" data-value="10">10 mi</button>
+              <button type="button" class="radius-option" data-value="25">25 mi</button>
+              <button type="button" class="radius-option is-selected" data-value="50">50 mi</button>
+            </div>
           </div>
         </div>
       </dialog>
