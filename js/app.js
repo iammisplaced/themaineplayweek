@@ -4066,9 +4066,12 @@ function render() {
     });
   } else if (state.view === "festivals") {
     entries.sort(([, groupA], [, groupB]) => {
-      const orderA = Number(groupA?.festivalInfo?.sortOrder ?? 0);
-      const orderB = Number(groupB?.festivalInfo?.sortOrder ?? 0);
-      if (orderA !== orderB) return orderA - orderB;
+      const tsA = Date.parse(groupA?.festivalInfo?.startDate || groupA?.festivalInfo?.endDate || "");
+      const tsB = Date.parse(groupB?.festivalInfo?.startDate || groupB?.festivalInfo?.endDate || "");
+      const validA = !isNaN(tsA);
+      const validB = !isNaN(tsB);
+      if (validA !== validB) return validA ? -1 : 1;
+      if (tsA !== tsB) return tsA - tsB;
       const nameA = String(groupA?.festivalInfo?.name || "");
       const nameB = String(groupB?.festivalInfo?.name || "");
       return nameA.localeCompare(nameB);
@@ -4754,7 +4757,7 @@ function getFileExtension(fileName) {
 function renderResultCards(cards) {
   if (!cards.length) return;
 
-  if (state.view === "films" || state.view === "days") {
+  if (state.view === "films" || state.view === "days" || state.view === "festivals") {
     cards.forEach((card) => elements.results.appendChild(card));
     return;
   }
