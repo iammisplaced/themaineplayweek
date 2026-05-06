@@ -1376,6 +1376,35 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   margin-bottom: 0.28rem;
 }
 
+.special-notes-pill {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.16rem 0.54rem;
+  margin-top: 0.22rem;
+  font-size: 0.62rem;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #ffffff;
+  background: #9c1818;
+  box-shadow: 0 2px 6px rgba(29, 31, 31, 0.14);
+}
+
+:root[data-theme="dark"] .special-notes-pill {
+  background: #9c1818;
+  color: #ffffff;
+}
+
+.special-notes-pill-inline {
+  display: inline-flex;
+  margin-left: 0.35rem;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .results.results-masonry[data-view="festivals"] .festival-show-item .show-meta {
   margin-top: 0.22rem;
 }

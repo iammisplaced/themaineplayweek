@@ -47,8 +47,14 @@ const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
 const LOCATION_PREFERENCE_STORAGE_KEY = "tmp-location-preference-v1";
 const LOCATION_CHOOSER_SEEN_STORAGE_KEY = "tmp-location-chooser-seen-v1";
+const BETA_BANNER_ROTATION_MS = 5200;
 const SEARCH_INPUT_DEBOUNCE_MS = 180;
 const MAX_ADMIN_SEARCH_RESULTS = 120;
+const BETA_BANNER_MESSAGES = Object.freeze([
+  "Listings and distance sorting are actively being tuned.",
+  "Showtimes update throughout the day while we refine the feed.",
+  "Near You results are beta and may shift as location data improves.",
+]);
 
 const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
 const SUPABASE_ANON_KEY =
@@ -86,12 +92,6 @@ const THEME_COLOR_MAP = {
   [DARK_THEME]: "#121816",
 };
 const VALID_VIEWS = new Set(["films", "theatres", "days", "festivals"]);
-const NAV_VIEW_LABELS = Object.freeze({
-  days: "Near You",
-  theatres: "Theatres",
-  films: "All Films",
-  festivals: "Festivals",
-});
 
 const state = {
   data: { theatreGroups: [], festivals: [] },
@@ -144,21 +144,16 @@ const state = {
 
 const elements = {
   appLoader: document.getElementById("appLoader"),
+  betaBannerMessage: document.getElementById("betaBannerMessage"),
   themeColorMeta: document.querySelector('meta[name="theme-color"]'),
   themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
   brandWordmark: document.getElementById("brandWordmark"),
-  navMenuWrap: document.getElementById("navMenuWrap"),
-  navMenu: document.getElementById("navMenu"),
-  navMenuLabel: document.getElementById("navMenuLabel"),
-  navMenuItems: Array.from(document.querySelectorAll(".nav-menu-item")),
   publicSearchWrap: document.getElementById("publicSearchWrap"),
   publicSearchInput: document.getElementById("publicSearchInput"),
   dayPickerWrap: document.getElementById("dayPickerWrap"),
-  dayPickerDateGroup: document.getElementById("dayPickerDateGroup"),
   dayPickerInput: document.getElementById("dayPickerInput"),
-  dayPickerDisplayLabel: document.getElementById("dayPickerDisplayLabel"),
-  radiusButtonGroup: document.getElementById("radiusButtonGroup"),
+  dayRadiusInput: document.getElementById("dayRadiusInput"),
   dayPrevButton: document.getElementById("dayPrevButton"),
   dayNextButton: document.getElementById("dayNextButton"),
   locationChooserModal: document.getElementById("locationChooserModal"),
@@ -250,7 +245,6 @@ const elements = {
   metadataStarsInput: document.getElementById("metadataStarsInput"),
   metadataGenresInput: document.getElementById("metadataGenresInput"),
   metadataReleaseDateInput: document.getElementById("metadataReleaseDateInput"),
-  metadataFestivalOnlyInput: document.getElementById("metadataFestivalOnlyInput"),
   cancelEditFilmMetadata: document.getElementById("cancelEditFilmMetadata"),
   cancelAddFilm: document.getElementById("cancelAddFilm"),
   cancelAddTheatre: document.getElementById("cancelAddTheatre"),
@@ -261,6 +255,7 @@ const elements = {
   showingTimesInput: document.getElementById("showingTimesInput"),
   showingPremiumTimesInput: document.getElementById("showingPremiumTimesInput"),
   showingRoomInput: document.getElementById("showingRoomInput"),
+  showingNotesInput: document.getElementById("showingNotesInput"),
   showingFestivalSelect: document.getElementById("showingFestivalSelect"),
   addShowing: document.getElementById("addShowing"),
   showingsList: document.getElementById("showingsList"),
@@ -276,6 +271,7 @@ const elements = {
 
 let resizeRenderTimeout = null;
 let logoSpinResetTimeout = null;
+let betaBannerRotationInterval = null;
 let lastViewportWidth = window.innerWidth;
 let appBootComplete = false;
 let pageLoadComplete = document.readyState === "complete";
@@ -323,6 +319,7 @@ function waitForNextPaint() {
 }
 
 async function init() {
+  initializeBetaBanner();
   initializeBrandWordmarkVariant();
   initializeTheme();
   initializeViewPreference();
@@ -345,6 +342,32 @@ async function init() {
   registerSortDebugTools();
 }
 
+function initializeBetaBanner() {
+  const messageNode = elements.betaBannerMessage;
+  if (!messageNode || !BETA_BANNER_MESSAGES.length) return;
+
+  if (betaBannerRotationInterval) {
+    clearInterval(betaBannerRotationInterval);
+    betaBannerRotationInterval = null;
+  }
+
+  let messageIndex = 0;
+  swapBetaBannerMessage(messageNode, BETA_BANNER_MESSAGES[messageIndex]);
+
+  if (BETA_BANNER_MESSAGES.length === 1) return;
+  betaBannerRotationInterval = window.setInterval(() => {
+    messageIndex = (messageIndex + 1) % BETA_BANNER_MESSAGES.length;
+    swapBetaBannerMessage(messageNode, BETA_BANNER_MESSAGES[messageIndex]);
+  }, BETA_BANNER_ROTATION_MS);
+}
+
+function swapBetaBannerMessage(messageNode, nextMessage) {
+  messageNode.classList.remove("is-swapping");
+  messageNode.textContent = nextMessage;
+  requestAnimationFrame(() => {
+    messageNode.classList.add("is-swapping");
+  });
+}
 
 async function loadLatestSubstackPost() {
   if (!elements.latestPost) return;
@@ -593,7 +616,6 @@ function bindEvents() {
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
     closePosterLightbox();
-    closeNavMenu();
   });
 
   elements.tabs.forEach((tab) => {
@@ -601,22 +623,6 @@ function bindEvents() {
       const view = tab.dataset.view;
       setView(view, { persist: true });
     });
-  });
-
-  elements.navMenu?.addEventListener("click", (event) => {
-    const item = event.target.closest(".nav-menu-item");
-    if (!item) return;
-    const view = item.dataset.view;
-    if (view) {
-      setView(view, { persist: true });
-      closeNavMenu();
-    }
-  });
-
-  document.addEventListener("click", (event) => {
-    if (elements.navMenuWrap && !elements.navMenuWrap.contains(event.target)) {
-      closeNavMenu();
-    }
   });
 
   const debouncedPublicSearchRender = debounce(() => {
@@ -643,30 +649,18 @@ function bindEvents() {
     shiftSelectedDay(1);
   });
 
-  elements.dayPickerDateGroup?.addEventListener("click", (e) => {
-    if (e.target.closest(".day-picker-nav")) return;
-    try {
-      elements.dayPickerInput.showPicker();
-    } catch (_) {
-      elements.dayPickerInput.focus();
-    }
-  });
-
   elements.dayPickerInput?.addEventListener("change", () => {
     const requested = String(elements.dayPickerInput.value || "").trim();
     state.selectedDay = requested || toIsoDate(new Date());
     render();
   });
 
-  elements.radiusButtonGroup?.addEventListener("click", (e) => {
-    const btn = e.target.closest(".radius-option");
-    if (!btn) return;
-    const requestedRadius = Number(btn.dataset.value);
+  elements.dayRadiusInput?.addEventListener("change", () => {
+    const requestedRadius = Number(elements.dayRadiusInput.value);
     state.daysViewRadiusMiles =
       Number.isFinite(requestedRadius) && requestedRadius > 0
         ? requestedRadius
         : DEFAULT_DAYS_VIEW_RADIUS_MILES;
-    syncRadiusButtons();
     render();
   });
 
@@ -1057,9 +1051,6 @@ function bindEvents() {
     elements.metadataStarsInput.value = metadata.stars.join(", ");
     elements.metadataGenresInput.value = metadata.genres.join(", ");
     elements.metadataReleaseDateInput.value = metadata.releaseDate;
-    if (elements.metadataFestivalOnlyInput) {
-      elements.metadataFestivalOnlyInput.checked = Boolean(film.festivalOnly);
-    }
     elements.editFilmMetadataModal.showModal();
   });
 
@@ -1148,7 +1139,6 @@ function bindEvents() {
       featuredOnPlayweek: false,
       featuredOnPlayweekUrl: "",
       rankingOverride: false,
-      festivalOnly: false,
       metadataSource: "manual",
       showings: [],
     };
@@ -1187,7 +1177,6 @@ function bindEvents() {
     const stars = parseCommaSeparatedList(elements.metadataStarsInput.value);
     const genres = parseCommaSeparatedList(elements.metadataGenresInput.value);
     const releaseDate = String(elements.metadataReleaseDateInput.value || "").trim();
-    const festivalOnly = Boolean(elements.metadataFestivalOnlyInput?.checked);
 
     if (releaseDate && !parseIsoDate(releaseDate)) {
       elements.adminMessage.textContent = "Release date must be YYYY-MM-DD.";
@@ -1207,7 +1196,6 @@ function bindEvents() {
 
     film.tmdb = nextMetadata;
     film.metadataSource = "manual";
-    film.festivalOnly = festivalOnly;
     syncFilmMetadataAcrossTheatres(film);
     elements.editFilmMetadataModal.close();
     syncAdminEditor();
@@ -1278,6 +1266,7 @@ function bindEvents() {
     const times = parseTimesInput(elements.showingTimesInput.value);
     const premiumTimes = parseTimesInput(elements.showingPremiumTimesInput?.value || "");
     const room = String(elements.showingRoomInput?.value || "").trim();
+    const notes = String(elements.showingNotesInput?.value || "").trim();
     const selectedFestivalIdRaw = String(elements.showingFestivalSelect?.value || "").trim();
     const selectedFestivalId = Number(selectedFestivalIdRaw);
     const showingFestivalId =
@@ -1297,10 +1286,12 @@ function bindEvents() {
         existing.premiumTimes = dedupeSortTimes([...(existing.premiumTimes || []), ...premiumTimes]);
         existing.festivalId = showingFestivalId;
         existing.room = room;
+        existing.notes = notes;
       } else {
         film.showings.push({
           date: targetDate,
           room,
+          notes,
           festivalId: showingFestivalId,
           times: dedupeSortTimes(times),
           premiumTimes: dedupeSortTimes(premiumTimes),
@@ -1316,6 +1307,9 @@ function bindEvents() {
     }
     if (elements.showingRoomInput) {
       elements.showingRoomInput.value = "";
+    }
+    if (elements.showingNotesInput) {
+      elements.showingNotesInput.value = "";
     }
     if (elements.showingFestivalSelect) {
       elements.showingFestivalSelect.value = "";
@@ -1534,11 +1528,11 @@ function bindEvents() {
       "show_times",
       "premium_show_times",
       "room",
+      "notes",
       "festival_name",
       "ticket_link",
       "film_year",
       "film_tmdb_id",
-      "film_synopsis",
     ];
     const rows = [
       header,
@@ -1551,8 +1545,8 @@ function bindEvents() {
         "",
         "",
         "",
-        "https://tickets.example.com/anora",
         "",
+        "https://tickets.example.com/anora",
         "",
         "",
       ],
@@ -1626,22 +1620,11 @@ function initializeViewPreference() {
   syncViewTabSelection();
 }
 
-
-function closeNavMenu() {
-  elements.navMenuWrap?.removeAttribute("open");
-}
-
 function syncViewTabSelection() {
   elements.tabs.forEach((button) => {
     const selected = button.dataset.view === state.view;
     button.classList.toggle("active", selected);
     button.setAttribute("aria-selected", String(selected));
-  });
-  if (elements.navMenuLabel) {
-    elements.navMenuLabel.textContent = NAV_VIEW_LABELS[state.view] || state.view;
-  }
-  elements.navMenuItems.forEach((item) => {
-    item.classList.toggle("active", item.dataset.view === state.view);
   });
 }
 
@@ -1898,7 +1881,6 @@ function buildTheatreGroupsFromFilmPagesSource(source) {
           featuredOnPlayweek: Boolean(filmEntry?.featuredOnPlayweek),
           featuredOnPlayweekUrl: String(filmEntry?.featuredOnPlayweekUrl || "").trim(),
           rankingOverride: Boolean(filmEntry?.rankingOverride || filmEntry?.ranking_override),
-          festivalOnly: Boolean(filmEntry?.festivalOnly || filmEntry?.festival_only),
           metadataSource: normalizeMetadataSource("tmdb", { tmdbId }),
           tmdb: {
             overview: String(filmEntry?.description || "").trim(),
@@ -1968,7 +1950,7 @@ async function loadDataFromSupabase() {
       state.supabase
         .from("films")
         .select(
-          "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,ranking_override,festival_only,metadata_source,tmdb_json"
+          "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,ranking_override,metadata_source,tmdb_json"
         )
         .order("id", { ascending: true })
     ),
@@ -1982,7 +1964,7 @@ async function loadDataFromSupabase() {
     fetchAllRowsFromSupabase("showings", () =>
       state.supabase
         .from("showings")
-        .select("id,theatre_id,film_id,festival_id,show_date,room,times,premium_times")
+        .select("id,theatre_id,film_id,festival_id,show_date,room,notes,times,premium_times")
         .order("id", { ascending: true })
     ),
     fetchAllRowsFromSupabase("promos", () =>
@@ -2054,7 +2036,6 @@ async function loadDataFromSupabase() {
       featuredOnPlayweek: Boolean(filmRow.featured_on_playweek),
       featuredOnPlayweekUrl: String(filmRow.featured_on_playweek_url || "").trim(),
       rankingOverride: Boolean(filmRow.ranking_override),
-      festivalOnly: Boolean(filmRow.festival_only),
       metadataSource: normalizeMetadataSource(filmRow.metadata_source, { tmdbId: filmRow.tmdb_id }),
       tmdb: tmdbJson,
       _dbId: filmRow.id,
@@ -2075,7 +2056,6 @@ async function loadDataFromSupabase() {
         featuredOnPlayweek: Boolean(filmTemplate.featuredOnPlayweek),
         featuredOnPlayweekUrl: String(filmTemplate.featuredOnPlayweekUrl || ""),
         rankingOverride: Boolean(filmTemplate.rankingOverride),
-        festivalOnly: Boolean(filmTemplate.festivalOnly),
         metadataSource: normalizeMetadataSource(filmTemplate.metadataSource, filmTemplate),
         tmdb: filmTemplate.tmdb,
         showings: [],
@@ -2116,6 +2096,7 @@ async function loadDataFromSupabase() {
     film.showings.push({
       date: showingRow.show_date,
       room: String(showingRow.room || "").trim(),
+      notes: String(showingRow.notes || "").trim(),
       festivalId: Number.isInteger(Number(resolvedFestivalId)) ? Number(resolvedFestivalId) : null,
       times: dedupeSortTimes(Array.isArray(showingRow.times) ? showingRow.times : []),
       premiumTimes: dedupeSortTimes(Array.isArray(showingRow.premium_times) ? showingRow.premium_times : []),
@@ -2226,9 +2207,6 @@ function validateData(data) {
       }
       if (typeof film?.featuredOnPlayweekUrl !== "undefined" && typeof film?.featuredOnPlayweekUrl !== "string") {
         throw new Error(`Film "${film.title}" at "${theatre.name}" has invalid featuredOnPlayweekUrl.`);
-      }
-      if (typeof film?.festivalOnly !== "undefined" && typeof film?.festivalOnly !== "boolean") {
-        throw new Error(`Film "${film.title}" at "${theatre.name}" has invalid festivalOnly.`);
       }
       if (typeof film?.metadataSource !== "undefined") {
         const metadataSource = String(film.metadataSource || "").trim().toLowerCase();
@@ -2547,7 +2525,8 @@ function renderShowingsList() {
         : null;
       const festivalLabel = festival?.name ? ` [Festival: ${festival.name}]` : "";
       const roomLabel = String(showing?.room || "").trim();
-      label.textContent = `${showing.date}${festivalLabel}${roomLabel ? ` [Room: ${roomLabel}]` : ""}: ${timeLabelParts.join(" | ")}`;
+      const notesLabel = String(showing?.notes || "").trim();
+      label.textContent = `${showing.date}${festivalLabel}${roomLabel ? ` [Room: ${roomLabel}]` : ""}${notesLabel ? ` [Note: ${notesLabel}]` : ""}: ${timeLabelParts.join(" | ")}`;
       const button = document.createElement("button");
       button.type = "button";
       button.className = "ghost-btn";
@@ -2870,8 +2849,8 @@ function importShowtimesCsv(data, csvContent) {
     const filmYearRaw = readCsvValue(row, headerIndexByKey, "film_year");
     const filmTmdbIdRaw = readCsvValue(row, headerIndexByKey, "film_tmdb_id");
     const ticketLinkRaw = readCsvValue(row, headerIndexByKey, "ticket_link");
-    const filmSynopsisRaw = readCsvValue(row, headerIndexByKey, "film_synopsis");
     const roomRaw = readCsvValue(row, headerIndexByKey, "room");
+    const notesRaw = readCsvValue(row, headerIndexByKey, "notes");
     const festivalNameRaw = readCsvValue(row, headerIndexByKey, "festival_name");
     const showDate = readCsvValue(row, headerIndexByKey, "show_date");
     const showTimesRaw = readCsvValue(row, headerIndexByKey, "show_times");
@@ -2944,7 +2923,6 @@ function importShowtimesCsv(data, csvContent) {
         featuredOnPlayweek: false,
         featuredOnPlayweekUrl: "",
         rankingOverride: false,
-        festivalOnly: false,
         metadataSource: filmTmdbId !== null ? "tmdb" : "manual",
         showings: [],
       };
@@ -2977,9 +2955,6 @@ function importShowtimesCsv(data, csvContent) {
     if (ticketLinkRaw) {
       film.ticketLink = normalizeOutboundUrl(ticketLinkRaw);
     }
-    if (filmSynopsisRaw) {
-      film.synopsis = filmSynopsisRaw;
-    }
 
     if (!Array.isArray(film.showings)) film.showings = [];
     const showing = film.showings.find((entry) => entry.date === showDate);
@@ -2989,6 +2964,7 @@ function importShowtimesCsv(data, csvContent) {
       showing.times = dedupeSortTimes([...(showing.times || []), ...parsedTimes]);
       showing.premiumTimes = dedupeSortTimes([...(showing.premiumTimes || []), ...parsedPremiumTimes]);
       showing.room = roomRaw;
+      showing.notes = String(notesRaw || "").trim();
       if (resolvedFestivalId) {
         showing.festivalId = resolvedFestivalId;
       }
@@ -3000,6 +2976,7 @@ function importShowtimesCsv(data, csvContent) {
       film.showings.push({
         date: showDate,
         room: roomRaw,
+        notes: String(notesRaw || "").trim(),
         festivalId: resolvedFestivalId,
         times: dedupeSortTimes(parsedTimes),
         premiumTimes: dedupeSortTimes(parsedPremiumTimes),
@@ -3217,7 +3194,6 @@ function addFilmToAllTheatres(baseFilm) {
         staffFavoriteBy: String(baseFilm.staffFavoriteBy || ""),
         featuredOnPlayweek: Boolean(baseFilm.featuredOnPlayweek),
         featuredOnPlayweekUrl: String(baseFilm.featuredOnPlayweekUrl || ""),
-        festivalOnly: Boolean(baseFilm.festivalOnly),
         metadataSource: normalizeMetadataSource(baseFilm.metadataSource, baseFilm),
         tmdb: baseFilm.tmdb,
         showings: [],
@@ -3239,7 +3215,6 @@ function syncFilmMetadataAcrossTheatres(sourceFilm) {
       if (!filmsMatch(film, sourceFilm)) return;
       film.tmdb = sourceFilm.tmdb;
       film.metadataSource = normalizeMetadataSource(sourceFilm.metadataSource, sourceFilm);
-      film.festivalOnly = Boolean(sourceFilm.festivalOnly);
       if (sourceFilm.tmdbId) film.tmdbId = sourceFilm.tmdbId;
       if (sourceFilm.year) film.year = sourceFilm.year;
     });
@@ -3549,7 +3524,6 @@ function buildReplacePayload(data, promotedCards) {
           featured_on_playweek: Boolean(film.featuredOnPlayweek),
           featured_on_playweek_url: String(film.featuredOnPlayweekUrl || "").trim(),
           ranking_override: Boolean(film.rankingOverride),
-          festival_only: Boolean(film.festivalOnly),
           tmdb_json: film.tmdb || null,
         });
         filmPayloadIndexByKey.set(filmKey, films.length - 1);
@@ -3587,9 +3561,6 @@ function buildReplacePayload(data, promotedCards) {
         if (typeof existingFilmIndex === "number" && Boolean(film.rankingOverride)) {
           films[existingFilmIndex].ranking_override = true;
         }
-        if (typeof existingFilmIndex === "number" && Boolean(film.festivalOnly)) {
-          films[existingFilmIndex].festival_only = true;
-        }
         if (filmTicketLink) {
           if (typeof existingFilmIndex === "number" && !films[existingFilmIndex].ticket_link) {
             films[existingFilmIndex].ticket_link = filmTicketLink;
@@ -3623,6 +3594,7 @@ function buildReplacePayload(data, promotedCards) {
           festival_slug: showingFestivalId ? (festivalSlugByDbId.get(showingFestivalId) || "") : "",
           show_date: showing.date,
           room: String(showing?.room || "").trim(),
+          notes: String(showing?.notes || "").trim(),
           times: dedupeSortTimes(showing.times || []),
           premium_times: dedupeSortTimes(showing.premiumTimes || []),
         });
@@ -3806,7 +3778,6 @@ function hasFilmRowChanges(previousRow, nextRow) {
     Boolean(previousRow?.featured_on_playweek) !== Boolean(nextRow?.featured_on_playweek) ||
     String(previousRow?.featured_on_playweek_url || "") !== String(nextRow?.featured_on_playweek_url || "") ||
     Boolean(previousRow?.ranking_override) !== Boolean(nextRow?.ranking_override) ||
-    Boolean(previousRow?.festival_only) !== Boolean(nextRow?.festival_only) ||
     !areJsonValuesEqual(previousRow?.tmdb_json, nextRow?.tmdb_json)
   );
 }
@@ -4110,9 +4081,12 @@ function render() {
     });
   } else if (state.view === "festivals") {
     entries.sort(([, groupA], [, groupB]) => {
-      const orderA = Number(groupA?.festivalInfo?.sortOrder ?? 0);
-      const orderB = Number(groupB?.festivalInfo?.sortOrder ?? 0);
-      if (orderA !== orderB) return orderA - orderB;
+      const tsA = Date.parse(groupA?.festivalInfo?.startDate || groupA?.festivalInfo?.endDate || "");
+      const tsB = Date.parse(groupB?.festivalInfo?.startDate || groupB?.festivalInfo?.endDate || "");
+      const validA = !isNaN(tsA);
+      const validB = !isNaN(tsB);
+      if (validA !== validB) return validA ? -1 : 1;
+      if (tsA !== tsB) return tsA - tsB;
       const nameA = String(groupA?.festivalInfo?.name || "");
       const nameB = String(groupB?.festivalInfo?.name || "");
       return nameA.localeCompare(nameB);
@@ -4354,14 +4328,6 @@ function render() {
           if (earliestA !== earliestB) return earliestA - earliestB;
           return buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
         }
-        if (state.view === "festivals") {
-          const earliestA = getRowEarliestShowtimeTimestamp(a);
-          const earliestB = getRowEarliestShowtimeTimestamp(b);
-          if (earliestA !== earliestB) return earliestA - earliestB;
-          const filmComparison = buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
-          if (filmComparison !== 0) return filmComparison;
-          return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
-        }
         return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
       });
 
@@ -4370,22 +4336,7 @@ function render() {
           ? shows.slice(0, THEATRE_COLLAPSED_FILM_COUNT)
           : shows;
 
-      const festivalShowsToRender = state.view === "festivals"
-        ? expandFestivalShowsByDate(showsToRender)
-        : null;
-      let lastFestivalDateHeader = "";
-
-      for (const show of (festivalShowsToRender || showsToRender)) {
-        if (state.view === "festivals") {
-          const showDate = String(show?.festivalDate || "").trim();
-          if (showDate && showDate !== lastFestivalDateHeader) {
-            const dateDivider = document.createElement("li");
-            dateDivider.className = "festival-date-divider";
-            dateDivider.textContent = formatDisplayDate(showDate);
-            list.appendChild(dateDivider);
-            lastFestivalDateHeader = showDate;
-          }
-        }
+      for (const show of showsToRender) {
         const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
         const main = item.querySelector(".show-main");
         const meta = item.querySelector(".show-meta");
@@ -4424,37 +4375,25 @@ function render() {
             : `No poster available for ${show.film}`;
           poster.classList.remove("hidden");
 
-          main.textContent = "";
+          main.textContent = filmLabel;
           if (showFestivalIds.length) {
-            const ribbonWrap = document.createElement("div");
-            ribbonWrap.className = "festival-entry-ribbon-inline";
             const ribbon = document.createElement("span");
-            ribbon.className = "festival-entry-ribbon";
+            ribbon.className = "festival-entry-ribbon festival-entry-ribbon-inline";
             ribbon.textContent = festivalBadgeLabel;
-            ribbonWrap.appendChild(ribbon);
-            main.appendChild(ribbonWrap);
+            main.prepend(ribbon);
           }
-          main.appendChild(document.createTextNode(filmLabel));
           const showDateKeys = Object.keys(show?.dates || {});
           const singleDateRoom =
             showDateKeys.length === 1
               ? String(show?.roomByDate?.[showDateKeys[0]] || "").trim()
               : "";
-          meta.textContent = "";
-          if (singleDateRoom) {
-            const roomLine = document.createElement("span");
-            roomLine.textContent = singleDateRoom;
-            meta.appendChild(roomLine);
-          }
+          meta.textContent = singleDateRoom ? `Room: ${singleDateRoom}` : "";
 
           if (state.view === "theatres") {
-            renderSchedule(schedule, show.dates, show.premiumDates, {});
+            renderSchedule(schedule, show.dates, show.premiumDates, show.noteByDate);
           }
 
           if (!rowExpanded) {
-            if (singleDateRoom) {
-              meta.appendChild(document.createElement("br"));
-            }
             meta.appendChild(rowToggle);
             schedule.classList.add("hidden");
           } else {
@@ -4485,9 +4424,19 @@ function render() {
           if (state.view === "festivals") {
             item.classList.add("festival-show-item");
             main.textContent = show.film || show.theatre || "Showtime";
-            meta.textContent = [show.theatre || "", show.room || show.city || ""]
+            meta.textContent = [show.theatre || "", show.city || "", show.room ? `Room: ${show.room}` : ""]
               .filter(Boolean)
               .join(", ");
+            const ribbon = document.createElement("span");
+            ribbon.className = "festival-entry-ribbon";
+            ribbon.textContent = "Festival Selection";
+            main.prepend(ribbon);
+            if (show.notes) {
+              const notesPill = document.createElement("span");
+              notesPill.className = "special-notes-pill";
+              notesPill.textContent = show.notes;
+              main.appendChild(notesPill);
+            }
           } else {
             main.textContent = `${show.theatre}`;
             const theatreKey = `${show.theatre} · ${show.city}`;
@@ -4501,6 +4450,12 @@ function render() {
               ribbon.textContent = festivalBadgeLabel;
               main.prepend(ribbon);
             }
+            if (show.notes) {
+              const notesPill = document.createElement("span");
+              notesPill.className = "special-notes-pill special-notes-pill-inline";
+              notesPill.textContent = show.notes;
+              main.appendChild(notesPill);
+            }
           }
           renderSchedule(schedule, show.dates, show.premiumDates);
           const ticketUrl = normalizeOutboundUrl(show.ticketLink);
@@ -4508,30 +4463,8 @@ function render() {
             link.href = ticketUrl;
             link.classList.remove("hidden");
           }
-          if (state.view === "festivals") {
-            const rowActions = document.createElement("div");
-            rowActions.className = "theatre-row-actions";
-            if (!link.classList.contains("hidden")) {
-              rowActions.appendChild(link);
-            }
-            const rowFilmPageLink = document.createElement("a");
-            rowFilmPageLink.className = "theatre-row-film-link";
-            rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
-            rowFilmPageLink.target = "_blank";
-            rowFilmPageLink.rel = "noopener noreferrer";
-            rowFilmPageLink.textContent = "View Film Page";
-            rowActions.appendChild(rowFilmPageLink);
-            item.appendChild(rowActions);
-          }
         }
         list.appendChild(item);
-      }
-
-      if (state.view === "festivals" && shows.length === 0) {
-        const placeholder = document.createElement("li");
-        placeholder.className = "festival-empty-placeholder";
-        placeholder.textContent = "Programming coming soon.";
-        list.appendChild(placeholder);
       }
     }
 
@@ -4851,7 +4784,7 @@ function getFileExtension(fileName) {
 function renderResultCards(cards) {
   if (!cards.length) return;
 
-  if (state.view === "films" || state.view === "days") {
+  if (state.view === "films" || state.view === "days" || state.view === "festivals") {
     cards.forEach((card) => elements.results.appendChild(card));
     return;
   }
@@ -5679,14 +5612,6 @@ function shiftSelectedDay(direction) {
   render();
 }
 
-function syncRadiusButtons() {
-  if (!elements.radiusButtonGroup) return;
-  const current = String(getDaysViewRadiusMiles());
-  elements.radiusButtonGroup.querySelectorAll(".radius-option").forEach((btn) => {
-    btn.classList.toggle("is-selected", btn.dataset.value === current);
-  });
-}
-
 function syncDayPickerUI(activeDay) {
   if (!elements.dayPickerWrap || !elements.dayPickerInput) return;
 
@@ -5697,14 +5622,16 @@ function syncDayPickerUI(activeDay) {
 
   elements.dayPickerWrap.classList.remove("hidden");
   elements.dayPickerInput.disabled = false;
-  syncRadiusButtons();
+  if (elements.dayRadiusInput) {
+    elements.dayRadiusInput.disabled = false;
+    elements.dayRadiusInput.value = String(getDaysViewRadiusMiles());
+  }
   elements.dayPrevButton.disabled = false;
   elements.dayNextButton.disabled = false;
 
   if (!activeDay) {
     elements.dayPickerInput.value = "";
     elements.dayPickerInput.title = "Select a date";
-    if (elements.dayPickerDisplayLabel) elements.dayPickerDisplayLabel.textContent = "";
     elements.dayPrevButton.disabled = true;
     elements.dayNextButton.disabled = true;
     return;
@@ -5712,12 +5639,6 @@ function syncDayPickerUI(activeDay) {
 
   elements.dayPickerInput.value = activeDay;
   elements.dayPickerInput.title = formatLongDisplayDate(activeDay);
-  if (elements.dayPickerDisplayLabel) {
-    const isNarrow = window.matchMedia("(max-width: 640px)").matches;
-    elements.dayPickerDisplayLabel.textContent = isNarrow
-      ? formatShortDate(activeDay)
-      : formatDisplayDate(activeDay);
-  }
 }
 
 function buildSingleDayGroups(theatres, selectedDate) {
@@ -5726,13 +5647,13 @@ function buildSingleDayGroups(theatres, selectedDate) {
 
   theatres.forEach((theatre) => {
     (theatre.films || []).forEach((film) => {
-      if (Boolean(film?.festivalOnly)) return;
       const metadata = extractFilmMetadata(film);
       const year = Number.isInteger(Number(film.year)) ? Number(film.year) : null;
       const times = [];
       const premiumTimes = [];
       const festivalIds = new Set();
       let room = "";
+      let notes = "";
 
       (film.showings || []).forEach((showing) => {
         if (showing.date !== selectedDate) return;
@@ -5741,6 +5662,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
           if (!showDateTime || showDateTime < now) return;
           times.push(time);
           if (!room) room = String(showing?.room || "").trim();
+          if (!notes) notes = String(showing?.notes || "").trim();
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) festivalIds.add(festivalId);
         });
@@ -5749,6 +5671,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
           if (!showDateTime || showDateTime < now) return;
           premiumTimes.push(time);
           if (!room) room = String(showing?.room || "").trim();
+          if (!notes) notes = String(showing?.notes || "").trim();
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) festivalIds.add(festivalId);
         });
@@ -5794,6 +5717,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
         film: film.title,
         year,
         room,
+        notes,
         festivalIds: Array.from(festivalIds.values()),
         ticketLink: film.ticketLink,
         dates: {
@@ -5861,6 +5785,7 @@ function buildFestivalGroups(theatres, festivals) {
           theatre: theatre.name,
           city: theatre.city,
           room: String(showing?.room || "").trim(),
+          notes: String(showing?.notes || "").trim(),
           film: film.title,
           year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
           ticketLink: film.ticketLink,
@@ -5879,29 +5804,6 @@ function buildFestivalGroups(theatres, festivals) {
     });
   });
 
-  for (const [festivalId, festival] of festivalById) {
-    if (festival && !festival.enabled) continue;
-    const groupKey = `festival::${festivalId}`;
-    if (grouped[groupKey]) continue;
-    const festivalName = String(festival?.name || `Festival ${festivalId}`).trim();
-    grouped[groupKey] = {
-      festivalInfo: {
-        id: festivalId,
-        name: festivalName,
-        description: String(festival?.description || "").trim(),
-        website: String(festival?.website || "").trim(),
-        primaryColor: String(festival?.primaryColor || "").trim(),
-        startDate: String(festival?.startDate || "").trim(),
-        endDate: String(festival?.endDate || "").trim(),
-        sortOrder: Number.isInteger(Number(festival?.sortOrder)) ? Number(festival.sortOrder) : 0,
-      },
-      theatreInfo: null,
-      dayInfo: null,
-      filmInfo: null,
-      shows: [],
-    };
-  }
-
   return grouped;
 }
 
@@ -5919,7 +5821,6 @@ function buildGroups(theatres, view) {
 
     const rowsByFilm = {};
     theatre.films.forEach((film) => {
-      if (Boolean(film?.festivalOnly)) return;
       const metadata = extractFilmMetadata(film);
       const row = {
         theatre: theatre.name,
@@ -5945,6 +5846,7 @@ function buildGroups(theatres, view) {
         dates: {},
         premiumDates: {},
         roomByDate: {},
+        noteByDate: {},
         festivalIdsSet: new Set(),
       };
 
@@ -5955,6 +5857,7 @@ function buildGroups(theatres, view) {
           if (!row.dates[showing.date]) row.dates[showing.date] = [];
           row.dates[showing.date].push(time);
           if (!row.roomByDate[showing.date]) row.roomByDate[showing.date] = String(showing?.room || "").trim();
+          if (!row.noteByDate[showing.date]) row.noteByDate[showing.date] = String(showing?.notes || "").trim();
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) row.festivalIdsSet.add(festivalId);
         });
@@ -5964,6 +5867,7 @@ function buildGroups(theatres, view) {
           if (!row.premiumDates[showing.date]) row.premiumDates[showing.date] = [];
           row.premiumDates[showing.date].push(time);
           if (!row.roomByDate[showing.date]) row.roomByDate[showing.date] = String(showing?.room || "").trim();
+          if (!row.noteByDate[showing.date]) row.noteByDate[showing.date] = String(showing?.notes || "").trim();
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) row.festivalIdsSet.add(festivalId);
         });
@@ -6128,7 +6032,7 @@ function buildExpandRowKey(view, group, show) {
   return `${view}-row::${filmKey}`;
 }
 
-function renderSchedule(container, dates, premiumDates = {}, options = {}) {
+function renderSchedule(container, dates, premiumDates = {}, noteByDate = {}) {
   container.innerHTML = "";
   const dateKeys = new Set([...Object.keys(dates || {}), ...Object.keys(premiumDates || {})]);
   const dateEntries = Array.from(dateKeys)
@@ -6139,7 +6043,7 @@ function renderSchedule(container, dates, premiumDates = {}, options = {}) {
   const hiddenEntries = dateEntries.slice(2);
 
   visibleEntries.forEach(([date, times, premiumTimes]) => {
-    container.appendChild(createScheduleRow(date, times, premiumTimes, options));
+    container.appendChild(createScheduleRow(date, times, premiumTimes, noteByDate));
   });
 
   if (hiddenEntries.length) {
@@ -6153,7 +6057,7 @@ function renderSchedule(container, dates, premiumDates = {}, options = {}) {
 
     const extra = document.createElement("div");
     hiddenEntries.forEach(([date, times, premiumTimes]) => {
-      extra.appendChild(createScheduleRow(date, times, premiumTimes, options));
+      extra.appendChild(createScheduleRow(date, times, premiumTimes, noteByDate));
     });
     details.appendChild(extra);
 
@@ -6161,25 +6065,13 @@ function renderSchedule(container, dates, premiumDates = {}, options = {}) {
   }
 }
 
-function createScheduleRow(date, times, premiumTimes = [], options = {}) {
+function createScheduleRow(date, times, premiumTimes = [], noteByDate = {}) {
   const row = document.createElement("div");
   row.className = "show-schedule-row";
-
-  const heading = document.createElement("span");
-  heading.className = "show-schedule-heading";
 
   const label = document.createElement("span");
   label.className = "show-schedule-day";
   label.textContent = formatDisplayDate(date);
-  heading.appendChild(label);
-
-  const dateBadgeLabel = String(options?.dateBadgeLabel || "").trim();
-  if (dateBadgeLabel) {
-    const badge = document.createElement("span");
-    badge.className = "festival-entry-ribbon festival-entry-ribbon-date";
-    badge.textContent = dateBadgeLabel;
-    heading.appendChild(badge);
-  }
 
   const value = document.createElement("span");
   value.className = "show-schedule-times";
@@ -6207,46 +6099,17 @@ function createScheduleRow(date, times, premiumTimes = [], options = {}) {
     value.appendChild(pill);
   });
 
-  row.appendChild(heading);
+  const noteForDate = String(noteByDate?.[date] || "").trim();
+  if (noteForDate) {
+    const notesPill = document.createElement("span");
+    notesPill.className = "special-notes-pill special-notes-pill-inline";
+    notesPill.textContent = noteForDate;
+    value.appendChild(notesPill);
+  }
+
+  row.appendChild(label);
   row.appendChild(value);
   return row;
-}
-
-function expandFestivalShowsByDate(shows) {
-  const flattened = [];
-  (shows || []).forEach((show) => {
-    const dateKeys = new Set([
-      ...Object.keys(show?.dates || {}),
-      ...Object.keys(show?.premiumDates || {}),
-    ]);
-    dateKeys.forEach((date) => {
-      const dateKey = String(date || "").trim();
-      if (!dateKey) return;
-      const times = dedupeSortTimes(show?.dates?.[dateKey] || []);
-      const premiumTimes = dedupeSortTimes(show?.premiumDates?.[dateKey] || []);
-      if (!times.length && !premiumTimes.length) return;
-      flattened.push({
-        ...show,
-        festivalDate: dateKey,
-        dates: { [dateKey]: times },
-        premiumDates: { [dateKey]: premiumTimes },
-      });
-    });
-  });
-
-  flattened.sort((a, b) => {
-    const dateA = String(a?.festivalDate || "");
-    const dateB = String(b?.festivalDate || "");
-    if (dateA !== dateB) return dateA.localeCompare(dateB);
-    const earliestA = getRowEarliestShowtimeTimestamp(a);
-    const earliestB = getRowEarliestShowtimeTimestamp(b);
-    if (earliestA !== earliestB) return earliestA - earliestB;
-    const filmComparison = buildFilmGroupKey(a?.film, a?.year).localeCompare(buildFilmGroupKey(b?.film, b?.year));
-    if (filmComparison !== 0) return filmComparison;
-    return `${a?.theatre || ""} ${a?.city || ""}`.localeCompare(`${b?.theatre || ""} ${b?.city || ""}`);
-  });
-
-  return flattened;
 }
 
 function buildFilmFacts(show) {
@@ -6375,18 +6238,6 @@ function formatDisplayDate(dateIso) {
     day: "numeric",
     ...(showYear ? { year: "numeric" } : {}),
   }).format(date);
-}
-
-function formatShortDate(dateIso) {
-  const date = parseIsoDate(dateIso);
-  if (!date) return dateIso;
-  const dayDiff = getDayDifferenceFromToday(date);
-  if (dayDiff === 0) return "Today";
-  if (dayDiff === 1) return "Tomorrow";
-  if (dayDiff > 1 && dayDiff <= 6) {
-    return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(date);
-  }
-  return new Intl.DateTimeFormat("en-US", { month: "numeric", day: "numeric" }).format(date);
 }
 
 function formatLongDisplayDate(dateIso) {
