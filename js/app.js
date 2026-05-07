@@ -92,6 +92,12 @@ const THEME_COLOR_MAP = {
   [DARK_THEME]: "#121816",
 };
 const VALID_VIEWS = new Set(["films", "theatres", "days", "festivals"]);
+const NAV_VIEW_LABELS = Object.freeze({
+  days: "Near You",
+  theatres: "Theatres",
+  films: "All Films",
+  festivals: "Festivals",
+});
 
 const state = {
   data: { theatreGroups: [], festivals: [] },
@@ -149,6 +155,10 @@ const elements = {
   themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
   brandWordmark: document.getElementById("brandWordmark"),
+  navMenuWrap: document.getElementById("navMenuWrap"),
+  navMenu: document.getElementById("navMenu"),
+  navMenuLabel: document.getElementById("navMenuLabel"),
+  navMenuItems: Array.from(document.querySelectorAll(".nav-menu-item")),
   publicSearchWrap: document.getElementById("publicSearchWrap"),
   publicSearchInput: document.getElementById("publicSearchInput"),
   dayPickerWrap: document.getElementById("dayPickerWrap"),
@@ -616,6 +626,7 @@ function bindEvents() {
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
     closePosterLightbox();
+    closeNavMenu();
   });
 
   elements.tabs.forEach((tab) => {
@@ -623,6 +634,22 @@ function bindEvents() {
       const view = tab.dataset.view;
       setView(view, { persist: true });
     });
+  });
+
+  elements.navMenu?.addEventListener("click", (event) => {
+    const item = event.target.closest(".nav-menu-item");
+    if (!item) return;
+    const view = item.dataset.view;
+    if (view) {
+      setView(view, { persist: true });
+      closeNavMenu();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (elements.navMenuWrap && !elements.navMenuWrap.contains(event.target)) {
+      closeNavMenu();
+    }
   });
 
   const debouncedPublicSearchRender = debounce(() => {
@@ -1612,6 +1639,10 @@ function initializeBrandWordmarkVariant() {
   state.brandWordmarkVariant = WORDMARK_VARIANTS[randomIndex] || WORDMARK_VARIANTS[0];
 }
 
+function closeNavMenu() {
+  elements.navMenuWrap?.removeAttribute("open");
+}
+
 function initializeViewPreference() {
   const storedView = String(localStorage.getItem(VIEW_STORAGE_KEY) || "").trim();
   if (VALID_VIEWS.has(storedView)) {
@@ -1625,6 +1656,12 @@ function syncViewTabSelection() {
     const selected = button.dataset.view === state.view;
     button.classList.toggle("active", selected);
     button.setAttribute("aria-selected", String(selected));
+  });
+  if (elements.navMenuLabel) {
+    elements.navMenuLabel.textContent = NAV_VIEW_LABELS[state.view] || state.view;
+  }
+  elements.navMenuItems.forEach((item) => {
+    item.classList.toggle("active", item.dataset.view === state.view);
   });
 }
 
