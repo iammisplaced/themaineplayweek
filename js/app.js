@@ -4345,6 +4345,14 @@ function render() {
           if (earliestA !== earliestB) return earliestA - earliestB;
           return buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
         }
+        if (state.view === "festivals") {
+          const earliestA = getRowEarliestShowtimeTimestamp(a);
+          const earliestB = getRowEarliestShowtimeTimestamp(b);
+          if (earliestA !== earliestB) return earliestA - earliestB;
+          const filmComparison = buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
+          if (filmComparison !== 0) return filmComparison;
+          return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
+        }
         return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
       });
 
@@ -4353,7 +4361,22 @@ function render() {
           ? shows.slice(0, THEATRE_COLLAPSED_FILM_COUNT)
           : shows;
 
-      for (const show of showsToRender) {
+      const festivalShowsToRender = state.view === "festivals"
+        ? expandFestivalShowsByDate(showsToRender)
+        : null;
+      let lastFestivalDateHeader = "";
+
+      for (const show of (festivalShowsToRender || showsToRender)) {
+        if (state.view === "festivals") {
+          const showDate = String(show?.festivalDate || "").trim();
+          if (showDate && showDate !== lastFestivalDateHeader) {
+            const dateDivider = document.createElement("li");
+            dateDivider.className = "festival-date-divider";
+            dateDivider.textContent = formatDisplayDate(showDate);
+            list.appendChild(dateDivider);
+            lastFestivalDateHeader = showDate;
+          }
+        }
         const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
         const main = item.querySelector(".show-main");
         const meta = item.querySelector(".show-meta");
@@ -4441,7 +4464,7 @@ function render() {
           if (state.view === "festivals") {
             item.classList.add("festival-show-item");
             main.textContent = show.film || show.theatre || "Showtime";
-            meta.textContent = [show.theatre || "", show.city || "", show.room ? `Room: ${show.room}` : ""]
+            meta.textContent = [show.theatre || "", show.room || show.city || ""]
               .filter(Boolean)
               .join(", ");
             const ribbon = document.createElement("span");
@@ -4479,6 +4502,21 @@ function render() {
           if (ticketUrl) {
             link.href = ticketUrl;
             link.classList.remove("hidden");
+          }
+          if (state.view === "festivals") {
+            const rowActions = document.createElement("div");
+            rowActions.className = "theatre-row-actions";
+            if (!link.classList.contains("hidden")) {
+              rowActions.appendChild(link);
+            }
+            const rowFilmPageLink = document.createElement("a");
+            rowFilmPageLink.className = "theatre-row-film-link";
+            rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
+            rowFilmPageLink.target = "_blank";
+            rowFilmPageLink.rel = "noopener noreferrer";
+            rowFilmPageLink.textContent = "View Film Page";
+            rowActions.appendChild(rowFilmPageLink);
+            item.appendChild(rowActions);
           }
         }
         list.appendChild(item);
@@ -6157,6 +6195,43 @@ function createScheduleRow(date, times, premiumTimes = [], noteByDate = {}) {
   row.appendChild(label);
   row.appendChild(value);
   return row;
+}
+
+function expandFestivalShowsByDate(shows) {
+  const flattened = [];
+  (shows || []).forEach((show) => {
+    const dateKeys = new Set([
+      ...Object.keys(show?.dates || {}),
+      ...Object.keys(show?.premiumDates || {}),
+    ]);
+    dateKeys.forEach((date) => {
+      const dateKey = String(date || "").trim();
+      if (!dateKey) return;
+      const times = dedupeSortTimes(show?.dates?.[dateKey] || []);
+      const premiumTimes = dedupeSortTimes(show?.premiumDates?.[dateKey] || []);
+      if (!times.length && !premiumTimes.length) return;
+      flattened.push({
+        ...show,
+        festivalDate: dateKey,
+        dates: { [dateKey]: times },
+        premiumDates: { [dateKey]: premiumTimes },
+      });
+    });
+  });
+
+  flattened.sort((a, b) => {
+    const dateA = String(a?.festivalDate || "");
+    const dateB = String(b?.festivalDate || "");
+    if (dateA !== dateB) return dateA.localeCompare(dateB);
+    const earliestA = getRowEarliestShowtimeTimestamp(a);
+    const earliestB = getRowEarliestShowtimeTimestamp(b);
+    if (earliestA !== earliestB) return earliestA - earliestB;
+    const filmComparison = buildFilmGroupKey(a?.film, a?.year).localeCompare(buildFilmGroupKey(b?.film, b?.year));
+    if (filmComparison !== 0) return filmComparison;
+    return `${a?.theatre || ""} ${a?.city || ""}`.localeCompare(`${b?.theatre || ""} ${b?.city || ""}`);
+  });
+
+  return flattened;
 }
 
 function buildFilmFacts(show) {
