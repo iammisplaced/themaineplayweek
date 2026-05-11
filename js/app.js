@@ -4483,6 +4483,13 @@ function render() {
         }
         list.appendChild(item);
       }
+
+      if (state.view === "festivals" && shows.length === 0) {
+        const placeholder = document.createElement("li");
+        placeholder.className = "festival-empty-placeholder";
+        placeholder.textContent = "Programming coming soon.";
+        list.appendChild(placeholder);
+      }
     }
 
     if (state.view === "theatres" && filmExpandToggle && !filmExpandToggle.classList.contains("hidden")) {
@@ -5820,6 +5827,29 @@ function buildFestivalGroups(theatres, festivals) {
       });
     });
   });
+
+  for (const [festivalId, festival] of festivalById) {
+    if (festival && !festival.enabled) continue;
+    const groupKey = `festival::${festivalId}`;
+    if (grouped[groupKey]) continue;
+    const festivalName = String(festival?.name || `Festival ${festivalId}`).trim();
+    grouped[groupKey] = {
+      festivalInfo: {
+        id: festivalId,
+        name: festivalName,
+        description: String(festival?.description || "").trim(),
+        website: String(festival?.website || "").trim(),
+        primaryColor: String(festival?.primaryColor || "").trim(),
+        startDate: String(festival?.startDate || "").trim(),
+        endDate: String(festival?.endDate || "").trim(),
+        sortOrder: Number.isInteger(Number(festival?.sortOrder)) ? Number(festival.sortOrder) : 0,
+      },
+      theatreInfo: null,
+      dayInfo: null,
+      filmInfo: null,
+      shows: [],
+    };
+  }
 
   return grouped;
 }
