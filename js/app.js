@@ -3272,10 +3272,8 @@ async function persistData() {
   let localDraftWarning = "";
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(stripInternalFields(state.data)));
-  } catch (error) {
-    if (!isStorageQuotaExceeded(error)) throw error;
-    localDraftWarning =
-      "Could not cache a local browser draft because this browser storage is full.";
+  } catch {
+    // Silently skip localStorage cache if it fails; Supabase is the authoritative source
   }
 
   if (!state.supabase || !state.admin.auth.authenticated) {
