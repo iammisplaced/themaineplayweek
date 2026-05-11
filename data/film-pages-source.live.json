@@ -702,6 +702,75 @@
       ]
     },
     {
+      "title": "Amrum",
+      "year": 2025,
+      "tmdbId": "1269644",
+      "description": "On Amrum Island in spring 1945, twelve-year-old Nanning hunts seals, fishes at night, and works the fields to help feed his family. When the war ends, his mother sinks into depression, and he must navigate new conflicts while struggling to find his own path.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/z87OLGYXojP3bJjp0EpbutpvGTy.jpg",
+      "director": "Fatih Akin",
+      "genres": [
+        "Drama"
+      ],
+      "stars": [
+        "Jasper Billerbeck",
+        "Diane Kruger",
+        "Kian Köppke"
+      ],
+      "releaseDate": "2025-10-09",
+      "popularity": 3.7933,
+      "voteAverage": 7.092,
+      "voteCount": 60,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-amrum/",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-29",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-amrum/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-05-31",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-amrum/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-06-04",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-amrum/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
       "title": "Anaconda",
       "year": 2025,
       "tmdbId": "1234731",
@@ -1312,6 +1381,91 @@
       "legacyTicketLink": "https://www.johnsonhall.org/event/annie-1982-movie/",
       "theatres": [],
       "showings": []
+    },
+    {
+      "title": "Aspen",
+      "year": 1991,
+      "tmdbId": "221861",
+      "description": "A former mining town in Colorado’s Rocky Mountains, Aspen is now better known as a winter playground for wealthy holidaymakers. Against the majestic landscape, visitors relax while locals toil around them.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/2I5FCuTDIOrCqpC2sF8pOKWZuBy.jpg",
+      "director": "Frederick Wiseman",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [
+        "John Denver"
+      ],
+      "releaseDate": "1991-01-01",
+      "popularity": 0.2137,
+      "voteAverage": 6.333,
+      "voteCount": 9,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-social-studies-a-tribute-to-frederick-wiseman-aspen-1991/",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-24",
+          "time": "3:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-social-studies-a-tribute-to-frederick-wiseman-aspen-1991/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
+      "title": "Asphalt Jungle",
+      "year": 1950,
+      "tmdbId": "16958",
+      "description": "Recently paroled from prison, legendary burglar \"Doc\" Riedenschneider, with funding from Alonzo Emmerich, a crooked lawyer, gathers a small group of veteran criminals together in the Midwest for a big jewel heist.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/8xsUnT0P2fJWQv9jGDhs3i9Zx2l.jpg",
+      "director": "John Huston",
+      "genres": [
+        "Crime",
+        "Drama"
+      ],
+      "stars": [
+        "Sterling Hayden",
+        "Louis Calhern",
+        "Jean Hagen"
+      ],
+      "releaseDate": "1950-05-12",
+      "popularity": 1.5227,
+      "voteAverage": 7.494,
+      "voteCount": 533,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://scarboroughlibrary.libcal.com/event/16618479",
+      "theatres": [
+        "Scarborough Public Library, Scarborough"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-29",
+          "time": "6:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Scarborough Public Library",
+          "city": "Scarborough",
+          "theatreWebsite": "https://scarboroughlibrary.libcal.com/calendar/events?cid=19666&t=g&d=0000-00-00&cal=19666&ct=70331,71216&inc=0",
+          "ticketLink": "https://scarboroughlibrary.libcal.com/event/16618479",
+          "latitude": 43.5965893,
+          "longitude": -70.3359669
+        }
+      ]
     },
     {
       "title": "Avatar: Fire and Ash",
@@ -2180,19 +2334,6 @@
         "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
-        {
-          "date": "2026-05-11",
-          "time": "3:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/billie-eilish-hit-me-hard-and-soft-the-tour-live-in-3d",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-05-11",
           "time": "6:10 PM",
@@ -3949,6 +4090,50 @@
       "showings": []
     },
     {
+      "title": "Casablanca",
+      "year": 1943,
+      "tmdbId": "289",
+      "description": "In Casablanca, Morocco in December 1941, a cynical American expatriate meets a former lover, with unforeseen complications.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/lGCEKlJo2CnWydQj7aamY7s1S7Q.jpg",
+      "director": "Michael Curtiz",
+      "genres": [
+        "Drama",
+        "Romance"
+      ],
+      "stars": [
+        "Humphrey Bogart",
+        "Ingrid Bergman",
+        "Paul Henreid"
+      ],
+      "releaseDate": "1943-01-15",
+      "popularity": 7.8108,
+      "voteAverage": 8.1,
+      "voteCount": 6023,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://yarmouthlibrary.org/event/merrill-film-society-casablanca/",
+      "theatres": [
+        "Merrill Memorial Library, Yarmouth"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-13",
+          "time": "5:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Merrill Memorial Library",
+          "city": "Yarmouth",
+          "theatreWebsite": "https://yarmouthlibrary.org/",
+          "ticketLink": "https://yarmouthlibrary.org/event/merrill-film-society-casablanca/",
+          "latitude": 43.8012564,
+          "longitude": -70.1871791
+        }
+      ]
+    },
+    {
       "title": "Cat People",
       "year": 1942,
       "tmdbId": "25508",
@@ -4721,6 +4906,94 @@
       "showings": []
     },
     {
+      "title": "Double Indemnity",
+      "year": 1944,
+      "tmdbId": "996",
+      "description": "An insurance representative is seduced by a dissatisfied housewife into a scheme of insurance fraud and murder that arouses the suspicion of his colleague, a claims investigator.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/rVNYZZgfhwqVMMWlBmxOfWqnwCj.jpg",
+      "director": "Billy Wilder",
+      "genres": [
+        "Crime",
+        "Thriller"
+      ],
+      "stars": [
+        "Fred MacMurray",
+        "Barbara Stanwyck",
+        "Edward G. Robinson"
+      ],
+      "releaseDate": "1944-07-06",
+      "popularity": 2.7298,
+      "voteAverage": 8.092,
+      "voteCount": 2023,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://scarboroughlibrary.libcal.com/event/16618402",
+      "theatres": [
+        "Scarborough Public Library, Scarborough"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-29",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Scarborough Public Library",
+          "city": "Scarborough",
+          "theatreWebsite": "https://scarboroughlibrary.libcal.com/calendar/events?cid=19666&t=g&d=0000-00-00&cal=19666&ct=70331,71216&inc=0",
+          "ticketLink": "https://scarboroughlibrary.libcal.com/event/16618402",
+          "latitude": 43.5965893,
+          "longitude": -70.3359669
+        }
+      ]
+    },
+    {
+      "title": "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
+      "year": 1964,
+      "tmdbId": "935",
+      "description": "After the insane General Jack D. Ripper initiates a nuclear strike on the Soviet Union, a war room full of politicians, generals and a Russian diplomat all frantically try to stop it.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/6x7MzQ6BOMlRzam1StcmPO9v61g.jpg",
+      "director": "Stanley Kubrick",
+      "genres": [
+        "Comedy",
+        "War"
+      ],
+      "stars": [
+        "Peter Sellers",
+        "George C. Scott",
+        "Sterling Hayden"
+      ],
+      "releaseDate": "1964-01-29",
+      "popularity": 4.4227,
+      "voteAverage": 8.123,
+      "voteCount": 6128,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.leavittheatre.com/event-details-registration/dr-strangelove-1964-big-screen-classic",
+      "theatres": [
+        "Leavitt Theatre, Ogunquit"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-11",
+          "time": "5:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Leavitt Theatre",
+          "city": "Ogunquit",
+          "theatreWebsite": "leavittheatre.com",
+          "ticketLink": "https://www.leavittheatre.com/event-details-registration/dr-strangelove-1964-big-screen-classic",
+          "latitude": 43.2504514,
+          "longitude": -70.6004205
+        }
+      ]
+    },
+    {
       "title": "Dracula",
       "year": 2026,
       "tmdbId": "1246049",
@@ -4777,6 +5050,76 @@
       "legacyTicketLink": "https://www.patriotcinemas.com/movie/dreams",
       "theatres": [],
       "showings": []
+    },
+    {
+      "title": "Dry Leaf",
+      "year": 2026,
+      "tmdbId": "1057888",
+      "description": "Lisa, a photographer, has gone missing. The last known detail is that she had been photographing rural football stadiums in villages across Georgia. Her father, Irakli, sets out to search for her, traveling from place to place. Levani, Lisa's best friend – and an invisible person – also sets off to help.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/8yoTbPfrcqxNWkIIo7bayF2N8hl.jpg",
+      "director": "Alexandre Koberidze",
+      "genres": [
+        "Drama",
+        "Fantasy"
+      ],
+      "stars": [
+        "David Koberidze",
+        "Irina Chelidze",
+        "Giorgi Bochorishvili"
+      ],
+      "releaseDate": "2026-03-20",
+      "popularity": 1.0308,
+      "voteAverage": 6,
+      "voteCount": 1,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-dry-leaf-free-screening/",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-21",
+          "time": "4:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-dry-leaf-free-screening/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-05-27",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-dry-leaf-free-screening/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-05-31",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-dry-leaf-free-screening/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
     },
     {
       "title": "E.T. the Extra-Terrestrial",
@@ -5830,6 +6173,50 @@
       "showings": []
     },
     {
+      "title": "Gentlemen Prefer Blondes",
+      "year": 1953,
+      "tmdbId": "759",
+      "description": "Lorelei Lee is a beautiful showgirl engaged to be married to the wealthy Gus Esmond, much to the disapproval of Gus' rich father, Esmond Sr., who thinks that Lorelei is just after his money. When Lorelei goes on a cruise accompanied only by her best friend, Dorothy Shaw, Esmond Sr. hires Ernie Malone, a private detective, to follow her and report any questionable behavior that would disqualify her from the marriage.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/fDozhst5HVJJcd3BM8ZOsKniO7Q.jpg",
+      "director": "Howard Hawks",
+      "genres": [
+        "Comedy",
+        "Romance"
+      ],
+      "stars": [
+        "Jane Russell",
+        "Marilyn Monroe",
+        "Charles Coburn"
+      ],
+      "releaseDate": "1953-07-14",
+      "popularity": 3.0381,
+      "voteAverage": 7.338,
+      "voteCount": 1058,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "",
+      "theatres": [
+        "Waldo Theatre, Waldoboro"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-31",
+          "time": "3:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Waldo Theatre",
+          "city": "Waldoboro",
+          "theatreWebsite": "thewaldotheatre.org",
+          "ticketLink": "thewaldotheatre.org",
+          "latitude": 44.0959558,
+          "longitude": -69.3751422
+        }
+      ]
+    },
+    {
       "title": "Georgia O'Keefe: The Brightness of Light",
       "year": 2024,
       "tmdbId": "1365258",
@@ -5897,6 +6284,50 @@
       "legacyTicketLink": "https://www.reelpizza.net/now-playing",
       "theatres": [],
       "showings": []
+    },
+    {
+      "title": "Girl Shy",
+      "year": 1924,
+      "tmdbId": "40574",
+      "description": "Harold Meadows is a shy, stuttering bachelor working in a tailor shop, who is writing a guidebook, The Secret of Making Love, for other bashful young men. Fate has him meet rich girl Mary, and they fall in love. But she is about to wed an already married man, so our hero embarks upon a hair-raising daredevil ride to prevent the wedding.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/dMxXZoNWqODqkeDY9SC5O4lLrae.jpg",
+      "director": "Fred C. Newmeyer",
+      "genres": [
+        "Comedy",
+        "Romance"
+      ],
+      "stars": [
+        "Harold Lloyd",
+        "Jobyna Ralston",
+        "Richard Daniels"
+      ],
+      "releaseDate": "1924-04-20",
+      "popularity": 0.4276,
+      "voteAverage": 6.965,
+      "voteCount": 71,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.leavittheatre.com/event-details-registration/silent-films-at-the-leavitt-a-live-cinema-series-girl-shy-1924-2026-05-16-19-00",
+      "theatres": [
+        "Leavitt Theatre, Ogunquit"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-16",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Leavitt Theatre",
+          "city": "Ogunquit",
+          "theatreWebsite": "leavittheatre.com",
+          "ticketLink": "https://www.leavittheatre.com/event-details-registration/silent-films-at-the-leavitt-a-live-cinema-series-girl-shy-1924-2026-05-16-19-00",
+          "latitude": 43.2504514,
+          "longitude": -70.6004205
+        }
+      ]
     },
     {
       "title": "GOAT",
@@ -8233,6 +8664,63 @@
       "legacyTicketLink": "https://www.applecinemas.com/Legends-of-the-Lost-Ark/611fe9edf74bab2423301ee0/69d5237adb37612c3093fe98",
       "theatres": [],
       "showings": []
+    },
+    {
+      "title": "Life of Pi",
+      "year": 2012,
+      "tmdbId": "87827",
+      "description": "The story of an Indian boy named Pi, a zookeeper's son who finds himself in the company of a hyena, zebra, orangutan, and a Bengal tiger after a shipwreck sets them adrift in the Pacific Ocean.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/iLgRu4hhSr6V1uManX6ukDriiSc.jpg",
+      "director": "Ang Lee",
+      "genres": [
+        "Adventure",
+        "Drama"
+      ],
+      "stars": [
+        "Suraj Sharma",
+        "Irrfan Khan",
+        "Ayush Tandon"
+      ],
+      "releaseDate": "2012-11-20",
+      "popularity": 8.7034,
+      "voteAverage": 7.408,
+      "voteCount": 13740,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
+      "theatres": [
+        "Criterion Theatre, Bar Harbor"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-22",
+          "time": "6:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Criterion Theatre",
+          "city": "Bar Harbor",
+          "theatreWebsite": "criteriontheatre.org",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
+          "latitude": 44.3898592,
+          "longitude": -68.2061942
+        },
+        {
+          "date": "2026-05-23",
+          "time": "6:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Criterion Theatre",
+          "city": "Bar Harbor",
+          "theatreWebsite": "criteriontheatre.org",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
+          "latitude": 44.3898592,
+          "longitude": -68.2061942
+        }
+      ]
     },
     {
       "title": "Little Shop of Horrors",
@@ -11635,19 +12123,6 @@
         },
         {
           "date": "2026-05-11",
-          "time": "3:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/mortal-kombat-ii",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-05-11",
           "time": "6:30 PM",
           "isPremium": false,
           "festivalName": "",
@@ -12766,19 +13241,6 @@
         },
         {
           "date": "2026-05-11",
-          "time": "3:40 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Mortal-Kombat-II/611fea26f74bab2423301ee4/69d80de5db37612c30940eb9",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-05-11",
           "time": "6:20 PM",
           "isPremium": true,
           "festivalName": "",
@@ -13075,19 +13537,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Windham/MORTAL-KOMBAT-II#",
           "latitude": 43.8396584,
           "longitude": -70.4409439
-        },
-        {
-          "date": "2026-05-11",
-          "time": "3:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/mortal-kombat-ii-ho00020073",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-05-11",
@@ -15941,6 +16390,45 @@
       "showings": []
     },
     {
+      "title": "Public Housing",
+      "year": 1997,
+      "tmdbId": "114412",
+      "description": "Public Housing is Wiseman’s unflinching portrayal of life at the Ida B. Wells housing project in Chicago, a raw exposition of the daily conflicts between residents and the bureaucratic machinery to which they are continually subjected. With intimate detail and an abiding dedication to his subject, Wiseman unearths the hidden facets of institutions to find humanity and sites of unexpected beauty.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/vmtCtqBKQIoN5mF8neYy6dwtWgg.jpg",
+      "director": "Frederick Wiseman",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [],
+      "releaseDate": "1997-06-02",
+      "popularity": 0.1077,
+      "voteAverage": 7.5,
+      "voteCount": 10,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-social-studies-a-tribute-to-frederick-wiseman-public-housing-1997/",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-24",
+          "time": "3:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-social-studies-a-tribute-to-frederick-wiseman-public-housing-1997/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
       "title": "Purple Rain",
       "year": 1984,
       "tmdbId": "13763",
@@ -16446,6 +16934,63 @@
       "legacyTicketLink": "https://73622.formovietickets.com:2235/T.ASP?WCI=BT&Page=schedule",
       "theatres": [],
       "showings": []
+    },
+    {
+      "title": "Sense and Sensibility",
+      "year": 1995,
+      "tmdbId": "4584",
+      "description": "The Dashwood sisters, sensible Elinor and passionate Marianne, learn that their prospects of marriage seem doomed by their family's sudden loss of fortune. After Henry Dashwood dies unexpectedly, his estate must pass on by law to his son. These circumstances leave Mr. Dashwood's wife and daughters without a home and with barely enough money to live on. As Elinor and Marianne struggle to find romantic fulfillment in a society obsessed with financial and social status, they must learn to mix sense with sensibility in their dealings with both money and men.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/cBK2yL3HqhFvIVd7lLtazWlRZPR.jpg",
+      "director": "Ang Lee",
+      "genres": [
+        "Drama",
+        "Romance"
+      ],
+      "stars": [
+        "Emma Thompson",
+        "Kate Winslet",
+        "Alan Rickman"
+      ],
+      "releaseDate": "1995-12-13",
+      "popularity": 5.3039,
+      "voteAverage": 7.42,
+      "voteCount": 1830,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
+      "theatres": [
+        "Criterion Theatre, Bar Harbor"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-30",
+          "time": "6:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Criterion Theatre",
+          "city": "Bar Harbor",
+          "theatreWebsite": "criteriontheatre.org",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
+          "latitude": 44.3898592,
+          "longitude": -68.2061942
+        },
+        {
+          "date": "2026-05-31",
+          "time": "6:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Criterion Theatre",
+          "city": "Bar Harbor",
+          "theatreWebsite": "criteriontheatre.org",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
+          "latitude": 44.3898592,
+          "longitude": -68.2061942
+        }
+      ]
     },
     {
       "title": "Sentimental Value",
@@ -21290,6 +21835,48 @@
       "showings": []
     },
     {
+      "title": "The Grocery List Show",
+      "year": 2025,
+      "tmdbId": "292520",
+      "description": "Hosted by Top Chef contender Chrissy Camba, The Grocery List Show is a trip to five bustling international grocery stores in America and the communities they serve. Special guests and food enthusiasts join Chrissy to shop for ingredients and cook a favorite family recipe, as they celebrate global food traditions over a shared meal.",
+      "posterUrl": "https://media.themoviedb.org/t/p/w300_and_h450_face/l6Kz9dM457loWheG45fgtHhGuV2.jpg",
+      "director": "",
+      "genres": [
+        "Documentary",
+        "Cooking"
+      ],
+      "stars": [
+        "Chrissy Camba"
+      ],
+      "releaseDate": "2025-05-28",
+      "popularity": 0,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://yarmouthlibrary.org/event/merrill-film-society-the-grocery-list/",
+      "theatres": [
+        "Merrill Memorial Library, Yarmouth"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-27",
+          "time": "5:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Merrill Memorial Library",
+          "city": "Yarmouth",
+          "theatreWebsite": "https://yarmouthlibrary.org/",
+          "ticketLink": "https://yarmouthlibrary.org/event/merrill-film-society-the-grocery-list/",
+          "latitude": 43.8012564,
+          "longitude": -70.1871791
+        }
+      ]
+    },
+    {
       "title": "The History of Sound",
       "year": 2025,
       "tmdbId": "891584",
@@ -21667,6 +22254,51 @@
           "ticketLink": "https://www.portlandlibrary.org/",
           "latitude": 43.658006,
           "longitude": -70.2595221
+        }
+      ]
+    },
+    {
+      "title": "The Maltese Falcon",
+      "year": 1941,
+      "tmdbId": "963",
+      "description": "A private detective takes on a case that involves him with three eccentric criminals, a beautiful liar, and their quest for a priceless statuette.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/bf4o6Uzw5wqLjdKwRuiDrN1xyvl.jpg",
+      "director": "John Huston",
+      "genres": [
+        "Mystery",
+        "Crime",
+        "Thriller"
+      ],
+      "stars": [
+        "Humphrey Bogart",
+        "Mary Astor",
+        "Gladys George"
+      ],
+      "releaseDate": "1941-10-18",
+      "popularity": 3.276,
+      "voteAverage": 7.703,
+      "voteCount": 1870,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://scarboroughlibrary.libcal.com/event/16515260",
+      "theatres": [
+        "Scarborough Public Library, Scarborough"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-29",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Scarborough Public Library",
+          "city": "Scarborough",
+          "theatreWebsite": "https://scarboroughlibrary.libcal.com/calendar/events?cid=19666&t=g&d=0000-00-00&cal=19666&ct=70331,71216&inc=0",
+          "ticketLink": "https://scarboroughlibrary.libcal.com/event/16515260",
+          "latitude": 43.5965893,
+          "longitude": -70.3359669
         }
       ]
     },
@@ -24644,6 +25276,141 @@
       "showings": []
     },
     {
+      "title": "The Stranger",
+      "year": 2026,
+      "tmdbId": "1429348",
+      "description": "Algiers, 1938. Meursault, a quiet and unassuming employee in his early thirties, attends his mother's funeral without shedding a tear. The next day, he begins a casual affair with Marie, a work colleague. He quickly slips back into his usual routine.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/11lx7Isd86SIPeNuWlAPjYTfr57.jpg",
+      "director": "François Ozon",
+      "genres": [
+        "Drama",
+        "Crime"
+      ],
+      "stars": [
+        "Benjamin Voisin",
+        "Rebecca Marder",
+        "Pierre Lottin"
+      ],
+      "releaseDate": "2025-10-29",
+      "popularity": 4.3787,
+      "voteAverage": 6.8,
+      "voteCount": 169,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-20",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-05-21",
+          "time": "1:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-05-22",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-05-22",
+          "time": "6:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-05-23",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-05-24",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-05-28",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-05-28",
+          "time": "3:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
       "title": "The Super Mario Galaxy Movie",
       "year": 2026,
       "tmdbId": "1226863",
@@ -26433,6 +27200,50 @@
       "showings": []
     },
     {
+      "title": "The Wedding Singer",
+      "year": 1998,
+      "tmdbId": "11003",
+      "description": "Robbie, a local rock star turned wedding singer, is dumped on the day of his wedding. Meanwhile, waitress Julia finally sets a wedding date with her fiancée Glenn. When Julia and Robbie meet and hit it off, they find that things are more complicated than anybody thought.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/zVvyTrcZQb7kC2DPDzyo25WcxXp.jpg",
+      "director": "Frank Coraci",
+      "genres": [
+        "Romance",
+        "Comedy"
+      ],
+      "stars": [
+        "Adam Sandler",
+        "Drew Barrymore",
+        "Christine Taylor"
+      ],
+      "releaseDate": "1998-02-13",
+      "popularity": 2.9507,
+      "voteAverage": 6.771,
+      "voteCount": 1907,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "legacyTicketLink": "https://yarmouthlibrary.org/event/friday-matinee-the-wedding-singer/",
+      "theatres": [
+        "Merrill Memorial Library, Yarmouth"
+      ],
+      "showings": [
+        {
+          "date": "2026-05-29",
+          "time": "11:00 AM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Merrill Memorial Library",
+          "city": "Yarmouth",
+          "theatreWebsite": "https://yarmouthlibrary.org/",
+          "ticketLink": "https://yarmouthlibrary.org/event/friday-matinee-the-wedding-singer/",
+          "latitude": 43.8012564,
+          "longitude": -70.1871791
+        }
+      ]
+    },
+    {
       "title": "The White Hell of Pitz Palu",
       "year": 1929,
       "tmdbId": "29043",
@@ -27695,864 +28506,6 @@
           "ticketLink": "space538.org",
           "latitude": 43.655603,
           "longitude": -70.2613361
-        }
-      ]
-    },
-    {
-      "title": "Life of Pi",
-      "year": 2012,
-      "tmdbId": "87827",
-      "description": "The story of an Indian boy named Pi, a zookeeper's son who finds himself in the company of a hyena, zebra, orangutan, and a Bengal tiger after a shipwreck sets them adrift in the Pacific Ocean.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/iLgRu4hhSr6V1uManX6ukDriiSc.jpg",
-      "director": "Ang Lee",
-      "genres": [
-        "Adventure",
-        "Drama"
-      ],
-      "stars": [
-        "Suraj Sharma",
-        "Irrfan Khan",
-        "Ayush Tandon"
-      ],
-      "releaseDate": "2012-11-20",
-      "popularity": 8.7034,
-      "voteAverage": 7.408,
-      "voteCount": 13740,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
-      "theatres": [
-        "Criterion Theatre, Bar Harbor"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-22",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Criterion Theatre",
-          "city": "Bar Harbor",
-          "theatreWebsite": "criteriontheatre.org",
-          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
-          "latitude": 44.3898592,
-          "longitude": -68.2061942
-        },
-        {
-          "date": "2026-05-23",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Criterion Theatre",
-          "city": "Bar Harbor",
-          "theatreWebsite": "criteriontheatre.org",
-          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
-          "latitude": 44.3898592,
-          "longitude": -68.2061942
-        }
-      ]
-    },
-    {
-      "title": "Sense and Sensibility",
-      "year": 1995,
-      "tmdbId": "4584",
-      "description": "The Dashwood sisters, sensible Elinor and passionate Marianne, learn that their prospects of marriage seem doomed by their family's sudden loss of fortune. After Henry Dashwood dies unexpectedly, his estate must pass on by law to his son. These circumstances leave Mr. Dashwood's wife and daughters without a home and with barely enough money to live on. As Elinor and Marianne struggle to find romantic fulfillment in a society obsessed with financial and social status, they must learn to mix sense with sensibility in their dealings with both money and men.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/cBK2yL3HqhFvIVd7lLtazWlRZPR.jpg",
-      "director": "Ang Lee",
-      "genres": [
-        "Drama",
-        "Romance"
-      ],
-      "stars": [
-        "Emma Thompson",
-        "Kate Winslet",
-        "Alan Rickman"
-      ],
-      "releaseDate": "1995-12-13",
-      "popularity": 5.3039,
-      "voteAverage": 7.42,
-      "voteCount": 1830,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
-      "theatres": [
-        "Criterion Theatre, Bar Harbor"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-30",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Criterion Theatre",
-          "city": "Bar Harbor",
-          "theatreWebsite": "criteriontheatre.org",
-          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
-          "latitude": 44.3898592,
-          "longitude": -68.2061942
-        },
-        {
-          "date": "2026-05-31",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Criterion Theatre",
-          "city": "Bar Harbor",
-          "theatreWebsite": "criteriontheatre.org",
-          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
-          "latitude": 44.3898592,
-          "longitude": -68.2061942
-        }
-      ]
-    },
-    {
-      "title": "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
-      "year": 1964,
-      "tmdbId": "935",
-      "description": "After the insane General Jack D. Ripper initiates a nuclear strike on the Soviet Union, a war room full of politicians, generals and a Russian diplomat all frantically try to stop it.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/6x7MzQ6BOMlRzam1StcmPO9v61g.jpg",
-      "director": "Stanley Kubrick",
-      "genres": [
-        "Comedy",
-        "War"
-      ],
-      "stars": [
-        "Peter Sellers",
-        "George C. Scott",
-        "Sterling Hayden"
-      ],
-      "releaseDate": "1964-01-29",
-      "popularity": 4.4227,
-      "voteAverage": 8.123,
-      "voteCount": 6128,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.leavittheatre.com/event-details-registration/dr-strangelove-1964-big-screen-classic",
-      "theatres": [
-        "Leavitt Theatre, Ogunquit"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-11",
-          "time": "5:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Leavitt Theatre",
-          "city": "Ogunquit",
-          "theatreWebsite": "leavittheatre.com",
-          "ticketLink": "https://www.leavittheatre.com/event-details-registration/dr-strangelove-1964-big-screen-classic",
-          "latitude": 43.2504514,
-          "longitude": -70.6004205
-        }
-      ]
-    },
-    {
-      "title": "Girl Shy",
-      "year": 1924,
-      "tmdbId": "40574",
-      "description": "Harold Meadows is a shy, stuttering bachelor working in a tailor shop, who is writing a guidebook, The Secret of Making Love, for other bashful young men. Fate has him meet rich girl Mary, and they fall in love. But she is about to wed an already married man, so our hero embarks upon a hair-raising daredevil ride to prevent the wedding.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/dMxXZoNWqODqkeDY9SC5O4lLrae.jpg",
-      "director": "Fred C. Newmeyer",
-      "genres": [
-        "Comedy",
-        "Romance"
-      ],
-      "stars": [
-        "Harold Lloyd",
-        "Jobyna Ralston",
-        "Richard Daniels"
-      ],
-      "releaseDate": "1924-04-20",
-      "popularity": 0.4276,
-      "voteAverage": 6.965,
-      "voteCount": 71,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.leavittheatre.com/event-details-registration/silent-films-at-the-leavitt-a-live-cinema-series-girl-shy-1924-2026-05-16-19-00",
-      "theatres": [
-        "Leavitt Theatre, Ogunquit"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-16",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Leavitt Theatre",
-          "city": "Ogunquit",
-          "theatreWebsite": "leavittheatre.com",
-          "ticketLink": "https://www.leavittheatre.com/event-details-registration/silent-films-at-the-leavitt-a-live-cinema-series-girl-shy-1924-2026-05-16-19-00",
-          "latitude": 43.2504514,
-          "longitude": -70.6004205
-        }
-      ]
-    },
-    {
-      "title": "Amrum",
-      "year": 2025,
-      "tmdbId": "1269644",
-      "description": "On Amrum Island in spring 1945, twelve-year-old Nanning hunts seals, fishes at night, and works the fields to help feed his family. When the war ends, his mother sinks into depression, and he must navigate new conflicts while struggling to find his own path.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/z87OLGYXojP3bJjp0EpbutpvGTy.jpg",
-      "director": "Fatih Akin",
-      "genres": [
-        "Drama"
-      ],
-      "stars": [
-        "Jasper Billerbeck",
-        "Diane Kruger",
-        "Kian Köppke"
-      ],
-      "releaseDate": "2025-10-09",
-      "popularity": 3.7933,
-      "voteAverage": 7.092,
-      "voteCount": 60,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-amrum/",
-      "theatres": [
-        "PMA Films, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-29",
-          "time": "2:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-amrum/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-05-31",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-amrum/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-06-04",
-          "time": "1:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-amrum/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        }
-      ]
-    },
-    {
-      "title": "Aspen",
-      "year": 1991,
-      "tmdbId": "221861",
-      "description": "A former mining town in Colorado’s Rocky Mountains, Aspen is now better known as a winter playground for wealthy holidaymakers. Against the majestic landscape, visitors relax while locals toil around them.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/2I5FCuTDIOrCqpC2sF8pOKWZuBy.jpg",
-      "director": "Frederick Wiseman",
-      "genres": [
-        "Documentary"
-      ],
-      "stars": [
-        "John Denver"
-      ],
-      "releaseDate": "1991-01-01",
-      "popularity": 0.2137,
-      "voteAverage": 6.333,
-      "voteCount": 9,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-social-studies-a-tribute-to-frederick-wiseman-aspen-1991/",
-      "theatres": [
-        "PMA Films, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-24",
-          "time": "3:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-social-studies-a-tribute-to-frederick-wiseman-aspen-1991/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        }
-      ]
-    },
-    {
-      "title": "Dry Leaf",
-      "year": 2026,
-      "tmdbId": "1057888",
-      "description": "Lisa, a photographer, has gone missing. The last known detail is that she had been photographing rural football stadiums in villages across Georgia. Her father, Irakli, sets out to search for her, traveling from place to place. Levani, Lisa's best friend – and an invisible person – also sets off to help.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/8yoTbPfrcqxNWkIIo7bayF2N8hl.jpg",
-      "director": "Alexandre Koberidze",
-      "genres": [
-        "Drama",
-        "Fantasy"
-      ],
-      "stars": [
-        "David Koberidze",
-        "Irina Chelidze",
-        "Giorgi Bochorishvili"
-      ],
-      "releaseDate": "2026-03-20",
-      "popularity": 1.0308,
-      "voteAverage": 6,
-      "voteCount": 1,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-dry-leaf-free-screening/",
-      "theatres": [
-        "PMA Films, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-21",
-          "time": "4:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-dry-leaf-free-screening/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-05-27",
-          "time": "12:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-dry-leaf-free-screening/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-05-31",
-          "time": "12:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-dry-leaf-free-screening/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        }
-      ]
-    },
-    {
-      "title": "Public Housing",
-      "year": 1997,
-      "tmdbId": "114412",
-      "description": "Public Housing is Wiseman’s unflinching portrayal of life at the Ida B. Wells housing project in Chicago, a raw exposition of the daily conflicts between residents and the bureaucratic machinery to which they are continually subjected. With intimate detail and an abiding dedication to his subject, Wiseman unearths the hidden facets of institutions to find humanity and sites of unexpected beauty.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/vmtCtqBKQIoN5mF8neYy6dwtWgg.jpg",
-      "director": "Frederick Wiseman",
-      "genres": [
-        "Documentary"
-      ],
-      "stars": [],
-      "releaseDate": "1997-06-02",
-      "popularity": 0.1077,
-      "voteAverage": 7.5,
-      "voteCount": 10,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-social-studies-a-tribute-to-frederick-wiseman-public-housing-1997/",
-      "theatres": [
-        "PMA Films, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-24",
-          "time": "3:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-social-studies-a-tribute-to-frederick-wiseman-public-housing-1997/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        }
-      ]
-    },
-    {
-      "title": "The Stranger",
-      "year": 2026,
-      "tmdbId": "1429348",
-      "description": "Algiers, 1938. Meursault, a quiet and unassuming employee in his early thirties, attends his mother's funeral without shedding a tear. The next day, he begins a casual affair with Marie, a work colleague. He quickly slips back into his usual routine.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/11lx7Isd86SIPeNuWlAPjYTfr57.jpg",
-      "director": "François Ozon",
-      "genres": [
-        "Drama",
-        "Crime"
-      ],
-      "stars": [
-        "Benjamin Voisin",
-        "Rebecca Marder",
-        "Pierre Lottin"
-      ],
-      "releaseDate": "2025-10-29",
-      "popularity": 4.3787,
-      "voteAverage": 6.8,
-      "voteCount": 169,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
-      "theatres": [
-        "PMA Films, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-20",
-          "time": "12:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-05-21",
-          "time": "1:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-05-22",
-          "time": "2:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-05-22",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-05-23",
-          "time": "12:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-05-24",
-          "time": "12:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-05-28",
-          "time": "1:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
-          "date": "2026-05-28",
-          "time": "3:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-the-stranger-8/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        }
-      ]
-    },
-    {
-      "title": "Gentlemen Prefer Blondes",
-      "year": 1953,
-      "tmdbId": "759",
-      "description": "Lorelei Lee is a beautiful showgirl engaged to be married to the wealthy Gus Esmond, much to the disapproval of Gus' rich father, Esmond Sr., who thinks that Lorelei is just after his money. When Lorelei goes on a cruise accompanied only by her best friend, Dorothy Shaw, Esmond Sr. hires Ernie Malone, a private detective, to follow her and report any questionable behavior that would disqualify her from the marriage.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/fDozhst5HVJJcd3BM8ZOsKniO7Q.jpg",
-      "director": "Howard Hawks",
-      "genres": [
-        "Comedy",
-        "Romance"
-      ],
-      "stars": [
-        "Jane Russell",
-        "Marilyn Monroe",
-        "Charles Coburn"
-      ],
-      "releaseDate": "1953-07-14",
-      "popularity": 3.0381,
-      "voteAverage": 7.338,
-      "voteCount": 1058,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "",
-      "theatres": [
-        "Waldo Theatre, Waldoboro"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-31",
-          "time": "3:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Waldo Theatre",
-          "city": "Waldoboro",
-          "theatreWebsite": "thewaldotheatre.org",
-          "ticketLink": "thewaldotheatre.org",
-          "latitude": 44.0959558,
-          "longitude": -69.3751422
-        }
-      ]
-    },
-    {
-      "title": "Asphalt Jungle",
-      "year": 1950,
-      "tmdbId": "16958",
-      "description": "Recently paroled from prison, legendary burglar \"Doc\" Riedenschneider, with funding from Alonzo Emmerich, a crooked lawyer, gathers a small group of veteran criminals together in the Midwest for a big jewel heist.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/8xsUnT0P2fJWQv9jGDhs3i9Zx2l.jpg",
-      "director": "John Huston",
-      "genres": [
-        "Crime",
-        "Drama"
-      ],
-      "stars": [
-        "Sterling Hayden",
-        "Louis Calhern",
-        "Jean Hagen"
-      ],
-      "releaseDate": "1950-05-12",
-      "popularity": 1.5227,
-      "voteAverage": 7.494,
-      "voteCount": 533,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://scarboroughlibrary.libcal.com/event/16618479",
-      "theatres": [
-        "Scarborough Public Library, Scarborough"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-29",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Scarborough Public Library",
-          "city": "Scarborough",
-          "theatreWebsite": "https://scarboroughlibrary.libcal.com/calendar/events?cid=19666&t=g&d=0000-00-00&cal=19666&ct=70331,71216&inc=0",
-          "ticketLink": "https://scarboroughlibrary.libcal.com/event/16618479",
-          "latitude": 43.5965893,
-          "longitude": -70.3359669
-        }
-      ]
-    },
-    {
-      "title": "Double Indemnity",
-      "year": 1944,
-      "tmdbId": "996",
-      "description": "An insurance representative is seduced by a dissatisfied housewife into a scheme of insurance fraud and murder that arouses the suspicion of his colleague, a claims investigator.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/rVNYZZgfhwqVMMWlBmxOfWqnwCj.jpg",
-      "director": "Billy Wilder",
-      "genres": [
-        "Crime",
-        "Thriller"
-      ],
-      "stars": [
-        "Fred MacMurray",
-        "Barbara Stanwyck",
-        "Edward G. Robinson"
-      ],
-      "releaseDate": "1944-07-06",
-      "popularity": 2.7298,
-      "voteAverage": 8.092,
-      "voteCount": 2023,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://scarboroughlibrary.libcal.com/event/16618402",
-      "theatres": [
-        "Scarborough Public Library, Scarborough"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-29",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Scarborough Public Library",
-          "city": "Scarborough",
-          "theatreWebsite": "https://scarboroughlibrary.libcal.com/calendar/events?cid=19666&t=g&d=0000-00-00&cal=19666&ct=70331,71216&inc=0",
-          "ticketLink": "https://scarboroughlibrary.libcal.com/event/16618402",
-          "latitude": 43.5965893,
-          "longitude": -70.3359669
-        }
-      ]
-    },
-    {
-      "title": "The Maltese Falcon",
-      "year": 1941,
-      "tmdbId": "963",
-      "description": "A private detective takes on a case that involves him with three eccentric criminals, a beautiful liar, and their quest for a priceless statuette.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/bf4o6Uzw5wqLjdKwRuiDrN1xyvl.jpg",
-      "director": "John Huston",
-      "genres": [
-        "Mystery",
-        "Crime",
-        "Thriller"
-      ],
-      "stars": [
-        "Humphrey Bogart",
-        "Mary Astor",
-        "Gladys George"
-      ],
-      "releaseDate": "1941-10-18",
-      "popularity": 3.276,
-      "voteAverage": 7.703,
-      "voteCount": 1870,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://scarboroughlibrary.libcal.com/event/16515260",
-      "theatres": [
-        "Scarborough Public Library, Scarborough"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-29",
-          "time": "12:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Scarborough Public Library",
-          "city": "Scarborough",
-          "theatreWebsite": "https://scarboroughlibrary.libcal.com/calendar/events?cid=19666&t=g&d=0000-00-00&cal=19666&ct=70331,71216&inc=0",
-          "ticketLink": "https://scarboroughlibrary.libcal.com/event/16515260",
-          "latitude": 43.5965893,
-          "longitude": -70.3359669
-        }
-      ]
-    },
-    {
-      "title": "Casablanca",
-      "year": 1943,
-      "tmdbId": "289",
-      "description": "In Casablanca, Morocco in December 1941, a cynical American expatriate meets a former lover, with unforeseen complications.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/lGCEKlJo2CnWydQj7aamY7s1S7Q.jpg",
-      "director": "Michael Curtiz",
-      "genres": [
-        "Drama",
-        "Romance"
-      ],
-      "stars": [
-        "Humphrey Bogart",
-        "Ingrid Bergman",
-        "Paul Henreid"
-      ],
-      "releaseDate": "1943-01-15",
-      "popularity": 7.8108,
-      "voteAverage": 8.1,
-      "voteCount": 6023,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://yarmouthlibrary.org/event/merrill-film-society-casablanca/",
-      "theatres": [
-        "Merrill Memorial Library, Yarmouth"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-13",
-          "time": "5:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Merrill Memorial Library",
-          "city": "Yarmouth",
-          "theatreWebsite": "https://yarmouthlibrary.org/",
-          "ticketLink": "https://yarmouthlibrary.org/event/merrill-film-society-casablanca/",
-          "latitude": 43.8012564,
-          "longitude": -70.1871791
-        }
-      ]
-    },
-    {
-      "title": "The Grocery List",
-      "year": 2025,
-      "tmdbId": "292520",
-      "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
-      "popularity": 0,
-      "voteAverage": 0,
-      "voteCount": 0,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://yarmouthlibrary.org/event/merrill-film-society-the-grocery-list/",
-      "theatres": [
-        "Merrill Memorial Library, Yarmouth"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-27",
-          "time": "5:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Merrill Memorial Library",
-          "city": "Yarmouth",
-          "theatreWebsite": "https://yarmouthlibrary.org/",
-          "ticketLink": "https://yarmouthlibrary.org/event/merrill-film-society-the-grocery-list/",
-          "latitude": 43.8012564,
-          "longitude": -70.1871791
-        }
-      ]
-    },
-    {
-      "title": "The Wedding Singer",
-      "year": 1998,
-      "tmdbId": "11003",
-      "description": "Robbie, a local rock star turned wedding singer, is dumped on the day of his wedding. Meanwhile, waitress Julia finally sets a wedding date with her fiancée Glenn. When Julia and Robbie meet and hit it off, they find that things are more complicated than anybody thought.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/zVvyTrcZQb7kC2DPDzyo25WcxXp.jpg",
-      "director": "Frank Coraci",
-      "genres": [
-        "Romance",
-        "Comedy"
-      ],
-      "stars": [
-        "Adam Sandler",
-        "Drew Barrymore",
-        "Christine Taylor"
-      ],
-      "releaseDate": "1998-02-13",
-      "popularity": 2.9507,
-      "voteAverage": 6.771,
-      "voteCount": 1907,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://yarmouthlibrary.org/event/friday-matinee-the-wedding-singer/",
-      "theatres": [
-        "Merrill Memorial Library, Yarmouth"
-      ],
-      "showings": [
-        {
-          "date": "2026-05-29",
-          "time": "11:00 AM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Merrill Memorial Library",
-          "city": "Yarmouth",
-          "theatreWebsite": "https://yarmouthlibrary.org/",
-          "ticketLink": "https://yarmouthlibrary.org/event/friday-matinee-the-wedding-singer/",
-          "latitude": 43.8012564,
-          "longitude": -70.1871791
         }
       ]
     }
