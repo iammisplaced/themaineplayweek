@@ -8,7 +8,8 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const QUERY_TIMEOUT_MS = 30000;
 const QUERY_PAGE_SIZE = 1000;
 const SEARCH_INPUT_DEBOUNCE_MS = 180;
-const MAX_CATALOG_RENDER_ROWS = 300;
+const VIRTUAL_SCROLL_CONTAINER_HEIGHT = 600;
+const VIRTUAL_SCROLL_ROW_HEIGHT = 60;
 
 const state = {
   query: "",
@@ -33,6 +34,7 @@ const elements = {
   filmSearch: document.getElementById("filmSearch"),
   summary: document.getElementById("summary"),
   catalogList: document.getElementById("catalogList"),
+  loadingSpinner: document.getElementById("loadingSpinner"),
   authStatus: document.getElementById("authStatus"),
   status: document.getElementById("status"),
 };
@@ -149,6 +151,7 @@ function updateAuthUI(authed) {
 
 async function loadCatalog() {
   try {
+    elements.loadingSpinner?.classList.remove("hidden");
     setStatus("Loading film catalog...");
 
     setStatus("Loading films table...");
@@ -184,6 +187,7 @@ async function loadCatalog() {
     }
     if (filmsResult.error) {
       setStatus(`Load failed (films): ${filmsResult.error.message}`);
+      elements.loadingSpinner.classList.add("hidden");
       return;
     }
 
@@ -212,6 +216,7 @@ async function loadCatalog() {
 
     renderSummary();
     renderCatalog();
+    elements.loadingSpinner.classList.add("hidden");
     if (warnings.length) {
       setStatus(`Loaded ${state.films.length} films with warnings: ${warnings.join(" | ")}`);
     } else {
@@ -219,6 +224,7 @@ async function loadCatalog() {
     }
   } catch (error) {
     setStatus(`Load error: ${error.message}`);
+    elements.loadingSpinner.classList.add("hidden");
   }
 }
 
@@ -384,7 +390,6 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
 function renderSummary() {
   const total = state.films.length;
   const withFuture = state.films.filter((film) => film.futureTimes > 0).length;
-  const withoutFuture = total - withFuture;
   const withAnyTicketLinks = state.films.filter((film) => film.links.some((entry) => entry.ticketLink)).length;
   const staffFavorites = state.films.filter((film) => film.staffFavorite).length;
   const featuredOnPlayweek = state.films.filter((film) => film.featuredOnPlayweek).length;
@@ -393,7 +398,7 @@ function renderSummary() {
   elements.summary.innerHTML = `
     <strong>${total}</strong> films total
     <br />
-    <strong>${withFuture}</strong> with upcoming showtimes, <strong>${withoutFuture}</strong> without upcoming showtimes
+    <strong>${withFuture}</strong> with upcoming showtimes
     <br />
     <strong>${withAnyTicketLinks}</strong> with at least one ticket link
     <br />
@@ -407,13 +412,15 @@ function renderSummary() {
 
 function renderCatalog() {
   const filtered = state.films.filter((film) => String(film.normalizedTitle || "").includes(state.query));
-  const visibleRows = filtered.slice(0, MAX_CATALOG_RENDER_ROWS);
   elements.catalogList.innerHTML = "";
 
   if (!filtered.length) {
     elements.catalogList.innerHTML = '<section class="panel">No films match your search.</section>';
     return;
   }
+
+  const wrap = document.createElement("div");
+  wrap.className = "table-wrap panel";
 
   const table = document.createElement("table");
   table.className = "catalog-table";
@@ -423,144 +430,163 @@ function renderCatalog() {
         <th>Title</th>
         <th>Year</th>
         <th>TMDb</th>
-        <th>Status</th>
         <th>Upcoming</th>
-        <th>Total</th>
-        <th>Ticket Links</th>
+        <th>Ticket<br />Links</th>
         <th>Director</th>
         <th>Starring</th>
         <th>Genre</th>
         <th>Staff Favorite</th>
         <th>Featured On Playweek</th>
         <th>Ranking Override</th>
-        <th>DB Rows</th>
       </tr>
     </thead>
-    <tbody></tbody>
   `;
 
-  const tbody = table.querySelector("tbody");
-  visibleRows.forEach((film) => {
-    const tmdb = film.tmdb || {};
-    const director = String(tmdb.director || "").trim();
-    const stars = Array.isArray(tmdb.stars) ? tmdb.stars.filter(Boolean) : [];
-    const genres = Array.isArray(tmdb.genres) ? tmdb.genres.filter(Boolean) : [];
-    const statusClass = film.futureTimes > 0 ? "badge badge-on" : "badge badge-off";
-    const statusText = film.futureTimes > 0 ? "Showing" : "No upcoming";
-    const isFavoriteBusy = state.favoriteSaveBusy.has(String(film.id));
-    const isFeaturedBusy = state.featuredSaveBusy.has(String(film.id));
-    const isRankingOverrideBusy = state.rankingOverrideSaveBusy.has(String(film.id));
-    const favoriteBadge = film.staffFavorite
-      ? film.staffFavoriteBy
-        ? `Yes (${escapeHtml(film.staffFavoriteBy)})`
-        : "Yes (General)"
-      : "No";
-    const featuredBadge = film.featuredOnPlayweek
-      ? film.featuredOnPlayweekUrl
-        ? `Yes (${escapeHtml(film.featuredOnPlayweekUrl)})`
-        : "Yes"
-      : "No";
+  const scrollContainer = document.createElement("div");
+  scrollContainer.className = "virtual-scroll-container";
+  scrollContainer.style.height = VIRTUAL_SCROLL_CONTAINER_HEIGHT + "px";
+  scrollContainer.style.overflowY = "auto";
+  scrollContainer.style.position = "relative";
 
-    const row = document.createElement("tr");
-    row.dataset.filmId = String(film.id);
-    row.innerHTML = `
-      <td><strong>${escapeHtml(film.title || "")}</strong></td>
-      <td>${Number.isInteger(Number(film.year)) ? Number(film.year) : ""}</td>
-      <td>${Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : ""}</td>
-      <td><span class="${statusClass}">${statusText}</span></td>
-      <td>${film.futureTimes}</td>
-      <td>${film.totalTimes}</td>
-      <td>${film.links.filter((entry) => entry.ticketLink).length}/${film.links.length}</td>
-      <td>${escapeHtml(director)}</td>
-      <td>${escapeHtml(stars.join(", "))}</td>
-      <td>${escapeHtml(genres.join(", "))}</td>
-      <td>
-        ${
-          !state.staffFavoriteSupported
-            ? '<span class="muted-inline">Schema update required</span>'
-            : state.isAuthed
-              ? `
-          <div class="staff-favorite-controls">
-            <label class="staff-favorite-toggle-wrap">
-              <input data-role="favorite-toggle" type="checkbox" ${film.staffFavorite ? "checked" : ""} ${isFavoriteBusy ? "disabled" : ""} />
-              Favorite
-            </label>
-            <input
-              data-role="favorite-by"
-              class="staff-favorite-by"
-              type="text"
-              value="${escapeHtml(film.staffFavoriteBy)}"
-              placeholder="Staff name (optional)"
-              ${film.staffFavorite && !isFavoriteBusy ? "" : "disabled"}
-            />
-            <button type="button" data-action="save-favorite" class="staff-favorite-save" ${isFavoriteBusy ? "disabled" : ""}>Save</button>
-          </div>
-        `
-              : `<span class="badge ${film.staffFavorite ? "badge-on" : "badge-off"}">${favoriteBadge}</span>`
-        }
-      </td>
-      <td>
-        ${
-          !state.featuredOnPlayweekSupported
-            ? '<span class="muted-inline">Schema update required</span>'
-            : state.isAuthed
-              ? `
-          <div class="featured-controls">
-            <label class="featured-toggle-wrap">
-              <input data-role="featured-toggle" type="checkbox" ${film.featuredOnPlayweek ? "checked" : ""} ${isFeaturedBusy ? "disabled" : ""} />
-              Featured
-            </label>
-            <input
-              data-role="featured-url"
-              class="featured-url"
-              type="url"
-              value="${escapeHtml(film.featuredOnPlayweekUrl)}"
-              placeholder="https://themaineplayweek.com/..."
-              ${film.featuredOnPlayweek && !isFeaturedBusy ? "" : "disabled"}
-            />
-            <button type="button" data-action="save-featured" class="featured-save" ${isFeaturedBusy ? "disabled" : ""}>Save</button>
-          </div>
-        `
-              : `<span class="badge ${film.featuredOnPlayweek ? "badge-on" : "badge-off"}">${featuredBadge}</span>`
-        }
-      </td>
-      <td>
-        ${
-          !state.rankingOverrideSupported
-            ? '<span class="muted-inline">Schema update required</span>'
-            : state.isAuthed
-              ? `
-          <div class="featured-controls">
-            <label class="featured-toggle-wrap">
-              <input data-role="ranking-override-toggle" type="checkbox" ${film.rankingOverride ? "checked" : ""} ${isRankingOverrideBusy ? "disabled" : ""} />
-              Pin to top
-            </label>
-            <button type="button" data-action="save-ranking-override" class="featured-save" ${isRankingOverrideBusy ? "disabled" : ""}>Save</button>
-          </div>
-        `
-              : `<span class="badge ${film.rankingOverride ? "badge-on" : "badge-off"}">${film.rankingOverride ? "Yes" : "No"}</span>`
-        }
-      </td>
-      <td>
-        <details>
-          <summary>View</summary>
-          <pre>${escapeHtml(JSON.stringify(film.raw, null, 2))}</pre>
-        </details>
-      </td>
-    `;
-    tbody.appendChild(row);
-  });
+  const tbody = document.createElement("tbody");
 
-  const wrap = document.createElement("div");
-  wrap.className = "table-wrap panel";
-  if (filtered.length > visibleRows.length) {
-    const note = document.createElement("p");
-    note.className = "muted-inline";
-    note.textContent = `Showing first ${visibleRows.length} of ${filtered.length} matching films. Refine search to narrow results.`;
-    wrap.appendChild(note);
-  }
-  wrap.appendChild(table);
+  const spacerTop = document.createElement("tr");
+  spacerTop.className = "virtual-scroll-spacer";
+  spacerTop.style.height = "0px";
+  tbody.appendChild(spacerTop);
+
+  const renderWindow = () => {
+    const scrollTop = scrollContainer.scrollTop;
+    const startIndex = Math.max(0, Math.floor(scrollTop / VIRTUAL_SCROLL_ROW_HEIGHT));
+    const visibleCount = Math.ceil(VIRTUAL_SCROLL_CONTAINER_HEIGHT / VIRTUAL_SCROLL_ROW_HEIGHT) + 2;
+    const endIndex = Math.min(filtered.length, startIndex + visibleCount);
+
+    spacerTop.style.height = (startIndex * VIRTUAL_SCROLL_ROW_HEIGHT) + "px";
+
+    const existingRows = tbody.querySelectorAll("tr:not(.virtual-scroll-spacer)");
+    existingRows.forEach((row) => row.remove());
+
+    for (let i = startIndex; i < endIndex; i++) {
+      const film = filtered[i];
+      const tmdb = film.tmdb || {};
+      const director = String(tmdb.director || "").trim();
+      const stars = Array.isArray(tmdb.stars) ? tmdb.stars.filter(Boolean) : [];
+      const genres = Array.isArray(tmdb.genres) ? tmdb.genres.filter(Boolean) : [];
+      const statusClass = film.futureTimes > 0 ? "badge badge-on" : "badge badge-off";
+      const statusText = film.futureTimes > 0 ? "Showing" : "No upcoming";
+      const isFavoriteBusy = state.favoriteSaveBusy.has(String(film.id));
+      const isFeaturedBusy = state.featuredSaveBusy.has(String(film.id));
+      const isRankingOverrideBusy = state.rankingOverrideSaveBusy.has(String(film.id));
+      const favoriteBadge = film.staffFavorite
+        ? film.staffFavoriteBy
+          ? `Yes (${escapeHtml(film.staffFavoriteBy)})`
+          : "Yes (General)"
+        : "No";
+      const featuredBadge = film.featuredOnPlayweek
+        ? film.featuredOnPlayweekUrl
+          ? `Yes (${escapeHtml(film.featuredOnPlayweekUrl)})`
+          : "Yes"
+        : "No";
+
+      const row = document.createElement("tr");
+      row.dataset.filmId = String(film.id);
+      row.innerHTML = `
+        <td><strong>${escapeHtml(film.title || "")}</strong></td>
+        <td>${Number.isInteger(Number(film.year)) ? Number(film.year) : ""}</td>
+        <td>${Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : ""}</td>
+        <td>${film.futureTimes}</td>
+        <td>${film.links.filter((entry) => entry.ticketLink).length}/${film.links.length}</td>
+        <td>${escapeHtml(director)}</td>
+        <td>${escapeHtml(stars.join(", "))}</td>
+        <td>${escapeHtml(genres.join(", "))}</td>
+        <td>
+          ${
+            !state.staffFavoriteSupported
+              ? '<span class="muted-inline">Schema update required</span>'
+              : state.isAuthed
+                ? `
+            <div class="staff-favorite-controls">
+              <label class="staff-favorite-toggle-wrap">
+                <input data-role="favorite-toggle" type="checkbox" ${film.staffFavorite ? "checked" : ""} ${isFavoriteBusy ? "disabled" : ""} />
+                Favorite
+              </label>
+              <input
+                data-role="favorite-by"
+                class="staff-favorite-by"
+                type="text"
+                value="${escapeHtml(film.staffFavoriteBy)}"
+                placeholder="Staff name (optional)"
+                ${film.staffFavorite && !isFavoriteBusy ? "" : "disabled"}
+              />
+              <button type="button" data-action="save-favorite" class="staff-favorite-save" ${isFavoriteBusy ? "disabled" : ""}>Save</button>
+            </div>
+          `
+                : `<span class="badge ${film.staffFavorite ? "badge-on" : "badge-off"}">${favoriteBadge}</span>`
+          }
+        </td>
+        <td>
+          ${
+            !state.featuredOnPlayweekSupported
+              ? '<span class="muted-inline">Schema update required</span>'
+              : state.isAuthed
+                ? `
+            <div class="featured-controls">
+              <label class="featured-toggle-wrap">
+                <input data-role="featured-toggle" type="checkbox" ${film.featuredOnPlayweek ? "checked" : ""} ${isFeaturedBusy ? "disabled" : ""} />
+                Featured
+              </label>
+              <input
+                data-role="featured-url"
+                class="featured-url"
+                type="url"
+                value="${escapeHtml(film.featuredOnPlayweekUrl)}"
+                placeholder="https://themaineplayweek.com/..."
+                ${film.featuredOnPlayweek && !isFeaturedBusy ? "" : "disabled"}
+              />
+              <button type="button" data-action="save-featured" class="featured-save" ${isFeaturedBusy ? "disabled" : ""}>Save</button>
+            </div>
+          `
+                : `<span class="badge ${film.featuredOnPlayweek ? "badge-on" : "badge-off"}">${featuredBadge}</span>`
+          }
+        </td>
+        <td>
+          ${
+            !state.rankingOverrideSupported
+              ? '<span class="muted-inline">Schema update required</span>'
+              : state.isAuthed
+                ? `
+            <div class="featured-controls">
+              <label class="featured-toggle-wrap">
+                <input data-role="ranking-override-toggle" type="checkbox" ${film.rankingOverride ? "checked" : ""} ${isRankingOverrideBusy ? "disabled" : ""} />
+                Pin to top
+              </label>
+              <button type="button" data-action="save-ranking-override" class="featured-save" ${isRankingOverrideBusy ? "disabled" : ""}>Save</button>
+            </div>
+          `
+                : `<span class="badge ${film.rankingOverride ? "badge-on" : "badge-off"}">${film.rankingOverride ? "Yes" : "No"}</span>`
+          }
+        </td>
+      `;
+      tbody.appendChild(row);
+    }
+
+    const spacerBottom = tbody.querySelector("tr.virtual-scroll-spacer-bottom");
+    if (spacerBottom) spacerBottom.remove();
+
+    const spacerBottomNew = document.createElement("tr");
+    spacerBottomNew.className = "virtual-scroll-spacer-bottom";
+    spacerBottomNew.style.height = (Math.max(0, filtered.length - endIndex) * VIRTUAL_SCROLL_ROW_HEIGHT) + "px";
+    tbody.appendChild(spacerBottomNew);
+  };
+
+  scrollContainer.addEventListener("scroll", renderWindow);
+
+  table.appendChild(tbody);
+  scrollContainer.appendChild(table);
+  wrap.appendChild(scrollContainer);
   elements.catalogList.appendChild(wrap);
+
+  renderWindow();
 }
 
 async function saveStaffFavorite(row) {

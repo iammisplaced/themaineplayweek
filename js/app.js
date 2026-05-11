@@ -193,6 +193,7 @@ const elements = {
   adminToggle: document.getElementById("adminToggle"),
   adminPanel: document.getElementById("adminPanel"),
   adminIntroText: document.getElementById("adminIntroText"),
+  adminDrawerLoading: document.getElementById("adminDrawerLoading"),
   adminAuthGate: document.getElementById("adminAuthGate"),
   adminAuthMessage: document.getElementById("adminAuthMessage"),
   adminControls: document.getElementById("adminControls"),
@@ -272,8 +273,6 @@ const elements = {
   promoSettingsList: document.getElementById("promoSettingsList"),
   saveAllAdmin: document.getElementById("saveAllAdmin"),
   saveAllPromos: document.getElementById("saveAllPromos"),
-  adminJson: document.getElementById("adminJson"),
-  applyJson: document.getElementById("applyJson"),
   downloadCsvTemplate: document.getElementById("downloadCsvTemplate"),
   uploadCsv: document.getElementById("uploadCsv"),
   adminMessage: document.getElementById("adminMessage"),
@@ -285,7 +284,6 @@ let betaBannerRotationInterval = null;
 let lastViewportWidth = window.innerWidth;
 let appBootComplete = false;
 let pageLoadComplete = document.readyState === "complete";
-let adminJsonSyncTimeout = null;
 
 setLoadingState(true);
 
@@ -795,10 +793,23 @@ function bindEvents() {
       elements.adminAuthMessage.textContent = "";
     }
     if (open) {
-      loadAdminSettings();
-      syncAdminEditor();
-      syncAdminSectionUI();
-      updateAdminAuthUI();
+      elements.adminDrawerLoading?.classList.remove("hidden");
+      elements.adminPanel.style.pointerEvents = "none";
+      const startTime = performance.now();
+      setTimeout(() => {
+        loadAdminSettings();
+        syncAdminEditor();
+        syncAdminSectionUI();
+        updateAdminAuthUI();
+
+        const elapsed = performance.now() - startTime;
+        const minDisplayTime = 200;
+        const remainingTime = Math.max(0, minDisplayTime - elapsed);
+        setTimeout(() => {
+          elements.adminDrawerLoading?.classList.add("hidden");
+          elements.adminPanel.style.pointerEvents = "auto";
+        }, remainingTime);
+      }, 0);
     }
   });
 
@@ -1529,21 +1540,6 @@ function bindEvents() {
     syncAdminEditor();
     render();
     elements.adminMessage.textContent = "Festival added.";
-  });
-
-  elements.applyJson.addEventListener("click", () => {
-    if (!requireAdminAuth()) return;
-    try {
-      const parsed = JSON.parse(elements.adminJson.value);
-      validateData(parsed);
-      state.data = parsed;
-      initializeAdminState();
-      syncAdminEditor();
-      render();
-      elements.adminMessage.textContent = "JSON applied. Click Save All Changes to sync Supabase.";
-    } catch (error) {
-      elements.adminMessage.textContent = `Invalid JSON: ${error.message}`;
-    }
   });
 
   elements.downloadCsvTemplate?.addEventListener("click", () => {
@@ -2324,20 +2320,6 @@ function syncAdminEditor() {
   renderShowingsList();
   renderPromoSettingsEditor();
   renderFestivalSettingsEditor();
-  if (!elements.adminPanel?.classList.contains("open")) return;
-  scheduleAdminJsonSync();
-}
-
-function scheduleAdminJsonSync() {
-  if (!elements.adminJson) return;
-  if (adminJsonSyncTimeout) {
-    clearTimeout(adminJsonSyncTimeout);
-    adminJsonSyncTimeout = null;
-  }
-  adminJsonSyncTimeout = setTimeout(() => {
-    adminJsonSyncTimeout = null;
-    elements.adminJson.value = JSON.stringify(stripInternalFields(state.data), null, 2);
-  }, 0);
 }
 
 function initializeAdminState() {

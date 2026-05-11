@@ -10,6 +10,10 @@
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png" />
+    <link rel="icon" href="assets/icons/favicon.ico" />
     <link rel="stylesheet" href="css/admin-films.css" />
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QBSZ931Z30"></script>
@@ -56,7 +60,12 @@
         </section>
 
         <section id="summary" class="panel summary"></section>
-        <section id="catalogList" class="catalog" aria-live="polite"></section>
+        <section id="catalogList" class="catalog" aria-live="polite">
+          <div id="loadingSpinner" class="loading-spinner hidden">
+            <div class="spinner"></div>
+            <p>Loading catalog...</p>
+          </div>
+        </section>
       </section>
 
       <p id="status" class="status" role="status"></p>

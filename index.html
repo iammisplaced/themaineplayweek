@@ -133,6 +133,9 @@
 
       <section id="adminPanel" class="admin-panel" aria-label="Admin panel">
         <h2>Admin</h2>
+        <div id="adminDrawerLoading" class="admin-drawer-loading hidden">
+          <div class="admin-spinner-small"></div>
+        </div>
         <p id="adminIntroText">Sign in with Supabase magic link to edit live data.</p>
 
         <section id="adminAuthGate" class="admin-auth-gate hidden">
@@ -234,13 +237,6 @@
                 <ul id="showingsList" class="admin-list"></ul>
               </section>
             </div>
-
-            <details class="admin-advanced">
-              <summary>Advanced: Edit Raw JSON</summary>
-              <label for="adminJson">Showtimes JSON</label>
-              <textarea id="adminJson" rows="16" spellcheck="false"></textarea>
-              <button id="applyJson">Apply Raw JSON Changes</button>
-            </details>
 
             <div class="admin-actions">
               <button id="saveAllAdmin">Save All Changes</button>
