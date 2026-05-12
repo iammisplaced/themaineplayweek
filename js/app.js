@@ -163,6 +163,7 @@ const elements = {
   publicSearchInput: document.getElementById("publicSearchInput"),
   dayPickerWrap: document.getElementById("dayPickerWrap"),
   dayPickerInput: document.getElementById("dayPickerInput"),
+  dayPickerDisplayLabel: document.getElementById("dayPickerDisplayLabel"),
   dayRadiusInput: document.getElementById("dayRadiusInput"),
   dayPrevButton: document.getElementById("dayPrevButton"),
   dayNextButton: document.getElementById("dayNextButton"),
@@ -5694,6 +5695,7 @@ function syncDayPickerUI(activeDay) {
   if (!activeDay) {
     elements.dayPickerInput.value = "";
     elements.dayPickerInput.title = "Select a date";
+    if (elements.dayPickerDisplayLabel) elements.dayPickerDisplayLabel.textContent = "";
     elements.dayPrevButton.disabled = true;
     elements.dayNextButton.disabled = true;
     return;
@@ -5701,6 +5703,12 @@ function syncDayPickerUI(activeDay) {
 
   elements.dayPickerInput.value = activeDay;
   elements.dayPickerInput.title = formatLongDisplayDate(activeDay);
+  if (elements.dayPickerDisplayLabel) {
+    const isNarrow = window.matchMedia("(max-width: 640px)").matches;
+    elements.dayPickerDisplayLabel.textContent = isNarrow
+      ? formatShortDate(activeDay)
+      : formatDisplayDate(activeDay);
+  }
 }
 
 function buildSingleDayGroups(theatres, selectedDate) {
