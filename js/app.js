@@ -6370,6 +6370,18 @@ function formatDisplayDate(dateIso) {
   }).format(date);
 }
 
+function formatShortDate(dateIso) {
+  const date = parseIsoDate(dateIso);
+  if (!date) return dateIso;
+  const dayDiff = getDayDifferenceFromToday(date);
+  if (dayDiff === 0) return "Today";
+  if (dayDiff === 1) return "Tomorrow";
+  if (dayDiff > 1 && dayDiff <= 6) {
+    return new Intl.DateTimeFormat("en-US", { weekday: "short" }).format(date);
+  }
+  return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(date);
+}
+
 function formatLongDisplayDate(dateIso) {
   const date = parseIsoDate(dateIso);
   if (!date) return dateIso;
