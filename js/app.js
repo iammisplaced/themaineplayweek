@@ -705,12 +705,18 @@ function bindEvents() {
     state.locationChooserSeen = true;
     persistLocationChooserSeen();
     closeLocationChooserModal();
+    if (state.view === "days" && !hasConfiguredLocationPreference()) {
+      setView("films", { persist: true });
+    }
   });
 
   elements.locationChooserModal?.addEventListener("cancel", () => {
     state.locationChooserSeen = true;
     persistLocationChooserSeen();
     setLocationChooserMessage("");
+    if (state.view === "days" && !hasConfiguredLocationPreference()) {
+      setView("films", { persist: true });
+    }
   });
 
   elements.useDeviceLocation?.addEventListener("click", async () => {
@@ -1673,6 +1679,10 @@ function setView(view, options = {}) {
   syncPublicSearchUI();
   refreshLocationChooser();
   maybeShowLocationChooserOnFirstVisit();
+  if (state.view === "days" && !hasConfiguredLocationPreference()) {
+    state.locationChooserSeen = false;
+    openLocationChooserModal();
+  }
   if ((state.view === "theatres" || state.view === "days") && hasConfiguredLocationPreference()) {
     void ensureTheatreDistanceSort();
   }
@@ -4353,6 +4363,16 @@ function render() {
           const filmComparison = buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
           if (filmComparison !== 0) return filmComparison;
           return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
+        }
+        if (state.view === "days") {
+          const keyA = buildTheatreDistanceKey({ name: a.theatre, city: a.city, address: a.address });
+          const keyB = buildTheatreDistanceKey({ name: b.theatre, city: b.city, address: b.address });
+          const distanceA = state.theatreDistanceByKey.get(keyA);
+          const distanceB = state.theatreDistanceByKey.get(keyB);
+          const hasDistanceA = Number.isFinite(distanceA);
+          const hasDistanceB = Number.isFinite(distanceB);
+          if (hasDistanceA && hasDistanceB && distanceA !== distanceB) return distanceA - distanceB;
+          if (hasDistanceA !== hasDistanceB) return hasDistanceA ? -1 : 1;
         }
         return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
       });
