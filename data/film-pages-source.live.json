@@ -9097,15 +9097,22 @@
       "title": "Clueless",
       "year": 1996,
       "tmdbId": "9603",
-      "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
-      "popularity": 0,
-      "voteAverage": 0,
-      "voteCount": 0,
+      "description": "Shallow, rich and socially successful Cher is at the top of her Beverly Hills high school's pecking scale. Seeing herself as a matchmaker, Cher first coaxes two teachers into dating each other. Emboldened by her success, she decides to give hopelessly klutzy new student Tai a makeover. When Tai becomes more popular than she is, Cher realizes that her disapproving ex-stepbrother was right about how misguided she was -- and falls for him.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/8AwVTcgpTnmeOs4TdTWqcFDXEsA.jpg",
+      "director": "Amy Heckerling",
+      "genres": [
+        "Comedy",
+        "Romance"
+      ],
+      "stars": [
+        "Alicia Silverstone",
+        "Stacey Dash",
+        "Brittany Murphy"
+      ],
+      "releaseDate": "1995-07-19",
+      "popularity": 6.7544,
+      "voteAverage": 7.255,
+      "voteCount": 4799,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -49128,8 +49135,24 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "legacyTicketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
-      "theatres": [],
-      "showings": []
+      "theatres": [
+        "Nickelodeon Cinemas, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-06-10",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "theatre": "Nickelodeon Cinemas",
+          "city": "Portland",
+          "theatreWebsite": "patriotcinemas.com",
+          "ticketLink": "https://ticketing.useast.veezi.com/sessions/?siteToken=67qh4taxvaz0kwn2d8yyhapbg0",
+          "latitude": 43.6575821,
+          "longitude": -70.2558618
+        }
+      ]
     },
     {
       "title": "The Day Iceland Stood Still",
@@ -58800,43 +58823,6 @@
       "legacyTicketLink": "",
       "theatres": [],
       "showings": []
-    },
-    {
-      "title": "The Dark Crystal",
-      "year": 2026,
-      "tmdbId": "",
-      "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
-      "popularity": 0,
-      "voteAverage": 0,
-      "voteCount": 0,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "https://www.patriotcinemas.com/movie/the-dark-crystal",
-      "theatres": [
-        "Nickelodeon Cinemas, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-06-10",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/the-dark-crystal",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        }
-      ]
     },
     {
       "title": "Amour",
