@@ -10663,113 +10663,18 @@
       ]
     },
     {
-      "title": "Maine Documentary Shorts",
-      "year": 2026,
-      "tmdbId": "",
-      "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
-      "popularity": 0,
-      "voteAverage": 0,
-      "voteCount": 0,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "",
-      "theatres": [
-        "Waterville Opera House, Waterville"
-      ],
-      "showings": [
-        {
-          "date": "2026-07-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "Maine International Film Festival",
-          "room": "",
-          "theatre": "Waterville Opera House",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/operahouse/home/",
-          "ticketLink": "https://www.watervillecreates.org/operahouse/home/",
-          "latitude": 44.5498254,
-          "longitude": -69.6290397
-        },
-        {
-          "date": "2026-07-19",
-          "time": "1:00 PM",
-          "isPremium": false,
-          "festivalName": "Maine International Film Festival",
-          "room": "",
-          "theatre": "Waterville Opera House",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/operahouse/home/",
-          "ticketLink": "https://www.watervillecreates.org/operahouse/home/",
-          "latitude": 44.5498254,
-          "longitude": -69.6290397
-        }
-      ]
-    },
-    {
-      "title": "Maine Narrative Shorts",
-      "year": 2026,
-      "tmdbId": "",
-      "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
-      "popularity": 0,
-      "voteAverage": 0,
-      "voteCount": 0,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "",
-      "theatres": [
-        "Waterville Opera House, Waterville"
-      ],
-      "showings": [
-        {
-          "date": "2026-07-17",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "Maine International Film Festival",
-          "room": "",
-          "theatre": "Waterville Opera House",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/operahouse/home/",
-          "ticketLink": "https://www.watervillecreates.org/operahouse/home/",
-          "latitude": 44.5498254,
-          "longitude": -69.6290397
-        },
-        {
-          "date": "2026-07-18",
-          "time": "1:00 PM",
-          "isPremium": false,
-          "festivalName": "Maine International Film Festival",
-          "room": "",
-          "theatre": "Waterville Opera House",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/operahouse/home/",
-          "ticketLink": "https://www.watervillecreates.org/operahouse/home/",
-          "latitude": 44.5498254,
-          "longitude": -69.6290397
-        }
-      ]
-    },
-    {
       "title": "Maine Student Film + Video Festival",
       "year": 2026,
       "tmdbId": "",
-      "description": "",
-      "posterUrl": "",
+      "description": "Celebrating the best of student filmmaking in the state!",
+      "posterUrl": "https://static-a.eventive.org/1780674965171temp-1780674965070-still.jpg",
       "director": "",
-      "genres": [],
+      "genres": [
+        "Documentary",
+        "Drama",
+        "Comedy",
+        "Experimental"
+      ],
       "stars": [],
       "releaseDate": "",
       "popularity": 0,
@@ -20899,43 +20804,6 @@
         {
           "date": "2026-07-13",
           "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "Maine International Film Festival",
-          "room": "Theatre 1",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/mainefilmcenter/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        }
-      ]
-    },
-    {
-      "title": "Shorts from Québec",
-      "year": 2026,
-      "tmdbId": "",
-      "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
-      "popularity": 0,
-      "voteAverage": 0,
-      "voteCount": 0,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "legacyTicketLink": "",
-      "theatres": [
-        "Maine Film Center, Waterville"
-      ],
-      "showings": [
-        {
-          "date": "2026-07-17",
-          "time": "3:00 PM",
           "isPremium": false,
           "festivalName": "Maine International Film Festival",
           "room": "Theatre 1",
