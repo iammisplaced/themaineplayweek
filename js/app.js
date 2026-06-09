@@ -4484,6 +4484,16 @@ function render() {
         } else {
           if (state.view === "festivals") {
             item.classList.add("festival-show-item");
+            row.classList.add("has-poster");
+            poster.onerror = () => {
+              poster.onerror = null;
+              poster.src = NO_POSTER_IMAGE_URL;
+            };
+            poster.src = show.posterUrl || NO_POSTER_IMAGE_URL;
+            poster.alt = show.posterUrl
+              ? `Poster for ${show.film}`
+              : `No poster available for ${show.film}`;
+            poster.classList.remove("hidden");
             main.textContent = show.film || show.theatre || "Showtime";
             meta.textContent = [show.theatre || "", show.room || show.city || ""]
               .filter(Boolean)
