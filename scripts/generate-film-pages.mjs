@@ -1499,11 +1499,11 @@ function resolveRelativeAssetPath(url, depthToRoot) {
 
 function buildFilmFactsMarkup(film, synopsis) {
   const facts = [
-    { label: "Synopsis", value: synopsis || "Not listed" },
-    { label: "Director", value: film.director || "Not listed" },
-    { label: "Genres", value: film.genres.length ? film.genres.join(", ") : "Not listed" },
-    { label: "Stars", value: film.stars.length ? film.stars.join(", ") : "Not listed" },
-    { label: "Release Date", value: film.releaseDate || "Not listed" },
+    { label: "Synopsis", value: synopsis || "Not listed", allowHtml: true },
+    { label: "Director", value: film.director || "Not listed", allowHtml: false },
+    { label: "Genres", value: film.genres.length ? film.genres.join(", ") : "Not listed", allowHtml: false },
+    { label: "Stars", value: film.stars.length ? film.stars.join(", ") : "Not listed", allowHtml: false },
+    { label: "Release Date", value: film.releaseDate || "Not listed", allowHtml: false },
   ];
 
   return facts
@@ -1511,9 +1511,38 @@ function buildFilmFactsMarkup(film, synopsis) {
       (fact) =>
         `<div class="film-fact"><span class="film-fact-label">${escapeHtml(
           fact.label
-        )}</span><span class="film-fact-value">${escapeHtml(fact.value)}</span></div>`
+        )}</span><span class="film-fact-value">${fact.allowHtml ? sanitizeHtmlForSynopsis(fact.value) : escapeHtml(fact.value)}</span></div>`
     )
     .join("");
+}
+
+function sanitizeHtmlForSynopsis(value) {
+  const text = String(value || "");
+
+  let escaped = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+  const safeTagPatterns = [
+    { pattern: /&lt;b&gt;/g, replacement: "<b>" },
+    { pattern: /&lt;\/b&gt;/g, replacement: "</b>" },
+    { pattern: /&lt;i&gt;/g, replacement: "<i>" },
+    { pattern: /&lt;\/i&gt;/g, replacement: "</i>" },
+    { pattern: /&lt;em&gt;/g, replacement: "<em>" },
+    { pattern: /&lt;\/em&gt;/g, replacement: "</em>" },
+    { pattern: /&lt;strong&gt;/g, replacement: "<strong>" },
+    { pattern: /&lt;\/strong&gt;/g, replacement: "</strong>" },
+    { pattern: /&lt;br\s*\/?&gt;/g, replacement: "<br>" },
+  ];
+
+  for (const { pattern, replacement } of safeTagPatterns) {
+    escaped = escaped.replace(pattern, replacement);
+  }
+
+  return escaped;
 }
 
 function buildTmdbMovieUrl(tmdbId) {
