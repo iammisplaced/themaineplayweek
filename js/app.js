@@ -106,6 +106,8 @@ const state = {
   loadedFromSupabaseThisSession: false,
   supabaseBaselinePayload: null,
   expandedFilmGroups: new Set(),
+  expandedFestivals: new Set(),
+  expandedFestivalDays: new Set(),
   theatreDistanceByKey: new Map(),
   theatreDistanceStatus: "idle",
   theatreDistanceError: "",
@@ -518,6 +520,40 @@ function bindEvents() {
   });
 
   elements.results.addEventListener("click", (event) => {
+    const festivalToggle = event.target.closest(".festival-toggle");
+    if (festivalToggle) {
+      const festivalKey = festivalToggle.dataset.festivalKey;
+      if (festivalKey) {
+        if (state.expandedFestivals.has(festivalKey)) {
+          state.expandedFestivals.delete(festivalKey);
+        } else {
+          state.expandedFestivals.add(festivalKey);
+        }
+        render();
+      }
+      return;
+    }
+
+    const festivalShowMore = event.target.closest(".festival-show-more");
+    if (festivalShowMore) {
+      const dayKey = festivalShowMore.dataset.dayKey;
+      if (dayKey) {
+        state.expandedFestivalDays.add(dayKey);
+        render();
+      }
+      return;
+    }
+
+    const festivalShowFewer = event.target.closest(".festival-show-fewer");
+    if (festivalShowFewer) {
+      const dayKey = festivalShowFewer.dataset.dayKey;
+      if (dayKey) {
+        state.expandedFestivalDays.delete(dayKey);
+        render();
+      }
+      return;
+    }
+
     const filmExpandToggle = event.target.closest(".film-expand-toggle");
     if (filmExpandToggle) {
       const filmPageUrl = String(filmExpandToggle.dataset.filmPageUrl || "").trim();
@@ -4202,6 +4238,11 @@ function render() {
     }
     if (group.festivalInfo && state.view === "festivals") {
       card.classList.add("festival-card");
+      const festivalKey = `festival-${group.festivalInfo.id || groupName}`;
+      const festivalExpanded = state.expandedFestivals.has(festivalKey);
+      card.dataset.festivalKey = festivalKey;
+      card.classList.toggle("festival-card-collapsed", !festivalExpanded);
+
       const festivalPrimaryColor = String(group.festivalInfo.primaryColor || "").trim();
       if (festivalPrimaryColor) {
         card.style.setProperty("--festival-accent", festivalPrimaryColor);
@@ -4225,6 +4266,16 @@ function render() {
         groupLink.href = festivalWebsite;
         groupLink.textContent = "Visit festival website";
         groupLink.classList.remove("hidden");
+      }
+
+      if (filmExpandToggle) {
+        filmExpandToggle.classList.add("festival-toggle");
+        filmExpandToggle.dataset.festivalKey = festivalKey;
+        const chevron = festivalExpanded ? "▼" : "▶";
+        filmExpandToggle.innerHTML = `<span class="festival-chevron">${chevron}</span>`;
+        filmExpandToggle.setAttribute("aria-expanded", String(festivalExpanded));
+        filmExpandToggle.setAttribute("aria-label", festivalExpanded ? `Collapse ${group.festivalInfo.name}` : `Expand ${group.festivalInfo.name}`);
+        filmExpandToggle.classList.remove("hidden");
       }
     }
     if (isFilmsView) {
@@ -4386,17 +4437,80 @@ function render() {
         ? expandFestivalShowsByDate(showsToRender)
         : null;
       let lastFestivalDateHeader = "";
+      let showsInCurrentDay = 0;
+      let showMoreButtonAddedForDay = false;
+      const festivalKey = `festival-${group.festivalInfo?.id || groupName}`;
+      const festivalExpanded = state.view === "festivals" && state.expandedFestivals.has(festivalKey);
+
+      // Group shows by date for festivals to track show counts
+      const showsByDate = {};
+      if (state.view === "festivals" && festivalShowsToRender) {
+        for (const show of festivalShowsToRender) {
+          const showDate = String(show?.festivalDate || "").trim();
+          if (showDate) {
+            if (!showsByDate[showDate]) showsByDate[showDate] = [];
+            showsByDate[showDate].push(show);
+          }
+        }
+      }
 
       for (const show of (festivalShowsToRender || showsToRender)) {
         if (state.view === "festivals") {
           const showDate = String(show?.festivalDate || "").trim();
           if (showDate && showDate !== lastFestivalDateHeader) {
+            // Add "Show fewer" button for the previous day if it was expanded
+            if (lastFestivalDateHeader && showMoreButtonAddedForDay) {
+              const previousDayKey = `day-${festivalKey}-${lastFestivalDateHeader}`;
+              if (state.expandedFestivalDays.has(previousDayKey)) {
+                const showFewerButton = document.createElement("li");
+                showFewerButton.className = "festival-show-more-button";
+                const button = document.createElement("button");
+                button.type = "button";
+                button.className = "festival-show-fewer";
+                button.dataset.dayKey = previousDayKey;
+                button.textContent = "Show fewer";
+                showFewerButton.appendChild(button);
+                list.appendChild(showFewerButton);
+              }
+            }
+
             const dateDivider = document.createElement("li");
             dateDivider.className = "festival-date-divider";
             dateDivider.textContent = formatDisplayDate(showDate);
             list.appendChild(dateDivider);
             lastFestivalDateHeader = showDate;
+            showsInCurrentDay = 0;
+            showMoreButtonAddedForDay = false;
           }
+
+          // For festivals, limit to first 4 shows per day unless day is expanded
+          const dayKey = `day-${festivalKey}-${String(show?.festivalDate || "").trim()}`;
+          const dayExpanded = state.expandedFestivalDays.has(dayKey);
+          const totalShowsForDay = showsByDate[String(show?.festivalDate || "").trim()]?.length || 0;
+
+          if (!dayExpanded && showsInCurrentDay >= 4) {
+            // Add "Show more" button once after 4th show
+            if (!showMoreButtonAddedForDay && totalShowsForDay > 4) {
+              const showMoreButton = document.createElement("li");
+              showMoreButton.className = "festival-show-more-button";
+              const button = document.createElement("button");
+              button.type = "button";
+              button.className = "festival-show-more";
+              button.dataset.dayKey = dayKey;
+              button.textContent = "Show more";
+              showMoreButton.appendChild(button);
+              list.appendChild(showMoreButton);
+              showMoreButtonAddedForDay = true;
+            }
+            continue;
+          }
+
+          // Mark that we should add "show fewer" after all shows for this day
+          if (dayExpanded && !showMoreButtonAddedForDay && totalShowsForDay > 4) {
+            showMoreButtonAddedForDay = true; // Reuse flag to track we've handled this day
+          }
+
+          showsInCurrentDay++;
         }
         const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
         const main = item.querySelector(".show-main");
@@ -4550,18 +4664,49 @@ function render() {
             item.appendChild(rowActions);
           }
         }
-        list.appendChild(item);
+
+        if (state.view === "festivals") {
+          const showDate = String(show?.festivalDate || "").trim();
+          const dayKey = `day-${festivalKey}-${showDate}`;
+          const dayExpanded = state.expandedFestivalDays.has(dayKey);
+          // Show first 4 shows always, then only show more if day is expanded
+          if (festivalExpanded && (showsInCurrentDay <= 4 || dayExpanded)) {
+            list.appendChild(item);
+          }
+        } else {
+          list.appendChild(item);
+        }
       }
 
-      if (state.view === "festivals" && shows.length === 0) {
-        const placeholder = document.createElement("li");
-        placeholder.className = "festival-empty-placeholder";
-        placeholder.textContent = "Programming coming soon.";
-        list.appendChild(placeholder);
+      if (state.view === "festivals") {
+        // Add "Show fewer" button for the last day if it was expanded
+        if (lastFestivalDateHeader && showMoreButtonAddedForDay) {
+          const lastDayKey = `day-${festivalKey}-${lastFestivalDateHeader}`;
+          const showsByLastDay = showsByDate[lastFestivalDateHeader]?.length || 0;
+          if (state.expandedFestivalDays.has(lastDayKey) && showsByLastDay > 4) {
+            const showFewerButton = document.createElement("li");
+            showFewerButton.className = "festival-show-more-button";
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "festival-show-fewer";
+            button.dataset.dayKey = lastDayKey;
+            button.textContent = "Show fewer";
+            showFewerButton.appendChild(button);
+            list.appendChild(showFewerButton);
+          }
+        }
+
+        list.classList.toggle("hidden", !festivalExpanded);
+        if (festivalExpanded && shows.length === 0) {
+          const placeholder = document.createElement("li");
+          placeholder.className = "festival-empty-placeholder";
+          placeholder.textContent = "Programming coming soon.";
+          list.appendChild(placeholder);
+        }
       }
     }
 
-    if (state.view === "theatres" && filmExpandToggle && !filmExpandToggle.classList.contains("hidden")) {
+    if ((state.view === "theatres" || state.view === "festivals") && filmExpandToggle && !filmExpandToggle.classList.contains("hidden")) {
       card.appendChild(filmExpandToggle);
     }
 
