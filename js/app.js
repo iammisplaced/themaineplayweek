@@ -1649,9 +1649,16 @@ function bindEvents() {
       initializeAdminState();
       syncAdminEditor();
       render();
-      elements.adminMessage.textContent =
-        `Imported CSV: ${result.rowsProcessed} rows, ${result.showingDatesUpdated} showing date entries updated, ${result.filmsCreated || 0} films created. ` +
-        "Click Save All Changes to sync Supabase.";
+      let message =
+        `Imported CSV: ${result.rowsProcessed} rows, ${result.showingDatesUpdated} showing date entries updated, ${result.filmsCreated || 0} films created.`;
+      if (result.createdFilms && result.createdFilms.length > 0) {
+        const filmList = result.createdFilms
+          .map((f) => `"${f.title}" (${f.theatreName}, ${f.theatreCity})`)
+          .join("; ");
+        message += ` Added films: ${filmList}.`;
+      }
+      message += " Click Save All Changes to sync Supabase.";
+      elements.adminMessage.textContent = message;
       elements.uploadCsv.value = "";
     } catch (error) {
       elements.adminMessage.textContent = `CSV import failed: ${error.message}`;
@@ -2902,6 +2909,7 @@ function importShowtimesCsv(data, csvContent) {
     rowsProcessed: 0,
     showingDatesUpdated: 0,
     filmsCreated: 0,
+    createdFilms: [],
   };
 
   for (let rowIndex = 1; rowIndex < rows.length; rowIndex += 1) {
@@ -2997,6 +3005,7 @@ function importShowtimesCsv(data, csvContent) {
       theatre.films.push(film);
       sortFilms(theatre.films);
       stats.filmsCreated += 1;
+      stats.createdFilms.push({ title: filmTitle, theatreName: theatre.name, theatreCity: theatre.city });
     } else if (filmMatches.length > 1 && filmTmdbId === null && filmYear === null) {
       throw new Error(
         `Row ${rowNumber}: multiple "${filmTitle}" entries at "${theatre.name}". Include film_year or film_tmdb_id.`
