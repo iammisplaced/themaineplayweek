@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { renderMapMarkers, showMapToggle, hideMapToggle } from "./map-view.js";
 
 const DATA_URL = "./data/showtimes.json";
 const FILM_PAGES_LIVE_SOURCE_URL = "./data/film-pages-source.live.json";
@@ -1835,6 +1836,13 @@ function setView(view, options = {}) {
   }
   if ((state.view === "theatres" || state.view === "days") && hasConfiguredLocationPreference()) {
     void ensureTheatreDistanceSort();
+  }
+
+  // Show/hide map toggle based on view
+  if (state.view === "theatres") {
+    showMapToggle();
+  } else {
+    hideMapToggle();
   }
   updateTheatreSortStatus();
   render();
@@ -4839,6 +4847,26 @@ function render() {
   }
 
   renderResultCards(cards);
+
+  // Render theatres on map if in theatre view
+  if (state.view === "theatres" && entries.length > 0) {
+    const theatreList = entries.flatMap(([, group]) => {
+      return Object.values(group.theatres || {}).map(theatre => ({
+        id: theatre.id,
+        name: theatre.name,
+        city: theatre.city,
+        address: theatre.address,
+        phone: theatre.phone,
+        website: theatre.website,
+        latitude: theatre.latitude,
+        longitude: theatre.longitude,
+      }));
+    });
+
+    // Get user location if available
+    const userLocation = state.userLocation || null;
+    renderMapMarkers(theatreList, userLocation);
+  }
 }
 
 function buildPromotedAdCards() {
