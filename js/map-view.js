@@ -175,9 +175,19 @@ function renderCachedMarkers() {
       dashArray: '5, 5',
     }).addTo(mapInstance);
   } else {
-    console.log('No user location, showing entire state');
-    // Show entire Maine/state if no user location
-    mapInstance.setView([45.2538, -69.4455], 7); // Maine center
+    console.log('No user location, fitting all theatres in view');
+    // Fit all theatres in view if no user location
+    if (cachedTheatres.length > 0) {
+      const bounds = L.latLngBounds();
+      cachedTheatres.forEach(theatre => {
+        if (theatre.latitude && theatre.longitude) {
+          bounds.extend([theatre.latitude, theatre.longitude]);
+        }
+      });
+      if (bounds.isValid()) {
+        mapInstance.fitBounds(bounds, { padding: [50, 50] });
+      }
+    }
   }
 
   // Add theatre markers
