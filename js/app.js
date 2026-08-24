@@ -388,11 +388,19 @@ async function loadLatestSubstackPost() {
     const post = await fetchLatestSubstackPost();
     if (!post) throw new Error("No posts returned");
 
+    console.log("[Substack] Final post object to display:", post);
+
     const title = String(post.title || "Latest post on Substack");
     const link = String(post.canonical_url || "https://themaineplayweek.substack.com");
     const subtitle = buildSubtitle(post.subtitle || post.description || "");
     const byline = buildSubstackByline(post);
     const imageUrl = normalizeSubstackImageUrl(post.cover_image);
+
+    console.log("[Substack Display] Title:", title);
+    console.log("[Substack Display] Link:", link);
+    console.log("[Substack Display] Subtitle:", subtitle);
+    console.log("[Substack Display] Byline:", byline);
+    console.log("[Substack Display] Image URL:", imageUrl);
 
     elements.latestPostTitle.textContent = title;
     elements.latestPostSubtitle.textContent = subtitle || "Read the latest post from The Maine Playweek.";
@@ -410,7 +418,7 @@ async function loadLatestSubstackPost() {
     }
 
     syncLatestPostVisibility();
-    console.log("[Substack] Successfully loaded latest post:", title);
+    console.log("[Substack] ✓ Successfully loaded latest post:", title);
   } catch (error) {
     console.warn("[Substack] Failed to load latest post:", error.message);
     // Keep fallback content when feed access is blocked.
@@ -472,16 +480,25 @@ async function fetchLatestSubstackPost() {
 function parseRss2JsonPost(jsonText) {
   try {
     const data = JSON.parse(jsonText);
+    console.log("[RSS2JSON] Raw response:", data);
+
     if (!data.items || !Array.isArray(data.items) || data.items.length === 0) return null;
 
     const item = data.items[0];
-    return {
+    console.log("[RSS2JSON] Latest item (raw):", item);
+
+    const parsedPost = {
       title: item.title || "",
       canonical_url: item.link || "",
       description: stripHtmlTags(item.description || ""),
       cover_image: item.enclosure?.link || extractImageFromContent(item.content || item.description || ""),
       post_date: item.pubDate || "",
     };
+
+    console.log("[RSS2JSON] Parsed post:", parsedPost);
+    console.log("[RSS2JSON] All available fields in item:", Object.keys(item));
+
+    return parsedPost;
   } catch (error) {
     console.warn("[RSS2JSON] Parse error:", error.message);
     return null;
