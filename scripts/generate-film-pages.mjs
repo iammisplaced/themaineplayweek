@@ -62,6 +62,7 @@ async function main() {
   const source = fromSupabase ? await loadFilmSourceFromSupabase() : JSON.parse(await fs.readFile(inputPath, "utf8"));
   const films = normalizeFilms(source)
     .filter(hasUpcomingShowtimes)
+    .map(prunePastShowings)
     .sort(compareFilmsByMainAppRanking);
 
   if (!films.length) {
@@ -483,6 +484,25 @@ function hasUpcomingShowtimes(film) {
     if (minutes !== null && minutes >= nowEt.minutes) return true;
   }
   return false;
+}
+
+function prunePastShowings(film) {
+  const showings = Array.isArray(film?.showings) ? film.showings : [];
+  if (!showings.length) return film;
+
+  const nowEt = getCurrentEasternDateTimeParts();
+  const futureShowings = showings.filter((showing) => {
+    const date = String(showing?.date || "").trim();
+    const time = String(showing?.time || "").trim();
+    if (!date) return false;
+    if (date > nowEt.date) return true;
+    if (date < nowEt.date) return false;
+    const minutes = parseTimeToMinutes(time);
+    // Include showing only if time is parseable and >= now
+    return minutes !== null && minutes >= nowEt.minutes;
+  });
+
+  return { ...film, showings: futureShowings };
 }
 
 function getCurrentEasternDateTimeParts() {
