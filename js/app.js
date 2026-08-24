@@ -429,29 +429,23 @@ function setLatestPostFallback() {
 
 async function fetchLatestSubstackPost() {
   const candidates = [
-    // Try RSS feed with allorigins CORS proxy
+    // Try RSS2JSON service (converts RSS to JSON, better CORS support)
     {
-      url: `https://api.allorigins.win/raw?url=${encodeURIComponent("https://themaineplayweek.substack.com/feed")}`,
-      parser: parseSubstackRssPost,
-      name: "RSS (allorigins)",
+      url: `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://themaineplayweek.substack.com/feed")}`,
+      parser: parseRss2JsonPost,
+      name: "RSS2JSON",
     },
-    // Try RSS with corsproxy
-    {
-      url: `https://corsproxy.io/?${encodeURIComponent("https://themaineplayweek.substack.com/feed")}`,
-      parser: parseSubstackRssPost,
-      name: "RSS (corsproxy.io)",
-    },
-    // Fallback to JSON API with codetabs proxy
+    // Fallback to Substack JSON API with codetabs proxy
     {
       url: `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(SUBSTACK_ARCHIVE_URL)}`,
       parser: parseSubstackJsonPost,
-      name: "JSON (codetabs)",
+      name: "Substack JSON (codetabs)",
     },
-    // Try JSON with allorigins proxy
+    // Try Substack JSON with allorigins proxy
     {
       url: `https://api.allorigins.win/raw?url=${encodeURIComponent(SUBSTACK_ARCHIVE_URL)}`,
       parser: parseSubstackJsonPost,
-      name: "JSON (allorigins)",
+      name: "Substack JSON (allorigins)",
     },
   ];
 
@@ -473,6 +467,31 @@ async function fetchLatestSubstackPost() {
   }
 
   throw lastError || new Error("Unable to fetch latest Substack post");
+}
+
+function parseRss2JsonPost(jsonText) {
+  try {
+    const data = JSON.parse(jsonText);
+    if (!data.items || !Array.isArray(data.items) || data.items.length === 0) return null;
+
+    const item = data.items[0];
+    return {
+      title: item.title || "",
+      canonical_url: item.link || "",
+      description: stripHtmlTags(item.description || ""),
+      cover_image: item.enclosure?.link || extractImageFromContent(item.content || item.description || ""),
+      post_date: item.pubDate || "",
+    };
+  } catch (error) {
+    console.warn("[RSS2JSON] Parse error:", error.message);
+    return null;
+  }
+}
+
+function extractImageFromContent(content) {
+  if (!content) return "";
+  const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/);
+  return imgMatch ? imgMatch[1] : "";
 }
 
 function parseSubstackRssPost(xmlText) {
