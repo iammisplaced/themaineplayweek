@@ -479,8 +479,8 @@ function hasUpcomingShowtimes(film) {
     if (date > nowEt.date) return true;
     if (date < nowEt.date) continue;
     const minutes = parseTimeToMinutes(time);
-    if (minutes === null) return true;
-    if (minutes >= nowEt.minutes) return true;
+    // Only consider a showing upcoming if we can parse the time and it's >= now
+    if (minutes !== null && minutes >= nowEt.minutes) return true;
   }
   return false;
 }
@@ -1678,23 +1678,54 @@ function compareShowTimes(a, b) {
 }
 
 function toSortableMinutes(value) {
-  const raw = String(value || "").trim().toUpperCase();
-  const match = raw.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/);
-  if (!match) return Number.MAX_SAFE_INTEGER;
-  let hour = Number(match[1]) % 12;
-  const minute = Number(match[2]);
-  if (match[3] === "PM") hour += 12;
+  const input = String(value || "").trim();
+
+  // Try 24-hour format first (e.g., "18:30", "6:30")
+  const match24 = /^(\d{1,2}):([0-5]\d)$/.exec(input);
+  if (match24) {
+    const hour = Number(match24[1]);
+    const minute = Number(match24[2]);
+    if (hour >= 0 && hour <= 23) {
+      return hour * 60 + minute;
+    }
+  }
+
+  // Try 12-hour format with optional space before AM/PM (case-insensitive)
+  const match12 = /^(\d{1,2}):([0-5]\d)\s?(AM|PM)$/i.exec(input);
+  if (!match12) return Number.MAX_SAFE_INTEGER;
+
+  let hour = Number(match12[1]) % 12;
+  const minute = Number(match12[2]);
+  const period = match12[3].toUpperCase();
+
+  if (period === "PM") hour += 12;
   return hour * 60 + minute;
 }
 
 function parseTimeToMinutes(value) {
-  const raw = String(value || "").trim().toUpperCase();
-  const match = raw.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/);
-  if (!match) return null;
-  let hour = Number(match[1]) % 12;
-  const minute = Number(match[2]);
+  const input = String(value || "").trim();
+
+  // Try 24-hour format first (e.g., "18:30", "6:30")
+  const match24 = /^(\d{1,2}):([0-5]\d)$/.exec(input);
+  if (match24) {
+    const hour = Number(match24[1]);
+    const minute = Number(match24[2]);
+    if (hour >= 0 && hour <= 23 && Number.isFinite(minute)) {
+      return hour * 60 + minute;
+    }
+  }
+
+  // Try 12-hour format with optional space before AM/PM (case-insensitive)
+  const match12 = /^(\d{1,2}):([0-5]\d)\s?(AM|PM)$/i.exec(input);
+  if (!match12) return null;
+
+  let hour = Number(match12[1]) % 12;
+  const minute = Number(match12[2]);
+  const period = match12[3].toUpperCase();
+
   if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null;
-  if (match[3] === "PM") hour += 12;
+
+  if (period === "PM") hour += 12;
   return hour * 60 + minute;
 }
 
