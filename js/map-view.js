@@ -54,20 +54,19 @@ function toggleMapView() {
 
   // Refresh map size when shown
   if (!isMapActive && mapInstance) {
-    // Use requestAnimationFrame to wait for layout to be calculated
-    requestAnimationFrame(() => {
-      mapInstance.invalidateSize();
-      // Also call it again after a short delay to catch any timing issues
-      setTimeout(() => mapInstance.invalidateSize(), 200);
-    });
-
-    // Listen for window resize to keep map sized correctly
-    window.addEventListener('resize', () => {
-      if (!mapElements.mapContainer.classList.contains('hidden')) {
-        mapInstance.invalidateSize();
-      }
-    });
+    // Force multiple size recalculations
+    setTimeout(() => mapInstance.invalidateSize(), 50);
+    setTimeout(() => mapInstance.invalidateSize(), 150);
+    setTimeout(() => mapInstance.invalidateSize(), 300);
+    setTimeout(() => mapInstance.invalidateSize(), 500);
   }
+
+  // Listen for window resize to keep map sized correctly
+  window.addEventListener('resize', () => {
+    if (mapInstance && !mapElements.mapContainer.classList.contains('hidden')) {
+      mapInstance.invalidateSize();
+    }
+  });
 }
 
 // Initialize Leaflet map
@@ -75,13 +74,24 @@ function initializeMap() {
   // Default center (will be updated with user location)
   const center = [40.0, -95.0];
 
-  mapInstance = L.map(mapElements.mapEl).setView(center, 4);
+  // Ensure container has visible dimensions
+  mapElements.mapEl.style.height = '600px';
+  mapElements.mapEl.style.width = '100%';
+
+  mapInstance = L.map(mapElements.mapEl, {
+    preferCanvas: true,
+  }).setView(center, 4);
 
   // Add OpenStreetMap tiles
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors',
     maxZoom: 18,
   }).addTo(mapInstance);
+
+  // Force size calculation
+  setTimeout(() => {
+    mapInstance.invalidateSize();
+  }, 100);
 }
 
 // Clear existing markers
