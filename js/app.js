@@ -6616,17 +6616,34 @@ function getShowDateTime(dateIso, time12Hour) {
 }
 
 function to24HourTime(time12Hour) {
-  const match = /^(\d{1,2}):([0-5]\d)\s(AM|PM)$/.exec(String(time12Hour).trim());
-  if (!match) return "";
-  let hour = Number(match[1]);
-  const minutes = match[2];
-  const period = match[3];
+  const input = String(time12Hour).trim();
+
+  // Try 24-hour format first (e.g., "18:30", "6:30")
+  const match24 = /^(\d{1,2}):([0-5]\d)$/.exec(input);
+  if (match24) {
+    const hour = Number(match24[1]);
+    const minutes = match24[2];
+    if (hour >= 0 && hour <= 23) {
+      return `${String(hour).padStart(2, "0")}:${minutes}`;
+    }
+  }
+
+  // Try 12-hour format with optional space before AM/PM (e.g., "6:30 PM", "6:30PM", "6:30 pm", "6:30pm")
+  const match12 = /^(\d{1,2}):([0-5]\d)\s?(AM|PM)$/i.exec(input);
+  if (!match12) return "";
+
+  let hour = Number(match12[1]);
+  const minutes = match12[2];
+  const period = match12[3].toUpperCase();
+
   if (hour < 1 || hour > 12) return "";
+
   if (period === "AM") {
     if (hour === 12) hour = 0;
   } else if (hour !== 12) {
     hour += 12;
   }
+
   return `${String(hour).padStart(2, "0")}:${minutes}`;
 }
 
