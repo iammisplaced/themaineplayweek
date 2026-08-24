@@ -426,7 +426,7 @@ async function loadLatestSubstackPost() {
 }
 
 function setLatestPostFallback() {
-  elements.latestPostTitle.textContent = "Latest from Substack";
+  elements.latestPostTitle.textContent = "Latest from The Playweek";
   elements.latestPostSubtitle.textContent = "Read our newest writing on The Maine Playweek Substack.";
   elements.latestPostByline.textContent = "themaineplayweek.substack.com";
   elements.latestPostLink.href = "https://themaineplayweek.substack.com";
