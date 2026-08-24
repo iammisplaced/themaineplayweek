@@ -410,7 +410,9 @@ async function loadLatestSubstackPost() {
     }
 
     syncLatestPostVisibility();
-  } catch {
+    console.log("[Substack] Successfully loaded latest post:", title);
+  } catch (error) {
+    console.warn("[Substack] Failed to load latest post:", error.message);
     // Keep fallback content when feed access is blocked.
   }
 }
@@ -427,24 +429,88 @@ function setLatestPostFallback() {
 
 async function fetchLatestSubstackPost() {
   const candidates = [
-    `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(SUBSTACK_ARCHIVE_URL)}`,
-    SUBSTACK_ARCHIVE_URL,
+    // Try RSS feed first (most reliable)
+    {
+      url: "https://themaineplayweek.substack.com/feed",
+      parser: parseSubstackRssPost,
+    },
+    // Fallback to JSON API with proxy
+    {
+      url: `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(SUBSTACK_ARCHIVE_URL)}`,
+      parser: parseSubstackJsonPost,
+    },
+    // Direct JSON API as last resort
+    {
+      url: SUBSTACK_ARCHIVE_URL,
+      parser: parseSubstackJsonPost,
+    },
   ];
 
   let lastError = null;
-  for (const url of candidates) {
+  for (const candidate of candidates) {
     try {
-      const response = await fetchWithTimeout(url, 4500);
-      if (!response.ok) throw new Error(`Archive request failed (${response.status})`);
-      const posts = await response.json();
-      if (!Array.isArray(posts) || !posts.length) throw new Error("Archive returned no posts");
-      return posts[0];
+      const response = await fetchWithTimeout(candidate.url, 8000);
+      if (!response.ok) throw new Error(`Request failed (${response.status})`);
+      const text = await response.text();
+      const post = candidate.parser(text);
+      if (post) return post;
     } catch (error) {
       lastError = error;
+      console.warn(`[Substack] Failed to fetch from ${candidate.url.split("?")[0]}: ${error.message}`);
     }
   }
 
   throw lastError || new Error("Unable to fetch latest Substack post");
+}
+
+function parseSubstackRssPost(xmlText) {
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xmlText, "application/xml");
+    if (doc.getElementsByTagName("parsererror").length) return null;
+
+    const item = doc.querySelector("item");
+    if (!item) return null;
+
+    const title = item.querySelector("title")?.textContent || "";
+    const link = item.querySelector("link")?.textContent || "";
+    const description = item.querySelector("description")?.textContent || "";
+    const pubDate = item.querySelector("pubDate")?.textContent || "";
+
+    // Extract image from description (RSS encodes images as <img> tags in HTML)
+    let coverImage = "";
+    const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/);
+    if (imgMatch) {
+      coverImage = imgMatch[1];
+    }
+
+    return {
+      title,
+      canonical_url: link,
+      description: stripHtmlTags(description),
+      cover_image: coverImage,
+      post_date: pubDate,
+    };
+  } catch (error) {
+    console.warn("[Substack RSS] Parse error:", error.message);
+    return null;
+  }
+}
+
+function parseSubstackJsonPost(jsonText) {
+  try {
+    const posts = JSON.parse(jsonText);
+    if (!Array.isArray(posts) || !posts.length) return null;
+    return posts[0];
+  } catch (error) {
+    console.warn("[Substack JSON] Parse error:", error.message);
+    return null;
+  }
+}
+
+function stripHtmlTags(html) {
+  if (!html) return "";
+  return html.replace(/<[^>]*>/g, "").trim();
 }
 
 async function fetchWithTimeout(url, timeoutMs) {
