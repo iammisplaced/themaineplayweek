@@ -59,6 +59,11 @@ main().catch((error) => {
 });
 
 async function main() {
+  // Prune past showings from Supabase before generating pages
+  if (fromSupabase) {
+    await prunePastShowingsFromSupabase();
+  }
+
   const source = fromSupabase ? await loadFilmSourceFromSupabase() : JSON.parse(await fs.readFile(inputPath, "utf8"));
   const films = normalizeFilms(source)
     .filter(hasUpcomingShowtimes)
@@ -258,6 +263,82 @@ async function loadFilmSourceFromSupabase() {
 
   const sourceFilms = Array.from(filmById.values()).filter((film) => film.title);
   return { films: sourceFilms };
+}
+
+async function prunePastShowingsFromSupabase() {
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.warn("Skipping Supabase prune: missing Supabase config");
+    return;
+  }
+
+  const restBase = `${supabaseUrl.replace(/\/+$/, "")}/rest/v1`;
+  const nowEt = getCurrentEasternDateTimeParts();
+
+  // Delete all showings with show_date < today
+  const deleteUrl = `${restBase}/showings?show_date=lt.${nowEt.date}`;
+  const deleteResponse = await fetch(deleteUrl, {
+    method: "DELETE",
+    headers: {
+      apikey: supabaseAnonKey,
+      Authorization: `Bearer ${supabaseAnonKey}`,
+      Prefer: "return=minimal",
+    },
+  });
+
+  if (!deleteResponse.ok) {
+    const text = await deleteResponse.text();
+    throw new Error(`Supabase delete past showings failed (${deleteResponse.status}): ${text}`);
+  }
+
+  // For today's showings, fetch and delete the ones that are in the past
+  const todayShowingsUrl = `${restBase}/showings?show_date=eq.${nowEt.date}&select=id,times,premium_times`;
+  const todayResponse = await fetch(todayShowingsUrl, {
+    headers: {
+      apikey: supabaseAnonKey,
+      Authorization: `Bearer ${supabaseAnonKey}`,
+    },
+  });
+
+  if (!todayResponse.ok) {
+    const text = await todayResponse.text();
+    throw new Error(`Supabase fetch today's showings failed (${todayResponse.status}): ${text}`);
+  }
+
+  const todayShowings = await todayResponse.json();
+  if (!Array.isArray(todayShowings)) return;
+
+  // Delete showings where all times (standard and premium) are in the past
+  for (const showing of todayShowings) {
+    const standardTimes = Array.isArray(showing.times) ? showing.times : [];
+    const premiumTimes = Array.isArray(showing.premium_times) ? showing.premium_times : [];
+    const allTimes = [...standardTimes, ...premiumTimes];
+
+    const hasUpcomingTime = allTimes.some((time) => {
+      const minutes = parseTimeToMinutes(time);
+      return minutes !== null && minutes >= nowEt.minutes;
+    });
+
+    if (!hasUpcomingTime) {
+      const deleteShowingUrl = `${restBase}/showings?id=eq.${showing.id}`;
+      const deleteShowingResponse = await fetch(deleteShowingUrl, {
+        method: "DELETE",
+        headers: {
+          apikey: supabaseAnonKey,
+          Authorization: `Bearer ${supabaseAnonKey}`,
+          Prefer: "return=minimal",
+        },
+      });
+
+      if (!deleteShowingResponse.ok) {
+        const text = await deleteShowingResponse.text();
+        console.warn(
+          `Warning: Failed to delete showing ${showing.id} (${deleteShowingResponse.status}): ${text}`
+        );
+      }
+    }
+  }
+
+  console.log("Pruned past showings from Supabase");
 }
 
 async function fetchAllFromSupabase(restBase, apiKey, table, select, orderBy = "", pageSize = 1000) {
