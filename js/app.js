@@ -393,18 +393,18 @@ async function loadLatestSubstackPost() {
     const title = String(post.title || "Latest post on Substack");
     const link = String(post.canonical_url || "https://themaineplayweek.substack.com");
     const subtitle = buildSubtitle(post.subtitle || post.description || "");
-    const byline = buildSubstackByline(post);
+    const author = String(post.author || "The Maine Playweek").trim();
     const imageUrl = normalizeSubstackImageUrl(post.cover_image);
 
     console.log("[Substack Display] Title:", title);
     console.log("[Substack Display] Link:", link);
     console.log("[Substack Display] Subtitle:", subtitle);
-    console.log("[Substack Display] Byline:", byline);
+    console.log("[Substack Display] Author:", author);
     console.log("[Substack Display] Image URL:", imageUrl);
 
     elements.latestPostTitle.textContent = title;
     elements.latestPostSubtitle.textContent = subtitle || "Read the latest post from The Maine Playweek.";
-    elements.latestPostByline.textContent = byline || "The Maine Playweek";
+    elements.latestPostByline.textContent = author;
     elements.latestPostLink.href = link;
 
     if (imageUrl) {
@@ -493,6 +493,7 @@ function parseRss2JsonPost(jsonText) {
       description: stripHtmlTags(item.description || ""),
       cover_image: item.enclosure?.link || extractImageFromContent(item.content || item.description || ""),
       post_date: item.pubDate || "",
+      author: item.author || "",
     };
 
     console.log("[RSS2JSON] Parsed post:", parsedPost);
