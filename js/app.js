@@ -429,34 +429,46 @@ function setLatestPostFallback() {
 
 async function fetchLatestSubstackPost() {
   const candidates = [
-    // Try RSS feed first (most reliable)
+    // Try RSS feed with allorigins CORS proxy
     {
-      url: "https://themaineplayweek.substack.com/feed",
+      url: `https://api.allorigins.win/raw?url=${encodeURIComponent("https://themaineplayweek.substack.com/feed")}`,
       parser: parseSubstackRssPost,
+      name: "RSS (allorigins)",
     },
-    // Fallback to JSON API with proxy
+    // Try RSS with corsproxy
+    {
+      url: `https://corsproxy.io/?${encodeURIComponent("https://themaineplayweek.substack.com/feed")}`,
+      parser: parseSubstackRssPost,
+      name: "RSS (corsproxy.io)",
+    },
+    // Fallback to JSON API with codetabs proxy
     {
       url: `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(SUBSTACK_ARCHIVE_URL)}`,
       parser: parseSubstackJsonPost,
+      name: "JSON (codetabs)",
     },
-    // Direct JSON API as last resort
+    // Try JSON with allorigins proxy
     {
-      url: SUBSTACK_ARCHIVE_URL,
+      url: `https://api.allorigins.win/raw?url=${encodeURIComponent(SUBSTACK_ARCHIVE_URL)}`,
       parser: parseSubstackJsonPost,
+      name: "JSON (allorigins)",
     },
   ];
 
   let lastError = null;
   for (const candidate of candidates) {
     try {
-      const response = await fetchWithTimeout(candidate.url, 8000);
+      const response = await fetchWithTimeout(candidate.url, 10000);
       if (!response.ok) throw new Error(`Request failed (${response.status})`);
       const text = await response.text();
       const post = candidate.parser(text);
-      if (post) return post;
+      if (post) {
+        console.log(`[Substack] Successfully loaded via ${candidate.name}`);
+        return post;
+      }
     } catch (error) {
       lastError = error;
-      console.warn(`[Substack] Failed to fetch from ${candidate.url.split("?")[0]}: ${error.message}`);
+      console.warn(`[Substack] Failed via ${candidate.name}: ${error.message}`);
     }
   }
 
