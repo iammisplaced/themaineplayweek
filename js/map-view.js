@@ -52,9 +52,17 @@ function toggleMapView() {
     initializeMap();
   }
 
-  // Refresh map size when shown
+  // Refresh map size when shown - multiple times to catch timing issues
   if (!isMapActive && mapInstance) {
-    setTimeout(() => mapInstance.invalidateSize(), 100);
+    setTimeout(() => {
+      mapInstance.invalidateSize();
+    }, 50);
+    setTimeout(() => {
+      mapInstance.invalidateSize();
+    }, 150);
+    setTimeout(() => {
+      mapInstance.invalidateSize();
+    }, 300);
   }
 }
 
@@ -151,9 +159,12 @@ export function renderMapMarkers(theatres, userLocation) {
 
   // Add theatre markers
   let addedMarkers = 0;
+  let missingCoords = 0;
+
   theatres.forEach(theatre => {
     if (!theatre.latitude || !theatre.longitude) {
-      console.log('Theatre missing lat/lng:', theatre);
+      console.warn('Theatre missing lat/lng:', theatre.name, theatre);
+      missingCoords++;
       return;
     }
 
@@ -170,7 +181,19 @@ export function renderMapMarkers(theatres, userLocation) {
     addedMarkers++;
   });
 
-  console.log(`Added ${addedMarkers} markers to map`);
+  console.log(`Added ${addedMarkers} markers to map. ${missingCoords} theatres missing coordinates.`);
+
+  // Show message if no markers could be added
+  if (addedMarkers === 0 && theatres.length > 0) {
+    console.warn('No theatres with coordinates found!');
+    mapElements.sidebarContent.innerHTML = `
+      <div style="padding: 1rem; text-align: center; color: var(--muted);">
+        <p>No theatres with location data available.</p>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Coordinates may need to be added in the admin panel.</p>
+      </div>
+    `;
+    mapElements.sidebar.classList.remove('hidden');
+  }
 }
 
 // Select theatre and show sidebar
