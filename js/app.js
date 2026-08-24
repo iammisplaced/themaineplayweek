@@ -864,17 +864,19 @@ function bindEvents() {
     elements.useDeviceLocation.disabled = true;
     setLocationChooserMessage("Checking browser location permissions...");
     try {
-      await getCurrentPosition({
+      const position = await getCurrentPosition({
         enableHighAccuracy: false,
         timeout: 7000,
         maximumAge: 5 * 60 * 1000,
       });
+      console.log('Geolocation position:', position);
       state.locationPreference = {
         mode: "geolocation",
         zip: "",
-        lat: null,
-        lng: null,
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
       };
+      console.log('Saved location preference:', state.locationPreference);
       persistLocationPreference();
       state.locationChooserSeen = true;
       persistLocationChooserSeen();
