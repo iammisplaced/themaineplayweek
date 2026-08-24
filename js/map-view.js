@@ -114,6 +114,7 @@ export function renderMapMarkers(theatres, userLocation) {
 
   // Debug logging
   console.log('renderMapMarkers called with:', { theatresCount: theatres.length, userLocation });
+  console.log('Sample theatres:', theatres.slice(0, 3));
 
   // Update map center to user location if available
   if (userLocation && userLocation.lat && userLocation.lng) {
