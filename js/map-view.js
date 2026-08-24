@@ -113,13 +113,41 @@ function renderCachedMarkers() {
 
   console.log('renderCachedMarkers - cachedUserLocation:', cachedUserLocation);
 
-  // Add user location marker if available
+  let userLat = null;
+  let userLng = null;
+
+  // Use user location if available
   if (cachedUserLocation && cachedUserLocation.lat && cachedUserLocation.lng) {
-    console.log('Setting map view to:', cachedUserLocation);
-    mapInstance.setView([cachedUserLocation.lat, cachedUserLocation.lng], 11);
+    userLat = cachedUserLocation.lat;
+    userLng = cachedUserLocation.lng;
+    console.log('Using user location:', userLat, userLng);
+  } else if (cachedTheatres.length > 0) {
+    // Fallback: calculate center of all theatres
+    let totalLat = 0;
+    let totalLng = 0;
+    let validTheatres = 0;
+
+    cachedTheatres.forEach(theatre => {
+      if (theatre.latitude && theatre.longitude) {
+        totalLat += theatre.latitude;
+        totalLng += theatre.longitude;
+        validTheatres++;
+      }
+    });
+
+    if (validTheatres > 0) {
+      userLat = totalLat / validTheatres;
+      userLng = totalLng / validTheatres;
+      console.log('Using theatre center fallback:', userLat, userLng);
+    }
+  }
+
+  // Set map view if we have a location
+  if (userLat && userLng) {
+    mapInstance.setView([userLat, userLng], 11);
 
     // Add user location marker
-    L.circleMarker([cachedUserLocation.lat, cachedUserLocation.lng], {
+    L.circleMarker([userLat, userLng], {
       radius: 8,
       fillColor: '#c54828',
       color: '#fff',
@@ -131,7 +159,7 @@ function renderCachedMarkers() {
     // Add 15 mile radius circle around user
     const radiusMiles = 15;
     const radiusMeters = radiusMiles * 1609.34;
-    L.circle([cachedUserLocation.lat, cachedUserLocation.lng], {
+    L.circle([userLat, userLng], {
       radius: radiusMeters,
       color: '#c54828',
       fillColor: '#c54828',
