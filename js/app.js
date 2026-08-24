@@ -402,7 +402,7 @@ async function loadLatestSubstackPost() {
     console.log("[Substack Display] Author:", author);
     console.log("[Substack Display] Image URL:", imageUrl);
 
-    elements.latestPostTitle.textContent = "Latest from The Playweek";
+    elements.latestPostTitle.textContent = title;
     elements.latestPostSubtitle.textContent = subtitle || "Read the latest post from The Maine Playweek.";
     elements.latestPostByline.textContent = author;
     elements.latestPostLink.href = link;
