@@ -127,6 +127,7 @@ const state = {
   selectedDay: "",
   daysViewRadiusMiles: DEFAULT_DAYS_VIEW_RADIUS_MILES,
   theme: LIGHT_THEME,
+  themeManuallyOverridden: false,
   brandWordmarkVariant: WORDMARK_VARIANTS[0],
   supabase: null,
   promotedCards: cloneDefaultPromotedCards(),
@@ -620,7 +621,8 @@ function bindEvents() {
   elements.themeToggle?.addEventListener("click", () => {
     animateThemeToggle();
     const nextTheme = state.theme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-    applyTheme(nextTheme, { persist: true });
+    state.themeManuallyOverridden = true;
+    applyTheme(nextTheme, { persist: false });
   });
 
   window.addEventListener("resize", () => {
@@ -1783,15 +1785,22 @@ function bindEvents() {
 }
 
 function initializeTheme() {
-  const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+  // Clear any stored theme preference - always use system preference
+  localStorage.removeItem(THEME_STORAGE_KEY);
+
   const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
-  const initialTheme =
-    storedTheme === LIGHT_THEME || storedTheme === DARK_THEME
-      ? storedTheme
-      : prefersDark
-        ? DARK_THEME
-        : LIGHT_THEME;
+  const initialTheme = prefersDark ? DARK_THEME : LIGHT_THEME;
   applyTheme(initialTheme, { persist: false });
+
+  // Listen for system theme preference changes
+  const darkModeQuery = window.matchMedia?.("(prefers-color-scheme: dark)");
+  darkModeQuery?.addEventListener?.("change", (e) => {
+    // Only auto-switch if user hasn't manually overridden the theme
+    if (!state.themeManuallyOverridden) {
+      const newTheme = e.matches ? DARK_THEME : LIGHT_THEME;
+      applyTheme(newTheme, { persist: false });
+    }
+  });
 }
 
 function initializeBrandWordmarkVariant() {
