@@ -4849,13 +4849,17 @@ function render() {
   renderResultCards(cards);
 
   // Render theatres on map if in theatre view
+  console.log('Checking if we should render map:', { view: state.view, entriesLength: entries.length });
   if (state.view === "theatres" && entries.length > 0) {
+    console.log('Rendering map for theatre view...');
     const theatreList = entries
       .map(([, group]) => group.theatreInfo)
       .filter(theatre => theatre && theatre.latitude && theatre.longitude);
 
+    console.log('Theatre list for map:', theatreList);
     // Get user location if available
     const userLocation = state.userLocation || null;
+    console.log('User location:', userLocation);
     renderMapMarkers(theatreList, userLocation);
   }
 }
