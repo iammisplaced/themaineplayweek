@@ -144,6 +144,7 @@ function renderCachedMarkers() {
 
   // Set map view if we have a location
   if (userLat && userLng) {
+    console.log('Centering on location:', userLat, userLng);
     mapInstance.setView([userLat, userLng], 11);
 
     // Add user location marker
@@ -167,6 +168,10 @@ function renderCachedMarkers() {
       weight: 2,
       dashArray: '5, 5',
     }).addTo(mapInstance);
+  } else {
+    console.log('No user location, showing entire state');
+    // Show entire Maine/state if no user location
+    mapInstance.setView([45.2538, -69.4455], 7); // Maine center
   }
 
   // Add theatre markers
