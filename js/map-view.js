@@ -112,6 +112,9 @@ export function renderMapMarkers(theatres, userLocation) {
   clearMarkers();
   currentTheatreId = null;
 
+  // Debug logging
+  console.log('renderMapMarkers called with:', { theatresCount: theatres.length, userLocation });
+
   // Update map center to user location if available
   if (userLocation && userLocation.lat && userLocation.lng) {
     mapInstance.setView([userLocation.lat, userLocation.lng], 12);
@@ -128,8 +131,12 @@ export function renderMapMarkers(theatres, userLocation) {
   }
 
   // Add theatre markers
+  let addedMarkers = 0;
   theatres.forEach(theatre => {
-    if (!theatre.latitude || !theatre.longitude) return;
+    if (!theatre.latitude || !theatre.longitude) {
+      console.log('Theatre missing lat/lng:', theatre);
+      return;
+    }
 
     const marker = L.marker(
       [theatre.latitude, theatre.longitude],
@@ -141,7 +148,10 @@ export function renderMapMarkers(theatres, userLocation) {
     });
 
     markers.push({ marker, theatre });
+    addedMarkers++;
   });
+
+  console.log(`Added ${addedMarkers} markers to map`);
 
   // Fit bounds to show all markers
   if (markers.length > 0) {

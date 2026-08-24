@@ -4850,18 +4850,9 @@ function render() {
 
   // Render theatres on map if in theatre view
   if (state.view === "theatres" && entries.length > 0) {
-    const theatreList = entries.flatMap(([, group]) => {
-      return Object.values(group.theatres || {}).map(theatre => ({
-        id: theatre.id,
-        name: theatre.name,
-        city: theatre.city,
-        address: theatre.address,
-        phone: theatre.phone,
-        website: theatre.website,
-        latitude: theatre.latitude,
-        longitude: theatre.longitude,
-      }));
-    });
+    const theatreList = entries
+      .map(([, group]) => group.theatreInfo)
+      .filter(theatre => theatre && theatre.latitude && theatre.longitude);
 
     // Get user location if available
     const userLocation = state.userLocation || null;
@@ -6229,10 +6220,14 @@ function buildGroups(theatres, view) {
 
   theatres.forEach((theatre) => {
     const theatreInfo = {
+      id: theatre.id,
       name: theatre.name,
       city: theatre.city,
       address: theatre.address,
+      phone: theatre.phone,
       website: theatre.website,
+      latitude: theatre.latitude,
+      longitude: theatre.longitude,
     };
 
     const rowsByFilm = {};

@@ -2446,6 +2446,10 @@ textarea {
   position: relative;
 }
 
+.map-view-container.hidden {
+  display: none;
+}
+
 .theatre-map {
   flex: 1;
   width: 100%;
