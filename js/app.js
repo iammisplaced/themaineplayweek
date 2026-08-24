@@ -4855,9 +4855,11 @@ function render() {
       .filter(theatre => theatre && theatre.latitude && theatre.longitude);
 
     // Get user location from location preference
+    console.log('state.locationPreference:', state.locationPreference);
     const userLocation = state.locationPreference && state.locationPreference.lat && state.locationPreference.lng
       ? { lat: state.locationPreference.lat, lng: state.locationPreference.lng }
       : null;
+    console.log('Passing userLocation to map:', userLocation);
 
     renderMapMarkers(theatreList, userLocation);
   }
