@@ -6,6 +6,8 @@
 let mapInstance = null;
 let markers = [];
 let currentTheatreId = null;
+let cachedTheatres = [];
+let cachedUserLocation = null;
 
 const mapElements = {
   toggleWrap: null,
@@ -94,6 +96,84 @@ function initializeMap() {
   setTimeout(() => {
     mapInstance.invalidateSize();
   }, 100);
+
+  // Render any cached theatre data
+  if (cachedTheatres.length > 0) {
+    console.log('Rendering cached theatres after map initialization');
+    renderCachedMarkers();
+  }
+}
+
+// Render the cached theatre data
+function renderCachedMarkers() {
+  if (!mapInstance || cachedTheatres.length === 0) return;
+
+  clearMarkers();
+  currentTheatreId = null;
+
+  // Add user location marker if available
+  if (cachedUserLocation && cachedUserLocation.lat && cachedUserLocation.lng) {
+    mapInstance.setView([cachedUserLocation.lat, cachedUserLocation.lng], 11);
+
+    // Add user location marker
+    L.circleMarker([cachedUserLocation.lat, cachedUserLocation.lng], {
+      radius: 8,
+      fillColor: '#c54828',
+      color: '#fff',
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.8,
+    }).addTo(mapInstance);
+
+    // Add 15 mile radius circle around user
+    const radiusMiles = 15;
+    const radiusMeters = radiusMiles * 1609.34;
+    L.circle([cachedUserLocation.lat, cachedUserLocation.lng], {
+      radius: radiusMeters,
+      color: '#c54828',
+      fillColor: '#c54828',
+      fillOpacity: 0.05,
+      weight: 2,
+      dashArray: '5, 5',
+    }).addTo(mapInstance);
+  }
+
+  // Add theatre markers
+  let addedMarkers = 0;
+  let missingCoords = 0;
+
+  cachedTheatres.forEach(theatre => {
+    if (!theatre.latitude || !theatre.longitude) {
+      missingCoords++;
+      return;
+    }
+
+    const marker = L.marker(
+      [theatre.latitude, theatre.longitude],
+      { icon: createMarkerIcon(false) }
+    ).addTo(mapInstance);
+
+    marker.on('click', () => {
+      selectTheatre(theatre, marker);
+    });
+
+    markers.push({ marker, theatre });
+    addedMarkers++;
+  });
+
+  console.log(`Added ${addedMarkers} markers to map. ${missingCoords} theatres missing coordinates.`);
+
+  // Show message if no markers could be added
+  if (addedMarkers === 0 && cachedTheatres.length > 0) {
+    console.warn('No theatres with coordinates found!');
+    mapElements.sidebarContent.innerHTML = `
+      <div style="padding: 1rem; text-align: center; color: var(--muted);">
+        <p>No theatres with location data available.</p>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Coordinates may need to be added in the admin panel.</p>
+      </div>
+    `;
+    mapElements.sidebar.classList.remove('hidden');
+  }
 }
 
 // Clear existing markers
@@ -132,90 +212,21 @@ function createMarkerIcon(isSelected = false) {
 // Add theatre markers to map
 export function renderMapMarkers(theatres, userLocation) {
   console.log('renderMapMarkers called');
+
+  // Cache the data for when map is initialized
+  cachedTheatres = theatres;
+  cachedUserLocation = userLocation;
+
   console.log('Map instance exists?', !!mapInstance);
 
   if (!mapInstance) {
-    console.log('No map instance, returning');
+    console.log('No map instance yet, data cached for when map is shown');
     return;
   }
 
-  clearMarkers();
-  currentTheatreId = null;
-
-  // Debug logging
-  console.log('renderMapMarkers with:', { theatresCount: theatres.length, userLocationExists: !!userLocation });
-  console.log('Sample theatres:', theatres.slice(0, 3));
-
-  // Update map center to user location if available
-  // 15 miles ≈ 24 km, zoom level 11 roughly shows this radius
-  const zoomLevel = 11;
-
-  if (userLocation && userLocation.lat && userLocation.lng) {
-    mapInstance.setView([userLocation.lat, userLocation.lng], zoomLevel);
-
-    // Add user location marker
-    L.circleMarker([userLocation.lat, userLocation.lng], {
-      radius: 8,
-      fillColor: '#c54828',
-      color: '#fff',
-      weight: 2,
-      opacity: 1,
-      fillOpacity: 0.8,
-    }).addTo(mapInstance);
-
-    // Add 15 mile radius circle around user
-    const radiusMiles = 15;
-    const radiusMeters = radiusMiles * 1609.34;
-    L.circle([userLocation.lat, userLocation.lng], {
-      radius: radiusMeters,
-      color: '#c54828',
-      fillColor: '#c54828',
-      fillOpacity: 0.05,
-      weight: 2,
-      dashArray: '5, 5',
-    }).addTo(mapInstance);
-  } else {
-    // Fallback center if no user location
-    mapInstance.setView([40.0, -95.0], 4);
-  }
-
-  // Add theatre markers
-  let addedMarkers = 0;
-  let missingCoords = 0;
-
-  theatres.forEach(theatre => {
-    if (!theatre.latitude || !theatre.longitude) {
-      console.warn('Theatre missing lat/lng:', theatre.name, theatre);
-      missingCoords++;
-      return;
-    }
-
-    const marker = L.marker(
-      [theatre.latitude, theatre.longitude],
-      { icon: createMarkerIcon(false) }
-    ).addTo(mapInstance);
-
-    marker.on('click', () => {
-      selectTheatre(theatre, marker);
-    });
-
-    markers.push({ marker, theatre });
-    addedMarkers++;
-  });
-
-  console.log(`Added ${addedMarkers} markers to map. ${missingCoords} theatres missing coordinates.`);
-
-  // Show message if no markers could be added
-  if (addedMarkers === 0 && theatres.length > 0) {
-    console.warn('No theatres with coordinates found!');
-    mapElements.sidebarContent.innerHTML = `
-      <div style="padding: 1rem; text-align: center; color: var(--muted);">
-        <p>No theatres with location data available.</p>
-        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Coordinates may need to be added in the admin panel.</p>
-      </div>
-    `;
-    mapElements.sidebar.classList.remove('hidden');
-  }
+  // If map exists, render immediately
+  console.log('Map exists, rendering cached markers now');
+  renderCachedMarkers();
 }
 
 // Select theatre and show sidebar
