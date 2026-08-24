@@ -224,5 +224,3 @@ export function hideMapToggle() {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', initMapElements);
-
-export { renderMapMarkers, showMapToggle, hideMapToggle };
