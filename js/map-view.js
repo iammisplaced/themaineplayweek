@@ -52,17 +52,21 @@ function toggleMapView() {
     initializeMap();
   }
 
-  // Refresh map size when shown - multiple times to catch timing issues
+  // Refresh map size when shown
   if (!isMapActive && mapInstance) {
-    setTimeout(() => {
+    // Use requestAnimationFrame to wait for layout to be calculated
+    requestAnimationFrame(() => {
       mapInstance.invalidateSize();
-    }, 50);
-    setTimeout(() => {
-      mapInstance.invalidateSize();
-    }, 150);
-    setTimeout(() => {
-      mapInstance.invalidateSize();
-    }, 300);
+      // Also call it again after a short delay to catch any timing issues
+      setTimeout(() => mapInstance.invalidateSize(), 200);
+    });
+
+    // Listen for window resize to keep map sized correctly
+    window.addEventListener('resize', () => {
+      if (!mapElements.mapContainer.classList.contains('hidden')) {
+        mapInstance.invalidateSize();
+      }
+    });
   }
 }
 
