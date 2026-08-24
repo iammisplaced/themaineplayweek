@@ -893,7 +893,7 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   order: 4;
   margin-top: 0.6rem;
   margin-bottom: 0.2rem;
-  align-self: flex-start;
+  align-self: center;
 }
 
 .group-title {
@@ -903,8 +903,9 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
 }
 
 .group-title-film {
-  font-size: 1.42rem;
-  font-style: italic;
+  font-size: 1.65rem;
+  font-style: normal;
+  font-weight: 600;
   line-height: 1.2;
   text-align: center;
 }
@@ -1152,6 +1153,7 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  align-content: space-around;
 }
 
 .group-card.film-card.film-card-collapsed .group-film-poster {

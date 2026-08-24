@@ -4289,7 +4289,13 @@ function render() {
     const isFilmsView = isFilmStyleView && Boolean(group.filmInfo);
     if (isFilmsView) {
       card.classList.add("film-card");
-      groupTitle.textContent = group.filmInfo.film;
+      // Add line break after colon in film title
+      const filmTitle = group.filmInfo.film;
+      if (filmTitle.includes(":")) {
+        groupTitle.innerHTML = filmTitle.replace(":", ":<br>");
+      } else {
+        groupTitle.textContent = filmTitle;
+      }
       groupTitle.classList.add("group-title-film");
       if (group.filmInfo.staffFavorite) {
         card.classList.add("film-card-staff-favorite");
