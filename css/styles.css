@@ -1936,6 +1936,14 @@ textarea {
     0 10px 20px rgba(0, 0, 0, 0.35);
 }
 
+:root[data-theme="dark"] .group-card.film-card:hover {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 0 0 1px rgba(141, 210, 193, 0.12) inset,
+    0 12px 24px rgba(0, 0, 0, 0.45),
+    0 0 16px rgba(255, 143, 111, 0.15);
+}
+
 :root[data-theme="dark"] .group-card.festival-card {
   border-color: rgba(237, 198, 130, 0.34);
   background:

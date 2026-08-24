@@ -389,7 +389,6 @@ async function loadLatestSubstackPost() {
     const post = await fetchLatestSubstackPost();
     if (!post) throw new Error("No posts returned");
 
-    console.log("[Substack] Final post object to display:", post);
 
     const title = String(post.title || "Latest post on Substack");
     const link = String(post.canonical_url || "https://themaineplayweek.substack.com");
@@ -397,11 +396,6 @@ async function loadLatestSubstackPost() {
     const author = String(post.author || "The Maine Playweek").trim();
     const imageUrl = normalizeSubstackImageUrl(post.cover_image);
 
-    console.log("[Substack Display] Title:", title);
-    console.log("[Substack Display] Link:", link);
-    console.log("[Substack Display] Subtitle:", subtitle);
-    console.log("[Substack Display] Author:", author);
-    console.log("[Substack Display] Image URL:", imageUrl);
 
     elements.latestPostTitle.textContent = title;
     elements.latestPostSubtitle.textContent = subtitle || "Read the latest post from The Maine Playweek.";
@@ -419,9 +413,7 @@ async function loadLatestSubstackPost() {
     }
 
     syncLatestPostVisibility();
-    console.log("[Substack] ✓ Successfully loaded latest post:", title);
   } catch (error) {
-    console.warn("[Substack] Failed to load latest post:", error.message);
     // Keep fallback content when feed access is blocked.
   }
 }
@@ -466,12 +458,10 @@ async function fetchLatestSubstackPost() {
       const text = await response.text();
       const post = candidate.parser(text);
       if (post) {
-        console.log(`[Substack] Successfully loaded via ${candidate.name}`);
         return post;
       }
     } catch (error) {
       lastError = error;
-      console.warn(`[Substack] Failed via ${candidate.name}: ${error.message}`);
     }
   }
 
@@ -481,12 +471,10 @@ async function fetchLatestSubstackPost() {
 function parseRss2JsonPost(jsonText) {
   try {
     const data = JSON.parse(jsonText);
-    console.log("[RSS2JSON] Raw response:", data);
 
     if (!data.items || !Array.isArray(data.items) || data.items.length === 0) return null;
 
     const item = data.items[0];
-    console.log("[RSS2JSON] Latest item (raw):", item);
 
     const parsedPost = {
       title: item.title || "",
@@ -497,12 +485,9 @@ function parseRss2JsonPost(jsonText) {
       author: item.author || "",
     };
 
-    console.log("[RSS2JSON] Parsed post:", parsedPost);
-    console.log("[RSS2JSON] All available fields in item:", Object.keys(item));
 
     return parsedPost;
   } catch (error) {
-    console.warn("[RSS2JSON] Parse error:", error.message);
     return null;
   }
 }
@@ -542,7 +527,6 @@ function parseSubstackRssPost(xmlText) {
       post_date: pubDate,
     };
   } catch (error) {
-    console.warn("[Substack RSS] Parse error:", error.message);
     return null;
   }
 }
@@ -553,7 +537,6 @@ function parseSubstackJsonPost(jsonText) {
     if (!Array.isArray(posts) || !posts.length) return null;
     return posts[0];
   } catch (error) {
-    console.warn("[Substack JSON] Parse error:", error.message);
     return null;
   }
 }
@@ -1959,7 +1942,6 @@ async function loadData() {
       }
     } catch (error) {
       const message = `Supabase data load failed; falling back to local/static data. ${String(error?.message || "")}`.trim();
-      console.error("[showtimes] " + message, error);
       if (elements.adminMessage) {
         elements.adminMessage.textContent = message;
       }
@@ -5868,7 +5850,6 @@ function registerSortDebugTools() {
         : rows;
       filtered.sort((a, b) => b.score - a.score);
       const finalRows = limit ? filtered.slice(0, limit) : filtered;
-      console.table(finalRows);
       return finalRows;
     },
   };
