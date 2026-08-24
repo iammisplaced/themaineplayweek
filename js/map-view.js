@@ -117,8 +117,11 @@ export function renderMapMarkers(theatres, userLocation) {
   console.log('Sample theatres:', theatres.slice(0, 3));
 
   // Update map center to user location if available
+  // 15 miles ≈ 24 km, zoom level 11 roughly shows this radius
+  const zoomLevel = 11;
+
   if (userLocation && userLocation.lat && userLocation.lng) {
-    mapInstance.setView([userLocation.lat, userLocation.lng], 12);
+    mapInstance.setView([userLocation.lat, userLocation.lng], zoomLevel);
 
     // Add user location marker
     L.circleMarker([userLocation.lat, userLocation.lng], {
@@ -129,6 +132,21 @@ export function renderMapMarkers(theatres, userLocation) {
       opacity: 1,
       fillOpacity: 0.8,
     }).addTo(mapInstance);
+
+    // Add 15 mile radius circle around user
+    const radiusMiles = 15;
+    const radiusMeters = radiusMiles * 1609.34;
+    L.circle([userLocation.lat, userLocation.lng], {
+      radius: radiusMeters,
+      color: '#c54828',
+      fillColor: '#c54828',
+      fillOpacity: 0.05,
+      weight: 2,
+      dashArray: '5, 5',
+    }).addTo(mapInstance);
+  } else {
+    // Fallback center if no user location
+    mapInstance.setView([40.0, -95.0], 4);
   }
 
   // Add theatre markers
@@ -153,16 +171,6 @@ export function renderMapMarkers(theatres, userLocation) {
   });
 
   console.log(`Added ${addedMarkers} markers to map`);
-
-  // Fit bounds to show all markers
-  if (markers.length > 0) {
-    const group = new L.featureGroup(markers.map(m => m.marker));
-    if (userLocation && userLocation.lat && userLocation.lng) {
-      const userCircle = L.circleMarker([userLocation.lat, userLocation.lng]);
-      group.addLayer(userCircle);
-    }
-    mapInstance.fitBounds(group.getBounds(), { padding: [50, 50] });
-  }
 }
 
 // Select theatre and show sidebar
