@@ -37,7 +37,9 @@ function initMapElements() {
 
 // Toggle between map and list view
 function toggleMapView() {
+  console.log('toggleMapView called');
   const isMapActive = mapElements.mapContainer.classList.toggle('hidden');
+  console.log('Map container hidden?', isMapActive);
   const resultsSection = document.getElementById('results');
 
   if (resultsSection) {
@@ -129,13 +131,19 @@ function createMarkerIcon(isSelected = false) {
 
 // Add theatre markers to map
 export function renderMapMarkers(theatres, userLocation) {
-  if (!mapInstance) return;
+  console.log('renderMapMarkers called');
+  console.log('Map instance exists?', !!mapInstance);
+
+  if (!mapInstance) {
+    console.log('No map instance, returning');
+    return;
+  }
 
   clearMarkers();
   currentTheatreId = null;
 
   // Debug logging
-  console.log('renderMapMarkers called with:', { theatresCount: theatres.length, userLocation });
+  console.log('renderMapMarkers with:', { theatresCount: theatres.length, userLocationExists: !!userLocation });
   console.log('Sample theatres:', theatres.slice(0, 3));
 
   // Update map center to user location if available
