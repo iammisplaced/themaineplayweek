@@ -111,8 +111,11 @@ function renderCachedMarkers() {
   clearMarkers();
   currentTheatreId = null;
 
+  console.log('renderCachedMarkers - cachedUserLocation:', cachedUserLocation);
+
   // Add user location marker if available
   if (cachedUserLocation && cachedUserLocation.lat && cachedUserLocation.lng) {
+    console.log('Setting map view to:', cachedUserLocation);
     mapInstance.setView([cachedUserLocation.lat, cachedUserLocation.lng], 11);
 
     // Add user location marker
@@ -217,6 +220,7 @@ export function renderMapMarkers(theatres, userLocation) {
   cachedTheatres = theatres;
   cachedUserLocation = userLocation;
 
+  console.log('Caching user location:', userLocation);
   console.log('Map instance exists?', !!mapInstance);
 
   if (!mapInstance) {
