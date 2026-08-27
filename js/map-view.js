@@ -321,7 +321,7 @@ function populateSidebar(theatre) {
     const item = document.createElement('li');
     item.className = 'show-item';
     item.innerHTML = `
-      <div class="show-row">
+      <div class="show-row has-poster">
         <img class="show-poster" alt="" />
         <div>
           <div class="show-main">${show.film}</div>
