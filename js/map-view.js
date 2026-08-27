@@ -236,7 +236,7 @@ function selectTheatre(theatre, marker) {
   mapElements.sidebar.classList.remove('hidden');
 }
 
-// Populate sidebar with theatre shows from cached data
+// Populate sidebar with theatre card - render directly without cloning
 function populateSidebar(theatre) {
   // Find the group data for this theatre from cachedGroups
   let theatreGroup = null;
@@ -249,46 +249,100 @@ function populateSidebar(theatre) {
 
   if (!theatreGroup || !theatreGroup.shows || theatreGroup.shows.length === 0) {
     // Fallback: show basic theatre info
-    const html = `
-      <div class="theatre-sidebar-header">
-        <h3>${theatre.name}</h3>
-        <p class="theatre-sidebar-city">${theatre.city}</p>
-      </div>
-      <div class="theatre-sidebar-details">
-        <p class="theatre-sidebar-address">${theatre.address}</p>
-        <a href="${theatre.website}" target="_blank" rel="noopener noreferrer" class="theatre-sidebar-link">
-          Visit Website
-        </a>
-      </div>
+    mapElements.sidebarContent.innerHTML = `
+      <article class="group-card" data-theatre-id="${theatre.id}">
+        <h3 class="group-title">${theatre.name}</h3>
+        <p class="group-subtitle">${theatre.city}</p>
+        <a class="group-link" href="${theatre.website}" target="_blank" rel="noopener noreferrer">Visit theatre website</a>
+        <p style="padding: 1rem 0; font-size: 0.9rem;">${theatre.address}</p>
+        <ul class="show-list"></ul>
+      </article>
     `;
-    mapElements.sidebarContent.innerHTML = html;
     return;
   }
 
-  // Clone the original card from the DOM
-  const originalCard = document.querySelector(`[data-theatre-id="${theatre.id}"]`);
-  if (originalCard) {
-    const clonedCard = originalCard.cloneNode(true);
+  // Build the theatre card HTML directly
+  const card = document.createElement('article');
+  card.className = 'group-card';
+  card.setAttribute('data-theatre-id', theatre.id);
 
-    // Show all hidden show-items (remove the hidden class from those that were cut off for scrolling)
-    const hiddenShowItems = clonedCard.querySelectorAll('.show-item.hidden');
-    hiddenShowItems.forEach(item => item.classList.remove('hidden'));
+  // Title
+  const title = document.createElement('h3');
+  title.className = 'group-title';
+  title.textContent = theatre.name;
+  card.appendChild(title);
 
-    // Remove the "Show all" toggle button since we're showing all films
-    const showAllToggle = clonedCard.querySelector('.film-expand-toggle.theatre-card-toggle');
-    if (showAllToggle) {
-      showAllToggle.remove();
+  // Subtitle (address)
+  const subtitle = document.createElement('p');
+  subtitle.className = 'group-subtitle';
+  subtitle.textContent = theatre.city;
+  card.appendChild(subtitle);
+
+  // Website link
+  const link = document.createElement('a');
+  link.className = 'group-link';
+  link.href = theatre.website;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.textContent = 'Visit theatre website';
+  card.appendChild(link);
+
+  // Shows list
+  const list = document.createElement('ul');
+  list.className = 'show-list';
+
+  // Render ALL shows (no "Show all" button or 5-film limit)
+  theatreGroup.shows.forEach((show, idx) => {
+    const item = document.createElement('li');
+    item.className = 'show-item';
+    item.innerHTML = `
+      <div class="show-row">
+        <img class="show-poster" alt="" />
+        <div>
+          <div class="show-main">${show.film}</div>
+          <div class="show-meta"></div>
+          <div class="show-schedule hidden"></div>
+        </div>
+      </div>
+      <a class="show-link hidden" target="_blank" rel="noopener noreferrer">Tickets</a>
+    `;
+
+    // Set poster
+    const poster = item.querySelector('.show-poster');
+    poster.src = show.posterUrl || './assets/images/noposter.webp';
+    poster.alt = `Poster for ${show.film}`;
+
+    // Set up expand button in meta
+    const meta = item.querySelector('.show-meta');
+    const expandBtn = document.createElement('button');
+    expandBtn.type = 'button';
+    expandBtn.className = 'film-expand-toggle theatre-row-toggle';
+    expandBtn.textContent = 'Expand';
+    // Build the filmKey the same way app.js does
+    const filmKey = `theatres::${theatre.name}::${theatre.city}::${show.film}${show.year ? `::${show.year}` : ''}`;
+    expandBtn.dataset.filmKey = filmKey;
+    meta.appendChild(expandBtn);
+
+    // Set ticket link
+    const ticketLink = item.querySelector('.show-link');
+    if (show.ticketLink) {
+      ticketLink.href = show.ticketLink;
     }
 
-    mapElements.sidebarContent.innerHTML = '';
-    mapElements.sidebarContent.appendChild(clonedCard);
-    attachCardEventListeners(clonedCard, theatreGroup);
-  }
+    list.appendChild(item);
+  });
+
+  card.appendChild(list);
+  mapElements.sidebarContent.innerHTML = '';
+  mapElements.sidebarContent.appendChild(card);
+
+  // Attach event listeners
+  attachCardEventListeners(card, theatreGroup);
 }
 
 // Attach event listeners to card elements
 function attachCardEventListeners(card, theatreGroup) {
-  // Find all expand buttons (which expand/collapse individual show schedules)
+  // Find all expand buttons
   const expandButtons = card.querySelectorAll('.film-expand-toggle.theatre-row-toggle');
 
   expandButtons.forEach((button, idx) => {
@@ -296,44 +350,89 @@ function attachCardEventListeners(card, theatreGroup) {
       e.preventDefault();
       e.stopPropagation();
 
-      // Get the film key from the button's dataset
-      const filmKey = button.dataset.filmKey;
-      if (!filmKey || !window.state) return;
+      const showItem = button.closest('.show-item');
+      if (!showItem) return;
 
-      // Toggle the expand state in app.js's global state
-      if (window.state.expandedFilmGroups.has(filmKey)) {
-        window.state.expandedFilmGroups.delete(filmKey);
+      const schedule = showItem.querySelector('.show-schedule');
+      if (!schedule) return;
+
+      const isExpanded = !schedule.classList.contains('hidden');
+      const show = theatreGroup.shows[idx];
+
+      if (isExpanded) {
+        // COLLAPSING
+        schedule.classList.add('hidden');
+        button.textContent = 'Expand';
+
+        const ticketLink = showItem.querySelector('.show-link');
+        if (ticketLink) ticketLink.classList.add('hidden');
+
+        const rowActions = showItem.querySelector('.theatre-row-actions');
+        if (rowActions) rowActions.remove();
+
+        const meta = showItem.querySelector('.show-meta');
+        if (meta && !meta.contains(button)) {
+          meta.appendChild(button);
+        }
       } else {
-        window.state.expandedFilmGroups.add(filmKey);
-      }
+        // EXPANDING
+        schedule.classList.remove('hidden');
+        button.textContent = 'Collapse';
 
-      // Re-render the entire app
-      if (window.render) {
-        window.render();
+        // Render schedule (dates/times)
+        if (show) {
+          const dates = show.dates || {};
+          const html = Object.entries(dates).map(([date, times]) => {
+            const dateStr = new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            return `<div><strong>${dateStr}</strong><br>${times.join(', ')}</div>`;
+          }).join('<br>');
+          schedule.innerHTML = html;
+        }
 
-        // After render, re-clone the updated card into the sidebar
-        setTimeout(() => {
-          const originalCard = document.querySelector(`[data-theatre-id="${card.getAttribute('data-theatre-id')}"]`);
-          if (originalCard) {
-            const clonedCard = originalCard.cloneNode(true);
+        // Show ticket link
+        const ticketLink = showItem.querySelector('.show-link');
+        if (ticketLink && show.ticketLink) {
+          ticketLink.classList.remove('hidden');
+        }
 
-            // Show all hidden show-items
-            const hiddenShowItems = clonedCard.querySelectorAll('.show-item.hidden');
-            hiddenShowItems.forEach(item => item.classList.remove('hidden'));
+        // Create row actions
+        let rowActions = showItem.querySelector('.theatre-row-actions');
+        if (!rowActions) {
+          rowActions = document.createElement('div');
+          rowActions.className = 'theatre-row-actions';
 
-            // Remove the "Show all" toggle button
-            const showAllToggle = clonedCard.querySelector('.film-expand-toggle.theatre-card-toggle');
-            if (showAllToggle) {
-              showAllToggle.remove();
-            }
-
-            mapElements.sidebarContent.innerHTML = '';
-            mapElements.sidebarContent.appendChild(clonedCard);
-
-            // Re-attach listeners to the new cloned card
-            attachCardEventListeners(clonedCard, theatreGroup);
+          // Move button to row actions
+          const meta = showItem.querySelector('.show-meta');
+          if (meta && meta.contains(button)) {
+            meta.removeChild(button);
           }
-        }, 0);
+          button.textContent = 'Collapse';
+          rowActions.appendChild(button);
+
+          // Add ticket link to row actions
+          if (ticketLink && show.ticketLink) {
+            rowActions.appendChild(ticketLink);
+          }
+
+          // Add film page link
+          if (show.film) {
+            const filmPageLink = document.createElement('a');
+            filmPageLink.className = 'theatre-row-film-link';
+            const slug = show.film
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-+|-+$/g, '')
+              .replace(/--+/g, '-')
+              .slice(0, 80);
+            filmPageLink.href = `films/${slug}/`;
+            filmPageLink.target = '_blank';
+            filmPageLink.rel = 'noopener noreferrer';
+            filmPageLink.textContent = 'View Film Page';
+            rowActions.appendChild(filmPageLink);
+          }
+
+          showItem.appendChild(rowActions);
+        }
       }
     });
   });
