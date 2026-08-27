@@ -2515,6 +2515,21 @@ textarea {
   animation: slideInUp 200ms ease-out;
   max-height: calc(100vh - 2rem);
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.theatre-sidebar-content .group-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.theatre-sidebar-content .group-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.theatre-sidebar-content .group-card::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
 }
 
 .theatre-sidebar-header h3 {
