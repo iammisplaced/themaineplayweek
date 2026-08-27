@@ -349,23 +349,33 @@ function attachCardEventListeners(card, theatreData) {
           }
         }
 
+        console.log('DEBUG: Expanding show', { filmTitle, theatreData, theatreDataFilms: theatreData?.films });
+
         // Find the matching film in theatre data to get ticketLink
         let ticketUrl = '';
         if (theatreData && theatreData.films && filmTitle) {
+          console.log('DEBUG: Looking for film in theatre.films array');
           const matchingFilm = theatreData.films.find(f => f.title === filmTitle);
+          console.log('DEBUG: Matching film found?', { matchingFilm, filmTitle });
           if (matchingFilm && matchingFilm.ticketLink) {
             ticketUrl = matchingFilm.ticketLink;
+            console.log('DEBUG: Got ticket URL:', ticketUrl);
           }
+        } else {
+          console.log('DEBUG: Missing data', { hasTheatreData: !!theatreData, hasFilmsArray: !!theatreData?.films, filmTitle });
         }
 
         // Show the tickets link if we have a ticket URL
         const ticketLink = showItem.querySelector('.show-link');
+        console.log('DEBUG: Ticket link element?', { ticketLink, ticketUrl });
         if (ticketLink) {
           if (ticketUrl) {
             ticketLink.href = ticketUrl;
             ticketLink.classList.remove('hidden');
+            console.log('DEBUG: Set ticket link href and showed it');
           } else {
             ticketLink.classList.add('hidden');
+            console.log('DEBUG: No ticket URL, hiding link');
           }
         }
 
