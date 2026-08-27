@@ -276,16 +276,27 @@ function populateSidebar(theatre) {
   mapElements.sidebarContent.innerHTML = '';
   mapElements.sidebarContent.appendChild(clonedCard);
 
+  // Find the group data for this theatre to get ticket links
+  let theatreGroup = null;
+  if (cachedGroups) {
+    const theatreKey = `${theatre.name} · ${theatre.city}`;
+    theatreGroup = Object.values(cachedGroups).find(
+      group => group.theatreInfo &&
+                group.theatreInfo.name === theatre.name &&
+                group.theatreInfo.city === theatre.city
+    );
+  }
+
   // Attach event listeners so expand/collapse buttons work
-  attachCardEventListeners(clonedCard);
+  attachCardEventListeners(clonedCard, theatreGroup);
 }
 
 // Attach event listeners to card elements
-function attachCardEventListeners(card) {
+function attachCardEventListeners(card, theatreGroup) {
   // Find all expand buttons (which expand/collapse individual show schedules)
   const expandButtons = card.querySelectorAll('.film-expand-toggle.theatre-row-toggle');
 
-  expandButtons.forEach((button) => {
+  expandButtons.forEach((button, idx) => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -327,10 +338,28 @@ function attachCardEventListeners(card) {
         schedule.classList.remove('hidden');
         button.textContent = 'Collapse';
 
-        // Show the tickets link if it has an href
+        // Get the film title to look up ticket link from theatreGroup
+        const showMain = showItem.querySelector('.show-main');
+        const filmTitle = showMain ? showMain.textContent.trim() : '';
+
+        // Find the matching show in theatreGroup to get ticketLink
+        let ticketUrl = '';
+        if (theatreGroup && theatreGroup.shows && theatreGroup.shows[idx]) {
+          const show = theatreGroup.shows[idx];
+          if (show && show.ticketLink) {
+            ticketUrl = show.ticketLink;
+          }
+        }
+
+        // Show the tickets link if we have a ticket URL
         const ticketLink = showItem.querySelector('.show-link');
-        if (ticketLink && ticketLink.href) {
-          ticketLink.classList.remove('hidden');
+        if (ticketLink) {
+          if (ticketUrl) {
+            ticketLink.href = ticketUrl;
+            ticketLink.classList.remove('hidden');
+          } else {
+            ticketLink.classList.add('hidden');
+          }
         }
 
         // Show or create row actions with collapse button and film page link
@@ -349,15 +378,12 @@ function attachCardEventListeners(card) {
           button.textContent = 'Collapse';
           rowActions.appendChild(button);
 
-          // Add ticket link to row actions if it has an href
-          if (ticketLink && ticketLink.href) {
+          // Add ticket link to row actions if it has a URL
+          if (ticketLink && ticketUrl) {
             rowActions.appendChild(ticketLink);
           }
 
-          // Extract film title from show-main text content
-          const showMain = showItem.querySelector('.show-main');
-          const filmTitle = showMain ? showMain.textContent.trim() : '';
-
+          // Create film page link if we have the film title
           if (filmTitle) {
             const filmPageLink = document.createElement('a');
             filmPageLink.className = 'theatre-row-film-link';
