@@ -242,8 +242,8 @@ function populateSidebar(theatre) {
 
   // Find the group data for this theatre from cachedGroups
   let theatreGroup = null;
-  if (cachedGroups) {
-    theatreGroup = Object.values(cachedGroups).find(
+  if (cachedGroups && Array.isArray(cachedGroups)) {
+    theatreGroup = cachedGroups.find(
       group => group.theatreInfo &&
                 group.theatreInfo.id === theatre.id
     );
