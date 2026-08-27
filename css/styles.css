@@ -2513,6 +2513,7 @@ textarea {
 
 .theatre-sidebar-content .group-card {
   animation: slideInUp 200ms ease-out;
+  max-height: 100%;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
