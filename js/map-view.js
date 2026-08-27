@@ -58,6 +58,21 @@ function formatDisplayDate(dateIso) {
   }).format(date);
 }
 
+// Helper to build film page URL with title and year (copied from app.js logic)
+function buildFilmPageUrl(title, year) {
+  const slug = String(title || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/--+/g, '-')
+    .slice(0, 80);
+
+  if (Number.isInteger(Number(year))) {
+    return `films/${slug}-${Number(year)}/`;
+  }
+  return `films/${slug}/`;
+}
+
 const mapElements = {
   toggleWrap: null,
   toggleBtn: null,
@@ -497,13 +512,7 @@ function attachCardEventListeners(card, shows) {
           if (show.film) {
             const filmPageLink = document.createElement('a');
             filmPageLink.className = 'theatre-row-film-link';
-            const slug = show.film
-              .toLowerCase()
-              .replace(/[^a-z0-9]+/g, '-')
-              .replace(/^-+|-+$/g, '')
-              .replace(/--+/g, '-')
-              .slice(0, 80);
-            filmPageLink.href = `films/${slug}/`;
+            filmPageLink.href = buildFilmPageUrl(show.film, show.year);
             filmPageLink.target = '_blank';
             filmPageLink.rel = 'noopener noreferrer';
             filmPageLink.textContent = 'View Film Page';
