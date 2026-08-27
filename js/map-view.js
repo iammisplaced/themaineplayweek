@@ -84,6 +84,18 @@ function initMapElements() {
   if (mapElements.sidebarClose) {
     mapElements.sidebarClose.addEventListener('click', closeSidebar);
   }
+
+  // Close sidebar when clicking outside of it
+  if (mapElements.mapContainer) {
+    mapElements.mapContainer.addEventListener('click', (e) => {
+      // Only close if sidebar is visible and click is not on the sidebar or its contents
+      if (mapElements.sidebar && !mapElements.sidebar.classList.contains('hidden')) {
+        if (!mapElements.sidebar.contains(e.target)) {
+          closeSidebar();
+        }
+      }
+    });
+  }
 }
 
 // Toggle between map and list view

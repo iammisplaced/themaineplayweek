@@ -2502,20 +2502,7 @@ textarea {
 }
 
 .theatre-sidebar-close {
-  position: sticky;
-  top: 0;
-  float: right;
-  border: 0;
-  background: transparent;
-  font-size: 1.5rem;
-  color: var(--muted);
-  cursor: pointer;
-  padding: 0;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: none;
   border-radius: 6px;
   transition: background 120ms, color 120ms;
   z-index: 11;
