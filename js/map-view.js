@@ -311,10 +311,16 @@ function attachCardEventListeners(card) {
           ticketLink.classList.add('hidden');
         }
 
-        // Hide row actions if they exist
+        // Remove row actions (or just hide them)
         const rowActions = showItem.querySelector('.theatre-row-actions');
         if (rowActions) {
-          rowActions.classList.add('hidden');
+          rowActions.remove();
+        }
+
+        // Move the button back to show-meta
+        const showMeta = showItem.querySelector('.show-meta');
+        if (showMeta) {
+          showMeta.appendChild(button);
         }
       } else {
         // EXPANDING
@@ -333,17 +339,20 @@ function attachCardEventListeners(card) {
           rowActions = document.createElement('div');
           rowActions.className = 'theatre-row-actions';
 
-          // Add the collapse button to row actions
-          const collapseBtn = document.createElement('button');
-          collapseBtn.type = 'button';
-          collapseBtn.className = 'film-expand-toggle theatre-row-toggle';
-          collapseBtn.textContent = 'Collapse';
-          collapseBtn.addEventListener('click', (evt) => {
-            evt.preventDefault();
-            evt.stopPropagation();
-            button.click();
-          });
-          rowActions.appendChild(collapseBtn);
+          // Move the expand button to row actions (or use the same button)
+          // Remove the button from show-meta if it's there
+          const showMeta = showItem.querySelector('.show-meta');
+          if (showMeta && showMeta.contains(button)) {
+            showMeta.removeChild(button);
+          }
+          // Update button text and add to row actions
+          button.textContent = 'Collapse';
+          rowActions.appendChild(button);
+
+          // Add ticket link to row actions if it has an href
+          if (ticketLink && ticketLink.href) {
+            rowActions.appendChild(ticketLink);
+          }
 
           // Extract film title from show-main text content
           const showMain = showItem.querySelector('.show-main');
