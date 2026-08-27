@@ -463,11 +463,11 @@ h1 {
 }
 
 .theatre-sort-status {
-  width: min(1024px, 100%);
-  margin: -0.45rem auto 0.8rem;
+  margin: 0;
   color: var(--accent-2);
   font-size: 0.84rem;
   line-height: 1.35;
+  flex: 1;
 }
 
 .theatre-sort-change-link {
@@ -2409,10 +2409,19 @@ textarea {
   border-color: color-mix(in srgb, var(--festival-accent, var(--border)) 62%, var(--border) 38%);
 }
 
+/* Theatre Controls Row */
+.theatre-controls-row {
+  width: min(1024px, 100%);
+  margin: 0 auto 0.8rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
 /* Theatre Map View */
 .theatre-map-toggle-wrap {
-  width: min(1024px, 100%);
-  margin: 0 auto 1rem;
+  margin: 0;
   display: flex;
   justify-content: flex-end;
 }

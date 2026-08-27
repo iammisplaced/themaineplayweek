@@ -1840,12 +1840,6 @@ function setView(view, options = {}) {
     void ensureTheatreDistanceSort();
   }
 
-  // Show/hide map toggle based on view
-  if (state.view === "theatres") {
-    showMapToggle();
-  } else {
-    hideMapToggle();
-  }
   updateTheatreSortStatus();
   render();
 }
@@ -4180,6 +4174,14 @@ function handleSearchKeydown(kind, event) {
 
 function render() {
   updateTheatreSortStatus();
+
+  // Show/hide map toggle based on view
+  if (state.view === "theatres") {
+    showMapToggle();
+  } else {
+    hideMapToggle();
+  }
+
   let grouped = {};
   let activeDay = "";
   if (state.view === "days") {
