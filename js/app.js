@@ -4869,7 +4869,9 @@ function render() {
 
     // Pass the theatre groups - they already have shows with dates/premiumDates processed
     const groupsArray = Array.from(entries.values());
-    renderMapMarkers(theatreList, userLocation, groupsArray, groupsArray);
+    // Extract just the group objects from the [key, group] pairs
+    const theatreGroupsForMap = entries.map(([, group]) => group);
+    renderMapMarkers(theatreList, userLocation, groupsArray, theatreGroupsForMap);
   }
 }
 
