@@ -263,10 +263,8 @@ function populateSidebar(theatre) {
   const rawTheatre = cachedTheatreGroups.find(t => t.id === theatre.id);
   console.log('DEBUG: rawTheatre found?', !!rawTheatre, 'Films:', rawTheatre?.films?.length);
   if (rawTheatre?.films?.length > 0) {
-    console.log('First film:', rawTheatre.films[0].title, 'Showings:', rawTheatre.films[0].showings?.length);
-    if (rawTheatre.films[0].showings?.length > 0) {
-      console.log('First showing:', rawTheatre.films[0].showings[0]);
-    }
+    console.log('First film object:', rawTheatre.films[0]);
+    console.log('First film title:', rawTheatre.films[0].title, 'Showings:', rawTheatre.films[0].showings?.length);
   }
 
   if (!rawTheatre || !rawTheatre.films || rawTheatre.films.length === 0) {
