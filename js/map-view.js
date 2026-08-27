@@ -218,7 +218,8 @@ function renderCachedMarkers() {
       { icon: createMarkerIcon(false) }
     ).addTo(mapInstance);
 
-    marker.on('click', () => {
+    marker.on('click', (e) => {
+      e.originalEvent.stopPropagation();
       selectTheatre(theatre, marker);
     });
 
