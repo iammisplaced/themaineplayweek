@@ -261,6 +261,14 @@ function populateSidebar(theatre) {
   }
 
   const rawTheatre = cachedTheatreGroups.find(t => t.id === theatre.id);
+  console.log('DEBUG: rawTheatre found?', !!rawTheatre, 'Films:', rawTheatre?.films?.length);
+  if (rawTheatre?.films?.length > 0) {
+    console.log('First film:', rawTheatre.films[0].title, 'Showings:', rawTheatre.films[0].showings?.length);
+    if (rawTheatre.films[0].showings?.length > 0) {
+      console.log('First showing:', rawTheatre.films[0].showings[0]);
+    }
+  }
+
   if (!rawTheatre || !rawTheatre.films || rawTheatre.films.length === 0) {
     console.log('ERROR: Theatre not found or has no films');
     mapElements.sidebarContent.innerHTML = `
@@ -278,7 +286,7 @@ function populateSidebar(theatre) {
   const now = new Date();
   const shows = [];
 
-  rawTheatre.films.forEach((film) => {
+  rawTheatre.films.forEach((film, filmIdx) => {
     const show = {
       theatre: rawTheatre.name,
       city: rawTheatre.city,
@@ -295,6 +303,7 @@ function populateSidebar(theatre) {
 
     // Process showings into dates/premiumDates maps
     if (film.showings && Array.isArray(film.showings)) {
+      let addedForThisFilm = 0;
       film.showings.forEach((showing) => {
         // Standard times
         (showing.times || []).forEach((time) => {
@@ -305,6 +314,7 @@ function populateSidebar(theatre) {
             show.dates[showDate].push(time);
             if (!show.roomByDate[showDate]) show.roomByDate[showDate] = String(showing?.room || '').trim();
             if (!show.noteByDate[showDate]) show.noteByDate[showDate] = String(showing?.notes || '').trim();
+            addedForThisFilm++;
           }
         });
 
@@ -317,9 +327,11 @@ function populateSidebar(theatre) {
             show.premiumDates[showDate].push(time);
             if (!show.roomByDate[showDate]) show.roomByDate[showDate] = String(showing?.room || '').trim();
             if (!show.noteByDate[showDate]) show.noteByDate[showDate] = String(showing?.notes || '').trim();
+            addedForThisFilm++;
           }
         });
       });
+      if (filmIdx === 0) console.log(`Film "${film.title}": added ${addedForThisFilm} times`);
     }
 
     // Only add if has dates
@@ -335,6 +347,7 @@ function populateSidebar(theatre) {
     }
   });
 
+  console.log('DEBUG: Shows processed:', shows.length);
   if (shows.length === 0) {
     console.log('No shows with valid dates found');
     return;
