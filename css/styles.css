@@ -2476,6 +2476,7 @@ textarea {
   right: 1rem;
   width: 320px;
   max-height: calc(100% - 2rem);
+  border-radius: var(--radius);
   overflow-y: auto;
   scrollbar-width: none;
   z-index: 10;
