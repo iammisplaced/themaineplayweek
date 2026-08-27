@@ -2476,14 +2476,8 @@ textarea {
   right: 1rem;
   width: 320px;
   max-height: calc(100% - 2rem);
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   z-index: 10;
-  animation: slideInUp 200ms ease-out;
 }
 
 .theatre-sidebar.hidden {
@@ -2515,7 +2509,11 @@ textarea {
 }
 
 .theatre-sidebar-content {
-  padding-top: 1.5rem;
+  padding: 0;
+}
+
+.theatre-sidebar-content .group-card {
+  animation: slideInUp 200ms ease-out;
 }
 
 .theatre-sidebar-header h3 {
