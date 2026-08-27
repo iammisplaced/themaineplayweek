@@ -2476,7 +2476,6 @@ textarea {
   right: 1rem;
   width: 320px;
   max-height: calc(100% - 2rem);
-  overflow-y: auto;
   z-index: 10;
 }
 
@@ -2514,6 +2513,8 @@ textarea {
 
 .theatre-sidebar-content .group-card {
   animation: slideInUp 200ms ease-out;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
 }
 
 .theatre-sidebar-header h3 {
