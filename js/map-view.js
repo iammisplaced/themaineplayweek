@@ -243,13 +243,23 @@ function populateSidebar(theatre) {
   // Find the group data for this theatre from cachedGroups
   let theatreGroup = null;
   if (cachedGroups && Array.isArray(cachedGroups)) {
+    console.log('DEBUG: Searching through', cachedGroups.length, 'groups for theatre ID', theatre.id);
+    cachedGroups.forEach((group, idx) => {
+      console.log(`Group ${idx}:`, {
+        hasTheatreInfo: !!group.theatreInfo,
+        theatreInfoId: group.theatreInfo?.id,
+        theatreInfoName: group.theatreInfo?.name,
+        showsLength: group.shows?.length
+      });
+    });
+
     theatreGroup = cachedGroups.find(
       group => group.theatreInfo &&
                 group.theatreInfo.id === theatre.id
     );
   }
 
-  console.log('DEBUG theatreGroup found:', { theatreGroup, shows: theatreGroup?.shows?.length });
+  console.log('DEBUG theatreGroup found:', { theatreGroup: !!theatreGroup, shows: theatreGroup?.shows?.length });
 
   if (!theatreGroup || !theatreGroup.shows || theatreGroup.shows.length === 0) {
     // Fallback: show basic theatre info
