@@ -25,6 +25,39 @@ function compareTimes(a, b) {
   return toMinutes(a) - toMinutes(b);
 }
 
+// Helper to format display dates (copied from app.js logic)
+function formatDisplayDate(dateIso) {
+  const parseIsoDate = (dateStr) => {
+    const match = String(dateStr || '').match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (!match) return null;
+    return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  };
+
+  const getDayDifferenceFromToday = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const otherDate = new Date(date);
+    otherDate.setHours(0, 0, 0, 0);
+    const diff = otherDate.getTime() - today.getTime();
+    return Math.round(diff / (1000 * 60 * 60 * 24));
+  };
+
+  const date = parseIsoDate(dateIso);
+  if (!date) return dateIso;
+  const dayDiff = getDayDifferenceFromToday(date);
+  if (dayDiff === 0) return 'Today';
+  if (dayDiff === 1) return 'Tomorrow';
+  if (dayDiff > 1 && dayDiff <= 6) {
+    return new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(date);
+  }
+  const showYear = date.getFullYear() !== new Date().getFullYear();
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    ...(showYear ? { year: 'numeric' } : {}),
+  }).format(date);
+}
+
 const mapElements = {
   toggleWrap: null,
   toggleBtn: null,
@@ -413,11 +446,22 @@ function attachCardEventListeners(card, shows) {
           Array.from(allDates).sort().forEach(date => {
             const times = show.dates[date] || [];
             const premiumTimes = show.premiumDates[date] || [];
-            const allTimes = [...times, ...premiumTimes];
-            const dateStr = new Date(`${date}T00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-            const div = document.createElement('div');
-            div.innerHTML = `<strong>${dateStr.toUpperCase()}</strong><br>${allTimes.join(', ')}`;
-            schedule.appendChild(div);
+            const allTimes = [...times, ...premiumTimes].sort(compareTimes);
+
+            const row = document.createElement('div');
+            row.className = 'show-schedule-row';
+
+            const label = document.createElement('span');
+            label.className = 'show-schedule-day';
+            label.textContent = formatDisplayDate(date);
+
+            const value = document.createElement('span');
+            value.className = 'show-schedule-times';
+            value.textContent = allTimes.join(', ');
+
+            row.appendChild(label);
+            row.appendChild(value);
+            schedule.appendChild(row);
           });
         }
 
