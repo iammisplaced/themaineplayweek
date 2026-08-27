@@ -2476,10 +2476,16 @@ textarea {
   right: 1rem;
   width: 320px;
   max-height: calc(100% - 2rem);
+  overflow-y: auto;
+  scrollbar-width: none;
   z-index: 10;
 }
 
 .theatre-sidebar.hidden {
+  display: none;
+}
+
+.theatre-sidebar::-webkit-scrollbar {
   display: none;
 }
 
@@ -2515,24 +2521,6 @@ textarea {
 
 .theatre-sidebar-content .group-card {
   animation: slideInUp 200ms ease-out;
-  min-height: 0;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-  flex: 1;
-}
-
-.theatre-sidebar-content .group-card::-webkit-scrollbar {
-  width: 6px;
-}
-
-.theatre-sidebar-content .group-card::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.theatre-sidebar-content .group-card::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 3px;
 }
 
 /* Simplify show-item styling in map card */
