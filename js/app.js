@@ -4867,9 +4867,9 @@ function render() {
       ? { lat: state.locationPreference.lat, lng: state.locationPreference.lng }
       : null;
 
-    // Pass groups data for film/showtime information
+    // Pass the theatre groups - they already have shows with dates/premiumDates processed
     const groupsArray = Array.from(entries.values());
-    renderMapMarkers(theatreList, userLocation, groupsArray, state.data.theatreGroups);
+    renderMapMarkers(theatreList, userLocation, groupsArray, groupsArray);
   }
 }
 

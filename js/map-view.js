@@ -252,23 +252,20 @@ function selectTheatre(theatre, marker) {
   mapElements.sidebar.classList.remove('hidden');
 }
 
-// Populate sidebar with theatre card - build from cachedTheatreGroups
+// Populate sidebar with theatre card - use theatre group's shows (already processed)
 function populateSidebar(theatre) {
-  // Find the actual theatre from cached theatre groups
-  if (!cachedTheatreGroups) {
+  // Find the theatre group from cached groups
+  if (!cachedTheatreGroups || !Array.isArray(cachedTheatreGroups)) {
     console.log('ERROR: cachedTheatreGroups not available');
     return;
   }
 
-  const rawTheatre = cachedTheatreGroups.find(t => t.id === theatre.id);
-  console.log('DEBUG: rawTheatre found?', !!rawTheatre, 'Films:', rawTheatre?.films?.length);
-  if (rawTheatre?.films?.length > 0) {
-    console.log('First film object:', rawTheatre.films[0]);
-    console.log('First film title:', rawTheatre.films[0].title, 'Showings:', rawTheatre.films[0].showings?.length);
-  }
+  const theatreGroup = cachedTheatreGroups.find(group =>
+    group.theatreInfo && group.theatreInfo.id === theatre.id
+  );
 
-  if (!rawTheatre || !rawTheatre.films || rawTheatre.films.length === 0) {
-    console.log('ERROR: Theatre not found or has no films');
+  if (!theatreGroup || !theatreGroup.shows || theatreGroup.shows.length === 0) {
+    console.log('ERROR: Theatre group not found or has no shows');
     mapElements.sidebarContent.innerHTML = `
       <article class="group-card" data-theatre-id="${theatre.id}">
         <h3 class="group-title">${theatre.name}</h3>
@@ -280,76 +277,8 @@ function populateSidebar(theatre) {
     return;
   }
 
-  // Build shows array from theatre's films - same transformation as buildGroups does for theatre view
-  const now = new Date();
-  const shows = [];
-
-  rawTheatre.films.forEach((film, filmIdx) => {
-    const show = {
-      theatre: rawTheatre.name,
-      city: rawTheatre.city,
-      film: film.title,
-      year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
-      ticketLink: film.ticketLink || '',
-      posterUrl: film.tmdb?.posterUrl || '',
-      dates: {},
-      premiumDates: {},
-      roomByDate: {},
-      noteByDate: {},
-      festivalIds: [],
-    };
-
-    // Process showings into dates/premiumDates maps
-    if (film.showings && Array.isArray(film.showings)) {
-      let addedForThisFilm = 0;
-      film.showings.forEach((showing) => {
-        // Standard times
-        (showing.times || []).forEach((time) => {
-          const showDate = showing.date;
-          const showDateTime = new Date(`${showDate}T${time}`);
-          if (showDateTime >= now) {
-            if (!show.dates[showDate]) show.dates[showDate] = [];
-            show.dates[showDate].push(time);
-            if (!show.roomByDate[showDate]) show.roomByDate[showDate] = String(showing?.room || '').trim();
-            if (!show.noteByDate[showDate]) show.noteByDate[showDate] = String(showing?.notes || '').trim();
-            addedForThisFilm++;
-          }
-        });
-
-        // Premium times
-        (showing.premiumTimes || []).forEach((time) => {
-          const showDate = showing.date;
-          const showDateTime = new Date(`${showDate}T${time}`);
-          if (showDateTime >= now) {
-            if (!show.premiumDates[showDate]) show.premiumDates[showDate] = [];
-            show.premiumDates[showDate].push(time);
-            if (!show.roomByDate[showDate]) show.roomByDate[showDate] = String(showing?.room || '').trim();
-            if (!show.noteByDate[showDate]) show.noteByDate[showDate] = String(showing?.notes || '').trim();
-            addedForThisFilm++;
-          }
-        });
-      });
-      if (filmIdx === 0) console.log(`Film "${film.title}": added ${addedForThisFilm} times`);
-    }
-
-    // Only add if has dates
-    if (Object.keys(show.dates).length || Object.keys(show.premiumDates).length) {
-      // Sort times for each date
-      Object.keys(show.dates).forEach(date => {
-        show.dates[date].sort(compareTimes);
-      });
-      Object.keys(show.premiumDates).forEach(date => {
-        show.premiumDates[date].sort(compareTimes);
-      });
-      shows.push(show);
-    }
-  });
-
-  console.log('DEBUG: Shows processed:', shows.length);
-  if (shows.length === 0) {
-    console.log('No shows with valid dates found');
-    return;
-  }
+  // Use the shows array from the theatre group - it already has dates/premiumDates processed
+  const shows = theatreGroup.shows;
 
   // Build the theatre card HTML
   const card = document.createElement('article');
