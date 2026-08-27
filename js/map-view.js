@@ -9,6 +9,7 @@ let currentTheatreId = null;
 let cachedTheatres = [];
 let cachedUserLocation = null;
 let cachedGroups = null;
+let cachedTheatreGroups = null;
 
 // Helper to compare times (copied from app.js logic)
 function compareTimes(a, b) {
@@ -219,11 +220,12 @@ function createMarkerIcon(isSelected = false) {
 }
 
 // Add theatre markers to map
-export function renderMapMarkers(theatres, userLocation, groups = null) {
+export function renderMapMarkers(theatres, userLocation, groups = null, theatreGroups = null) {
   // Cache the data for when map is initialized
   cachedTheatres = theatres;
   cachedUserLocation = userLocation;
   cachedGroups = groups;
+  cachedTheatreGroups = theatreGroups;
 
   if (!mapInstance) {
     return;
@@ -250,15 +252,15 @@ function selectTheatre(theatre, marker) {
   mapElements.sidebar.classList.remove('hidden');
 }
 
-// Populate sidebar with theatre card - build from state.data.theatreGroups
+// Populate sidebar with theatre card - build from cachedTheatreGroups
 function populateSidebar(theatre) {
-  // Find the actual theatre from state.data.theatreGroups
-  if (!window.state || !window.state.data || !window.state.data.theatreGroups) {
-    console.log('ERROR: Cannot access state.data.theatreGroups');
+  // Find the actual theatre from cached theatre groups
+  if (!cachedTheatreGroups) {
+    console.log('ERROR: cachedTheatreGroups not available');
     return;
   }
 
-  const rawTheatre = window.state.data.theatreGroups.find(t => t.id === theatre.id);
+  const rawTheatre = cachedTheatreGroups.find(t => t.id === theatre.id);
   if (!rawTheatre || !rawTheatre.films || rawTheatre.films.length === 0) {
     console.log('ERROR: Theatre not found or has no films');
     mapElements.sidebarContent.innerHTML = `

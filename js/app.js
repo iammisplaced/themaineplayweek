@@ -4869,7 +4869,7 @@ function render() {
 
     // Pass groups data for film/showtime information
     const groupsArray = Array.from(entries.values());
-    renderMapMarkers(theatreList, userLocation, groupsArray);
+    renderMapMarkers(theatreList, userLocation, groupsArray, state.data.theatreGroups);
   }
 }
 
