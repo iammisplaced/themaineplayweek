@@ -2490,6 +2490,20 @@ textarea {
   display: none;
 }
 
+/* Mobile responsive theatre sidebar */
+@media (max-width: 768px) {
+  .theatre-sidebar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    max-height: 40vh;
+    border-radius: var(--radius) var(--radius) 0 0;
+    margin: 0;
+  }
+}
+
 @keyframes slideInUp {
   from {
     transform: translateY(20px);
