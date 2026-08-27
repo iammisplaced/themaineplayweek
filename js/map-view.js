@@ -238,6 +238,8 @@ function selectTheatre(theatre, marker) {
 
 // Populate sidebar with theatre card - render directly without cloning
 function populateSidebar(theatre) {
+  console.log('DEBUG populateSidebar:', { theatre, cachedGroups: cachedGroups ? Object.keys(cachedGroups) : null });
+
   // Find the group data for this theatre from cachedGroups
   let theatreGroup = null;
   if (cachedGroups) {
@@ -246,6 +248,8 @@ function populateSidebar(theatre) {
                 group.theatreInfo.id === theatre.id
     );
   }
+
+  console.log('DEBUG theatreGroup found:', { theatreGroup, shows: theatreGroup?.shows?.length });
 
   if (!theatreGroup || !theatreGroup.shows || theatreGroup.shows.length === 0) {
     // Fallback: show basic theatre info
