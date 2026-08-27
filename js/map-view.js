@@ -337,13 +337,99 @@ function populateSidebar(theatre) {
     poster.src = show.posterUrl || './assets/images/noposter.webp';
     poster.alt = `Poster for ${show.film}`;
 
-    // Set up expand button in meta
+    // Build schedule HTML for sidebar (always visible by default)
+    const schedule = item.querySelector('.show-schedule');
+    const allDates = new Set([
+      ...Object.keys(show.dates || {}),
+      ...Object.keys(show.premiumDates || {})
+    ]);
+    const sortedDates = Array.from(allDates).sort();
+
+    let scheduleHTML = '';
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    sortedDates.forEach((date, dateIdx) => {
+      if (dateIdx >= 2) return; // Show first 2 dates by default
+
+      const times = show.dates[date] || [];
+      const premiumTimes = show.premiumDates[date] || [];
+      const allTimes = [...times, ...premiumTimes];
+
+      const dateObj = new Date(`${date}T00:00`);
+      let dateLabel = '';
+      if (dateObj.getTime() === today.getTime()) {
+        dateLabel = 'TODAY';
+      } else {
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        if (dateObj.getTime() === tomorrow.getTime()) {
+          dateLabel = 'TOMORROW';
+        } else {
+          dateLabel = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase();
+        }
+      }
+
+      scheduleHTML += `<div style="margin-bottom: 0.75rem;"><strong style="font-size: 0.85rem; color: var(--muted);">${dateLabel}</strong><br>${allTimes.join(', ')}</div>`;
+    });
+
+    // Add "More dates" button if there are more than 2 dates
+    if (sortedDates.length > 2) {
+      const moreBtn = document.createElement('button');
+      moreBtn.type = 'button';
+      moreBtn.className = 'film-expand-toggle';
+      moreBtn.style.cssText = 'width: 100%; margin-bottom: 0.75rem; padding: 0.5rem 1rem; text-align: center;';
+      moreBtn.textContent = `▶ More dates (${sortedDates.length - 2})`;
+      schedule.appendChild(moreBtn);
+
+      moreBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (moreBtn.textContent.includes('▶')) {
+          // Show all dates
+          moreBtn.textContent = '▼ Show fewer dates';
+          let allHTML = '';
+          sortedDates.forEach((date) => {
+            const times = show.dates[date] || [];
+            const premiumTimes = show.premiumDates[date] || [];
+            const allTimes = [...times, ...premiumTimes];
+            const dateObj = new Date(`${date}T00:00`);
+            let dateLabel = '';
+            if (dateObj.getTime() === today.getTime()) {
+              dateLabel = 'TODAY';
+            } else {
+              const tomorrow = new Date(today);
+              tomorrow.setDate(tomorrow.getDate() + 1);
+              if (dateObj.getTime() === tomorrow.getTime()) {
+                dateLabel = 'TOMORROW';
+              } else {
+                dateLabel = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase();
+              }
+            }
+            allHTML += `<div style="margin-bottom: 0.75rem;"><strong style="font-size: 0.85rem; color: var(--muted);">${dateLabel}</strong><br>${allTimes.join(', ')}</div>`;
+          });
+          const datesList = document.createElement('div');
+          datesList.className = 'expanded-dates';
+          datesList.innerHTML = allHTML;
+          moreBtn.parentNode.insertBefore(datesList, moreBtn.nextSibling);
+        } else {
+          // Hide extra dates
+          moreBtn.textContent = `▶ More dates (${sortedDates.length - 2})`;
+          const expanded = moreBtn.nextElementSibling;
+          if (expanded?.className === 'expanded-dates') {
+            expanded.remove();
+          }
+        }
+      });
+    }
+
+    schedule.innerHTML += scheduleHTML;
+
+    // Set up expand button
     const meta = item.querySelector('.show-meta');
     const expandBtn = document.createElement('button');
     expandBtn.type = 'button';
     expandBtn.className = 'film-expand-toggle theatre-row-toggle';
     expandBtn.textContent = 'Expand';
-    // Store show data on the button for easy access
     expandBtn.dataset.showIndex = idx;
     meta.appendChild(expandBtn);
 
@@ -351,6 +437,8 @@ function populateSidebar(theatre) {
     const ticketLink = item.querySelector('.show-link');
     if (show.ticketLink) {
       ticketLink.href = show.ticketLink;
+    } else {
+      ticketLink.classList.add('hidden');
     }
 
     list.appendChild(item);
