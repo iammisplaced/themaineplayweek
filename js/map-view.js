@@ -276,22 +276,26 @@ function populateSidebar(theatre) {
   mapElements.sidebarContent.innerHTML = '';
   mapElements.sidebarContent.appendChild(clonedCard);
 
-  // Find the theatre data from cachedTheatres to get film ticket links
-  let theatreData = null;
-  if (cachedTheatres) {
-    theatreData = cachedTheatres.find(t => t.id === theatre.id);
+  // Find the group data for this theatre from cachedGroups
+  let theatreGroup = null;
+  if (cachedGroups) {
+    const theatreKey = `${theatre.name} · ${theatre.city}`;
+    theatreGroup = Object.values(cachedGroups).find(
+      group => group.theatreInfo &&
+                group.theatreInfo.id === theatre.id
+    );
   }
 
   // Attach event listeners so expand/collapse buttons work
-  attachCardEventListeners(clonedCard, theatreData);
+  attachCardEventListeners(clonedCard, theatreGroup);
 }
 
 // Attach event listeners to card elements
-function attachCardEventListeners(card, theatreData) {
+function attachCardEventListeners(card, theatreGroup) {
   // Find all expand buttons (which expand/collapse individual show schedules)
   const expandButtons = card.querySelectorAll('.film-expand-toggle.theatre-row-toggle');
 
-  expandButtons.forEach((button) => {
+  expandButtons.forEach((button, idx) => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -333,49 +337,23 @@ function attachCardEventListeners(card, theatreData) {
         schedule.classList.remove('hidden');
         button.textContent = 'Collapse';
 
-        // Extract film title from show-main (strip any ribbons/pills)
-        const showMain = showItem.querySelector('.show-main');
-        let filmTitle = '';
-        if (showMain) {
-          // Get text content and trim, but skip any span elements (ribbons, pills)
-          filmTitle = Array.from(showMain.childNodes)
-            .filter(node => node.nodeType === Node.TEXT_NODE)
-            .map(node => node.textContent.trim())
-            .join('')
-            .trim();
-          // If no text nodes found, try getting all text
-          if (!filmTitle) {
-            filmTitle = showMain.textContent.trim();
-          }
-        }
-
-        console.log('DEBUG: Expanding show', { filmTitle, theatreData, theatreDataFilms: theatreData?.films });
-
-        // Find the matching film in theatre data to get ticketLink
+        // Get the show data from theatreGroup.shows[idx]
         let ticketUrl = '';
-        if (theatreData && theatreData.films && filmTitle) {
-          console.log('DEBUG: Looking for film in theatre.films array');
-          const matchingFilm = theatreData.films.find(f => f.title === filmTitle);
-          console.log('DEBUG: Matching film found?', { matchingFilm, filmTitle });
-          if (matchingFilm && matchingFilm.ticketLink) {
-            ticketUrl = matchingFilm.ticketLink;
-            console.log('DEBUG: Got ticket URL:', ticketUrl);
-          }
-        } else {
-          console.log('DEBUG: Missing data', { hasTheatreData: !!theatreData, hasFilmsArray: !!theatreData?.films, filmTitle });
+        let filmTitle = '';
+        if (theatreGroup && theatreGroup.shows && theatreGroup.shows[idx]) {
+          const show = theatreGroup.shows[idx];
+          ticketUrl = show.ticketLink || '';
+          filmTitle = show.film || '';
         }
 
         // Show the tickets link if we have a ticket URL
         const ticketLink = showItem.querySelector('.show-link');
-        console.log('DEBUG: Ticket link element?', { ticketLink, ticketUrl });
         if (ticketLink) {
           if (ticketUrl) {
             ticketLink.href = ticketUrl;
             ticketLink.classList.remove('hidden');
-            console.log('DEBUG: Set ticket link href and showed it');
           } else {
             ticketLink.classList.add('hidden');
-            console.log('DEBUG: No ticket URL, hiding link');
           }
         }
 
