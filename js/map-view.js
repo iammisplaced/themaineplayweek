@@ -260,10 +260,16 @@ function populateSidebar(theatre) {
     return;
   }
 
+  console.log('DEBUG: Looking for theatre ID', theatre.id, 'in', cachedTheatreGroups.length, 'groups');
+  if (cachedTheatreGroups.length > 0) {
+    console.log('First group:', cachedTheatreGroups[0]);
+  }
+
   const theatreGroup = cachedTheatreGroups.find(group =>
     group.theatreInfo && group.theatreInfo.id === theatre.id
   );
 
+  console.log('DEBUG: theatreGroup found?', !!theatreGroup, 'Shows:', theatreGroup?.shows?.length);
   if (!theatreGroup || !theatreGroup.shows || theatreGroup.shows.length === 0) {
     console.log('ERROR: Theatre group not found or has no shows');
     mapElements.sidebarContent.innerHTML = `
