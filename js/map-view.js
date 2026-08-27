@@ -10,6 +10,20 @@ let cachedTheatres = [];
 let cachedUserLocation = null;
 let cachedGroups = null;
 
+// Helper to compare times (copied from app.js logic)
+function compareTimes(a, b) {
+  const toMinutes = (time) => {
+    const match = String(time || '').match(/(\d+):(\d+)/);
+    if (!match) return 0;
+    let hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    if (String(time).toLowerCase().includes('pm') && hours !== 12) hours += 12;
+    if (String(time).toLowerCase().includes('am') && hours === 12) hours = 0;
+    return hours * 60 + minutes;
+  };
+  return toMinutes(a) - toMinutes(b);
+}
+
 const mapElements = {
   toggleWrap: null,
   toggleBtn: null,
@@ -236,56 +250,95 @@ function selectTheatre(theatre, marker) {
   mapElements.sidebar.classList.remove('hidden');
 }
 
-// Populate sidebar with theatre card - render directly without cloning
+// Populate sidebar with theatre card - build from state.data.theatreGroups
 function populateSidebar(theatre) {
-  console.log('DEBUG populateSidebar:', { theatre, cachedGroups: cachedGroups ? Object.keys(cachedGroups) : null });
-
-  // Find the group data for this theatre from cachedGroups
-  let theatreGroup = null;
-  if (cachedGroups && Array.isArray(cachedGroups)) {
-    console.log('DEBUG: First group structure:', cachedGroups[0]);
-
-    // Try searching by theatre name instead
-    theatreGroup = cachedGroups.find(
-      group => {
-        const showsForTheatre = group.shows?.filter(s => s.theatre === theatre.name && s.city === theatre.city);
-        return showsForTheatre && showsForTheatre.length > 0;
-      }
-    );
-
-    // If not found, try different approach - build theatre group from all shows
-    if (!theatreGroup) {
-      console.log('DEBUG: No matching group found, building from all shows');
-      const theatreShows = [];
-      cachedGroups.forEach(group => {
-        if (group.shows) {
-          const matching = group.shows.filter(s => s.theatre === theatre.name && s.city === theatre.city);
-          theatreShows.push(...matching);
-        }
-      });
-      if (theatreShows.length > 0) {
-        theatreGroup = { shows: theatreShows };
-      }
-    }
+  // Find the actual theatre from state.data.theatreGroups
+  if (!window.state || !window.state.data || !window.state.data.theatreGroups) {
+    console.log('ERROR: Cannot access state.data.theatreGroups');
+    return;
   }
 
-  console.log('DEBUG theatreGroup built:', { theatreGroup: !!theatreGroup, shows: theatreGroup?.shows?.length });
-
-  if (!theatreGroup || !theatreGroup.shows || theatreGroup.shows.length === 0) {
-    // Fallback: show basic theatre info
+  const rawTheatre = window.state.data.theatreGroups.find(t => t.id === theatre.id);
+  if (!rawTheatre || !rawTheatre.films || rawTheatre.films.length === 0) {
+    console.log('ERROR: Theatre not found or has no films');
     mapElements.sidebarContent.innerHTML = `
       <article class="group-card" data-theatre-id="${theatre.id}">
         <h3 class="group-title">${theatre.name}</h3>
         <p class="group-subtitle">${theatre.city}</p>
         <a class="group-link" href="${theatre.website}" target="_blank" rel="noopener noreferrer">Visit theatre website</a>
-        <p style="padding: 1rem 0; font-size: 0.9rem;">${theatre.address}</p>
         <ul class="show-list"></ul>
       </article>
     `;
     return;
   }
 
-  // Build the theatre card HTML directly
+  // Build shows array from theatre's films - same transformation as buildGroups does for theatre view
+  const now = new Date();
+  const shows = [];
+
+  rawTheatre.films.forEach((film) => {
+    const show = {
+      theatre: rawTheatre.name,
+      city: rawTheatre.city,
+      film: film.title,
+      year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
+      ticketLink: film.ticketLink || '',
+      posterUrl: film.tmdb?.posterUrl || '',
+      dates: {},
+      premiumDates: {},
+      roomByDate: {},
+      noteByDate: {},
+      festivalIds: [],
+    };
+
+    // Process showings into dates/premiumDates maps
+    if (film.showings && Array.isArray(film.showings)) {
+      film.showings.forEach((showing) => {
+        // Standard times
+        (showing.times || []).forEach((time) => {
+          const showDate = showing.date;
+          const showDateTime = new Date(`${showDate}T${time}`);
+          if (showDateTime >= now) {
+            if (!show.dates[showDate]) show.dates[showDate] = [];
+            show.dates[showDate].push(time);
+            if (!show.roomByDate[showDate]) show.roomByDate[showDate] = String(showing?.room || '').trim();
+            if (!show.noteByDate[showDate]) show.noteByDate[showDate] = String(showing?.notes || '').trim();
+          }
+        });
+
+        // Premium times
+        (showing.premiumTimes || []).forEach((time) => {
+          const showDate = showing.date;
+          const showDateTime = new Date(`${showDate}T${time}`);
+          if (showDateTime >= now) {
+            if (!show.premiumDates[showDate]) show.premiumDates[showDate] = [];
+            show.premiumDates[showDate].push(time);
+            if (!show.roomByDate[showDate]) show.roomByDate[showDate] = String(showing?.room || '').trim();
+            if (!show.noteByDate[showDate]) show.noteByDate[showDate] = String(showing?.notes || '').trim();
+          }
+        });
+      });
+    }
+
+    // Only add if has dates
+    if (Object.keys(show.dates).length || Object.keys(show.premiumDates).length) {
+      // Sort times for each date
+      Object.keys(show.dates).forEach(date => {
+        show.dates[date].sort(compareTimes);
+      });
+      Object.keys(show.premiumDates).forEach(date => {
+        show.premiumDates[date].sort(compareTimes);
+      });
+      shows.push(show);
+    }
+  });
+
+  if (shows.length === 0) {
+    console.log('No shows with valid dates found');
+    return;
+  }
+
+  // Build the theatre card HTML
   const card = document.createElement('article');
   card.className = 'group-card';
   card.setAttribute('data-theatre-id', theatre.id);
@@ -296,7 +349,7 @@ function populateSidebar(theatre) {
   title.textContent = theatre.name;
   card.appendChild(title);
 
-  // Subtitle (address)
+  // Subtitle
   const subtitle = document.createElement('p');
   subtitle.className = 'group-subtitle';
   subtitle.textContent = theatre.city;
@@ -315,8 +368,8 @@ function populateSidebar(theatre) {
   const list = document.createElement('ul');
   list.className = 'show-list';
 
-  // Render ALL shows (no "Show all" button or 5-film limit)
-  theatreGroup.shows.forEach((show, idx) => {
+  // Render all shows
+  shows.forEach((show, idx) => {
     const item = document.createElement('li');
     item.className = 'show-item';
     item.innerHTML = `
@@ -342,9 +395,8 @@ function populateSidebar(theatre) {
     expandBtn.type = 'button';
     expandBtn.className = 'film-expand-toggle theatre-row-toggle';
     expandBtn.textContent = 'Expand';
-    // Build the filmKey the same way app.js does
-    const filmKey = `theatres::${theatre.name}::${theatre.city}::${show.film}${show.year ? `::${show.year}` : ''}`;
-    expandBtn.dataset.filmKey = filmKey;
+    // Store show data on the button for easy access
+    expandBtn.dataset.showIndex = idx;
     meta.appendChild(expandBtn);
 
     // Set ticket link
@@ -361,15 +413,14 @@ function populateSidebar(theatre) {
   mapElements.sidebarContent.appendChild(card);
 
   // Attach event listeners
-  attachCardEventListeners(card, theatreGroup);
+  attachCardEventListeners(card, shows);
 }
 
 // Attach event listeners to card elements
-function attachCardEventListeners(card, theatreGroup) {
-  // Find all expand buttons
+function attachCardEventListeners(card, shows) {
   const expandButtons = card.querySelectorAll('.film-expand-toggle.theatre-row-toggle');
 
-  expandButtons.forEach((button, idx) => {
+  expandButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -380,8 +431,11 @@ function attachCardEventListeners(card, theatreGroup) {
       const schedule = showItem.querySelector('.show-schedule');
       if (!schedule) return;
 
+      const showIndex = Number(button.dataset.showIndex);
+      const show = shows[showIndex];
+      if (!show) return;
+
       const isExpanded = !schedule.classList.contains('hidden');
-      const show = theatreGroup.shows[idx];
 
       if (isExpanded) {
         // COLLAPSING
@@ -403,15 +457,20 @@ function attachCardEventListeners(card, theatreGroup) {
         schedule.classList.remove('hidden');
         button.textContent = 'Collapse';
 
-        // Render schedule (dates/times)
-        if (show) {
-          const dates = show.dates || {};
-          const html = Object.entries(dates).map(([date, times]) => {
-            const dateStr = new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            return `<div><strong>${dateStr}</strong><br>${times.join(', ')}</div>`;
-          }).join('<br>');
-          schedule.innerHTML = html;
-        }
+        // Build schedule HTML from dates/premiumDates
+        let scheduleHTML = '';
+        const allDates = new Set([
+          ...Object.keys(show.dates || {}),
+          ...Object.keys(show.premiumDates || {})
+        ]);
+        Array.from(allDates).sort().forEach(date => {
+          const times = show.dates[date] || [];
+          const premiumTimes = show.premiumDates[date] || [];
+          const allTimes = [...times, ...premiumTimes];
+          const dateStr = new Date(`${date}T00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+          scheduleHTML += `<div style="margin-bottom: 0.5rem;"><strong>${dateStr.toUpperCase()}</strong><br>${allTimes.join(', ')}</div>`;
+        });
+        schedule.innerHTML = scheduleHTML;
 
         // Show ticket link
         const ticketLink = showItem.querySelector('.show-link');
