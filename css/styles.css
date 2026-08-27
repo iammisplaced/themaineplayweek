@@ -2497,9 +2497,9 @@ textarea {
     bottom: 0;
     left: 0;
     right: 0;
-    width: auto;
-    max-height: 40vh;
-    border-radius: var(--radius) var(--radius) 0 0;
+    width: 100%;
+    max-height: 30vh;
+    border-radius: 0;
     margin: 0;
   }
 }
