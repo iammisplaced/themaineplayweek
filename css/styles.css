@@ -2417,6 +2417,10 @@ textarea {
   justify-content: flex-end;
 }
 
+.theatre-map-toggle-wrap.hidden {
+  display: none;
+}
+
 .theatre-map-toggle {
   border: 1px solid var(--border);
   background: var(--panel);
@@ -2459,38 +2463,39 @@ textarea {
 
 .theatre-sidebar {
   position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: min(360px, 100%);
+  bottom: 1rem;
+  right: 1rem;
+  width: 320px;
+  max-height: calc(100% - 2rem);
   background: var(--panel);
-  border-left: 1px solid var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   padding: 1rem;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
   z-index: 10;
-  animation: slideInRight 200ms ease-out;
+  animation: slideInUp 200ms ease-out;
 }
 
 .theatre-sidebar.hidden {
   display: none;
 }
 
-@keyframes slideInRight {
+@keyframes slideInUp {
   from {
-    transform: translateX(100%);
+    transform: translateY(20px);
     opacity: 0;
   }
   to {
-    transform: translateX(0);
+    transform: translateY(0);
     opacity: 1;
   }
 }
 
 .theatre-sidebar-close {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  position: sticky;
+  top: 0;
+  float: right;
   border: 0;
   background: transparent;
   font-size: 1.5rem;
@@ -2588,8 +2593,8 @@ textarea {
 
 :root[data-theme="dark"] .theatre-sidebar {
   background: var(--panel);
-  border-left-color: #3c504a;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.3);
+  border-color: #3c504a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 :root[data-theme="dark"] .theatre-sidebar-link {
@@ -2604,9 +2609,8 @@ textarea {
 
 @media (max-width: 640px) {
   .theatre-sidebar {
-    width: 100%;
-    border-left: none;
-    border-top: 1px solid var(--border);
+    width: calc(100% - 2rem);
+    max-width: 320px;
   }
 
   .map-view-container {

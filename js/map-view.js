@@ -8,6 +8,7 @@ let markers = [];
 let currentTheatreId = null;
 let cachedTheatres = [];
 let cachedUserLocation = null;
+let cachedGroups = null;
 
 const mapElements = {
   toggleWrap: null,
@@ -39,9 +40,7 @@ function initMapElements() {
 
 // Toggle between map and list view
 function toggleMapView() {
-  console.log('toggleMapView called');
   const isMapActive = mapElements.mapContainer.classList.toggle('hidden');
-  console.log('Map container hidden?', isMapActive);
   const resultsSection = document.getElementById('results');
 
   if (resultsSection) {
@@ -58,7 +57,6 @@ function toggleMapView() {
 
   // Request fresh location when opening map
   if (!isMapActive) {
-    console.log('Map opened, requesting fresh location...');
     requestFreshLocation();
   }
 
@@ -105,7 +103,6 @@ function initializeMap() {
 
   // Render any cached theatre data
   if (cachedTheatres.length > 0) {
-    console.log('Rendering cached theatres after map initialization');
     renderCachedMarkers();
   }
 }
@@ -117,8 +114,6 @@ function renderCachedMarkers() {
   clearMarkers();
   currentTheatreId = null;
 
-  console.log('renderCachedMarkers - cachedUserLocation:', cachedUserLocation);
-
   let userLat = null;
   let userLng = null;
 
@@ -126,31 +121,11 @@ function renderCachedMarkers() {
   if (cachedUserLocation && cachedUserLocation.lat && cachedUserLocation.lng) {
     userLat = cachedUserLocation.lat;
     userLng = cachedUserLocation.lng;
-    console.log('Using user location:', userLat, userLng);
-  } else if (cachedTheatres.length > 0) {
-    // Fallback: calculate center of all theatres
-    let totalLat = 0;
-    let totalLng = 0;
-    let validTheatres = 0;
-
-    cachedTheatres.forEach(theatre => {
-      if (theatre.latitude && theatre.longitude) {
-        totalLat += theatre.latitude;
-        totalLng += theatre.longitude;
-        validTheatres++;
-      }
-    });
-
-    if (validTheatres > 0) {
-      userLat = totalLat / validTheatres;
-      userLng = totalLng / validTheatres;
-      console.log('Using theatre center fallback:', userLat, userLng);
-    }
   }
 
-  // Set map view if we have a location
+  // Set map view based on available data
   if (userLat && userLng) {
-    console.log('Centering on location:', userLat, userLng);
+    // User location available: center on user with radius
     mapInstance.setView([userLat, userLng], 11);
 
     // Add user location marker
@@ -162,21 +137,8 @@ function renderCachedMarkers() {
       opacity: 1,
       fillOpacity: 0.8,
     }).addTo(mapInstance);
-
-    // Add 15 mile radius circle around user
-    const radiusMiles = 15;
-    const radiusMeters = radiusMiles * 1609.34;
-    L.circle([userLat, userLng], {
-      radius: radiusMeters,
-      color: '#c54828',
-      fillColor: '#c54828',
-      fillOpacity: 0.05,
-      weight: 2,
-      dashArray: '5, 5',
-    }).addTo(mapInstance);
   } else {
-    console.log('No user location, fitting all theatres in view');
-    // Fit all theatres in view if no user location
+    // No user location: fit all theatres in view
     if (cachedTheatres.length > 0) {
       const bounds = L.latLngBounds();
       cachedTheatres.forEach(theatre => {
@@ -191,12 +153,8 @@ function renderCachedMarkers() {
   }
 
   // Add theatre markers
-  let addedMarkers = 0;
-  let missingCoords = 0;
-
   cachedTheatres.forEach(theatre => {
     if (!theatre.latitude || !theatre.longitude) {
-      missingCoords++;
       return;
     }
 
@@ -210,27 +168,12 @@ function renderCachedMarkers() {
     });
 
     markers.push({ marker, theatre });
-    addedMarkers++;
   });
-
-  console.log(`Added ${addedMarkers} markers to map. ${missingCoords} theatres missing coordinates.`);
-
-  // Show message if no markers could be added
-  if (addedMarkers === 0 && cachedTheatres.length > 0) {
-    console.warn('No theatres with coordinates found!');
-    mapElements.sidebarContent.innerHTML = `
-      <div style="padding: 1rem; text-align: center; color: var(--muted);">
-        <p>No theatres with location data available.</p>
-        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Coordinates may need to be added in the admin panel.</p>
-      </div>
-    `;
-    mapElements.sidebar.classList.remove('hidden');
-  }
 }
 
 // Clear existing markers
 function clearMarkers() {
-  markers.forEach(marker => mapInstance.removeLayer(marker));
+  markers.forEach(m => mapInstance.removeLayer(m.marker));
   markers = [];
 }
 
@@ -262,23 +205,17 @@ function createMarkerIcon(isSelected = false) {
 }
 
 // Add theatre markers to map
-export function renderMapMarkers(theatres, userLocation) {
-  console.log('renderMapMarkers called');
-
+export function renderMapMarkers(theatres, userLocation, groups = null) {
   // Cache the data for when map is initialized
   cachedTheatres = theatres;
   cachedUserLocation = userLocation;
-
-  console.log('Caching user location:', userLocation);
-  console.log('Map instance exists?', !!mapInstance);
+  cachedGroups = groups;
 
   if (!mapInstance) {
-    console.log('No map instance yet, data cached for when map is shown');
     return;
   }
 
   // If map exists, render immediately
-  console.log('Map exists, rendering cached markers now');
   renderCachedMarkers();
 }
 
@@ -299,23 +236,83 @@ function selectTheatre(theatre, marker) {
   mapElements.sidebar.classList.remove('hidden');
 }
 
-// Populate sidebar with theatre information
+// Populate sidebar with theatre card from original DOM
 function populateSidebar(theatre) {
-  const html = `
-    <div class="theatre-sidebar-header">
-      <h3>${theatre.name}</h3>
-      <p class="theatre-sidebar-city">${theatre.city}</p>
-    </div>
-    <div class="theatre-sidebar-details">
-      <p class="theatre-sidebar-address">${theatre.address}</p>
-      ${theatre.phone ? `<p class="theatre-sidebar-phone">${theatre.phone}</p>` : ''}
-      <a href="${theatre.website}" target="_blank" rel="noopener noreferrer" class="theatre-sidebar-link">
-        Visit Website
-      </a>
-    </div>
-  `;
+  // Find the original theatre card in the DOM
+  const originalCard = document.querySelector(`[data-theatre-id="${theatre.id}"]`);
 
-  mapElements.sidebarContent.innerHTML = html;
+  if (!originalCard) {
+    // Fallback: show basic theatre info
+    const html = `
+      <div class="theatre-sidebar-header">
+        <h3>${theatre.name}</h3>
+        <p class="theatre-sidebar-city">${theatre.city}</p>
+      </div>
+      <div class="theatre-sidebar-details">
+        <p class="theatre-sidebar-address">${theatre.address}</p>
+        <a href="${theatre.website}" target="_blank" rel="noopener noreferrer" class="theatre-sidebar-link">
+          Visit Website
+        </a>
+      </div>
+    `;
+    mapElements.sidebarContent.innerHTML = html;
+    return;
+  }
+
+  // Clone the entire theatre card as-is
+  const clonedCard = originalCard.cloneNode(true);
+
+  // Show all hidden show-items (remove the hidden class from those that were cut off for scrolling)
+  const hiddenShowItems = clonedCard.querySelectorAll('.show-item.hidden');
+  hiddenShowItems.forEach(item => item.classList.remove('hidden'));
+
+  // Remove the "Show all" toggle button since we're showing all films
+  const showAllToggle = clonedCard.querySelector('.film-expand-toggle.theatre-card-toggle');
+  if (showAllToggle) {
+    showAllToggle.remove();
+  }
+
+  // Replace the sidebar content with the cloned card
+  mapElements.sidebarContent.innerHTML = '';
+  mapElements.sidebarContent.appendChild(clonedCard);
+
+  // Attach event listeners so expand/collapse buttons work
+  attachCardEventListeners(clonedCard);
+}
+
+// Attach event listeners to card elements
+function attachCardEventListeners(card) {
+  // Find all expand buttons (which expand/collapse individual show schedules)
+  const expandButtons = card.querySelectorAll('.film-expand-toggle.theatre-row-toggle');
+
+  expandButtons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // Find the parent show-item
+      const showItem = button.closest('.show-item');
+      if (!showItem) return;
+
+      // Toggle the show-schedule visibility
+      const schedule = showItem.querySelector('.show-schedule');
+      if (!schedule) return;
+
+      const isExpanded = !schedule.classList.contains('hidden');
+
+      // Toggle schedule visibility
+      schedule.classList.toggle('hidden', isExpanded);
+
+      // Update button text
+      button.textContent = isExpanded ? 'Expand' : 'Collapse';
+
+      // Show/hide the tickets link
+      const ticketLink = showItem.querySelector('.show-link');
+      if (ticketLink) {
+        ticketLink.classList.toggle('hidden', isExpanded);
+      }
+    });
+  });
 }
 
 // Close sidebar
@@ -353,7 +350,10 @@ export function hideMapToggle() {
 // Request fresh geolocation and update map
 async function requestFreshLocation() {
   if (!("geolocation" in navigator)) {
-    console.log('Geolocation not supported');
+    // Still render with fallback
+    if (mapInstance) {
+      renderCachedMarkers();
+    }
     return;
   }
 
@@ -366,22 +366,18 @@ async function requestFreshLocation() {
       });
     });
 
-    console.log('Fresh geolocation obtained:', position.coords);
-
     // Update cached location
     cachedUserLocation = {
       lat: position.coords.latitude,
       lng: position.coords.longitude,
     };
-
-    // Re-render map if it's already initialized
+  } catch (error) {
+    // Geolocation failed - will use fallback in renderCachedMarkers
+  } finally {
+    // Always render the map with whatever location we have (or fallback)
     if (mapInstance) {
-      console.log('Map initialized, re-rendering with fresh location');
       renderCachedMarkers();
     }
-  } catch (error) {
-    console.warn('Geolocation request failed:', error.message);
-    // Fall back to existing cached location or state
   }
 }
 

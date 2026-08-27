@@ -2207,6 +2207,7 @@ async function loadDataFromSupabase() {
   });
   const theatreGroups = theatres.map((theatreRow) => {
     const entry = {
+      id: theatreRow.id,
       name: theatreRow.name,
       city: theatreRow.city,
       address: theatreRow.address,
@@ -4286,6 +4287,12 @@ function render() {
 
   for (const [groupName, group] of entries) {
     const card = elements.groupTemplate.content.firstElementChild.cloneNode(true);
+
+    // Add data-theatre-id for map view lookup
+    if (state.view === "theatres" && group.theatreInfo) {
+      card.setAttribute("data-theatre-id", group.theatreInfo.id);
+    }
+
     const groupTitle = card.querySelector(".group-title");
     const isFilmsView = isFilmStyleView && Boolean(group.filmInfo);
     if (isFilmsView) {
@@ -4856,14 +4863,13 @@ function render() {
       .map(([, group]) => group.theatreInfo)
       .filter(theatre => theatre && theatre.latitude && theatre.longitude);
 
-    // Get user location from location preference
-    console.log('state.locationPreference:', state.locationPreference);
     const userLocation = state.locationPreference && state.locationPreference.lat && state.locationPreference.lng
       ? { lat: state.locationPreference.lat, lng: state.locationPreference.lng }
       : null;
-    console.log('Passing userLocation to map:', userLocation);
 
-    renderMapMarkers(theatreList, userLocation);
+    // Pass groups data for film/showtime information
+    const groupsArray = Array.from(entries.values());
+    renderMapMarkers(theatreList, userLocation, groupsArray);
   }
 }
 
@@ -6231,7 +6237,6 @@ function buildGroups(theatres, view) {
       name: theatre.name,
       city: theatre.city,
       address: theatre.address,
-      phone: theatre.phone,
       website: theatre.website,
       latitude: theatre.latitude,
       longitude: theatre.longitude,
