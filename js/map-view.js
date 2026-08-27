@@ -441,11 +441,6 @@ function attachCardEventListeners(card, shows) {
           button.textContent = 'Collapse';
           rowActions.appendChild(button);
 
-          // Add ticket link to row actions
-          if (ticketLink && show.ticketLink) {
-            rowActions.appendChild(ticketLink);
-          }
-
           // Add film page link
           if (show.film) {
             const filmPageLink = document.createElement('a');
