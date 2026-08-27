@@ -300,16 +300,76 @@ function attachCardEventListeners(card) {
 
       const isExpanded = !schedule.classList.contains('hidden');
 
-      // Toggle schedule visibility
-      schedule.classList.toggle('hidden', isExpanded);
+      if (isExpanded) {
+        // COLLAPSING
+        schedule.classList.add('hidden');
+        button.textContent = 'Expand';
 
-      // Update button text
-      button.textContent = isExpanded ? 'Expand' : 'Collapse';
+        // Hide the tickets link
+        const ticketLink = showItem.querySelector('.show-link');
+        if (ticketLink) {
+          ticketLink.classList.add('hidden');
+        }
 
-      // Show/hide the tickets link
-      const ticketLink = showItem.querySelector('.show-link');
-      if (ticketLink) {
-        ticketLink.classList.toggle('hidden', isExpanded);
+        // Hide row actions if they exist
+        const rowActions = showItem.querySelector('.theatre-row-actions');
+        if (rowActions) {
+          rowActions.classList.add('hidden');
+        }
+      } else {
+        // EXPANDING
+        schedule.classList.remove('hidden');
+        button.textContent = 'Collapse';
+
+        // Show the tickets link if it has an href
+        const ticketLink = showItem.querySelector('.show-link');
+        if (ticketLink && ticketLink.href) {
+          ticketLink.classList.remove('hidden');
+        }
+
+        // Show or create row actions with collapse button and film page link
+        let rowActions = showItem.querySelector('.theatre-row-actions');
+        if (!rowActions) {
+          rowActions = document.createElement('div');
+          rowActions.className = 'theatre-row-actions';
+
+          // Add the collapse button to row actions
+          const collapseBtn = document.createElement('button');
+          collapseBtn.type = 'button';
+          collapseBtn.className = 'film-expand-toggle theatre-row-toggle';
+          collapseBtn.textContent = 'Collapse';
+          collapseBtn.addEventListener('click', (evt) => {
+            evt.preventDefault();
+            evt.stopPropagation();
+            button.click();
+          });
+          rowActions.appendChild(collapseBtn);
+
+          // Extract film title from show-main text content
+          const showMain = showItem.querySelector('.show-main');
+          const filmTitle = showMain ? showMain.textContent.trim() : '';
+
+          if (filmTitle) {
+            const filmPageLink = document.createElement('a');
+            filmPageLink.className = 'theatre-row-film-link';
+            // Build the slug the same way app.js does: lowercase, replace non-alphanumeric with dash, trim dashes
+            const slug = filmTitle
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, '-')
+              .replace(/^-+|-+$/g, '')
+              .replace(/--+/g, '-')
+              .slice(0, 80);
+            filmPageLink.href = `films/${slug}/`;
+            filmPageLink.target = '_blank';
+            filmPageLink.rel = 'noopener noreferrer';
+            filmPageLink.textContent = 'View Film Page';
+            rowActions.appendChild(filmPageLink);
+          }
+
+          showItem.appendChild(rowActions);
+        } else {
+          rowActions.classList.remove('hidden');
+        }
       }
     });
   });
