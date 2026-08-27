@@ -148,11 +148,6 @@ function initializeMap() {
   setTimeout(() => {
     mapInstance.invalidateSize();
   }, 100);
-
-  // Render any cached theatre data
-  if (cachedTheatres.length > 0) {
-    renderCachedMarkers();
-  }
 }
 
 // Render the cached theatre data
