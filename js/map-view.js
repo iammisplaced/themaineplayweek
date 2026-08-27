@@ -243,23 +243,33 @@ function populateSidebar(theatre) {
   // Find the group data for this theatre from cachedGroups
   let theatreGroup = null;
   if (cachedGroups && Array.isArray(cachedGroups)) {
-    console.log('DEBUG: Searching through', cachedGroups.length, 'groups for theatre ID', theatre.id);
-    cachedGroups.forEach((group, idx) => {
-      console.log(`Group ${idx}:`, {
-        hasTheatreInfo: !!group.theatreInfo,
-        theatreInfoId: group.theatreInfo?.id,
-        theatreInfoName: group.theatreInfo?.name,
-        showsLength: group.shows?.length
-      });
-    });
+    console.log('DEBUG: First group structure:', cachedGroups[0]);
 
+    // Try searching by theatre name instead
     theatreGroup = cachedGroups.find(
-      group => group.theatreInfo &&
-                group.theatreInfo.id === theatre.id
+      group => {
+        const showsForTheatre = group.shows?.filter(s => s.theatre === theatre.name && s.city === theatre.city);
+        return showsForTheatre && showsForTheatre.length > 0;
+      }
     );
+
+    // If not found, try different approach - build theatre group from all shows
+    if (!theatreGroup) {
+      console.log('DEBUG: No matching group found, building from all shows');
+      const theatreShows = [];
+      cachedGroups.forEach(group => {
+        if (group.shows) {
+          const matching = group.shows.filter(s => s.theatre === theatre.name && s.city === theatre.city);
+          theatreShows.push(...matching);
+        }
+      });
+      if (theatreShows.length > 0) {
+        theatreGroup = { shows: theatreShows };
+      }
+    }
   }
 
-  console.log('DEBUG theatreGroup found:', { theatreGroup: !!theatreGroup, shows: theatreGroup?.shows?.length });
+  console.log('DEBUG theatreGroup built:', { theatreGroup: !!theatreGroup, shows: theatreGroup?.shows?.length });
 
   if (!theatreGroup || !theatreGroup.shows || theatreGroup.shows.length === 0) {
     // Fallback: show basic theatre info
