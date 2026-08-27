@@ -276,27 +276,22 @@ function populateSidebar(theatre) {
   mapElements.sidebarContent.innerHTML = '';
   mapElements.sidebarContent.appendChild(clonedCard);
 
-  // Find the group data for this theatre to get ticket links
-  let theatreGroup = null;
-  if (cachedGroups) {
-    const theatreKey = `${theatre.name} · ${theatre.city}`;
-    theatreGroup = Object.values(cachedGroups).find(
-      group => group.theatreInfo &&
-                group.theatreInfo.name === theatre.name &&
-                group.theatreInfo.city === theatre.city
-    );
+  // Find the theatre data from cachedTheatres to get film ticket links
+  let theatreData = null;
+  if (cachedTheatres) {
+    theatreData = cachedTheatres.find(t => t.id === theatre.id);
   }
 
   // Attach event listeners so expand/collapse buttons work
-  attachCardEventListeners(clonedCard, theatreGroup);
+  attachCardEventListeners(clonedCard, theatreData);
 }
 
 // Attach event listeners to card elements
-function attachCardEventListeners(card, theatreGroup) {
+function attachCardEventListeners(card, theatreData) {
   // Find all expand buttons (which expand/collapse individual show schedules)
   const expandButtons = card.querySelectorAll('.film-expand-toggle.theatre-row-toggle');
 
-  expandButtons.forEach((button, idx) => {
+  expandButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -338,16 +333,28 @@ function attachCardEventListeners(card, theatreGroup) {
         schedule.classList.remove('hidden');
         button.textContent = 'Collapse';
 
-        // Get the film title to look up ticket link from theatreGroup
+        // Extract film title from show-main (strip any ribbons/pills)
         const showMain = showItem.querySelector('.show-main');
-        const filmTitle = showMain ? showMain.textContent.trim() : '';
+        let filmTitle = '';
+        if (showMain) {
+          // Get text content and trim, but skip any span elements (ribbons, pills)
+          filmTitle = Array.from(showMain.childNodes)
+            .filter(node => node.nodeType === Node.TEXT_NODE)
+            .map(node => node.textContent.trim())
+            .join('')
+            .trim();
+          // If no text nodes found, try getting all text
+          if (!filmTitle) {
+            filmTitle = showMain.textContent.trim();
+          }
+        }
 
-        // Find the matching show in theatreGroup to get ticketLink
+        // Find the matching film in theatre data to get ticketLink
         let ticketUrl = '';
-        if (theatreGroup && theatreGroup.shows && theatreGroup.shows[idx]) {
-          const show = theatreGroup.shows[idx];
-          if (show && show.ticketLink) {
-            ticketUrl = show.ticketLink;
+        if (theatreData && theatreData.films && filmTitle) {
+          const matchingFilm = theatreData.films.find(f => f.title === filmTitle);
+          if (matchingFilm && matchingFilm.ticketLink) {
+            ticketUrl = matchingFilm.ticketLink;
           }
         }
 
