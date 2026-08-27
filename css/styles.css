@@ -2532,6 +2532,24 @@ textarea {
   border-radius: 3px;
 }
 
+/* Simplify show-item styling in map card */
+.theatre-sidebar-content .show-item {
+  border: none;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  padding: 0.75rem 0;
+  background: transparent;
+}
+
+.theatre-sidebar-content .show-item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.theatre-sidebar-content .show-list {
+  gap: 0;
+}
+
 .theatre-sidebar-header h3 {
   margin: 0 0 0.35rem;
   font-size: 1.2rem;
