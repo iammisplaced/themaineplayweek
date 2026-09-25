@@ -1,0 +1,49 @@
+{
+  "films": [
+    {
+      "title": "Anora",
+      "year": 2024,
+      "description": "A Brooklyn stripper's whirlwind romance with a Russian oligarch's son collides with family power and money.",
+      "posterUrl": "/assets/images/noposter.webp",
+      "director": "Sean Baker",
+      "genres": ["Drama", "Comedy"],
+      "stars": ["Mikey Madison", "Mark Eydelshteyn", "Yura Borisov"],
+      "releaseDate": "2024-10-18",
+      "theatres": ["Nickelodeon Cinema, Portland", "Railroad Square Cinema, Waterville"],
+      "showings": [
+        { "date": "2026-03-20", "time": "6:30 PM", "theatre": "Nickelodeon Cinema" },
+        { "date": "2026-03-20", "time": "9:10 PM", "theatre": "Nickelodeon Cinema" },
+        { "date": "2026-03-21", "time": "7:00 PM", "theatre": "Railroad Square Cinema" }
+      ]
+    },
+    {
+      "title": "The Brutalist",
+      "year": 2024,
+      "description": "An architect emigrates to America and finds his ambition tested by opportunity, memory, and power.",
+      "posterUrl": "/assets/images/noposter.webp",
+      "director": "Brady Corbet",
+      "genres": ["Drama", "Historical"],
+      "stars": ["Adrien Brody", "Felicity Jones", "Guy Pearce"],
+      "releaseDate": "2024-12-20",
+      "theatres": ["The Harbor Theatre, Boothbay Harbor"],
+      "showings": [
+        { "date": "2026-03-22", "time": "4:00 PM", "theatre": "The Harbor Theatre" },
+        { "date": "2026-03-22", "time": "7:45 PM", "theatre": "The Harbor Theatre" }
+      ]
+    },
+    {
+      "title": "Misericordia",
+      "year": 2024,
+      "description": "A village mystery unfolds after a quiet return home, where old tensions and desires resurface.",
+      "posterUrl": "/assets/images/noposter.webp",
+      "director": "Alain Guiraudie",
+      "genres": ["Thriller", "Drama"],
+      "stars": ["Félix Kysyl", "Catherine Frot"],
+      "releaseDate": "2024-05-15",
+      "theatres": ["The Gem, Bethel"],
+      "showings": [
+        { "date": "2026-03-23", "time": "5:50 PM", "theatre": "The Gem" }
+      ]
+    }
+  ]
+}

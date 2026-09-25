@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[TEST] Admin Film Catalog - The Maine Playweek</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png" />
+    <link rel="icon" href="assets/icons/favicon.ico" />
+    <link rel="stylesheet" href="css/admin-films.css" />
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- Test environment: analytics removed so test traffic stays out of production stats -->
+    <style>
+      .test-env-banner { position: sticky; top: 0; z-index: 10000; margin: 0; padding: 6px 12px;
+        background: #b3261e; color: #fff; font: 600 13px/1.4 "IBM Plex Sans", system-ui, sans-serif; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <p class="test-env-banner" role="note">TEST ENVIRONMENT &middot; not the live site &middot; no production database</p>
+    <main class="page">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">The Maine Playweek</p>
+          <h1>Admin Film Catalog</h1>
+          <p class="sub">Full film list from Supabase, including films with no upcoming showtimes.</p>
+        </div>
+        <a class="ghost-btn" href="index.html">Back to Showtimes</a>
+      </header>
+
+      <section id="authGate" class="panel">
+        <h2>Admin Login</h2>
+        <p>Use your magic link email to access the full catalog.</p>
+        <label for="emailInput">Email</label>
+        <input id="emailInput" type="email" />
+        <div class="row-actions">
+          <button id="sendMagicLink" type="button">Send Magic Link</button>
+        </div>
+      </section>
+
+      <section id="catalogApp" class="hidden">
+        <section class="panel controls">
+          <div>
+            <h2>Catalog Controls</h2>
+            <p id="authStatus" class="muted"></p>
+          </div>
+          <div class="row-actions">
+            <input id="filmSearch" type="search" placeholder="Search film titles..." aria-label="Search film titles" />
+            <button id="refreshCatalog" class="ghost-btn" type="button">Refresh</button>
+            <button id="logout" class="ghost-btn" type="button">Log Out</button>
+          </div>
+        </section>
+
+        <section id="summary" class="panel summary"></section>
+        <section id="catalogList" class="catalog" aria-live="polite">
+          <div id="loadingSpinner" class="loading-spinner hidden">
+            <div class="spinner"></div>
+            <p>Loading catalog...</p>
+          </div>
+        </section>
+      </section>
+
+      <p id="status" class="status" role="status"></p>
+    </main>
+    <script type="module" src="js/admin-films.js"></script>
+  </body>
+</html>

@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[TEST] The Maine Playweek - Showtimes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16x16.png" />
+    <link rel="icon" href="assets/icons/favicon.ico" />
+    <link rel="manifest" href="site.webmanifest" />
+    <meta name="theme-color" content="#ECE5E0" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <!-- Leaflet Map -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- Test environment: analytics removed so test traffic stays out of production stats -->
+    <style>
+      .test-env-banner { position: sticky; top: 0; z-index: 10000; margin: 0; padding: 6px 12px;
+        background: #b3261e; color: #fff; font: 600 13px/1.4 "IBM Plex Sans", system-ui, sans-serif; text-align: center; }
+    </style>
+  </head>
+  <body>
+    <p class="test-env-banner" role="note">TEST ENVIRONMENT &middot; not the live site &middot; no production database</p>
+    <div id="appLoader" class="app-loader" role="status" aria-live="polite" aria-hidden="false">
+      <div class="app-loader-mark">
+        <p class="app-loader-title">The Maine Playweek</p>
+        <span class="app-loader-spinner" aria-hidden="true"></span>
+        <p class="app-loader-text">Loading showtimes...</p>
+      </div>
+    </div>
+
+    <section class="beta-banner" role="status" aria-label="Beta notice" aria-live="polite">
+      <p class="beta-banner-line"><strong>Currently in Beta</strong></p>
+      <p class="beta-banner-line">
+        See something off? Email <a href="mailto:hello@themaineplayweek.com">hello@themaineplayweek.com</a>.
+      </p>
+    </section>
+
+    <header class="site-header">
+      <div class="brand-wordmark-wrap">
+        <img
+          id="brandWordmark"
+          class="brand-wordmark"
+          src="assets/brand/TMP Wordmark v01 Dark.png"
+          alt="The Maine Playweek"
+        />
+        <h1 class="visually-hidden">Maine Showtimes</h1>
+      </div>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode">
+        <img id="brandLogo" class="brand-logo" src="assets/brand/TMP logo dark.png" alt="" />
+      </button>
+    </header>
+
+    <main>
+      <section class="controls" aria-label="View controls">
+        <div class="tabs" role="tablist" aria-label="Showtimes view type">
+          <button class="tab active" role="tab" data-view="days" aria-selected="true">
+            Near You
+            <span class="tab-beta-chip">Beta</span>
+          </button>
+          <button class="tab" role="tab" data-view="theatres" aria-selected="false">Theatres</button>
+          <button class="tab" role="tab" data-view="films" aria-selected="false">All Films</button>
+          <button class="tab" role="tab" data-view="festivals" aria-selected="false">Festivals</button>
+        </div>
+        <details class="nav-menu-wrap" id="navMenuWrap">
+          <summary id="navMenuButton" class="nav-menu-button">
+            <span id="navMenuLabel" class="nav-menu-label">Near You</span>
+            <span class="nav-menu-chevron" aria-hidden="true"></span>
+          </summary>
+          <div id="navMenu" class="nav-menu" role="menu">
+            <button class="nav-menu-item active" role="menuitem" data-view="days" type="button">Near You <span class="nav-menu-beta-chip">Beta</span></button>
+            <button class="nav-menu-item" role="menuitem" data-view="theatres" type="button">Theatres</button>
+            <button class="nav-menu-item" role="menuitem" data-view="films" type="button">All Films</button>
+            <button class="nav-menu-item" role="menuitem" data-view="festivals" type="button">Festivals</button>
+          </div>
+        </details>
+        <div id="publicSearchWrap" class="public-search">
+          <input id="publicSearchInput" type="search" placeholder="Search films..." aria-label="Search listings" />
+        </div>
+        <div id="dayPickerWrap" class="day-picker hidden" aria-label="Date selection">
+          <div id="dayPickerDateGroup" class="day-picker-date-group">
+            <button id="dayPrevButton" class="day-picker-nav" type="button" aria-label="Previous date"><span class="day-picker-nav-label">Prev</span><span class="day-picker-nav-chevron" aria-hidden="true">‹</span></button>
+            <div class="day-picker-main">
+              <input id="dayPickerInput" class="day-picker-input" type="date" aria-label="Select date" />
+              <span id="dayPickerDisplayLabel" class="day-picker-display-label" aria-hidden="true"></span>
+            </div>
+            <button id="dayNextButton" class="day-picker-nav" type="button" aria-label="Next date"><span class="day-picker-nav-label">Next</span><span class="day-picker-nav-chevron" aria-hidden="true">›</span></button>
+          </div>
+        </div>
+        <div id="locationChooserTriggerWrap" class="location-chooser-trigger-wrap hidden">
+          <button id="openLocationChooser" class="location-control-btn" type="button" aria-label="Set location">
+            <img id="locationControlIcon" src="assets/icons/location.png" alt="" aria-hidden="true" />
+            <span class="control-beta-chip">Beta</span>
+          </button>
+        </div>
+      </section>
+
+      <div class="theatre-controls-row">
+        <p id="theatreSortStatus" class="theatre-sort-status hidden" role="status" aria-live="polite"></p>
+        <div id="theatreMapToggleWrap" class="theatre-map-toggle-wrap hidden">
+          <button id="theatreMapToggle" class="theatre-map-toggle" type="button" aria-pressed="false">
+            Show Map
+          </button>
+        </div>
+      </div>
+
+      <div id="mapViewContainer" class="map-view-container hidden">
+        <div id="theatreMap" class="theatre-map"></div>
+        <aside id="theatreSidebar" class="theatre-sidebar hidden">
+          <button id="theatreSidebarClose" class="theatre-sidebar-close" type="button" aria-label="Close theatre details">✕</button>
+          <div id="theatreSidebarContent" class="theatre-sidebar-content"></div>
+        </aside>
+      </div>
+
+      <section id="latestPost" class="latest-post hidden" aria-label="Latest Substack post">
+        <a
+          id="latestPostLink"
+          class="latest-post-link"
+          href="https://themaineplayweek.substack.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img id="latestPostImage" class="latest-post-image hidden" alt="" />
+          <div class="latest-post-content">
+            <p class="latest-post-kicker">Latest from The Playweek</p>
+            <h2 id="latestPostTitle" class="latest-post-title"></h2>
+            <p id="latestPostSubtitle" class="latest-post-subtitle"></p>
+            <p id="latestPostByline" class="latest-post-byline"></p>
+          </div>
+        </a>
+      </section>
+
+      <section id="results" class="results" aria-live="polite"></section>
+
+      <section class="site-meta" aria-label="Site information">
+        <p>&copy; 2026 The Maine Playweek, LLC.</p>
+        <p>hello@themaineplayweek.com</p>
+      </section>
+
+      <section class="admin-toggle-row" aria-label="Admin access">
+        <button id="adminToggle" class="ghost-btn" aria-expanded="false">Admin</button>
+      </section>
+
+      <section id="adminPanel" class="admin-panel" aria-label="Admin panel">
+        <h2>Admin</h2>
+        <div id="adminDrawerLoading" class="admin-drawer-loading hidden">
+          <div class="admin-spinner-small"></div>
+        </div>
+        <p id="adminIntroText">Sign in with Supabase magic link to edit live data.</p>
+
+        <section id="adminAuthGate" class="admin-auth-gate hidden">
+          <h3>Admin Login</h3>
+          <p class="admin-help">Enter your email to receive a magic link.</p>
+          <label for="adminEmailInput">Email</label>
+          <input id="adminEmailInput" type="email" />
+          <div class="admin-inline-actions">
+            <button id="adminLoginButton">Send Magic Link</button>
+          </div>
+          <p id="adminAuthMessage" class="admin-message" role="status"></p>
+        </section>
+
+        <div id="adminControls" class="hidden">
+          <div class="admin-inline-actions admin-top-actions">
+            <button id="adminLogoutButton" class="ghost-btn">Log Out</button>
+            <button id="openFilmCatalogButton" class="ghost-btn" type="button">Open Film Catalog</button>
+            <a class="ghost-btn" href="films/" target="_blank" rel="noopener noreferrer">Film Pages Prototype</a>
+          </div>
+          <div class="admin-section-tabs" role="tablist" aria-label="Admin editing section">
+            <button
+              id="adminMoviesTab"
+              class="admin-section-tab active"
+              type="button"
+              role="tab"
+              data-admin-section="movies"
+              aria-selected="true"
+            >
+              Movies
+            </button>
+            <button
+              id="adminPromosTab"
+              class="admin-section-tab"
+              type="button"
+              role="tab"
+              data-admin-section="promos"
+              aria-selected="false"
+            >
+              Promos
+            </button>
+            <button
+              id="adminFestivalsTab"
+              class="admin-section-tab"
+              type="button"
+              role="tab"
+              data-admin-section="festivals"
+              aria-selected="false"
+            >
+              Festivals
+            </button>
+          </div>
+
+          <section id="adminMoviesPanel" class="admin-section-panel" role="tabpanel" aria-labelledby="adminMoviesTab">
+            <div class="admin-grid">
+              <section class="admin-card admin-card-wide">
+                <h3>Quick Admin</h3>
+                <label for="adminTheatreSearch">Theatre</label>
+                <input id="adminTheatreSearch" type="text" placeholder="Search theatre, city, or address..." />
+                <ul id="adminTheatreResults" class="admin-search-results"></ul>
+                <label for="adminFilmSearch">Film</label>
+                <input id="adminFilmSearch" type="text" placeholder="Search films..." />
+                <ul id="adminFilmResults" class="admin-search-results"></ul>
+                <label for="selectedTicketLinkInput">Ticket Link (selected theatre + film)</label>
+                <input id="selectedTicketLinkInput" type="url" placeholder="https://tickets.example.com/..." />
+                <div class="admin-inline-actions">
+                  <button id="saveSelectedTicketLink">Save Ticket Link</button>
+                </div>
+                <label for="tmdbApiKeyInput">TMDb API Key (local)</label>
+                <input id="tmdbApiKeyInput" type="password" placeholder="Used only in this browser" />
+                <div class="admin-inline-actions">
+                  <button id="addTheatre" class="ghost-btn">+ Add Theatre</button>
+                  <button id="addFilm" class="ghost-btn">+ Add Film</button>
+                  <button id="editFilmMetadata" class="ghost-btn">Edit Film Metadata</button>
+                  <button id="deleteFilm" class="ghost-btn">Delete Film</button>
+                  <button id="refreshTmdb" class="ghost-btn">Refresh TMDb</button>
+                </div>
+              </section>
+
+              <section class="admin-card admin-card-wide">
+                <h3>Showings</h3>
+                <p class="admin-help">Tip: keep times as <code>h:mm AM/PM</code> and separate multiple times with commas.</p>
+                <label for="showingDateInput">Date</label>
+                <input id="showingDateInput" type="date" />
+                <label for="showingSpanDaysInput">Number of days</label>
+                <input id="showingSpanDaysInput" type="number" min="1" step="1" value="1" />
+                <label for="showingTimesInput">Times (comma separated)</label>
+                <input id="showingTimesInput" type="text" placeholder="1:30 PM, 6:50 PM" />
+                <label for="showingPremiumTimesInput">Premium Times (comma separated)</label>
+                <input id="showingPremiumTimesInput" type="text" placeholder="4:10 PM, 7:40 PM" />
+                <label for="showingRoomInput">Room (optional)</label>
+                <input id="showingRoomInput" type="text" placeholder="Main Hall" />
+                <label for="showingFestivalSelect">Festival (optional)</label>
+                <select id="showingFestivalSelect">
+                  <option value="">None</option>
+                </select>
+                <div class="admin-inline-actions">
+                  <button id="addShowing">+ Add Showing</button>
+                </div>
+                <ul id="showingsList" class="admin-list"></ul>
+              </section>
+            </div>
+
+            <div class="admin-actions">
+              <button id="saveAllAdmin">Save All Changes</button>
+              <button id="downloadCsvTemplate" class="ghost-btn">Download CSV Template</button>
+              <label class="upload-label">
+                Import CSV
+                <input id="uploadCsv" type="file" accept=".csv,text/csv" />
+              </label>
+            </div>
+          </section>
+
+          <section
+            id="adminPromosPanel"
+            class="admin-section-panel hidden"
+            role="tabpanel"
+            aria-labelledby="adminPromosTab"
+          >
+            <div class="admin-grid">
+              <section class="admin-card admin-card-wide">
+                <h3>Promos</h3>
+                <p class="admin-help">Toggle promo visibility and edit title/button URL. Leave title blank to hide it.</p>
+                <div class="admin-inline-actions">
+                  <button id="openAddPromoModalButton" type="button">+ Add Promo</button>
+                </div>
+                <div id="promoSettingsList" class="promo-settings-list"></div>
+                <div class="admin-inline-actions">
+                  <button id="saveAllPromos">Save All Changes</button>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <section
+            id="adminFestivalsPanel"
+            class="admin-section-panel hidden"
+            role="tabpanel"
+            aria-labelledby="adminFestivalsTab"
+          >
+            <div class="admin-grid">
+              <section class="admin-card admin-card-wide">
+                <h3>Festivals</h3>
+                <p class="admin-help">Add/edit festivals used by showings CSV and manual showing assignment.</p>
+                <div class="admin-inline-actions">
+                  <button id="openAddFestivalModalButton" type="button">+ Add Festival</button>
+                </div>
+                <div id="festivalSettingsList" class="promo-settings-list"></div>
+                <div class="admin-inline-actions">
+                  <button id="saveAllFestivals">Save All Changes</button>
+                </div>
+              </section>
+            </div>
+          </section>
+
+        <dialog id="addFilmModal" class="admin-modal">
+          <form id="addFilmForm" method="dialog" class="admin-modal-body">
+            <h3>Add Film</h3>
+            <label for="modalFilmTitleInput">Title</label>
+            <input id="modalFilmTitleInput" type="text" required />
+            <label for="modalFilmYearInput">Year (optional if TMDb ID used)</label>
+            <input id="modalFilmYearInput" type="number" />
+            <label for="modalFilmTmdbIdInput">TMDb ID (optional if year used)</label>
+            <input id="modalFilmTmdbIdInput" type="number" />
+            <div class="admin-inline-actions">
+              <button id="confirmAddFilm" value="confirm">Add Film</button>
+              <button id="cancelAddFilm" class="ghost-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </dialog>
+
+        <dialog id="editFilmMetadataModal" class="admin-modal">
+          <form id="editFilmMetadataForm" method="dialog" class="admin-modal-body">
+            <h3>Edit Film Metadata</h3>
+            <p class="admin-help">
+              Use this when TMDb data is missing or you want manual overrides.
+            </p>
+            <label for="metadataSourceInput">Metadata Source</label>
+            <input id="metadataSourceInput" type="text" readonly />
+            <label for="metadataPosterUrlInput">Poster URL (optional)</label>
+            <input id="metadataPosterUrlInput" type="url" placeholder="https://..." />
+            <label for="metadataDirectorInput">Director (optional)</label>
+            <input id="metadataDirectorInput" type="text" />
+            <label for="metadataStarsInput">Actors/Stars (comma separated)</label>
+            <textarea id="metadataStarsInput" rows="3" placeholder="Actor One, Actor Two"></textarea>
+            <label for="metadataGenresInput">Genres (comma separated)</label>
+            <textarea id="metadataGenresInput" rows="2" placeholder="Drama, Comedy"></textarea>
+            <label for="metadataReleaseDateInput">Release Date (optional)</label>
+            <input id="metadataReleaseDateInput" type="date" />
+            <label class="promo-settings-toggle" for="metadataFestivalOnlyInput">
+              <input id="metadataFestivalOnlyInput" type="checkbox" />
+              Festival only (hide from All Films / Near You / Theatres)
+            </label>
+            <div class="admin-inline-actions">
+              <button id="confirmEditFilmMetadata" value="confirm">Save Metadata</button>
+              <button id="cancelEditFilmMetadata" class="ghost-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </dialog>
+
+        <dialog id="addTheatreModal" class="admin-modal">
+          <form id="addTheatreForm" method="dialog" class="admin-modal-body">
+            <h3>Add Theatre</h3>
+            <label for="modalTheatreNameInput">Name</label>
+            <input id="modalTheatreNameInput" type="text" required />
+            <label for="modalTheatreCityInput">City</label>
+            <input id="modalTheatreCityInput" type="text" required />
+            <label for="modalTheatreAddressInput">Address</label>
+            <input id="modalTheatreAddressInput" type="text" required />
+            <label for="modalTheatreWebsiteInput">Website</label>
+            <input id="modalTheatreWebsiteInput" type="url" required />
+            <label for="modalTheatreLatitudeInput">Latitude (optional)</label>
+            <input id="modalTheatreLatitudeInput" type="number" step="any" placeholder="43.6591" />
+            <label for="modalTheatreLongitudeInput">Longitude (optional)</label>
+            <input id="modalTheatreLongitudeInput" type="number" step="any" placeholder="-70.2568" />
+            <div class="admin-inline-actions">
+              <button id="confirmAddTheatre" value="confirm">Add Theatre</button>
+              <button id="cancelAddTheatre" class="ghost-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </dialog>
+
+        <dialog id="addPromoModal" class="admin-modal">
+          <form id="addPromoForm" method="dialog" class="admin-modal-body">
+            <h3>Add Promo</h3>
+            <label for="modalPromoImageInput">Image</label>
+            <input id="modalPromoImageInput" type="file" accept="image/*" required />
+            <label for="modalPromoTitleInput">Title (optional)</label>
+            <input id="modalPromoTitleInput" type="text" placeholder="Optional" />
+            <label for="modalPromoButtonUrlInput">Button URL</label>
+            <input id="modalPromoButtonUrlInput" type="url" placeholder="https://example.com" />
+            <div class="admin-inline-actions">
+              <button id="confirmAddPromo" value="confirm">Add Promo</button>
+              <button id="cancelAddPromo" class="ghost-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </dialog>
+
+        <dialog id="addFestivalModal" class="admin-modal">
+          <form id="addFestivalForm" method="dialog" class="admin-modal-body">
+            <h3>Add Festival</h3>
+            <label for="modalFestivalNameInput">Name</label>
+            <input id="modalFestivalNameInput" type="text" required />
+            <label for="modalFestivalSlugInput">Slug (optional)</label>
+            <input id="modalFestivalSlugInput" type="text" placeholder="auto-from-name" />
+            <label for="modalFestivalWebsiteInput">Website (optional)</label>
+            <input id="modalFestivalWebsiteInput" type="url" placeholder="https://..." />
+            <label for="modalFestivalPrimaryColorInput">Primary Color (optional, hex)</label>
+            <input id="modalFestivalPrimaryColorInput" type="text" placeholder="#C54828" />
+            <label for="modalFestivalStartDateInput">Start Date (optional)</label>
+            <input id="modalFestivalStartDateInput" type="date" />
+            <label for="modalFestivalEndDateInput">End Date (optional)</label>
+            <input id="modalFestivalEndDateInput" type="date" />
+            <label for="modalFestivalDescriptionInput">Description (optional)</label>
+            <textarea id="modalFestivalDescriptionInput" rows="3"></textarea>
+            <div class="admin-inline-actions">
+              <button id="confirmAddFestival" value="confirm">Add Festival</button>
+              <button id="cancelAddFestival" class="ghost-btn" type="button">Cancel</button>
+            </div>
+          </form>
+        </dialog>
+
+          <p id="adminMessage" class="admin-message" role="status"></p>
+        </div>
+      </section>
+
+      <dialog id="locationChooserModal" class="admin-modal location-chooser-modal">
+        <div class="admin-modal-body location-chooser-modal-body">
+          <div class="location-chooser-header">
+            <h3 class="location-chooser-title">Find showtimes near you</h3>
+            <button id="closeLocationChooser" class="location-chooser-close" type="button" aria-label="Close">&#x2715;</button>
+          </div>
+          <div class="location-chooser-actions">
+            <button id="useDeviceLocation" type="button">Use My Location</button>
+            <form id="zipLocationForm" class="location-chooser-zip-form">
+              <label class="visually-hidden" for="zipLocationInput">ZIP code</label>
+              <input
+                id="zipLocationInput"
+                type="text"
+                inputmode="numeric"
+                autocomplete="postal-code"
+                placeholder="ZIP code"
+                pattern="[0-9]{5}(-[0-9]{4})?"
+              />
+              <button id="useZipLocation" class="ghost-btn" type="submit">Go</button>
+            </form>
+          </div>
+          <p id="locationChooserMessage" class="location-chooser-message"></p>
+          <div class="location-chooser-radius-row">
+            <span class="location-chooser-radius-label">Search radius</span>
+            <div id="radiusButtonGroup" class="radius-button-group" role="group" aria-label="Search radius">
+              <button type="button" class="radius-option" data-value="10">10 mi</button>
+              <button type="button" class="radius-option" data-value="25">25 mi</button>
+              <button type="button" class="radius-option is-selected" data-value="50">50 mi</button>
+            </div>
+          </div>
+        </div>
+      </dialog>
+    </main>
+
+    <template id="groupTemplate">
+      <article class="group-card">
+        <h3 class="group-title"></h3>
+        <button class="film-expand-toggle hidden" type="button" aria-expanded="false">Expand</button>
+        <p class="group-subtitle hidden"></p>
+        <a class="group-link hidden" target="_blank" rel="noopener noreferrer">Visit theatre website</a>
+        <div class="group-film-summary hidden">
+          <img class="group-film-poster hidden" alt="" />
+          <div class="group-film-details">
+            <p class="group-film-facts hidden"></p>
+            <a class="group-feature-link hidden" target="_blank" rel="noopener noreferrer">Read feature</a>
+          </div>
+        </div>
+        <ul class="show-list"></ul>
+      </article>
+    </template>
+
+    <template id="showItemTemplate">
+      <li class="show-item">
+        <div class="show-row">
+          <img class="show-poster hidden" alt="" />
+          <div>
+            <div class="show-main"></div>
+            <div class="show-meta"></div>
+            <div class="show-schedule"></div>
+          </div>
+        </div>
+        <a class="show-link hidden" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </li>
+    </template>
+
+    <div id="posterLightbox" class="poster-lightbox hidden" role="dialog" aria-modal="true" aria-label="Poster preview">
+      <button id="posterLightboxClose" class="poster-lightbox-close" type="button" aria-label="Close poster preview">Close</button>
+      <img id="posterLightboxImage" class="poster-lightbox-image" alt="" />
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="js/map-view.js" type="module"></script>
+    <script src="js/app.js" type="module"></script>
+  </body>
+</html>
