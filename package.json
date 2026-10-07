@@ -8,5 +8,10 @@
     "film-pages:build": "node scripts/generate-film-pages.mjs",
     "film-pages:live": "node scripts/generate-film-pages.mjs --from-supabase --write-source=data/film-pages-source.live.json",
     "film-pages:live:site": "node scripts/generate-film-pages.mjs --from-supabase --write-source=data/film-pages-source.live.json --site-url=$SITE_URL"
+  },
+  "dependencies": {
+    "puppeteer": "^24.43.1",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }
