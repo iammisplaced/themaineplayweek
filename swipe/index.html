@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Playing Tonight | The Maine Playweek</title>
+    <meta name="description" content="Swipe through the films playing in Maine tonight." />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0f2a3a" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Big+Shoulders+Display:wght@600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png" />
+    <link rel="stylesheet" href="swipe.css" />
+  </head>
+  <body>
+    <header class="top">
+      <a class="home" href="../">
+        <picture>
+          <source srcset="../assets/brand/Empire%20-%20Dark%20-%20One%20Line.png" media="(prefers-color-scheme: light)" />
+          <img src="../assets/brand/Empire%20-%20Light%20-%20One%20Line.png" alt="The Maine Playweek" width="2489" height="255" />
+        </picture>
+      </a>
+      <button type="button" class="place" id="place-button" aria-haspopup="dialog" aria-controls="place-sheet">
+        <span id="place-label">All of Maine</span>
+      </button>
+    </header>
+
+    <main id="app" class="app" aria-live="polite">
+      <p class="status">Loading tonight's showtimes…</p>
+    </main>
+
+    <dialog id="place-sheet" class="sheet" aria-labelledby="place-title">
+      <form method="dialog">
+        <h2 id="place-title">Where are you?</h2>
+        <p class="sheet-hint">Films are sorted by how close they're playing.</p>
+        <div class="sheet-options">
+          <button type="button" class="sheet-option" data-place="locate">Use my location</button>
+          <label class="sheet-option sheet-select">
+            <span class="visually-hidden">Choose a town</span>
+            <select id="town-select">
+              <option value="">Near a town…</option>
+            </select>
+          </label>
+          <button type="button" class="sheet-option" data-place="anywhere">All of Maine</button>
+        </div>
+        <p class="sheet-status" id="place-status" role="status"></p>
+        <button class="sheet-close" value="close">Done</button>
+      </form>
+    </dialog>
+
+    <script type="module" src="swipe.js"></script>
+  </body>
+</html>
