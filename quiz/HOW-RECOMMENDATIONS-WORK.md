@@ -1,6 +1,6 @@
 # How the film quiz recommends a film
 
-The quiz in `lab/` (Go See a Movie) asks a few questions and picks one film playing in Maine. This file explains how it makes that pick. All of the logic is in `lab/lab.js`, mainly in `rankFilms`, `buildTasteProfile` and `scoreFilm`.
+The quiz in `quiz/` (Go See a Movie) asks a few questions and picks one film playing in Maine. This file explains how it makes that pick. All of the logic is in `quiz/quiz.js`, mainly in `rankFilms`, `buildTasteProfile` and `scoreFilm`.
 
 There's no AI or outside recommendation service. The quiz gives every film that's playing a points score from the answers and picks the highest.
 
@@ -110,4 +110,4 @@ This mode asks only where and when, so there are no genre, mood, "seen it" or er
 
 - **Films without TMDb data** have no genres, director or rating, so they score near zero and are rarely picked.
 - **Names have to match exactly.** TMDb gives one director per film, so co-directors only match on whichever one is listed.
-- **The weights are educated guesses** and haven't been tuned against real users. To change them, edit `buildTasteProfile` and `scoreFilm` in `lab/lab.js`, and update this file to match.
+- **The weights are educated guesses** and haven't been tuned against real users. To change them, edit `buildTasteProfile` and `scoreFilm` in `quiz/quiz.js`, and update this file to match.
