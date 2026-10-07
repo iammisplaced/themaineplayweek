@@ -4,24 +4,27 @@
 // showing at that location, so no browser is needed. If a page's ld+json is missing or
 // unparseable we fall back to the per-day endpoint the site's date picker calls.
 //
-// Usage: node scripts/scrape-smittys.mjs [--city=Sanford|Topsham|all] [--days=7]
+// Usage: node scripts/scrape-smittys.mjs [--city=Sanford|Topsham|all] [--end=YYYY-MM-DD | --days=7]
 
 import { compareTimes } from '../js/shared.js';
-import { fetchText, formatShowtimesCsv, prompt, writeCsvToRepoRoot } from './lib/scraper-utils.mjs';
+import {
+  fetchText,
+  formatShowtimesCsv,
+  getArg,
+  logCoverage,
+  prompt,
+  resolveDateRange,
+  writeCsvToRepoRoot,
+} from './lib/scraper-utils.mjs';
 
 const BASE_URL = 'https://www.smittyscinema.com';
 const THEATRE_NAME = "Smitty's Entertainment";
 const CITIES = ['Sanford', 'Topsham'];
-const DEFAULT_DAYS = 7;
 
 const MONTHS = {
   january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
   july: 7, august: 8, september: 9, october: 10, november: 11, december: 12,
 };
-
-function getArg(name) {
-  return process.argv.find(arg => arg.startsWith(`--${name}=`))?.split('=')[1];
-}
 
 function decodeHtml(value) {
   return String(value || '')
@@ -39,12 +42,6 @@ function toIsoDate(year, month, day) {
 function todayIso() {
   const now = new Date();
   return toIsoDate(now.getFullYear(), now.getMonth() + 1, now.getDate());
-}
-
-function addDaysIso(iso, days) {
-  const [y, m, d] = iso.split('-').map(Number);
-  const date = new Date(y, m - 1, d + days);
-  return toIsoDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
 }
 
 function normalizeTime(value) {
@@ -146,9 +143,7 @@ async function extractFromDayEndpoint(html, city, fromIso, toIso) {
   return showings;
 }
 
-async function scrapeCity(city, days) {
-  const fromIso = todayIso();
-  const toIso = addDaysIso(fromIso, days - 1);
+async function scrapeCity(city, { fromIso, toIso }) {
   console.log(`\n=== ${city} (${fromIso} to ${toIso}) ===`);
 
   const movieUrls = await getMovieUrls(city);
@@ -184,6 +179,7 @@ async function scrapeCity(city, days) {
   const csv = formatShowtimesCsv(showings, THEATRE_NAME, city);
   const filename = writeCsvToRepoRoot(`scraped-${city.toLowerCase()}-smittys-showtimes.csv`, csv);
   console.log(`\nSaved ${showings.length} showings to ${filename}`);
+  logCoverage(showings, toIso);
 
   const byDate = {};
   showings.forEach(s => { byDate[s.date] = (byDate[s.date] || 0) + 1; });
@@ -192,7 +188,8 @@ async function scrapeCity(city, days) {
 
 async function main() {
   let cityArg = getArg('city');
-  if (!cityArg) {
+  const interactive = !cityArg;
+  if (interactive) {
     console.log("=== Smitty's Entertainment Showtimes Scraper ===\n");
     cityArg = await prompt(`Enter theatre city (${CITIES.join(', ')} or all):\n> `);
   }
@@ -204,10 +201,8 @@ async function main() {
     throw new Error(`Invalid theatre city "${cityArg}". Use: ${CITIES.join(', ')} or all`);
   }
 
-  const days = Number(getArg('days') || DEFAULT_DAYS);
-  if (!Number.isInteger(days) || days < 1) throw new Error('--days must be a positive whole number');
-
-  for (const city of cities) await scrapeCity(city, days);
+  const range = await resolveDateRange(todayIso(), { ask: interactive });
+  for (const city of cities) await scrapeCity(city, range);
 }
 
 main().catch(error => {

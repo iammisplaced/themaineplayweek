@@ -1,19 +1,27 @@
 // Scrapes Flagship Cinemas (Maine) showtimes into admin import CSVs, one per theatre.
 //
 // [city].flagshipcinemas.com redirects to flagshipcinemas.com/[city], an INDY Systems app
-// that loads everything from a public GraphQL API. We call that API directly: one
-// showingsForDate request per theatre per day. 3D showings go to premium_show_times.
+// that loads everything from a public GraphQL API. We call that API directly: datesWithShowing
+// for each theatre, then one showingsForDate request per date in range. 3D showings go to
+// premium_show_times.
 //
-// Usage: node scripts/scrape-flagship.mjs [--city=Auburn|Falmouth|Thomaston|Waterville|Wells|all] [--days=7]
+// Usage: node scripts/scrape-flagship.mjs [--city=Auburn|Falmouth|Thomaston|Waterville|Wells|all] [--end=YYYY-MM-DD | --days=7]
 
 import { compareTimes } from '../js/shared.js';
-import { fetchText, formatShowtimesCsv, prompt, writeCsvToRepoRoot } from './lib/scraper-utils.mjs';
+import {
+  fetchText,
+  formatShowtimesCsv,
+  getArg,
+  logCoverage,
+  prompt,
+  resolveDateRange,
+  writeCsvToRepoRoot,
+} from './lib/scraper-utils.mjs';
 
 const GRAPHQL_URL = 'https://flagshipcinemas.com/graphql';
 const CIRCUIT_ID = '83';
 const THEATRE_NAME = 'Flagship Cinemas';
 const CITIES = ['Auburn', 'Falmouth', 'Thomaston', 'Waterville', 'Wells'];
-const DEFAULT_DAYS = 7;
 const TIME_ZONE = 'America/New_York';
 const PREMIUM_BADGE_NAMES = ['3D'];
 
@@ -25,6 +33,10 @@ const CONFIG_QUERY = `mutation ($clientConfigInput: ClientConfigInput!) {
       showingBadges { id displayName }
     }
   }
+}`;
+
+const DATES_QUERY = `query ($siteIds: [ID]) {
+  datesWithShowing(siteIds: $siteIds) { value }
 }`;
 
 const SHOWINGS_QUERY = `query ($date: String, $siteIds: [ID]) {
@@ -39,10 +51,6 @@ const SHOWINGS_QUERY = `query ($date: String, $siteIds: [ID]) {
     }
   }
 }`;
-
-function getArg(name) {
-  return process.argv.find(arg => arg.startsWith(`--${name}=`))?.split('=')[1];
-}
 
 async function graphql(query, variables) {
   const text = await fetchText(GRAPHQL_URL, {
@@ -83,9 +91,14 @@ function toEastern(isoTimestamp) {
   };
 }
 
-function easternDateIso(offsetDays = 0) {
-  const date = new Date(Date.now() + offsetDays * 86400000);
-  return toEastern(date.toISOString()).date;
+function easternTodayIso() {
+  return toEastern(new Date().toISOString()).date;
+}
+
+async function getDatesWithShowings(siteId) {
+  const data = await graphql(DATES_QUERY, { siteIds: [siteId] });
+  const dates = JSON.parse(data?.datesWithShowing?.value || '[]');
+  return Array.isArray(dates) ? dates.filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)).sort() : [];
 }
 
 async function loadConfig() {
@@ -110,17 +123,16 @@ async function loadConfig() {
   return { siteIdByCity, premiumBadgeIds };
 }
 
-async function scrapeCity(city, siteId, premiumBadgeIds, days) {
-  const fromIso = easternDateIso(0);
-  const toIso = easternDateIso(days - 1);
+async function scrapeCity(city, siteId, premiumBadgeIds, { fromIso, toIso }) {
   console.log(`\n=== ${city} (site ${siteId}, ${fromIso} to ${toIso}) ===`);
+
+  const dates = (await getDatesWithShowings(siteId)).filter(d => d >= fromIso && d <= toIso);
 
   const showings = [];
   const seenShowingIds = new Set();
   let skipped = 0;
 
-  for (let offset = 0; offset < days; offset++) {
-    const date = easternDateIso(offset);
+  for (const date of dates) {
     const data = await graphql(SHOWINGS_QUERY, { date, siteIds: [siteId] });
     const rows = data?.showingsForDate?.data || [];
     let kept = 0;
@@ -162,11 +174,13 @@ async function scrapeCity(city, siteId, premiumBadgeIds, days) {
   const filename = writeCsvToRepoRoot(`scraped-${city.toLowerCase()}-flagship-showtimes.csv`, csv);
   const premiumCount = showings.filter(s => s.premium).length;
   console.log(`Saved ${showings.length} showings (${premiumCount} 3D) to ${filename}`);
+  logCoverage(showings, toIso);
 }
 
 async function main() {
   let cityArg = getArg('city');
-  if (!cityArg) {
+  const interactive = !cityArg;
+  if (interactive) {
     console.log('=== Flagship Cinemas Showtimes Scraper ===\n');
     cityArg = await prompt(`Enter theatre city (${CITIES.join(', ')} or all):\n> `);
   }
@@ -178,14 +192,12 @@ async function main() {
     throw new Error(`Invalid theatre city "${cityArg}". Use: ${CITIES.join(', ')} or all`);
   }
 
-  const days = Number(getArg('days') || DEFAULT_DAYS);
-  if (!Number.isInteger(days) || days < 1) throw new Error('--days must be a positive whole number');
-
+  const range = await resolveDateRange(easternTodayIso(), { ask: interactive });
   const { siteIdByCity, premiumBadgeIds } = await loadConfig();
   const failures = [];
   for (const city of cities) {
     try {
-      await scrapeCity(city, siteIdByCity.get(city), premiumBadgeIds, days);
+      await scrapeCity(city, siteIdByCity.get(city), premiumBadgeIds, range);
     } catch (error) {
       console.error(`${city} FAILED: ${error.message}`);
       failures.push(city);

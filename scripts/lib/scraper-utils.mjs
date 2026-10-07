@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import * as readline from 'readline';
+import { parseIsoDate } from '../../js/shared.js';
 
 const REPO_ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 
@@ -20,6 +21,51 @@ const CSV_HEADERS = [
   'film_year',
   'film_tmdb_id',
 ];
+
+export function getArg(name) {
+  return process.argv.find(arg => arg.startsWith(`--${name}=`))?.split('=')[1];
+}
+
+export function addDaysIso(iso, days) {
+  const [y, m, d] = iso.split('-').map(Number);
+  const date = new Date(y, m - 1, d + days);
+  return [date.getFullYear(), date.getMonth() + 1, date.getDate()]
+    .map((part, i) => String(part).padStart(i ? 2 : 4, '0'))
+    .join('-');
+}
+
+/**
+ * Works out which dates to scrape, starting at `todayIso`:
+ * --end=YYYY-MM-DD scrapes through that date (inclusive), --days=N scrapes N days,
+ * and with neither it asks (when `ask` is true) or defaults to 7 days.
+ */
+export async function resolveDateRange(todayIso, { ask = false, defaultDays = 7 } = {}) {
+  let endArg = getArg('end');
+  const daysArg = getArg('days');
+  if (endArg && daysArg) throw new Error('Use either --end or --days, not both');
+
+  if (!endArg && !daysArg && ask) {
+    endArg = await prompt(`\nEnd date (YYYY-MM-DD, inclusive), or blank for the next ${defaultDays} days:\n> `);
+  }
+
+  if (endArg) {
+    if (!parseIsoDate(endArg)) throw new Error(`End date "${endArg}" must be a real date in YYYY-MM-DD format`);
+    if (endArg < todayIso) throw new Error(`End date ${endArg} is before today (${todayIso})`);
+    return { fromIso: todayIso, toIso: endArg };
+  }
+
+  const days = Number(daysArg || defaultDays);
+  if (!Number.isInteger(days) || days < 1) throw new Error('--days must be a positive whole number');
+  return { fromIso: todayIso, toIso: addDaysIso(todayIso, days - 1) };
+}
+
+/** Logs how far the scraped data actually reaches compared with what was asked for. */
+export function logCoverage(showings, toIso) {
+  const lastDate = showings.reduce((max, s) => (s.date > max ? s.date : max), '');
+  if (lastDate && lastDate < toIso) {
+    console.log(`  Showtimes are only posted through ${lastDate} (requested through ${toIso})`);
+  }
+}
 
 export function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
