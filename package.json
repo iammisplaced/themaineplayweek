@@ -2,10 +2,21 @@
   "name": "tmp-showtimes",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "description": "The Maine Playweek showtimes site",
   "scripts": {
     "film-pages:build": "node scripts/generate-film-pages.mjs",
     "film-pages:live": "node scripts/generate-film-pages.mjs --from-supabase --write-source=data/film-pages-source.live.json",
-    "film-pages:live:site": "node scripts/generate-film-pages.mjs --from-supabase --write-source=data/film-pages-source.live.json --site-url=$SITE_URL"
+    "film-pages:live:site": "node scripts/generate-film-pages.mjs --from-supabase --write-source=data/film-pages-source.live.json --site-url=$SITE_URL",
+    "scrape": "node scripts/scrape-all.mjs",
+    "scrape:flagship": "node scripts/scrape-flagship.mjs",
+    "scrape:smittys": "node scripts/scrape-smittys.mjs",
+    "scrape:regal": "node scripts/scrape-regal.mjs",
+    "scrape:apple": "node scripts/scrape-apple-cinema.mjs"
+  },
+  "dependencies": {
+    "puppeteer": "^24.43.1",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }
