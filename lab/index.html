@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Find Your Film | The Maine Playweek</title>
+    <meta name="description" content="Answer a few questions and get one film playing in Maine picked for you." />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0f2a3a" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Big+Shoulders+Display:wght@600;800&family=Cabin:wght@600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png" />
+    <link rel="stylesheet" href="lab.css" />
+  </head>
+  <body>
+    <header class="top">
+      <a class="home" href="../">
+        <picture>
+          <source srcset="../assets/brand/Empire%20-%20Dark%20-%20One%20Line.png" media="(prefers-color-scheme: light)" />
+          <img src="../assets/brand/Empire%20-%20Light%20-%20One%20Line.png" alt="The Maine Playweek" width="2489" height="255" />
+        </picture>
+      </a>
+      <ol class="bulbs" id="progress" aria-label="Progress" hidden></ol>
+    </header>
+    <main id="screen" class="screen" aria-live="polite"></main>
+    <script type="module" src="lab.js"></script>
+  </body>
+</html>

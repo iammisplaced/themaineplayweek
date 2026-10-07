@@ -1,0 +1,713 @@
+/* Find Your Film (experiment). Mobile-first; the one loud element is the marquee on the result. */
+
+:root {
+  --night: #0f2a3a;
+  --raised: #173b4f;
+  --line: #2b5468;
+  --text: #eaf2ef;
+  --muted: #9fb6bf;
+  --bulb: #f6c94a;
+  --bulb-glow: rgba(246, 201, 74, 0.5);
+  --on-bulb: #1d1704;
+  --link: #f6c94a;
+  /* The marquee is a lit sign in both themes. */
+  --sign: #0b2230;
+  --sign-text: #fdf6e0;
+  --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  /* Gill Sans for the Keep Calm hero; Cabin stands in where it isn't installed. */
+  --poster-face: "Gill Sans", "Gill Sans MT", "Cabin", sans-serif;
+  --body: "Atkinson Hyperlegible", system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --night: #eef3f1;
+    --raised: #ffffff;
+    --line: #c5d4d6;
+    --text: #0f2a3a;
+    --muted: #4b6470;
+    --bulb: #f2bb2c;
+    --bulb-glow: rgba(242, 187, 44, 0.45);
+    --link: #8a5a00;
+    color-scheme: light;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--night);
+  color: var(--text);
+  font: 1.0625rem/1.5 var(--body);
+  display: flex;
+  flex-direction: column;
+}
+
+button,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--bulb);
+  outline-offset: 2px;
+}
+
+h1:focus {
+  outline: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---- Header and progress ---- */
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: max(0.875rem, env(safe-area-inset-top)) 1rem 0.5rem;
+  max-width: 34rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.top[hidden] {
+  display: none;
+}
+
+.home {
+  display: block;
+  line-height: 0;
+}
+
+.home img {
+  display: block;
+  height: 1.25rem;
+  width: auto;
+}
+
+.bulbs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bulbs[hidden] {
+  display: none;
+}
+
+.bulb {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+}
+
+.bulb.done {
+  background: var(--bulb);
+  border-color: var(--bulb);
+}
+
+.bulb.current {
+  border-color: var(--bulb);
+  box-shadow: 0 0 0 3px var(--bulb-glow);
+}
+
+/* ---- Screens ---- */
+
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 1rem 1rem 0;
+}
+
+h1 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 11vw, 3.5rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  margin: 1.5rem 0 0.75rem;
+}
+
+h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  margin: 2rem 0 0.75rem;
+}
+
+.lede {
+  font-size: 1.25rem;
+  line-height: 1.45;
+  max-width: 30ch;
+  margin: 0 0 1rem;
+}
+
+.hint,
+.status {
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+}
+
+.intro {
+  margin: auto 0;
+  text-align: center;
+}
+
+.intro .lede {
+  margin-inline: auto;
+}
+
+/* Landing hero in the style of the Keep Calm and Carry On poster. */
+.keep-calm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0.5rem auto 1.75rem;
+}
+
+.keep-calm .crest {
+  width: 3.75rem;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.keep-calm h1 {
+  margin: 0;
+  font-family: var(--poster-face);
+  font-weight: 600;
+  font-size: clamp(2.75rem, 15vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.keep-calm h1 span {
+  display: block;
+}
+
+.keep-calm h1 .small-word {
+  font-size: 0.42em;
+  line-height: 1.5;
+}
+
+/* Keep the intro text clear of the action bar on short phones. */
+@media (max-height: 740px) {
+  .keep-calm {
+    margin-bottom: 1rem;
+  }
+
+  .keep-calm .crest {
+    width: 3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .keep-calm h1 {
+    font-size: clamp(2.5rem, 12vw, 3.25rem);
+  }
+}
+
+button.inline {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--link);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ---- Thumb-zone action bar ---- */
+
+.actions {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding: 1.25rem 0 max(1rem, env(safe-area-inset-bottom));
+  background: linear-gradient(to bottom, transparent, var(--night) 1.25rem);
+}
+
+.actions button {
+  flex: 1;
+  min-height: 3.25rem;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.actions .ghost.lucky {
+  flex: 1;
+}
+
+.primary {
+  background: var(--bulb);
+  color: var(--on-bulb);
+  border: 0;
+}
+
+.primary:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.actions .ghost {
+  background: transparent;
+  border: 2px solid var(--line);
+  flex: 0 1 8rem;
+}
+
+/* ---- Single-choice options ---- */
+
+.options {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--raised);
+  border: 2px solid var(--line);
+  border-radius: 0.875rem;
+  text-align: left;
+  font-size: 1.125rem;
+  cursor: pointer;
+}
+
+.lamp {
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  transition: background-color 150ms, box-shadow 150ms;
+}
+
+.option[aria-checked="true"],
+.option[aria-pressed="true"],
+.option.is-on {
+  border-color: var(--bulb);
+}
+
+.option[aria-checked="true"] .lamp,
+.option[aria-pressed="true"] .lamp,
+.option.is-on .lamp {
+  background: var(--bulb);
+  border-color: var(--bulb);
+  box-shadow: 0 0 10px 2px var(--bulb-glow);
+}
+
+.select-option {
+  position: relative;
+}
+
+.select-option select {
+  flex: 1;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  font-size: 1.125rem;
+  padding: 0;
+  cursor: pointer;
+}
+
+.select-option select:focus-visible {
+  outline: none;
+}
+
+.select-option:focus-within {
+  outline: 3px solid var(--bulb);
+  outline-offset: 2px;
+}
+
+/* ---- Genre chips ---- */
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: var(--raised);
+  border: 2px solid var(--line);
+  cursor: pointer;
+}
+
+.chip[aria-pressed="true"] {
+  background: var(--bulb);
+  border-color: var(--bulb);
+  color: var(--on-bulb);
+  font-weight: 700;
+}
+
+/* ---- Have you seen it? ---- */
+
+.seen-card {
+  margin: 0 auto 1.25rem;
+  width: min(62vw, 15rem);
+}
+
+.seen-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  background: var(--raised);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.35);
+}
+
+.seen-card figcaption {
+  margin-top: 0.75rem;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.seen-card figcaption span {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.verdicts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+}
+
+.verdict {
+  min-height: 3.25rem;
+  border-radius: 0.875rem;
+  background: var(--raised);
+  border: 2px solid var(--line);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.verdict[data-rating="unseen"] {
+  grid-column: 1 / -1;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.verdict[aria-pressed="true"] {
+  border-color: var(--bulb);
+}
+
+/* ---- Result: the marquee ---- */
+
+.marquee {
+  --bulb-size: 18px;
+  position: relative;
+  margin: 1rem -0.25rem 0;
+  padding: calc(var(--bulb-size) + 1rem) calc(var(--bulb-size) + 1rem);
+  background: var(--sign);
+  color: var(--sign-text);
+  border-radius: 0.375rem;
+  text-align: center;
+}
+
+.marquee::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  --dot: radial-gradient(circle, #ffe7a0 0 2px, var(--bulb) 3px 4px, transparent 5px);
+  /* "space" fits whole bulbs and spreads them evenly, so each edge ends on a corner bulb
+     at any width instead of clipping into the next edge. */
+  background:
+    var(--dot) left top / var(--bulb-size) var(--bulb-size) space no-repeat,
+    var(--dot) left bottom / var(--bulb-size) var(--bulb-size) space no-repeat,
+    var(--dot) left top / var(--bulb-size) var(--bulb-size) no-repeat space,
+    var(--dot) right top / var(--bulb-size) var(--bulb-size) no-repeat space;
+  filter: drop-shadow(0 0 4px var(--bulb-glow));
+  pointer-events: none;
+}
+
+.marquee-kicker {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--bulb);
+}
+
+.marquee h1 {
+  margin: 0.25rem 0 0;
+  font-size: clamp(2.75rem, 13vw, 4.25rem);
+  line-height: 0.92;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.marquee-year {
+  margin: 0.5rem 0 0;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  opacity: 0.75;
+}
+
+/* The one orchestrated moment: the sign flickers on, then the title appears. */
+@media (prefers-reduced-motion: no-preference) {
+  .marquee.is-lit::before {
+    animation: switch-on 900ms steps(1, end) both;
+  }
+
+  .marquee.is-lit > * {
+    animation: letters-on 500ms 700ms ease-out both;
+  }
+}
+
+@keyframes switch-on {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  25% { opacity: 0.2; }
+  40% { opacity: 1; }
+  50% { opacity: 0.4; }
+  65%, 100% { opacity: 1; }
+}
+
+@keyframes letters-on {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.pick-body {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  align-items: start;
+}
+
+.poster {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+
+.pick-text {
+  min-width: 0;
+}
+
+.facts {
+  margin: 0 0 0.75rem;
+  color: var(--muted);
+}
+
+.reasons {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.625rem;
+}
+
+.reasons li {
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.reasons li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--bulb);
+}
+
+.synopsis {
+  margin: 1.25rem 0 0;
+  max-width: 65ch;
+}
+
+.article {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  margin-top: 1.25rem;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--line);
+  border-radius: 0.875rem;
+  background: var(--raised);
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.article img {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.375rem;
+}
+
+.article span {
+  text-decoration: underline;
+  text-decoration-color: var(--bulb);
+  text-underline-offset: 0.2em;
+}
+
+/* ---- Showtimes ---- */
+
+.theatre {
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.theatre h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.125rem;
+  line-height: 1.3;
+}
+
+.where {
+  margin: -0.5rem 0 0.75rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.day {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: 0.5rem;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.day-name {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.time {
+  padding: 0.25rem 0.625rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9375rem;
+  white-space: nowrap;
+}
+
+.time.premium {
+  border-color: var(--bulb);
+}
+
+.tickets {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-top: 0.5rem;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  background: var(--bulb);
+  color: var(--on-bulb);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.film-page {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--link);
+}
+
+/* ---- Runners-up ---- */
+
+.runners {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.runners button {
+  display: grid;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: 0;
+  text-align: left;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.runners img,
+.runners .no-poster {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 0.375rem;
+  background: var(--raised);
+}
+
+.more {
+  margin: 1.5rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.more a {
+  color: var(--link);
+}
+
+.empty {
+  margin-top: auto;
+}
