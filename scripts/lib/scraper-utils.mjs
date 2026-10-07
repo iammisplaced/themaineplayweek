@@ -172,8 +172,11 @@ export function formatShowtimesCsv(showings, theatreName, theatreCity) {
   return rows.map(row => row.map(escapeCsvCell).join(',')).join('\n');
 }
 
-/** Writes the CSV to the repo root and returns the filename. */
-export function writeCsvToRepoRoot(filename, csv) {
-  fs.writeFileSync(path.join(REPO_ROOT, filename), csv);
+/**
+ * Writes a scraper's CSV and returns the filename. Goes to the repo root unless
+ * SCRAPE_OUTPUT_DIR is set (npm run scrape uses that to collect files before combining them).
+ */
+export function writeScrapedCsv(filename, csv) {
+  fs.writeFileSync(path.join(process.env.SCRAPE_OUTPUT_DIR || REPO_ROOT, filename), csv);
   return filename;
 }

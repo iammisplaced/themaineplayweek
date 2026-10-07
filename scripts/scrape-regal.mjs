@@ -16,7 +16,7 @@ import {
   prompt,
   resolveDateRange,
   sleep,
-  writeCsvToRepoRoot,
+  writeScrapedCsv,
 } from './lib/scraper-utils.mjs';
 
 const BASE_URL = 'https://www.regmovies.com';
@@ -119,7 +119,7 @@ async function scrapeTheatre(page, city, { fromIso, toIso }) {
 
   showings.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title) || compareTimes(a.time, b.time));
   const csv = formatShowtimesCsv(showings, THEATRE_NAME, city);
-  const filename = writeCsvToRepoRoot(`scraped-${city.toLowerCase()}-regal-showtimes.csv`, csv);
+  const filename = writeScrapedCsv(`scraped-${city.toLowerCase()}-regal-showtimes.csv`, csv);
   const premiumCount = showings.filter(s => s.premium).length;
   console.log(`Saved ${showings.length} showings (${premiumCount} 3D) to ${filename}`);
   logCoverage(showings, toIso);
