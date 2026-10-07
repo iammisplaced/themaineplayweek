@@ -1,273 +1,179 @@
-import { formatShowtimesCsv, launchBrowser, prompt, sleep, writeScrapedCsv } from './lib/scraper-utils.mjs';
+// Scrapes Apple Cinemas showtimes into admin import CSVs, one per theatre.
+//
+// applecinemas.com is an Angular app on a JSON API behind Cloudflare, so we open the site once
+// in a stealth browser and call the API from inside that page. Each theatre's film list comes
+// from GetAllCompanyLocationMoviesOptimized; showtimes come from GetLocationonlineMoviesOptimized,
+// which returns one film's showings for one day at every Apple location. 3D showings go to
+// premium_show_times, and a trailing "(2026)" in a title becomes film_year.
+//
+// Usage: node scripts/scrape-apple-cinema.mjs [--city=Saco|Westbrook|all] [--end=YYYY-MM-DD | --days=7]
 
-async function scrapeShowtimes() {
-  let browser;
-  try {
-    // Get input from user
-    console.log('=== Apple Cinemas Showtimes Scraper ===\n');
-    const theatreUrl = await prompt('Enter theatre URL (e.g., https://www.applecinemas.com/home/611fea26f74bab2423301ee4):\n> ');
-    const theatreName = await prompt('\nEnter theatre name (e.g., Apple Cinemas Saco and IMAX):\n> ');
-    const theatreCity = await prompt('Enter theatre city (e.g., Saco):\n> ');
-    const fetchYears = (await prompt('\nFetch film years? (y/n, slower but more complete):\n> ')).toLowerCase() === 'y';
+import { compareTimes } from '../js/shared.js';
+import {
+  addDaysIso,
+  fetchJsonInPage,
+  formatShowtimesCsv,
+  getArg,
+  launchBrowser,
+  logCoverage,
+  prompt,
+  resolveDateRange,
+  writeScrapedCsv,
+} from './lib/scraper-utils.mjs';
 
-    if (!theatreUrl || !theatreName || !theatreCity) {
-      throw new Error('All fields are required');
-    }
+const BASE_URL = 'https://www.applecinemas.com';
+const COMPANY_ID = 'f604d90';
+const THEATRE_NAME = 'Apple Cinemas';
+// Location IDs are the last part of the theatre's URL on applecinemas.com/locations.
+const THEATRES = {
+  Saco: '611fea26f74bab2423301ee4',
+  Westbrook: '611fe9edf74bab2423301ee0',
+};
+const CITIES = Object.keys(THEATRES);
+const TIME_ZONE = 'America/New_York';
 
-    console.log(`\nStarting scrape for ${theatreName}, ${theatreCity}...`);
-    console.log(`URL: ${theatreUrl}`);
-    console.log(`Fetch years: ${fetchYears ? 'yes' : 'no'}\n`);
+function easternTodayIso() {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE }).format(new Date());
+}
 
-    let page;
-    ({ browser, page } = await launchBrowser());
+// "PAW Patrol: The Dino Movie   (2026)" -> { title: "PAW Patrol: The Dino Movie", year: 2026 }
+function cleanTitle(name) {
+  const title = String(name || '').replace(/\s+/g, ' ').trim();
+  const match = /^(.*\S)\s*\((\d{4})\)$/.exec(title);
+  return match ? { title: match[1], year: Number(match[2]) } : { title, year: null };
+}
 
-    console.log('Loading theatre page...');
-    await page.goto(theatreUrl, { waitUntil: 'networkidle2' });
+// The API labels times as UTC ("2026-10-10T19:30:00+00:00") but they are the theatre's local
+// time, which is what the site shows, so read the clock time as-is.
+function parseShowTime(value) {
+  const match = /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2})/.exec(String(value || ''));
+  if (!match) return null;
+  const hour24 = Number(match[2]);
+  const hour12 = hour24 % 12 || 12;
+  return { date: match[1], time: `${hour12}:${match[3]} ${hour24 < 12 ? 'AM' : 'PM'}` };
+}
 
-    console.log('Finding NOW PLAYING films...\n');
-
-    // Get all NOW PLAYING films with their titles
-    const filmLinks = await page.evaluate(() => {
-      const allElements = document.querySelectorAll('a');
-      const films = [];
-
-      Array.from(allElements).forEach((link, idx) => {
-        const text = link.textContent.trim();
-        const isPreSales = text.includes('Pre - Sales');
-        const isEvent = text.includes('EVENTS');
-        const isValidLength = text.length > 30;
-
-        if (isValidLength && !isPreSales && !isEvent && !text.startsWith('By using')) {
-          films.push({
-            idx,
-            title: text.substring(0, 100), // Get the full text as title
-            isNowPlaying: !isPreSales && !isEvent,
-          });
-        }
-      });
-
-      // Remove duplicates
-      const seen = new Set();
-      return films.filter(f => {
-        if (seen.has(f.title)) return false;
-        seen.add(f.title);
-        return true;
-      });
-    });
-
-    console.log(`Found ${filmLinks.length} NOW PLAYING films\n`);
-
-    const allShowtimesData = [];
-
-    // Process each film
-    for (const filmLink of filmLinks) {
-      const filmTitle = filmLink.title;
-      console.log(`Processing: ${filmTitle.substring(0, 50)}...`);
-
-      // Click the film
-      const clicked = await page.evaluate((idx) => {
-        const links = document.querySelectorAll('a');
-        const validLinks = Array.from(links).filter(l => {
-          const text = l.textContent.trim();
-          return text.length > 30 && !text.includes('Pre - Sales');
-        });
-        if (validLinks[idx] && validLinks[idx].click) {
-          validLinks[idx].click();
-          return true;
-        }
-        return false;
-      }, filmLinks.indexOf(filmLink));
-
-      if (!clicked) {
-        console.log('  ✗ Could not click film');
-        continue;
-      }
-
-      await sleep(1500);
-
-      // Handle any modals that pop up after clicking
-      let modalHandled = false;
-      for (let attempt = 0; attempt < 3; attempt++) {
-        const modalAction = await page.evaluate(() => {
-          // Check for confirmation modal (yes/no)
-          const buttons = document.querySelectorAll('button');
-          for (const btn of buttons) {
-            if (btn.textContent.includes('Yes') || btn.textContent.includes('OK') || btn.textContent.includes('Confirm')) {
-              btn.click();
-              return 'confirmed';
-            }
-          }
-          return null;
-        });
-
-        if (modalAction) {
-          await sleep(1000);
-          modalHandled = true;
-          break;
-        }
-      }
-
-      // Handle location selection modal
-      const locationSelected = await page.evaluate((town) => {
-        const buttons = document.querySelectorAll('button, a, [role="button"]');
-        for (const btn of buttons) {
-          if (btn.textContent.includes(town)) {
-            btn.click();
-            return true;
-          }
-        }
-        return false;
-      }, theatreCity);
-
-      if (!locationSelected) {
-        console.log(`  ✗ Location "${theatreCity}" not found - skipping film`);
-        // Go back to theatre page
-        await page.goto(theatreUrl, { waitUntil: 'networkidle2' });
-        await sleep(1000);
-        continue;
-      }
-
-      console.log(`  ✓ Location selected`);
-      await sleep(1500);
-
-      // Extract showtimes for 7 days
-      const filmShowtimes = await extractSevenDaysShowtimes(page, filmTitle, theatreCity);
-
-      if (filmShowtimes.length > 0) {
-        console.log(`  ✓ Found ${filmShowtimes.length} total showings`);
-        allShowtimesData.push(...filmShowtimes);
+/**
+ * Films listed at any of the cities, keyed by movie ID. Pre-sale films carry their first
+ * showtime (advanceShowTime), so dates before it are skipped.
+ */
+async function loadFilms(page, cities) {
+  const films = new Map();
+  for (const city of cities) {
+    const { schedules = [] } = await fetchJsonInPage(page, `/Kiosk/GetAllCompanyLocationMoviesOptimized/${COMPANY_ID}/${THEATRES[city]}`);
+    for (const film of schedules) {
+      const firstDate = film.isAdvance && film.advanceShowTime ? String(film.advanceShowTime).slice(0, 10) : '';
+      const existing = films.get(film.actualMovieId);
+      if (existing) {
+        if (existing.firstDate > firstDate) existing.firstDate = firstDate;
       } else {
-        console.log(`  ✗ No showtimes found`);
+        films.set(film.actualMovieId, { ...cleanTitle(film.movieName), firstDate });
       }
-
-      // Go back to theatre page for next film
-      await page.goto(theatreUrl, { waitUntil: 'networkidle2' });
-      await sleep(1000);
     }
-
-    console.log(`\nTotal showings: ${allShowtimesData.length}\n`);
-
-    if (allShowtimesData.length === 0) {
-      throw new Error('No showtimes data extracted from the page');
-    }
-
-    // Format as CSV
-    const csv = formatShowtimesCsv(allShowtimesData, theatreName, theatreCity);
-
-    // Generate filename
-    const filename = `scraped-${theatreCity.toLowerCase().replace(/\s+/g, '-')}-apple-showtimes.csv`;
-    writeScrapedCsv(filename, csv);
-    console.log(`Saved to ${filename}\n`);
-
-    // Show summary
-    const byDate = {};
-    allShowtimesData.forEach(s => {
-      byDate[s.date] = (byDate[s.date] || 0) + 1;
-    });
-
-    console.log('Summary by date:');
-    Object.entries(byDate).sort().forEach(([date, count]) => {
-      console.log(`  ${date}: ${count} showings`);
-    });
-
-    return allShowtimesData;
-  } catch (error) {
-    console.error('Scraping failed:', error.message);
-    throw error;
-  } finally {
-    if (browser) {
-      await browser.close();
-    }
+    console.log(`  ${city}: ${schedules.length} films listed`);
   }
+  return films;
 }
 
-async function extractSevenDaysShowtimes(page, filmTitle, theatreCity) {
-  const allShowtimes = [];
-
-  for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + dayOffset);
-    const isoDate = targetDate.toISOString().split('T')[0];
-
-    // If not first day, click the next date button
-    if (dayOffset > 0) {
-      const nextDateClicked = await page.evaluate(() => {
-        // Look for next date button/arrow
-        const buttons = document.querySelectorAll('button, a, [role="button"]');
-        const nextBtn = Array.from(buttons).find(btn => {
-          const text = btn.textContent.trim();
-          return text === '>' || text === 'Next' || text.includes('→');
+function extractShowings(response, film) {
+  const showingsByCity = {};
+  for (const listing of response || []) {
+    const city = CITIES.find(c => THEATRES[c] === listing.locationId);
+    if (!city) continue;
+    for (const screen of listing.screens || []) {
+      for (const show of screen.showTimes || []) {
+        const local = parseShowTime(show.showTime);
+        if (!local) continue;
+        (showingsByCity[city] ||= []).push({
+          title: film.title,
+          ...local,
+          premium: (show.screenInfo || []).some(info => /\b3D\b/i.test(info)),
+          year: film.year,
         });
-
-        if (nextBtn) {
-          nextBtn.click();
-          return true;
-        }
-        return false;
-      });
-
-      if (!nextDateClicked) {
-        // No next button found, stop here
-        break;
       }
-
-      await sleep(1000);
     }
-
-    // Check if a modal appeared (indicating no more showtimes)
-    const modalAppeared = await page.evaluate(() => {
-      const modals = document.querySelectorAll('[role="dialog"], .modal');
-      return modals.length > 0;
-    });
-
-    if (modalAppeared) {
-      // Close modal and stop
-      await page.evaluate(() => {
-        const closeButtons = document.querySelectorAll('button');
-        for (const btn of closeButtons) {
-          if (btn.textContent.includes('Close') || btn.textContent.includes('OK') || btn.textContent.includes('×')) {
-            btn.click();
-            return;
-          }
-        }
-      });
-      break;
-    }
-
-    // Extract showtimes from detail frame
-    const showtimes = await page.evaluate(() => {
-      // Find the detail frame with showtimes
-      const detailFrames = document.querySelectorAll('[class*="detail"], [class*="showtime"], [class*="frame"]');
-
-      if (detailFrames.length === 0) {
-        return null; // No data
-      }
-
-      // Get text from the first detail frame
-      const text = detailFrames[0].innerText || detailFrames[0].textContent || '';
-
-      // Extract times (format: HH:MM AM/PM)
-      const times = text.match(/\d{1,2}:\d{2}\s*(?:AM|PM)/gi) || [];
-
-      return times.length > 0 ? times : null;
-    });
-
-    if (!showtimes) {
-      // No data for this date, stop here
-      break;
-    }
-
-    // Add to results
-    showtimes.forEach(time => {
-      allShowtimes.push({
-        title: filmTitle,
-        date: isoDate,
-        time: time.toUpperCase(),
-      });
-    });
   }
-
-  return allShowtimes;
+  return showingsByCity;
 }
 
-scrapeShowtimes().catch(console.error);
+async function scrapeCities(page, cities, { fromIso, toIso }) {
+  console.log(`\n=== ${cities.join(', ')} (${fromIso} to ${toIso}) ===`);
+  console.log('  Loading applecinemas.com...');
+  await page.goto(`${BASE_URL}/home/${THEATRES[cities[0]]}`, { waitUntil: 'networkidle2', timeout: 60000 });
+
+  const films = await loadFilms(page, cities);
+  const showingsByCity = Object.fromEntries(cities.map(city => [city, []]));
+  const failedFilms = [];
+
+  // One request per film per day covers every city at once.
+  for (const [movieId, film] of films) {
+    const startIso = film.firstDate > fromIso ? film.firstDate : fromIso;
+    if (startIso > toIso) continue;
+    let count = 0;
+    try {
+      for (let date = startIso; date <= toIso; date = addDaysIso(date, 1)) {
+        const url = `/Kiosk/GetLocationonlineMoviesOptimized/${COMPANY_ID}/${movieId}/${date}T00:00:00.000Z/${date}T23:59:59.000Z`;
+        const dayShowings = extractShowings(await fetchJsonInPage(page, url), film);
+        for (const [city, showings] of Object.entries(dayShowings)) {
+          const inRange = showings.filter(s => s.date >= fromIso && s.date <= toIso);
+          showingsByCity[city]?.push(...inRange);
+          count += inRange.length;
+        }
+      }
+    } catch (error) {
+      console.error(`  ${film.title} FAILED: ${error.message}`);
+      failedFilms.push(film.title);
+      continue;
+    }
+    if (count) console.log(`  ${film.title}: ${count} showings`);
+  }
+
+  for (const city of cities) writeCityCsv(city, showingsByCity[city], toIso);
+  return failedFilms;
+}
+
+function writeCityCsv(city, showings, toIso) {
+  if (showings.length === 0) {
+    console.warn(`No showtimes found for ${city}; no CSV written.`);
+    return;
+  }
+  showings.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title) || compareTimes(a.time, b.time));
+  const csv = formatShowtimesCsv(showings, THEATRE_NAME, city);
+  const filename = writeScrapedCsv(`scraped-${city.toLowerCase()}-apple-showtimes.csv`, csv);
+  const premiumCount = showings.filter(s => s.premium).length;
+  console.log(`${city}: saved ${showings.length} showings (${premiumCount} 3D) to ${filename}`);
+  logCoverage(showings, toIso);
+}
+
+async function main() {
+  let cityArg = getArg('city');
+  const interactive = !cityArg;
+  if (interactive) {
+    console.log('=== Apple Cinemas Showtimes Scraper ===\n');
+    cityArg = await prompt(`Enter theatre city (${CITIES.join(', ')} or all):\n> `);
+  }
+
+  const cities = cityArg.toLowerCase() === 'all'
+    ? CITIES
+    : CITIES.filter(city => city.toLowerCase() === cityArg.toLowerCase());
+  if (cities.length === 0) {
+    throw new Error(`Invalid theatre city "${cityArg}". Use: ${CITIES.join(', ')} or all`);
+  }
+
+  const range = await resolveDateRange(easternTodayIso(), { ask: interactive });
+  const { browser, page } = await launchBrowser();
+  try {
+    const failedFilms = await scrapeCities(page, cities, range);
+    if (failedFilms.length) {
+      console.error(`\nFailed films (missing from the CSV): ${failedFilms.join(', ')}`);
+      process.exitCode = 1;
+    }
+  } finally {
+    await browser.close();
+  }
+}
+
+main().catch(error => {
+  console.error('Scraping failed:', error.message);
+  process.exitCode = 1;
+});
