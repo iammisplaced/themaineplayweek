@@ -10,7 +10,7 @@ Run `npm install` once, then:
 npm run scrape
 ```
 
-It asks for an end date (leave it blank for the next 7 days), then scrapes every Flagship, Smitty's and Regal theatre and saves everything to **one file, `scraped-all-showtimes.csv`**, in the project folder. Import that single file in the admin panel. You can skip the question:
+It asks for an end date (leave it blank for the next 7 days), then scrapes every Flagship, Smitty's, Regal and Apple Cinemas theatre and saves everything to **one file, `scraped-all-showtimes.csv`**, in the project folder. Import that single file in the admin panel. You can skip the question:
 
 ```bash
 npm run scrape -- --end=2026-11-30   # through Nov 30, inclusive
@@ -24,9 +24,9 @@ npm run scrape -- --days=14          # today plus the next 13 days
 | Flagship Cinemas | `npm run scrape:flagship` | Auburn, Falmouth, Thomaston, Waterville, Wells | `scraped-{city}-flagship-showtimes.csv` |
 | Smitty's Entertainment | `npm run scrape:smittys` | Sanford, Topsham, Windham | `scraped-{city}-smittys-showtimes.csv` |
 | Regal Cinemas | `npm run scrape:regal` | Augusta | `scraped-{city}-regal-showtimes.csv` |
-| Apple Cinemas | `npm run scrape:apple` | any (asks for a URL) | `scraped-{city}-apple-showtimes.csv` |
+| Apple Cinemas | `npm run scrape:apple` | Saco, Westbrook | `scraped-{city}-apple-showtimes.csv` |
 
-These write one CSV per theatre instead of the combined file. Flagship, Smitty's and Regal all work the same way. Run with no options and they ask for a city (or `all`) and an end date, or pass options to skip the questions:
+These write one CSV per theatre instead of the combined file. They all work the same way. Run with no options and they ask for a city (or `all`) and an end date, or pass options to skip the questions:
 
 ```bash
 npm run scrape:flagship -- --city=Wells --end=2026-11-30
@@ -34,8 +34,6 @@ npm run scrape:regal -- --city=all --days=3
 ```
 
 (`node scripts/scrape-flagship.mjs --city=Wells ...` works too.)
-
-Apple Cinemas is the odd one out: it isn't part of `npm run scrape`, it asks for a theatre URL, name and city, and it always scrapes 7 days.
 
 ## Date range
 
@@ -46,12 +44,12 @@ Apple Cinemas is the odd one out: it isn't part of `npm run scrape`, it asks for
 ## Output
 
 Every scraper writes the same columns as the admin CSV template (see README):
-- `theatre_name` - `Flagship Cinemas`, `Smitty's Entertainment` or `Regal Cinemas` (Apple uses what you type); `theatre_city` tells theatres apart
-- `film_title` - movie title as listed by the theatre
+- `theatre_name` - `Flagship Cinemas`, `Smitty's Entertainment`, `Regal Cinemas` or `Apple Cinemas`; `theatre_city` tells theatres apart
+- `film_title` - movie title as listed by the theatre (Apple titles have extra spaces and a trailing `(2026)` removed)
 - `show_date` - `YYYY-MM-DD`
 - `show_times` - pipe-separated, one row per film per date, duplicates removed (e.g. `12:30 PM|3:20 PM|6:00 PM`)
-- `premium_show_times` - 3D showings (Flagship and Regal)
-- `film_year` - Flagship and Regal (re-releases get the re-release year)
+- `premium_show_times` - 3D showings (all chains except Smitty's); IMAX, ACX, ScreenX etc. stay in `show_times`
+- `film_year` - Flagship and Regal (re-releases get the re-release year), and Apple when the title ends in a year like `(2026)`
 - `film_tmdb_id` - Flagship only
 - everything else is left blank for you to fill in
 
@@ -69,14 +67,14 @@ All requests are spaced 400 ms apart, and blocked or failed requests (403, 429, 
 
 **Regal** (browser). regmovies.com is behind a Cloudflare bot check, so plain requests get a "Just a moment..." page. The scraper opens the theatre page once in a stealth browser, reads the list of dates with showings from the page's `__NEXT_DATA__`, then calls `/api/getShowtimes?theatres=1704&date=MM-DD-YYYY` (the endpoint the site's date buttons use) from inside the page for each date in range. Times come from `CalendarShowTime` (theatre-local), 3D comes from `PerformanceAttributes`, and `film_year` from each film's `OpeningDate`. To add a Regal theatre, add its URL slug and code (the number at the end of its regmovies.com URL) to `THEATRES` in `scrape-regal.mjs`.
 
-**Apple Cinemas** (browser) goes through each NOW PLAYING film:
-1. Clicks the film, then handles any confirmation modal (Yes/OK) and the location modal (clicks your city; if your city isn't listed, the film has no showtimes there and is skipped).
-2. Reads the times for the date the page opens on. This is the soonest showtime, which isn't always today.
-3. Steps through the date picker. It stops when a date opens a modal or has no data.
+**Apple Cinemas** (browser). applecinemas.com is an Angular app on a JSON API behind Cloudflare, so plain requests get a 403. The scraper opens the site once in a stealth browser and calls the API from inside the page:
+1. `/Kiosk/GetAllCompanyLocationMoviesOptimized/f604d90/{locationId}` lists each theatre's films, now playing and pre-sales. Pre-sale films include their first showtime (`advanceShowTime`), and dates before it are skipped.
+2. For each film and each date, `/Kiosk/GetLocationonlineMoviesOptimized/f604d90/{movieId}/{date}T00:00:00.000Z/{date}T23:59:59.000Z` returns that film's showings at every Apple location for that one day (a wider range still returns only the first day). Saco and Westbrook come from the same request.
+3. Showtimes are labelled `+00:00` but are really theatre-local time (the site shows `12:00:00+00:00` as 12:00 PM), so they're read as-is. Showings tagged `3D` in `screenInfo` go to `premium_show_times`.
 
-Theatre URLs for Apple: go to https://www.applecinemas.com/locations, open the theatre and copy its URL, e.g. `https://www.applecinemas.com/home/611fea26f74bab2423301ee4`.
+To add an Apple theatre, add its city and location ID (the last part of its URL on https://www.applecinemas.com/locations) to `THEATRES` in `scrape-apple-cinema.mjs`.
 
-Timing: a full 7-day `npm run scrape` takes a minute or two.
+Timing: a full 7-day `npm run scrape` takes a few minutes; Apple is the slowest, at about one request per film per day.
 
 ## Import to the app
 
@@ -92,4 +90,5 @@ Timing: a full 7-day `npm run scrape` takes a minute or two.
 - **Smitty's: "no ld+json screening list"**: the site changed its markup. The fallback still works, but check `extractFromLdJson`.
 - **Regal: timeout waiting for the page**: the Cloudflare check didn't clear. Run it again; if it keeps happening, the stealth plugin may need updating (`npm update puppeteer-extra-plugin-stealth`).
 - **Regal: "request kept failing"**: the `/api/getShowtimes` endpoint changed. Click a date on the theatre page with the Network tab open to see the new request.
-- **Apple: "location not found" for a film**: that film isn't playing at your theatre.
+- **Apple: timeout loading applecinemas.com**: the Cloudflare check didn't clear. Run it again.
+- **Apple: "request kept failing"**: the API changed. Open a film on applecinemas.com with the Network tab open and compare the `Kiosk/...` requests with the ones in `scrape-apple-cinema.mjs`.
