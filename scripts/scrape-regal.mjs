@@ -9,13 +9,13 @@
 
 import { compareTimes } from '../js/shared.js';
 import {
+  fetchJsonInPage,
   formatShowtimesCsv,
   getArg,
   launchBrowser,
   logCoverage,
   prompt,
   resolveDateRange,
-  sleep,
   writeScrapedCsv,
 } from './lib/scraper-utils.mjs';
 
@@ -27,7 +27,6 @@ const THEATRES = {
 };
 const CITIES = Object.keys(THEATRES);
 const TIME_ZONE = 'America/New_York';
-const REQUEST_DELAY_MS = 400;
 
 function easternTodayIso() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE }).format(new Date());
@@ -46,24 +45,6 @@ function parseCalendarShowTime(value) {
   const hour24 = Number(match[2]);
   const hour12 = hour24 % 12 || 12;
   return { date: match[1], time: `${hour12}:${match[3]} ${hour24 < 12 ? 'AM' : 'PM'}` };
-}
-
-// Runs fetch() inside the browser page so the request carries its Cloudflare clearance.
-async function fetchJsonInPage(page, url) {
-  for (let attempt = 0; attempt < 3; attempt++) {
-    await sleep(REQUEST_DELAY_MS + attempt * 5000);
-    const result = await page.evaluate(async (u) => {
-      try {
-        const res = await fetch(u, { headers: { accept: 'application/json' } });
-        return { status: res.status, text: await res.text() };
-      } catch (error) {
-        return { status: 0, text: String(error) };
-      }
-    }, url);
-    if (result.status === 200) return JSON.parse(result.text);
-    console.warn(`    ${url}: HTTP ${result.status}${attempt < 2 ? ', retrying...' : ''}`);
-  }
-  throw new Error(`${url}: request kept failing`);
 }
 
 function extractShowings(response) {

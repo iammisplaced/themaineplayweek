@@ -127,6 +127,27 @@ export async function launchBrowser() {
   return { browser, page };
 }
 
+/**
+ * Runs fetch() inside a browser page, so the request carries the page's Cloudflare clearance.
+ * Paced like fetchText and retried on failure. Returns the parsed JSON.
+ */
+export async function fetchJsonInPage(page, url) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await sleep(REQUEST_DELAY_MS + attempt * 5000);
+    const result = await page.evaluate(async (u) => {
+      try {
+        const res = await fetch(u, { headers: { accept: 'application/json' } });
+        return { status: res.status, text: await res.text() };
+      } catch (error) {
+        return { status: 0, text: String(error) };
+      }
+    }, url);
+    if (result.status === 200) return JSON.parse(result.text);
+    console.warn(`    ${url}: HTTP ${result.status}${attempt < 2 ? ', retrying...' : ''}`);
+  }
+  throw new Error(`${url}: request kept failing`);
+}
+
 function escapeCsvCell(cell) {
   const str = String(cell || '');
   return /[",\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str;
