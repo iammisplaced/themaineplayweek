@@ -3046,6 +3046,9 @@ function importShowtimesCsv(data, csvContent) {
     const ticketLinkRaw = readCsvValue(row, headerIndexByKey, "ticket_link");
     const roomRaw = readCsvValue(row, headerIndexByKey, "room");
     const notesRaw = readCsvValue(row, headerIndexByKey, "notes");
+    // Blank keeps the stored note; a lone "-" clears it.
+    const clearNotes = notesRaw === "-";
+    const csvNotes = clearNotes ? "" : notesRaw;
     const festivalNameRaw = readCsvValue(row, headerIndexByKey, "festival_name");
     const showDate = readCsvValue(row, headerIndexByKey, "show_date");
     const showTimesRaw = readCsvValue(row, headerIndexByKey, "show_times");
@@ -3160,7 +3163,7 @@ function importShowtimesCsv(data, csvContent) {
       showing.times = dedupeSortTimes([...(showing.times || []), ...parsedTimes]);
       showing.premiumTimes = dedupeSortTimes([...(showing.premiumTimes || []), ...parsedPremiumTimes]);
       showing.room = roomRaw;
-      showing.notes = String(notesRaw || "").trim();
+      if (csvNotes || clearNotes) showing.notes = csvNotes;
       if (resolvedFestivalId) {
         showing.festivalId = resolvedFestivalId;
       }
@@ -3172,7 +3175,7 @@ function importShowtimesCsv(data, csvContent) {
       film.showings.push({
         date: showDate,
         room: roomRaw,
-        notes: String(notesRaw || "").trim(),
+        notes: csvNotes,
         festivalId: resolvedFestivalId,
         times: dedupeSortTimes(parsedTimes),
         premiumTimes: dedupeSortTimes(parsedPremiumTimes),
