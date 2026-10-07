@@ -48,7 +48,8 @@ Every scraper writes the same columns as the admin CSV template (see README):
 - `film_title` - movie title as listed by the theatre (Apple titles have extra spaces and a trailing `(2026)` removed)
 - `show_date` - `YYYY-MM-DD`
 - `show_times` - pipe-separated, one row per film per date, duplicates removed (e.g. `12:30 PM|3:20 PM|6:00 PM`)
-- `premium_show_times` - 3D showings (all chains except Smitty's); IMAX, ACX, ScreenX etc. stay in `show_times`
+- `premium_show_times` - premium-format showings: 3D, FPX and 4K Laser at Flagship; 3D, IMAX, RPX, 4DX and ScreenX at Regal; 3D, IMAX, ACX and ScreenX at Apple. Smitty's doesn't mark formats.
+- `notes` - names the format of each premium time (`7:00 PM: IMAX; 9:30 PM: 3D`), shown when a visitor hovers or taps the time. Importing adds these to any note already saved for that date instead of replacing it.
 - `film_year` - Flagship and Regal (re-releases get the re-release year), and Apple when the title ends in a year like `(2026)`
 - `film_tmdb_id` - Flagship only
 - everything else is left blank for you to fill in
@@ -61,16 +62,16 @@ All requests are spaced 400 ms apart, and blocked or failed requests (403, 429, 
 1. Calls the same startup config the site requests on every page load, to get the site ID for each city (Auburn 338, Falmouth 339, Thomaston 340, Waterville 341, Wells 342) and the ID of the `3D` badge.
 2. For each theatre, calls `datesWithShowing` to find which dates have showings, then `showingsForDate(date, siteIds)` for each of those dates in the range.
 3. Skips unpublished and private showings, converts the UTC timestamps to Eastern time, and files each showing under its Eastern date.
-4. Fills `film_year` and `film_tmdb_id` from the movie data, and puts showings with the 3D badge in `premium_show_times`.
+4. Fills `film_year` and `film_tmdb_id` from the movie data, and puts showings with a 3D, FPX (or `FPX 6`) or 4K Laser badge in `premium_show_times`. The badge mapping is `PREMIUM_BADGES` in `scrape-flagship.mjs`.
 
 **Smitty's** (no browser). A Theater Toolkit site. Windham is closed for renovation but is scraped anyway; until it lists films again it prints "No movies listed for Windham" and writes no CSV. The scraper downloads the location page to get the movie list, then each movie page. Every movie page contains an `ld+json` list of `screeningEvent`s with the full upcoming schedule at that location (`"StartDate": "Tuesday, October 6, 2026 6:30 PM"`), and that list is the data source. If a page's list is missing or won't parse, it falls back to the endpoint the date picker uses (`/theater/movietimes?locationKey=…&featureName=…&day=M/D/YYYY`) and logs a warning.
 
-**Regal** (browser). regmovies.com is behind a Cloudflare bot check, so plain requests get a "Just a moment..." page. The scraper opens the theatre page once in a stealth browser, reads the list of dates with showings from the page's `__NEXT_DATA__`, then calls `/api/getShowtimes?theatres=1704&date=MM-DD-YYYY` (the endpoint the site's date buttons use) from inside the page for each date in range. Times come from `CalendarShowTime` (theatre-local), 3D comes from `PerformanceAttributes`, and `film_year` from each film's `OpeningDate`. To add a Regal theatre, add its URL slug and code (the number at the end of its regmovies.com URL) to `THEATRES` in `scrape-regal.mjs`.
+**Regal** (browser). regmovies.com is behind a Cloudflare bot check, so plain requests get a "Just a moment..." page. The scraper opens the theatre page once in a stealth browser, reads the list of dates with showings from the page's `__NEXT_DATA__`, then calls `/api/getShowtimes?theatres=1704&date=MM-DD-YYYY` (the endpoint the site's date buttons use) from inside the page for each date in range. Times come from `CalendarShowTime` (theatre-local), premium formats (`PREMIUM_FORMATS`) from `PerformanceAttributes`, and `film_year` from each film's `OpeningDate`. To add a Regal theatre, add its URL slug and code (the number at the end of its regmovies.com URL) to `THEATRES` in `scrape-regal.mjs`.
 
 **Apple Cinemas** (browser). applecinemas.com is an Angular app on a JSON API behind Cloudflare, so plain requests get a 403. The scraper opens the site once in a stealth browser and calls the API from inside the page:
 1. `/Kiosk/GetAllCompanyLocationMoviesOptimized/f604d90/{locationId}` lists each theatre's films, now playing and pre-sales. Pre-sale films include their first showtime (`advanceShowTime`), and dates before it are skipped.
 2. For each film and each date, `/Kiosk/GetLocationonlineMoviesOptimized/f604d90/{movieId}/{date}T00:00:00.000Z/{date}T23:59:59.000Z` returns that film's showings at every Apple location for that one day (a wider range still returns only the first day). Saco and Westbrook come from the same request.
-3. Showtimes are labelled `+00:00` but are really theatre-local time (the site shows `12:00:00+00:00` as 12:00 PM), so they're read as-is. Showings tagged `3D` in `screenInfo` go to `premium_show_times`.
+3. Showtimes are labelled `+00:00` but are really theatre-local time (the site shows `12:00:00+00:00` as 12:00 PM), so they're read as-is. Showings whose `screenInfo` is 3D, IMAX, ACX or ScreenX (`PREMIUM_FORMATS`) go to `premium_show_times`; `2D` and `Open caption` stay in `show_times`.
 
 To add an Apple theatre, add its city and location ID (the last part of its URL on https://www.applecinemas.com/locations) to `THEATRES` in `scrape-apple-cinema.mjs`.
 

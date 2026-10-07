@@ -3,8 +3,9 @@
 // applecinemas.com is an Angular app on a JSON API behind Cloudflare, so we open the site once
 // in a stealth browser and call the API from inside that page. Each theatre's film list comes
 // from GetAllCompanyLocationMoviesOptimized; showtimes come from GetLocationonlineMoviesOptimized,
-// which returns one film's showings for one day at every Apple location. 3D showings go to
-// premium_show_times, and a trailing "(2026)" in a title becomes film_year.
+// which returns one film's showings for one day at every Apple location. 3D, IMAX, ACX and
+// ScreenX showings go to premium_show_times with a note naming the format, and a trailing
+// "(2026)" in a title becomes film_year.
 //
 // Usage: node scripts/scrape-apple-cinema.mjs [--city=Saco|Westbrook|all] [--end=YYYY-MM-DD | --days=7]
 
@@ -31,6 +32,14 @@ const THEATRES = {
 };
 const CITIES = Object.keys(THEATRES);
 const TIME_ZONE = 'America/New_York';
+// screenInfo values that make a showing premium -> the format named in the note.
+const PREMIUM_FORMATS = [
+  [/^IMAX$/i, 'IMAX'],
+  [/^ACX$/i, 'ACX'],
+  [/^Screen ?X Infinity Vision$/i, 'ScreenX Infinity Vision'],
+  [/^Screen ?X$/i, 'ScreenX'],
+  [/^3D$/i, '3D'],
+];
 
 function easternTodayIso() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE }).format(new Date());
@@ -75,6 +84,12 @@ async function loadFilms(page, cities) {
   return films;
 }
 
+// ["IMAX"] -> "IMAX"; ["2D"] or ["Open caption "] -> ""
+function premiumFormat(screenInfo) {
+  const formats = screenInfo.map(info => PREMIUM_FORMATS.find(([pattern]) => pattern.test(String(info).trim()))?.[1]);
+  return [...new Set(formats.filter(Boolean))].join(' ');
+}
+
 function extractShowings(response, film) {
   const showingsByCity = {};
   for (const listing of response || []) {
@@ -87,7 +102,7 @@ function extractShowings(response, film) {
         (showingsByCity[city] ||= []).push({
           title: film.title,
           ...local,
-          premium: (show.screenInfo || []).some(info => /\b3D\b/i.test(info)),
+          premium: premiumFormat(show.screenInfo || []),
           year: film.year,
         });
       }
@@ -141,7 +156,7 @@ function writeCityCsv(city, showings, toIso) {
   const csv = formatShowtimesCsv(showings, THEATRE_NAME, city);
   const filename = writeScrapedCsv(`scraped-${city.toLowerCase()}-apple-showtimes.csv`, csv);
   const premiumCount = showings.filter(s => s.premium).length;
-  console.log(`${city}: saved ${showings.length} showings (${premiumCount} 3D) to ${filename}`);
+  console.log(`${city}: saved ${showings.length} showings (${premiumCount} premium) to ${filename}`);
   logCoverage(showings, toIso);
 }
 

@@ -155,34 +155,43 @@ function escapeCsvCell(cell) {
 
 /**
  * Builds an import CSV. Each showing is `{ title, date, time, premium?, year?, tmdbId? }`,
- * or uses `times: [...]` in place of `time`. Rows are merged per film + date, premium
- * showings go to premium_show_times, and duplicate times are dropped.
+ * or uses `times: [...]` in place of `time`. `premium` is the format's name ("3D", "IMAX"),
+ * or empty for a standard showing. Rows are merged per film + date, premium showings go to
+ * premium_show_times with a note naming the format ("7:00 PM: IMAX"), and duplicate times
+ * are dropped.
  */
 export function formatShowtimesCsv(showings, theatreName, theatreCity) {
   const grouped = new Map();
   showings.forEach(showing => {
     const key = `${showing.title}|${showing.date}`;
     if (!grouped.has(key)) {
-      grouped.set(key, { title: showing.title, date: showing.date, times: new Set(), premiumTimes: new Set() });
+      grouped.set(key, { title: showing.title, date: showing.date, times: new Set(), premiumTimes: new Map() });
     }
     const entry = grouped.get(key);
     entry.year ||= showing.year;
     entry.tmdbId ||= showing.tmdbId;
-    const target = showing.premium ? entry.premiumTimes : entry.times;
-    (showing.times || [showing.time]).filter(Boolean).forEach(time => target.add(time));
+    (showing.times || [showing.time]).filter(Boolean).forEach(time => {
+      if (!showing.premium) {
+        entry.times.add(time);
+        return;
+      }
+      if (!entry.premiumTimes.has(time)) entry.premiumTimes.set(time, new Set());
+      entry.premiumTimes.get(time).add(showing.premium);
+    });
   });
 
   const rows = [CSV_HEADERS];
   grouped.forEach(showing => {
+    const notes = [...showing.premiumTimes].map(([time, formats]) => `${time}: ${[...formats].join(' · ')}`);
     rows.push([
       theatreName,
       theatreCity,
       showing.title,
       showing.date,
       [...showing.times].join('|'),
-      [...showing.premiumTimes].join('|'),
+      [...showing.premiumTimes.keys()].join('|'),
       '',
-      '',
+      notes.join('; '),
       '',
       '',
       showing.year || '',

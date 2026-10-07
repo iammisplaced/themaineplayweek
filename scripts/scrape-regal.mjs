@@ -2,8 +2,9 @@
 //
 // regmovies.com sits behind a Cloudflare bot check, so we open the theatre page once in a
 // stealth browser, then call the JSON endpoint the site's own date picker uses
-// (/api/getShowtimes) from inside that page for each date in range. 3D showings go to
-// premium_show_times, and film_year comes from each film's opening date.
+// (/api/getShowtimes) from inside that page for each date in range. 3D, IMAX, RPX, 4DX and
+// ScreenX showings go to premium_show_times with a note naming the format, and film_year comes
+// from each film's opening date.
 //
 // Usage: node scripts/scrape-regal.mjs [--city=Augusta|all] [--end=YYYY-MM-DD | --days=7]
 
@@ -27,6 +28,8 @@ const THEATRES = {
 };
 const CITIES = Object.keys(THEATRES);
 const TIME_ZONE = 'America/New_York';
+// PerformanceAttributes that make a showing premium, in the order they're named in the note.
+const PREMIUM_FORMATS = ['IMAX', 'RPX', '4DX', 'ScreenX', '3D'];
 
 function easternTodayIso() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: TIME_ZONE }).format(new Date());
@@ -47,6 +50,11 @@ function parseCalendarShowTime(value) {
   return { date: match[1], time: `${hour12}:${match[3]} ${hour24 < 12 ? 'AM' : 'PM'}` };
 }
 
+// ["2D", "IMAX", "Recliner"] -> "IMAX"; standard showings -> ""
+function premiumFormat(attributes) {
+  return PREMIUM_FORMATS.filter(format => attributes.some(attr => new RegExp(`\\b${format}\\b`, 'i').test(attr))).join(' ');
+}
+
 function extractShowings(response) {
   const yearByMovieCode = new Map(
     (response.movies || []).map(movie => [movie.MasterMovieCode, Number(String(movie.OpeningDate || '').slice(0, 4)) || null])
@@ -63,7 +71,7 @@ function extractShowings(response) {
         showings.push({
           title,
           ...local,
-          premium: (performance.PerformanceAttributes || []).some(attr => /\b3D\b/i.test(attr)),
+          premium: premiumFormat(performance.PerformanceAttributes || []),
           year: yearByMovieCode.get(film.MasterMovieCode) || null,
         });
       }
@@ -102,7 +110,7 @@ async function scrapeTheatre(page, city, { fromIso, toIso }) {
   const csv = formatShowtimesCsv(showings, THEATRE_NAME, city);
   const filename = writeScrapedCsv(`scraped-${city.toLowerCase()}-regal-showtimes.csv`, csv);
   const premiumCount = showings.filter(s => s.premium).length;
-  console.log(`Saved ${showings.length} showings (${premiumCount} 3D) to ${filename}`);
+  console.log(`Saved ${showings.length} showings (${premiumCount} premium) to ${filename}`);
   logCoverage(showings, toIso);
 }
 

@@ -2,8 +2,8 @@
 //
 // [city].flagshipcinemas.com redirects to flagshipcinemas.com/[city], an INDY Systems app
 // that loads everything from a public GraphQL API. We call that API directly: datesWithShowing
-// for each theatre, then one showingsForDate request per date in range. 3D showings go to
-// premium_show_times.
+// for each theatre, then one showingsForDate request per date in range. 3D, FPX and 4K Laser
+// showings go to premium_show_times, with a note naming the format.
 //
 // Usage: node scripts/scrape-flagship.mjs [--city=Auburn|Falmouth|Thomaston|Waterville|Wells|all] [--end=YYYY-MM-DD | --days=7]
 
@@ -23,7 +23,8 @@ const CIRCUIT_ID = '83';
 const THEATRE_NAME = 'Flagship Cinemas';
 const CITIES = ['Auburn', 'Falmouth', 'Thomaston', 'Waterville', 'Wells'];
 const TIME_ZONE = 'America/New_York';
-const PREMIUM_BADGE_NAMES = ['3D'];
+// Showing badge name -> the format named in the showtime's note ("FPX 6" is the FPX screen's badge).
+const PREMIUM_BADGES = { '3D': '3D', FPX: 'FPX', 'FPX 6': 'FPX', '4K Laser': '4K Laser' };
 
 // The same "validate" call the site makes on every page load; it returns the site list and badges.
 const CONFIG_QUERY = `mutation ($clientConfigInput: ClientConfigInput!) {
@@ -113,17 +114,17 @@ async function loadConfig() {
     siteIdByCity.set(city, site.id);
   }
 
-  const premiumBadgeIds = new Set(
-    (config.showingBadges || [])
-      .filter(badge => PREMIUM_BADGE_NAMES.includes(badge.displayName?.trim()))
-      .map(badge => badge.id)
-  );
-  if (premiumBadgeIds.size === 0) console.warn('Warning: no 3D badge found; all times will go to show_times');
+  const premiumBadges = new Map();
+  for (const badge of config.showingBadges || []) {
+    const format = PREMIUM_BADGES[badge.displayName?.trim()];
+    if (format) premiumBadges.set(String(badge.id), format);
+  }
+  if (premiumBadges.size === 0) console.warn('Warning: no premium badges found; all times will go to show_times');
 
-  return { siteIdByCity, premiumBadgeIds };
+  return { siteIdByCity, premiumBadges };
 }
 
-async function scrapeCity(city, siteId, premiumBadgeIds, { fromIso, toIso }) {
+async function scrapeCity(city, siteId, premiumBadges, { fromIso, toIso }) {
   console.log(`\n=== ${city} (site ${siteId}, ${fromIso} to ${toIso}) ===`);
 
   const dates = (await getDatesWithShowings(siteId)).filter(d => d >= fromIso && d <= toIso);
@@ -154,7 +155,7 @@ async function scrapeCity(city, siteId, premiumBadgeIds, { fromIso, toIso }) {
         title,
         date: local.date,
         time: local.time,
-        premium: (row.showingBadgeIds || []).some(id => premiumBadgeIds.has(String(id))),
+        premium: [...new Set((row.showingBadgeIds || []).map(id => premiumBadges.get(String(id))).filter(Boolean))].join(' '),
         year,
         tmdbId: Number(row.movie.tmdbId) || null,
       });
@@ -173,7 +174,7 @@ async function scrapeCity(city, siteId, premiumBadgeIds, { fromIso, toIso }) {
   const csv = formatShowtimesCsv(showings, THEATRE_NAME, city);
   const filename = writeScrapedCsv(`scraped-${city.toLowerCase()}-flagship-showtimes.csv`, csv);
   const premiumCount = showings.filter(s => s.premium).length;
-  console.log(`Saved ${showings.length} showings (${premiumCount} 3D) to ${filename}`);
+  console.log(`Saved ${showings.length} showings (${premiumCount} premium) to ${filename}`);
   logCoverage(showings, toIso);
 }
 
@@ -193,11 +194,11 @@ async function main() {
   }
 
   const range = await resolveDateRange(easternTodayIso(), { ask: interactive });
-  const { siteIdByCity, premiumBadgeIds } = await loadConfig();
+  const { siteIdByCity, premiumBadges } = await loadConfig();
   const failures = [];
   for (const city of cities) {
     try {
-      await scrapeCity(city, siteIdByCity.get(city), premiumBadgeIds, range);
+      await scrapeCity(city, siteIdByCity.get(city), premiumBadges, range);
     } catch (error) {
       console.error(`${city} FAILED: ${error.message}`);
       failures.push(city);
