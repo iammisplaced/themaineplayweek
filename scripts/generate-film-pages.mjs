@@ -6,6 +6,7 @@ import {
   buildFilmSlug,
   escapeHtml,
   getFilmSortBreakdown,
+  getShowtimeNote,
   isPlainObject,
   normalizeSortTitle,
 } from "../js/shared.js";
@@ -146,7 +147,7 @@ async function loadFilmSourceFromSupabase() {
       restBase,
       supabaseAnonKey,
       "showings",
-      "theatre_id,film_id,festival_id,show_date,room,times,premium_times",
+      "theatre_id,film_id,festival_id,show_date,room,notes,times,premium_times",
       "theatre_id.asc,film_id.asc,show_date.asc"
     ),
     fetchAllFromSupabase(
@@ -230,6 +231,7 @@ async function loadFilmSourceFromSupabase() {
         isPremium: false,
         festivalName: festivalNameById.get(Number(row.festival_id)) || "",
         room: String(row.room || "").trim(),
+        notes: String(row.notes || "").trim(),
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
@@ -248,6 +250,7 @@ async function loadFilmSourceFromSupabase() {
         isPremium: true,
         festivalName: festivalNameById.get(Number(row.festival_id)) || "",
         room: String(row.room || "").trim(),
+        notes: String(row.notes || "").trim(),
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
@@ -440,6 +443,7 @@ function normalizeFilms(source) {
                 festivalNameById.get(Number(showing?.festivalId)) ||
                 stringOrEmpty(showing?.festivalName),
               room: stringOrEmpty(showing?.room),
+              notes: stringOrEmpty(showing?.notes),
               theatre: theatreName,
               city: theatreCity,
               theatreWebsite: stringOrEmpty(theatre?.website),
@@ -459,6 +463,7 @@ function normalizeFilms(source) {
                 festivalNameById.get(Number(showing?.festivalId)) ||
                 stringOrEmpty(showing?.festivalName),
               room: stringOrEmpty(showing?.room),
+              notes: stringOrEmpty(showing?.notes),
               theatre: theatreName,
               city: theatreCity,
               theatreWebsite: stringOrEmpty(theatre?.website),
@@ -534,6 +539,7 @@ function normalizeFlatFilm(film, festivalNameById = new Map()) {
               festivalNameById.get(Number(showing?.festivalId ?? showing?.festival_id)) ||
               "",
             room: stringOrEmpty(showing?.room),
+            notes: stringOrEmpty(showing?.notes),
             theatre: stringOrEmpty(showing?.theatre),
             city: stringOrEmpty(showing?.city),
             theatreWebsite: stringOrEmpty(showing?.theatreWebsite),
@@ -633,8 +639,8 @@ function renderFilmPage(film, slug, siteUrl) {
                 <h3 class="show-schedule-day">${escapeHtml(formatIsoDateLabel(row.date))}</h3>
                 ${row.room ? `<div class="show-room-label">Room: ${escapeHtml(row.room)}</div>` : ""}
                 <div class="show-times-grid">
-                  ${row.times.map((time) => `<span class="show-time-chip">${escapeHtml(time)}</span>`).join("")}
-                  ${row.premiumTimes.map((time) => `<span class="show-time-chip show-time-chip-premium">Premium ${escapeHtml(time)}</span>`).join("")}
+                  ${row.times.map((time) => renderTimeChip(time, false, row.timeNotes)).join("")}
+                  ${row.premiumTimes.map((time) => renderTimeChip(time, true, row.timeNotes)).join("")}
                 </div>
               </article>`
           )
@@ -1311,6 +1317,10 @@ function renderFilmPage(film, slug, siteUrl) {
         });
       })();
     </script>
+    <script type="module">
+      import { initShowtimeNoteTooltips } from "../../js/shared.js";
+      initShowtimeNoteTooltips();
+    </script>
   </body>
 </html>`;
 }
@@ -1660,6 +1670,18 @@ function buildFilmStampMarkup(film, depthToRoot) {
   return stamps.join("");
 }
 
+function buildTimeNoteKey(time, isPremium) {
+  return `${String(time || "").trim()}|${isPremium ? "premium" : "standard"}`;
+}
+
+function renderTimeChip(time, isPremium, timeNotes = {}) {
+  const label = isPremium ? `Premium ${escapeHtml(time)}` : escapeHtml(time);
+  const className = isPremium ? "show-time-chip show-time-chip-premium" : "show-time-chip";
+  const note = String(timeNotes?.[buildTimeNoteKey(time, isPremium)] || "").trim();
+  if (!note) return `<span class="${className}">${label}</span>`;
+  return `<span class="${className} show-time-noted" tabindex="0" data-note="${escapeHtml(note)}">${label}<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ${escapeHtml(note)})</span></span>`;
+}
+
 function buildShowtimesByTheatre(film) {
   const byTheatre = new Map();
 
@@ -1694,7 +1716,7 @@ function buildShowtimesByTheatre(film) {
     }
     const byDate = entry.byDate;
     if (!byDate.has(showing.date)) {
-      byDate.set(showing.date, { room: String(showing.room || "").trim(), times: [], premiumTimes: [] });
+      byDate.set(showing.date, { room: String(showing.room || "").trim(), times: [], premiumTimes: [], timeNotes: {} });
     }
     const slot = byDate.get(showing.date);
     if (!slot.room) {
@@ -1704,6 +1726,16 @@ function buildShowtimesByTheatre(film) {
       slot.premiumTimes.push(showing.time);
     } else {
       slot.times.push(showing.time);
+    }
+    const note = getShowtimeNote(showing.notes, showing.time);
+    if (note) {
+      const noteKey = buildTimeNoteKey(showing.time, showing.isPremium);
+      const existing = slot.timeNotes[noteKey];
+      if (!existing) {
+        slot.timeNotes[noteKey] = note;
+      } else if (!existing.split(" · ").includes(note)) {
+        slot.timeNotes[noteKey] = `${existing} · ${note}`;
+      }
     }
   }
 
@@ -1715,6 +1747,7 @@ function buildShowtimesByTheatre(film) {
         room: String(value?.room || "").trim(),
         times: dedupeTimes(value?.times || []),
         premiumTimes: dedupeTimes(value?.premiumTimes || []),
+        timeNotes: value?.timeNotes || {},
       }));
     return {
       theatre: entry.theatre,

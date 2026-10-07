@@ -542,7 +542,7 @@ begin
     v_film_id := nullif(film_id_map->>(showing_item->>'film_key'), '')::bigint;
 
     if v_theatre_id is not null and v_film_id is not null then
-      insert into public.showings (theatre_id, film_id, festival_id, show_date, room, times, premium_times)
+      insert into public.showings (theatre_id, film_id, festival_id, show_date, room, notes, times, premium_times)
       values (
         v_theatre_id,
         v_film_id,
@@ -558,6 +558,7 @@ begin
         ),
         (showing_item->>'show_date')::date,
         coalesce(showing_item->>'room', ''),
+        coalesce(showing_item->>'notes', ''),
         array(select jsonb_array_elements_text(coalesce(showing_item->'times', '[]'::jsonb))),
         array(select jsonb_array_elements_text(coalesce(showing_item->'premium_times', '[]'::jsonb)))
       );
