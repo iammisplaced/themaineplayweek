@@ -61,6 +61,10 @@ for (const film of films) {
       director: details.director,
       stars: details.stars,
       genres: details.genres,
+      runtime: details.runtime,
+      certification: details.certification,
+      originalLanguage: details.original_language,
+      originalLanguageName: details.original_language_name,
       matchedAt: new Date().toISOString(),
     };
 
@@ -177,7 +181,7 @@ async function fetchTmdbFilmDetailsById(apiKey, tmdbId, fallbackTitle = "", fall
 async function fetchMovieDetailsById(apiKey, movieId, fallbackTitle = "") {
   const detailsUrl =
     `https://api.themoviedb.org/3/movie/${encodeURIComponent(String(movieId))}` +
-    `?api_key=${encodeURIComponent(apiKey)}&append_to_response=credits`;
+    `?api_key=${encodeURIComponent(apiKey)}&append_to_response=credits,release_dates`;
   const details = await fetchJson(detailsUrl);
 
   const crew = Array.isArray(details.credits?.crew) ? details.credits.crew : [];
@@ -185,6 +189,12 @@ async function fetchMovieDetailsById(apiKey, movieId, fallbackTitle = "") {
   const director = crew.find((member) => member.job === "Director")?.name || "";
   const stars = cast.slice(0, 3).map((member) => member.name).filter(Boolean);
   const genres = Array.isArray(details.genres) ? details.genres.map((genre) => genre.name).filter(Boolean) : [];
+  const runtime = Number.isInteger(details.runtime) && details.runtime > 0 ? details.runtime : null;
+  const originalLanguage = String(details.original_language || "").trim();
+  const originalLanguageName =
+    (Array.isArray(details.spoken_languages) ? details.spoken_languages : []).find(
+      (language) => language?.iso_639_1 === originalLanguage
+    )?.english_name || "";
 
   return {
     id: details.id,
@@ -198,7 +208,23 @@ async function fetchMovieDetailsById(apiKey, movieId, fallbackTitle = "") {
     director,
     stars,
     genres,
+    runtime,
+    certification: pickUsCertification(details.release_dates),
+    original_language: originalLanguage,
+    original_language_name: originalLanguageName,
   };
+}
+
+// US rating (PG-13, R, ...), preferring the theatrical release (type 3) over other release types.
+function pickUsCertification(releaseDates) {
+  const us = (Array.isArray(releaseDates?.results) ? releaseDates.results : []).find(
+    (entry) => entry?.iso_3166_1 === "US"
+  );
+  const rated = (Array.isArray(us?.release_dates) ? us.release_dates : []).filter((release) =>
+    String(release?.certification || "").trim()
+  );
+  const theatrical = rated.find((release) => release.type === 3);
+  return String((theatrical || rated[0])?.certification || "").trim();
 }
 
 function pickBestResult(results, title, year) {
