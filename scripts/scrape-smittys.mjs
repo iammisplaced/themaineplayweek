@@ -4,7 +4,7 @@
 // showing at that location, so no browser is needed. If a page's ld+json is missing or
 // unparseable we fall back to the per-day endpoint the site's date picker calls.
 //
-// Usage: node scripts/scrape-smittys.mjs [--city=Sanford|Topsham|all] [--end=YYYY-MM-DD | --days=7]
+// Usage: node scripts/scrape-smittys.mjs [--city=Sanford|Topsham|Windham|all] [--end=YYYY-MM-DD | --days=7]
 
 import { compareTimes } from '../js/shared.js';
 import {
@@ -19,7 +19,8 @@ import {
 
 const BASE_URL = 'https://www.smittyscinema.com';
 const THEATRE_NAME = "Smitty's Entertainment";
-const CITIES = ['Sanford', 'Topsham'];
+// Windham is closed for renovation; it's scraped anyway so its showtimes appear once it reopens.
+const CITIES = ['Sanford', 'Topsham', 'Windham'];
 
 const MONTHS = {
   january: 1, february: 2, march: 3, april: 4, may: 5, june: 6,
@@ -148,6 +149,10 @@ async function scrapeCity(city, { fromIso, toIso }) {
 
   const movieUrls = await getMovieUrls(city);
   console.log(`Found ${movieUrls.length} movies`);
+  if (movieUrls.length === 0) {
+    console.warn(`No movies listed for ${city}; no CSV written.`);
+    return;
+  }
 
   const showings = [];
   const failures = [];
@@ -202,7 +207,19 @@ async function main() {
   }
 
   const range = await resolveDateRange(todayIso(), { ask: interactive });
-  for (const city of cities) await scrapeCity(city, range);
+  const failures = [];
+  for (const city of cities) {
+    try {
+      await scrapeCity(city, range);
+    } catch (error) {
+      console.error(`${city} FAILED: ${error.message}`);
+      failures.push(city);
+    }
+  }
+  if (failures.length) {
+    console.error(`\nFailed: ${failures.join(', ')}`);
+    process.exitCode = 1;
+  }
 }
 
 main().catch(error => {
