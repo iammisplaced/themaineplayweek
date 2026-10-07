@@ -10,7 +10,7 @@ Run `npm install` once, then:
 npm run scrape
 ```
 
-It asks for an end date (leave it blank for the next 7 days), then scrapes every Flagship, Smitty's and Regal theatre and writes one CSV per theatre into the project folder. You can skip the question:
+It asks for an end date (leave it blank for the next 7 days), then scrapes every Flagship, Smitty's and Regal theatre and saves everything to **one file, `scraped-all-showtimes.csv`**, in the project folder. Import that single file in the admin panel. You can skip the question:
 
 ```bash
 npm run scrape -- --end=2026-11-30   # through Nov 30, inclusive
@@ -26,7 +26,7 @@ npm run scrape -- --days=14          # today plus the next 13 days
 | Regal Cinemas | `npm run scrape:regal` | Augusta | `scraped-{city}-regal-showtimes.csv` |
 | Apple Cinemas | `npm run scrape:apple` | any (asks for a URL) | `scraped-{city}-apple-showtimes.csv` |
 
-Flagship, Smitty's and Regal all work the same way. Run with no options and they ask for a city (or `all`) and an end date, or pass options to skip the questions:
+These write one CSV per theatre instead of the combined file. Flagship, Smitty's and Regal all work the same way. Run with no options and they ask for a city (or `all`) and an end date, or pass options to skip the questions:
 
 ```bash
 npm run scrape:flagship -- --city=Wells --end=2026-11-30
@@ -81,7 +81,7 @@ Timing: a full 7-day `npm run scrape` takes a minute or two.
 ## Import to the app
 
 1. Open the admin panel.
-2. **Import CSV** and choose a file.
+2. **Import CSV** and choose `scraped-all-showtimes.csv` (or a single theatre's file).
 3. **Save All Changes**.
 
 ## Troubleshooting

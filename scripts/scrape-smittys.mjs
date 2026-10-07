@@ -14,7 +14,7 @@ import {
   logCoverage,
   prompt,
   resolveDateRange,
-  writeCsvToRepoRoot,
+  writeScrapedCsv,
 } from './lib/scraper-utils.mjs';
 
 const BASE_URL = 'https://www.smittyscinema.com';
@@ -182,7 +182,7 @@ async function scrapeCity(city, { fromIso, toIso }) {
 
   showings.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title) || compareTimes(a.time, b.time));
   const csv = formatShowtimesCsv(showings, THEATRE_NAME, city);
-  const filename = writeCsvToRepoRoot(`scraped-${city.toLowerCase()}-smittys-showtimes.csv`, csv);
+  const filename = writeScrapedCsv(`scraped-${city.toLowerCase()}-smittys-showtimes.csv`, csv);
   console.log(`\nSaved ${showings.length} showings to ${filename}`);
   logCoverage(showings, toIso);
 

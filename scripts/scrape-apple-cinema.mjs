@@ -1,4 +1,4 @@
-import { formatShowtimesCsv, launchBrowser, prompt, sleep, writeCsvToRepoRoot } from './lib/scraper-utils.mjs';
+import { formatShowtimesCsv, launchBrowser, prompt, sleep, writeScrapedCsv } from './lib/scraper-utils.mjs';
 
 async function scrapeShowtimes() {
   let browser;
@@ -156,7 +156,7 @@ async function scrapeShowtimes() {
 
     // Generate filename
     const filename = `scraped-${theatreCity.toLowerCase().replace(/\s+/g, '-')}-apple-showtimes.csv`;
-    writeCsvToRepoRoot(filename, csv);
+    writeScrapedCsv(filename, csv);
     console.log(`Saved to ${filename}\n`);
 
     // Show summary

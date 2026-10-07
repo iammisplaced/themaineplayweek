@@ -15,7 +15,7 @@ import {
   logCoverage,
   prompt,
   resolveDateRange,
-  writeCsvToRepoRoot,
+  writeScrapedCsv,
 } from './lib/scraper-utils.mjs';
 
 const GRAPHQL_URL = 'https://flagshipcinemas.com/graphql';
@@ -171,7 +171,7 @@ async function scrapeCity(city, siteId, premiumBadgeIds, { fromIso, toIso }) {
 
   showings.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title) || compareTimes(a.time, b.time));
   const csv = formatShowtimesCsv(showings, THEATRE_NAME, city);
-  const filename = writeCsvToRepoRoot(`scraped-${city.toLowerCase()}-flagship-showtimes.csv`, csv);
+  const filename = writeScrapedCsv(`scraped-${city.toLowerCase()}-flagship-showtimes.csv`, csv);
   const premiumCount = showings.filter(s => s.premium).length;
   console.log(`Saved ${showings.length} showings (${premiumCount} 3D) to ${filename}`);
   logCoverage(showings, toIso);
