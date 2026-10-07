@@ -11,6 +11,7 @@ Data now supports Supabase as the primary backend, with JSON/local fallback.
 - `index.html` - page structure
 - `css/styles.css` - styling
 - `js/app.js` - frontend logic + Supabase read/write + admin UI
+- `js/shared.js` - helpers + Supabase config shared by the frontend and `scripts/generate-film-pages.mjs` (film slugs, date/time parsing, film ranking)
 - `admin-films.html` - admin film catalog page
 - `css/admin-films.css` - admin film catalog styles
 - `js/admin-films.js` - admin film catalog behavior

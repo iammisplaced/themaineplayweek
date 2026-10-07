@@ -2,6 +2,7 @@
   "name": "tmp-showtimes",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "description": "The Maine Playweek showtimes site",
   "scripts": {
     "film-pages:build": "node scripts/generate-film-pages.mjs",

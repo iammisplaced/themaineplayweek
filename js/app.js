@@ -1,5 +1,24 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { renderMapMarkers, showMapToggle, hideMapToggle } from "./map-view.js";
+import {
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+  buildFilmPageUrl,
+  compareTimes,
+  debounce,
+  formatDisplayDate,
+  getDayDifferenceFromToday,
+  getFilmSortBreakdown,
+  getShowDateTime,
+  isPlainObject,
+  normalizeOutboundUrl,
+  normalizeSortTitle,
+  parseIsoDate,
+  slugifyTextSegment,
+  stripDiacritics,
+  to24HourTime,
+  toFiniteNumber,
+} from "./shared.js";
 
 const DATA_URL = "./data/showtimes.json";
 const FILM_PAGES_LIVE_SOURCE_URL = "./data/film-pages-source.live.json";
@@ -33,15 +52,6 @@ const PROMOTED_CARDS = Object.freeze([
 ]);
 const THEATRE_COLLAPSED_FILM_COUNT = 5;
 const FILM_LAYOUT_ANIMATION_MS = 320;
-const FILM_SORT_WEIGHTS = Object.freeze({
-  tmdbPopularity: 0.2,
-  tmdbRating: 0.15,
-  tmdbRecency: 0.1,
-  upcomingShowings: 0.35,
-  theatreCoverage: 0.15,
-  staffFavoriteBoost: 0.12,
-});
-const RELEASE_RECENCY_WINDOW_DAYS = 14;
 const SUBSTACK_ARCHIVE_URL = "https://themaineplayweek.substack.com/api/v1/archive?sort=new";
 const THEATRE_GEO_CACHE_KEY = "theatre-geocode-cache-v1";
 const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
@@ -57,9 +67,6 @@ const BETA_BANNER_MESSAGES = Object.freeze([
   "Near You results are beta and may shift as location data improves.",
 ]);
 
-const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqZnNqb3JhdHNmcWN5eWpzZXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2Mzc5MDgsImV4cCI6MjA4ODIxMzkwOH0.dmcQ_ffwmm4JIKTjSUNNYLGQ9w_v1mR6VRMZimVnLNg";
 const LOGO_SPIN_ANIMATION_MS = 420;
 const LIGHT_THEME = "light";
 const DARK_THEME = "dark";
@@ -3318,14 +3325,6 @@ function prunePastShowtimes(data) {
   });
 }
 
-function normalizeOutboundUrl(value) {
-  const raw = String(value || "").trim();
-  if (!raw) return "";
-  if (/^[a-z][a-z0-9+.-]*:/i.test(raw)) return raw;
-  if (raw.startsWith("//")) return `https:${raw}`;
-  return `https://${raw}`;
-}
-
 function parseCommaSeparatedList(value) {
   return String(value || "")
     .split(/[;,|]+/)
@@ -5338,10 +5337,6 @@ function normalizeSearchText(value) {
     .toLowerCase();
 }
 
-function isPlainObject(value) {
-  return value !== null && typeof value === "object" && !Array.isArray(value);
-}
-
 function normalizeCityMatchText(value) {
   return normalizeSearchText(value).replace(/\b(maine|me)\b/g, "").replace(/,\s*$/g, "").trim();
 }
@@ -5774,73 +5769,24 @@ function setTheatreSortStatus(message, options = {}) {
   el.appendChild(changeLocationButton);
 }
 
-function stripDiacritics(value) {
-  const text = String(value || "");
-  if (typeof text.normalize !== "function") return text;
-  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-
-function debounce(fn, waitMs = 150) {
-  let timeoutId = null;
-  return (...args) => {
-    if (timeoutId) window.clearTimeout(timeoutId);
-    timeoutId = window.setTimeout(() => {
-      timeoutId = null;
-      fn(...args);
-    }, Math.max(0, Number(waitMs) || 0));
-  };
-}
-
-function normalizeSortTitle(value) {
-  return String(value || "")
-    .trim()
-    .replace(/^[^A-Za-z0-9]+/, "")
-    .replace(/^the\s+/i, "")
-    .toLowerCase();
-}
-
 function getFilmGroupSortBreakdown(group) {
   const filmInfo = group?.filmInfo || {};
-  const popularity = normalizeScoreRange(toFiniteNumber(filmInfo.popularity), 100);
-  const voteAverage = normalizeScoreRange(toFiniteNumber(filmInfo.voteAverage), 10);
-  const voteCount = toFiniteNumber(filmInfo.voteCount);
-  const voteConfidence = normalizeLogRange(voteCount, 10000);
-  const ratingScore = voteAverage * voteConfidence;
-  const releaseRecency = calculateReleaseRecencyScore(filmInfo.releaseDate);
-
-  const upcomingTimes = countGroupUpcomingTimes(group);
-  const theatreCoverage = normalizeLogRange(countGroupTheatreCoverage(group), 30);
-  const upcomingShowings = normalizeLogRange(upcomingTimes, 80);
-
-  const tmdbScore =
-    FILM_SORT_WEIGHTS.tmdbPopularity * popularity +
-    FILM_SORT_WEIGHTS.tmdbRating * ratingScore +
-    FILM_SORT_WEIGHTS.tmdbRecency * releaseRecency;
-  const localDemandScore =
-    FILM_SORT_WEIGHTS.upcomingShowings * upcomingShowings +
-    FILM_SORT_WEIGHTS.theatreCoverage * theatreCoverage;
-  const editorialBoost = filmInfo.staffFavorite ? FILM_SORT_WEIGHTS.staffFavoriteBoost : 0;
-  const finalScore = tmdbScore + localDemandScore + editorialBoost;
-
+  const breakdown = getFilmSortBreakdown({
+    popularity: filmInfo.popularity,
+    voteAverage: filmInfo.voteAverage,
+    voteCount: filmInfo.voteCount,
+    releaseDate: filmInfo.releaseDate,
+    staffFavorite: filmInfo.staffFavorite,
+    upcomingTimes: countGroupUpcomingTimes(group),
+    theatreCount: countGroupTheatreCoverage(group),
+  });
   return {
-    finalScore,
-    tmdbScore,
-    localDemandScore,
-    editorialBoost,
+    ...breakdown,
     inputs: {
-      popularity,
-      voteAverage,
-      voteCount,
-      voteConfidence,
-      ratingScore,
-      releaseRecency,
-      upcomingTimes,
-      upcomingShowings,
-      theatreCoverage,
+      ...breakdown.inputs,
       staffFavorite: Boolean(filmInfo.staffFavorite),
       featuredOnPlayweek: Boolean(filmInfo.featuredOnPlayweek),
     },
-    weights: FILM_SORT_WEIGHTS,
   };
 }
 
@@ -5910,39 +5856,6 @@ function countGroupTheatreCoverage(group) {
     keys.add(`${show?.theatre || ""}::${show?.city || ""}`);
   });
   return keys.size;
-}
-
-function calculateReleaseRecencyScore(releaseDate) {
-  const release = parseIsoDateLike(releaseDate);
-  if (!release) return 0;
-  const now = new Date();
-  const daysSinceRelease = (now.getTime() - release.getTime()) / 86400000;
-  if (!Number.isFinite(daysSinceRelease)) return 0;
-  if (daysSinceRelease <= 0) return 1;
-  if (daysSinceRelease >= RELEASE_RECENCY_WINDOW_DAYS) return 0;
-  return 1 - (daysSinceRelease / RELEASE_RECENCY_WINDOW_DAYS);
-}
-
-function normalizeScoreRange(value, max) {
-  if (!Number.isFinite(value) || max <= 0) return 0;
-  return Math.max(0, Math.min(1, value / max));
-}
-
-function normalizeLogRange(value, expectedHigh) {
-  if (!Number.isFinite(value) || value <= 0 || expectedHigh <= 0) return 0;
-  return Math.max(0, Math.min(1, Math.log1p(value) / Math.log1p(expectedHigh)));
-}
-
-function toFiniteNumber(value) {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function parseIsoDateLike(value) {
-  const raw = String(value || "").trim();
-  if (!raw) return null;
-  const head = raw.slice(0, 10);
-  return parseIsoDate(head);
 }
 
 function getRowEarliestShowtimeTimestamp(row) {
@@ -6659,49 +6572,10 @@ function buildFilmGroupKey(title, year) {
   return title;
 }
 
-function buildFilmPageUrl(title, year) {
-  const slug = slugifyTextSegment(
-    Number.isInteger(Number(year)) ? `${String(title || "")}-${Number(year)}` : String(title || "")
-  );
-  return `films/${slug}/`;
-}
-
-function slugifyTextSegment(value) {
-  return String(value || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .replace(/--+/g, "-")
-    .slice(0, 80);
-}
-
 function isValidCssColor(value) {
   const raw = String(value || "").trim();
   if (!raw) return true;
   return /^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(raw);
-}
-
-function compareTimes(a, b) {
-  const left = to24HourTime(a);
-  const right = to24HourTime(b);
-  return left.localeCompare(right);
-}
-
-function formatDisplayDate(dateIso) {
-  const date = parseIsoDate(dateIso);
-  if (!date) return dateIso;
-  const dayDiff = getDayDifferenceFromToday(date);
-  if (dayDiff === 0) return "Today";
-  if (dayDiff === 1) return "Tomorrow";
-  if (dayDiff > 1 && dayDiff <= 6) {
-    return new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(date);
-  }
-  const showYear = date.getFullYear() !== new Date().getFullYear();
-  return new Intl.DateTimeFormat("en-US", {
-    month: "long",
-    day: "numeric",
-    ...(showYear ? { year: "numeric" } : {}),
-  }).format(date);
 }
 
 function formatShortDate(dateIso) {
@@ -6744,75 +6618,6 @@ function toIsoDate(value) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
-}
-
-function getDayDifferenceFromToday(targetDate) {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const targetDay = Date.UTC(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
-  const todayDay = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate());
-  return Math.round((targetDay - todayDay) / 86400000);
-}
-
-function getShowDateTime(dateIso, time12Hour) {
-  const hhmm = to24HourTime(time12Hour);
-  if (!hhmm) return null;
-  const baseDate = parseIsoDate(dateIso);
-  if (!baseDate) return null;
-  const [hours, minutes] = hhmm.split(":").map(Number);
-  const date = new Date(baseDate);
-  date.setHours(hours, minutes, 0, 0);
-  return date;
-}
-
-function to24HourTime(time12Hour) {
-  const input = String(time12Hour).trim();
-
-  // Try 24-hour format first (e.g., "18:30", "6:30")
-  const match24 = /^(\d{1,2}):([0-5]\d)$/.exec(input);
-  if (match24) {
-    const hour = Number(match24[1]);
-    const minutes = match24[2];
-    if (hour >= 0 && hour <= 23) {
-      return `${String(hour).padStart(2, "0")}:${minutes}`;
-    }
-  }
-
-  // Try 12-hour format with optional space before AM/PM (e.g., "6:30 PM", "6:30PM", "6:30 pm", "6:30pm")
-  const match12 = /^(\d{1,2}):([0-5]\d)\s?(AM|PM)$/i.exec(input);
-  if (!match12) return "";
-
-  let hour = Number(match12[1]);
-  const minutes = match12[2];
-  const period = match12[3].toUpperCase();
-
-  if (hour < 1 || hour > 12) return "";
-
-  if (period === "AM") {
-    if (hour === 12) hour = 0;
-  } else if (hour !== 12) {
-    hour += 12;
-  }
-
-  return `${String(hour).padStart(2, "0")}:${minutes}`;
-}
-
-function parseIsoDate(dateIso) {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(dateIso).trim());
-  if (!match) return null;
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const day = Number(match[3]);
-  const date = new Date(year, month - 1, day);
-  if (
-    date.getFullYear() !== year ||
-    date.getMonth() + 1 !== month ||
-    date.getDate() !== day
-  ) {
-    return null;
-  }
-  date.setHours(0, 0, 0, 0);
-  return date;
 }
 
 async function fetchTmdbMovieById(apiKey, tmdbId) {

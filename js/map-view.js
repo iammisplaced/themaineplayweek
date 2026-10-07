@@ -3,6 +3,8 @@
  * Manages the interactive map for displaying nearby theatres
  */
 
+import { buildFilmPageUrl, compareTimes, formatDisplayDate } from "./shared.js";
+
 let mapInstance = null;
 let markers = [];
 let currentTheatreId = null;
@@ -10,68 +12,6 @@ let cachedTheatres = [];
 let cachedUserLocation = null;
 let cachedGroups = null;
 let cachedTheatreGroups = null;
-
-// Helper to compare times (copied from app.js logic)
-function compareTimes(a, b) {
-  const toMinutes = (time) => {
-    const match = String(time || '').match(/(\d+):(\d+)/);
-    if (!match) return 0;
-    let hours = Number(match[1]);
-    const minutes = Number(match[2]);
-    if (String(time).toLowerCase().includes('pm') && hours !== 12) hours += 12;
-    if (String(time).toLowerCase().includes('am') && hours === 12) hours = 0;
-    return hours * 60 + minutes;
-  };
-  return toMinutes(a) - toMinutes(b);
-}
-
-// Helper to format display dates (copied from app.js logic)
-function formatDisplayDate(dateIso) {
-  const parseIsoDate = (dateStr) => {
-    const match = String(dateStr || '').match(/(\d{4})-(\d{2})-(\d{2})/);
-    if (!match) return null;
-    return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-  };
-
-  const getDayDifferenceFromToday = (date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const otherDate = new Date(date);
-    otherDate.setHours(0, 0, 0, 0);
-    const diff = otherDate.getTime() - today.getTime();
-    return Math.round(diff / (1000 * 60 * 60 * 24));
-  };
-
-  const date = parseIsoDate(dateIso);
-  if (!date) return dateIso;
-  const dayDiff = getDayDifferenceFromToday(date);
-  if (dayDiff === 0) return 'Today';
-  if (dayDiff === 1) return 'Tomorrow';
-  if (dayDiff > 1 && dayDiff <= 6) {
-    return new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(date);
-  }
-  const showYear = date.getFullYear() !== new Date().getFullYear();
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'long',
-    day: 'numeric',
-    ...(showYear ? { year: 'numeric' } : {}),
-  }).format(date);
-}
-
-// Helper to build film page URL with title and year (copied from app.js logic)
-function buildFilmPageUrl(title, year) {
-  const slug = String(title || '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .replace(/--+/g, '-')
-    .slice(0, 80);
-
-  if (Number.isInteger(Number(year))) {
-    return `films/${slug}-${Number(year)}/`;
-  }
-  return `films/${slug}/`;
-}
 
 const mapElements = {
   toggleWrap: null,

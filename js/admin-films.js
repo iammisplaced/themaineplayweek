@@ -1,8 +1,14 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import {
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+  debounce,
+  escapeHtml,
+  getShowDateTime,
+  normalizeOutboundUrl,
+  stripDiacritics,
+} from "./shared.js";
 
-const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqZnNqb3JhdHNmcWN5eWpzZXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2Mzc5MDgsImV4cCI6MjA4ODIxMzkwOH0.dmcQ_ffwmm4JIKTjSUNNYLGQ9w_v1mR6VRMZimVnLNg";
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const QUERY_TIMEOUT_MS = 30000;
@@ -752,95 +758,7 @@ function normalize(value) {
     .toLowerCase();
 }
 
-function stripDiacritics(value) {
-  const text = String(value || "");
-  if (typeof text.normalize !== "function") return text;
-  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-
 function setStatus(message) {
   elements.status.textContent = message;
 }
 
-function escapeHtml(value) {
-  return String(value || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
-function normalizeOutboundUrl(value) {
-  const raw = String(value || "").trim();
-  if (!raw) return "";
-  if (/^[a-z][a-z0-9+.-]*:/i.test(raw)) return raw;
-  if (raw.startsWith("//")) return `https:${raw}`;
-  return `https://${raw}`;
-}
-
-function getShowDateTime(dateIso, time12Hour) {
-  const hhmm = to24HourTime(time12Hour);
-  if (!hhmm) return null;
-  const date = parseIsoDate(dateIso);
-  if (!date) return null;
-  const [hours, minutes] = hhmm.split(":").map(Number);
-  const next = new Date(date);
-  next.setHours(hours, minutes, 0, 0);
-  return next;
-}
-
-function to24HourTime(time12Hour) {
-  const value = String(time12Hour || "").trim().toUpperCase();
-  const match = value.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/);
-  if (!match) {
-    const match24 = value.match(/^(\d{1,2}):(\d{2})$/);
-    if (match24) {
-      const hours = Number(match24[1]);
-      const minutes = Number(match24[2]);
-      if (hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
-        return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
-      }
-    }
-    const matchNoMinutes = value.match(/^(\d{1,2})\s*(AM|PM)$/);
-    if (matchNoMinutes) {
-      let hours = Number(matchNoMinutes[1]);
-      const period = matchNoMinutes[2];
-      if (hours === 12) hours = 0;
-      if (period === "PM") hours += 12;
-      return `${String(hours).padStart(2, "0")}:00`;
-    }
-    return "";
-  }
-  let hours = Number(match[1]);
-  const minutes = Number(match[2]);
-  const period = match[3];
-  if (hours === 12) hours = 0;
-  if (period === "PM") hours += 12;
-  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
-}
-
-function parseIsoDate(dateIso) {
-  const match = String(dateIso || "").trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if (!match) return null;
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const day = Number(match[3]);
-  const date = new Date(year, month - 1, day);
-  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
-    return null;
-  }
-  date.setHours(0, 0, 0, 0);
-  return date;
-}
-
-function debounce(fn, waitMs = 150) {
-  let timeoutId = null;
-  return (...args) => {
-    if (timeoutId) window.clearTimeout(timeoutId);
-    timeoutId = window.setTimeout(() => {
-      timeoutId = null;
-      fn(...args);
-    }, Math.max(0, Number(waitMs) || 0));
-  };
-}

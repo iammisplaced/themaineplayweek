@@ -2,6 +2,13 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
+import {
+  buildFilmSlug,
+  escapeHtml,
+  getFilmSortBreakdown,
+  isPlainObject,
+  normalizeSortTitle,
+} from "../js/shared.js";
 
 const cwd = process.cwd();
 const args = process.argv.slice(2);
@@ -43,16 +50,6 @@ const ONE_LINE_WORDMARKS = Object.freeze({
     "Strand%20-%20Light%20-%20One%20Line.png",
   ],
 });
-const FILM_SORT_WEIGHTS = Object.freeze({
-  tmdbPopularity: 0.2,
-  tmdbRating: 0.15,
-  tmdbRecency: 0.1,
-  upcomingShowings: 0.35,
-  theatreCoverage: 0.15,
-  staffFavoriteBoost: 0.12,
-});
-const RELEASE_RECENCY_WINDOW_DAYS = 14;
-
 main().catch((error) => {
   console.error(error instanceof Error ? error.message : String(error));
   process.exitCode = 1;
@@ -81,7 +78,7 @@ async function main() {
 
   const pageItems = [];
   for (const film of films) {
-    const slug = film.slug || slugify(`${film.title}-${film.year || ""}`);
+    const slug = film.slug || buildFilmSlug(film.title, film.year);
     const fileDir = path.join(outputDir, slug);
     const pagePath = path.join(fileDir, "index.html");
     await fs.mkdir(fileDir, { recursive: true });
@@ -1564,24 +1561,6 @@ body {
   await fs.writeFile(path.join(outputDir, "film-pages.css"), css, "utf8");
 }
 
-function slugify(value) {
-  return String(value || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .replace(/--+/g, "-")
-    .slice(0, 80);
-}
-
-function escapeHtml(value) {
-  return String(value || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
 function absoluteOrPassThrough(url, siteUrl) {
   if (!url) return "";
   if (/^https?:\/\//i.test(url)) return url;
@@ -1854,10 +1833,6 @@ function normalizeSupabasePosterUrl(value) {
   return raw;
 }
 
-function isPlainObject(value) {
-  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-}
-
 function toNumber(value) {
   const n = Number(value);
   return Number.isFinite(n) ? n : undefined;
@@ -1891,26 +1866,15 @@ function compareFilmsByMainAppRanking(a, b) {
 }
 
 function getFilmSortScore(film) {
-  const popularity = normalizeScoreRange(toFiniteNumber(film?.popularity), 100);
-  const voteAverage = normalizeScoreRange(toFiniteNumber(film?.voteAverage), 10);
-  const voteCount = toFiniteNumber(film?.voteCount);
-  const voteConfidence = normalizeLogRange(voteCount, 10000);
-  const ratingScore = voteAverage * voteConfidence;
-  const releaseRecency = calculateReleaseRecencyScore(film?.releaseDate);
-
-  const upcomingTimes = countUpcomingShowings(film);
-  const theatreCoverage = normalizeLogRange(countUpcomingTheatreCoverage(film), 30);
-  const upcomingShowings = normalizeLogRange(upcomingTimes, 80);
-  const editorialBoost = film?.staffFavorite ? FILM_SORT_WEIGHTS.staffFavoriteBoost : 0;
-
-  return (
-    FILM_SORT_WEIGHTS.tmdbPopularity * popularity +
-    FILM_SORT_WEIGHTS.tmdbRating * ratingScore +
-    FILM_SORT_WEIGHTS.tmdbRecency * releaseRecency +
-    FILM_SORT_WEIGHTS.upcomingShowings * upcomingShowings +
-    FILM_SORT_WEIGHTS.theatreCoverage * theatreCoverage +
-    editorialBoost
-  );
+  return getFilmSortBreakdown({
+    popularity: film?.popularity,
+    voteAverage: film?.voteAverage,
+    voteCount: film?.voteCount,
+    releaseDate: film?.releaseDate,
+    staffFavorite: film?.staffFavorite,
+    upcomingTimes: countUpcomingShowings(film),
+    theatreCount: countUpcomingTheatreCoverage(film),
+  }).finalScore;
 }
 
 function countUpcomingShowings(film) {
@@ -1938,52 +1902,6 @@ function isUpcomingShowing(showing) {
   const minutes = parseTimeToMinutes(time);
   if (minutes === null) return true;
   return minutes >= nowEt.minutes;
-}
-
-function calculateReleaseRecencyScore(releaseDate) {
-  const release = parseIsoDateLike(releaseDate);
-  if (!release) return 0;
-  const daysSinceRelease = (Date.now() - release.getTime()) / 86400000;
-  if (!Number.isFinite(daysSinceRelease)) return 0;
-  if (daysSinceRelease <= 0) return 1;
-  if (daysSinceRelease >= RELEASE_RECENCY_WINDOW_DAYS) return 0;
-  return 1 - (daysSinceRelease / RELEASE_RECENCY_WINDOW_DAYS);
-}
-
-function parseIsoDateLike(value) {
-  const raw = String(value || "").trim();
-  if (!raw) return null;
-  const head = raw.slice(0, 10);
-  const match = head.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if (!match) return null;
-  const year = Number(match[1]);
-  const month = Number(match[2]) - 1;
-  const day = Number(match[3]);
-  const dt = new Date(Date.UTC(year, month, day));
-  return Number.isFinite(dt.getTime()) ? dt : null;
-}
-
-function normalizeScoreRange(value, max) {
-  if (!Number.isFinite(value) || max <= 0) return 0;
-  return Math.max(0, Math.min(1, value / max));
-}
-
-function normalizeLogRange(value, expectedHigh) {
-  if (!Number.isFinite(value) || value <= 0 || expectedHigh <= 0) return 0;
-  return Math.max(0, Math.min(1, Math.log1p(value) / Math.log1p(expectedHigh)));
-}
-
-function toFiniteNumber(value) {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : 0;
-}
-
-function normalizeSortTitle(value) {
-  return String(value || "")
-    .trim()
-    .replace(/^[^A-Za-z0-9]+/, "")
-    .replace(/^the\s+/i, "")
-    .toLowerCase();
 }
 
 function pruneUndefined(obj) {
