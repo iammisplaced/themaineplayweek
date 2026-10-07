@@ -19,7 +19,8 @@ Data now supports Supabase as the primary backend, with JSON/local fallback.
 - `data/showtimes.json` - fallback seed data
 - `supabase/schema.sql` - Supabase tables + RLS policies
 - `scripts/enrich-tmdb.mjs` - TMDb metadata enrichment script (local/offline workflow)
-- `scripts/lib/scraper-utils.mjs` - browser launch, prompts and CSV output shared by the `scrape-*.mjs` scrapers
+- `scripts/scrape-*.mjs` - theatre showtime scrapers; `npm run scrape` runs them all (see `SCRAPER_GUIDE.md`)
+- `scripts/lib/scraper-utils.mjs` - browser launch, requests, prompts, date ranges and CSV output shared by the scrapers
 
 ## Revert note (film card newspaper style)
 - The "torn newspaper" film card treatment touches:
