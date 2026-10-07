@@ -69,6 +69,23 @@
         margin: 0;
         color: var(--muted);
       }
+      .film-page-title {
+        font-style: italic;
+      }
+      .film-page-meta {
+        order: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: -0.1rem 0 0.55rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
+      }
+      .film-page-meta span + span::before {
+        content: "·";
+        margin: 0 0.45rem;
+      }
       .film-page-facts {
         margin-top: 0.15rem;
       }
@@ -353,7 +370,8 @@
       </div>
       <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">Trouble in Paradise</h1>
+        <h1 class="group-title group-title-film"><cite class="film-page-title">Trouble in Paradise</cite></h1>
+        <p class="film-page-meta"><span>1932</span></p>
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
             <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/FBxuoLRD3Biyul14unT5m3PYNS.jpg" alt="Poster for Trouble in Paradise" loading="lazy" />
@@ -362,7 +380,7 @@
           
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
-              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Thief Gaston Monescu and pickpocket Lily are partners in crime and love. Working for perfume company executive Mariette Colet, the two crooks decide to combine their criminal talents to rob their employer. Under the alias of Monsieur Laval, Gaston uses his position as Mariette&#39;s personal secretary to become closer to her. However, he takes things too far when he actually falls in love with Mariette, and has to choose between her and Lily.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Ernst Lubitsch</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Comedy, Crime, Romance</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Miriam Hopkins, Kay Francis, Herbert Marshall</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">1932-10-30</span></div>
+              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Thief Gaston Monescu and pickpocket Lily are partners in crime and love. Working for perfume company executive Mariette Colet, the two crooks decide to combine their criminal talents to rob their employer. Under the alias of Monsieur Laval, Gaston uses his position as Mariette&#39;s personal secretary to become closer to her. However, he takes things too far when he actually falls in love with Mariette, and has to choose between her and Lily.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Ernst Lubitsch</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Comedy, Crime, Romance</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Miriam Hopkins, Kay Francis, Herbert Marshall</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">October 30, 1932</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/195" target="_blank" rel="noopener noreferrer">View on TMDb</a>
           </div>

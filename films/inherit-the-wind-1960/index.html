@@ -69,6 +69,23 @@
         margin: 0;
         color: var(--muted);
       }
+      .film-page-title {
+        font-style: italic;
+      }
+      .film-page-meta {
+        order: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: -0.1rem 0 0.55rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
+      }
+      .film-page-meta span + span::before {
+        content: "·";
+        margin: 0 0.45rem;
+      }
       .film-page-facts {
         margin-top: 0.15rem;
       }
@@ -353,7 +370,8 @@
       </div>
       <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">Inherit the Wind</h1>
+        <h1 class="group-title group-title-film"><cite class="film-page-title">Inherit the Wind</cite></h1>
+        <p class="film-page-meta"><span>1960</span></p>
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
             <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/7oaHcF0gCOt2lKaT2zajhajP0Zo.jpg" alt="Poster for Inherit the Wind" loading="lazy" />
@@ -362,7 +380,7 @@
           
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
-              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Schoolteacher Bertram Cates is arrested for teaching his students Darwin&#39;s theory of evolution. The case receives national attention and one of the newspaper reporters, E.K. Hornbeck, arranges to bring in renowned defense attorney and atheist Henry Drummond to defend Cates. The prosecutor, Matthew Brady is a former presidential candidate, famous evangelist, and old adversary of Drummond.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Stanley Kramer</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Drama</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Spencer Tracy, Fredric March, Gene Kelly</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">1960-07-07</span></div>
+              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Schoolteacher Bertram Cates is arrested for teaching his students Darwin&#39;s theory of evolution. The case receives national attention and one of the newspaper reporters, E.K. Hornbeck, arranges to bring in renowned defense attorney and atheist Henry Drummond to defend Cates. The prosecutor, Matthew Brady is a former presidential candidate, famous evangelist, and old adversary of Drummond.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Stanley Kramer</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Drama</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Spencer Tracy, Fredric March, Gene Kelly</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">July 7, 1960</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/1908" target="_blank" rel="noopener noreferrer">View on TMDb</a>
           </div>

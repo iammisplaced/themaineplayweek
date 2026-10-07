@@ -69,6 +69,23 @@
         margin: 0;
         color: var(--muted);
       }
+      .film-page-title {
+        font-style: italic;
+      }
+      .film-page-meta {
+        order: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: -0.1rem 0 0.55rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
+      }
+      .film-page-meta span + span::before {
+        content: "·";
+        margin: 0 0.45rem;
+      }
       .film-page-facts {
         margin-top: 0.15rem;
       }
@@ -353,7 +370,8 @@
       </div>
       <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">Pickup on South Street</h1>
+        <h1 class="group-title group-title-film"><cite class="film-page-title">Pickup on South Street</cite></h1>
+        <p class="film-page-meta"><span>1953</span></p>
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
             <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/et4fY4BxLyAPwxvUFUbzCUrGsjR.jpg" alt="Poster for Pickup on South Street" loading="lazy" />
@@ -362,7 +380,7 @@
           
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
-              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">In New York City, an insolent pickpocket, Skip McCoy, inadvertently sets off a chain of events when he targets ex-prostitute Candy and steals her wallet. Unaware that she has been making deliveries of highly classified information to the communists, Candy, who has been trailed by FBI agents for months in hopes of nabbing the spy ringleader, is sent by her ex-boyfriend, Joey, to find Skip and retrieve the valuable microfilm he now holds.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Samuel Fuller</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Thriller, Crime</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Richard Widmark, Jean Peters, Thelma Ritter</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">1953-05-27</span></div>
+              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">In New York City, an insolent pickpocket, Skip McCoy, inadvertently sets off a chain of events when he targets ex-prostitute Candy and steals her wallet. Unaware that she has been making deliveries of highly classified information to the communists, Candy, who has been trailed by FBI agents for months in hopes of nabbing the spy ringleader, is sent by her ex-boyfriend, Joey, to find Skip and retrieve the valuable microfilm he now holds.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Samuel Fuller</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Thriller, Crime</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Richard Widmark, Jean Peters, Thelma Ritter</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">May 27, 1953</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/25955" target="_blank" rel="noopener noreferrer">View on TMDb</a>
           </div>

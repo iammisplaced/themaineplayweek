@@ -69,6 +69,23 @@
         margin: 0;
         color: var(--muted);
       }
+      .film-page-title {
+        font-style: italic;
+      }
+      .film-page-meta {
+        order: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: -0.1rem 0 0.55rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
+      }
+      .film-page-meta span + span::before {
+        content: "·";
+        margin: 0 0.45rem;
+      }
       .film-page-facts {
         margin-top: 0.15rem;
       }
@@ -353,7 +370,8 @@
       </div>
       <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box film-card-staff-favorite">
-        <h1 class="group-title group-title-film">Resident Evil</h1>
+        <h1 class="group-title group-title-film"><cite class="film-page-title">Resident Evil</cite></h1>
+        <p class="film-page-meta"><span>2026</span></p>
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
             <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/i7UyjfPio0VFHB9rBUZSFyhOoM8.jpg" alt="Poster for Resident Evil" loading="lazy" />
@@ -362,7 +380,7 @@
           <img class="film-favorite-stamp" src="../../assets/images/playweek%20recommends.png" alt="Playweek recommends" loading="lazy" decoding="async" title="Playweek recommends (Kyle)" />
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
-              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Medical courier Bryan unwittingly finds himself fighting for survival as one fateful, horrifying night collapses around him in chaos.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Zach Cregger</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Horror, Science Fiction, Adventure</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Austin Abrams, Paul Walter Hauser, Kali Reis</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">2026-09-16</span></div>
+              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Medical courier Bryan unwittingly finds himself fighting for survival as one fateful, horrifying night collapses around him in chaos.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Zach Cregger</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Horror, Science Fiction, Adventure</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Austin Abrams, Paul Walter Hauser, Kali Reis</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">September 16, 2026</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/1423191" target="_blank" rel="noopener noreferrer">View on TMDb</a>
           </div>
@@ -459,7 +477,7 @@
                 <h3 class="show-schedule-day">Wed, Oct 7, 2026</h3>
                 
                 <div class="show-times-grid">
-                  <span class="show-time-chip">12:50pm</span><span class="show-time-chip">3:20pm</span><span class="show-time-chip">5:45pm</span><span class="show-time-chip">8:00pm</span>
+                  <span class="show-time-chip">3:20pm</span><span class="show-time-chip">5:45pm</span><span class="show-time-chip">8:00pm</span>
                   <span class="show-time-chip show-time-chip-premium">Premium 9:00 PM</span>
                 </div>
               </article><article class="show-day-card">
@@ -752,7 +770,7 @@
                 <h3 class="show-schedule-day">Wed, Oct 7, 2026</h3>
                 
                 <div class="show-times-grid">
-                  <span class="show-time-chip">12:45pm</span><span class="show-time-chip">4:00pm</span><span class="show-time-chip">5:45pm</span><span class="show-time-chip">8:45pm</span>
+                  <span class="show-time-chip">4:00pm</span><span class="show-time-chip">5:45pm</span><span class="show-time-chip">8:45pm</span>
                   
                 </div>
               </article><article class="show-day-card">
@@ -828,7 +846,7 @@
                 <h3 class="show-schedule-day">Wed, Oct 7, 2026</h3>
                 
                 <div class="show-times-grid">
-                  <span class="show-time-chip">12:30pm</span><span class="show-time-chip">12:30 PM</span><span class="show-time-chip">2:45pm</span><span class="show-time-chip">2:45 PM</span><span class="show-time-chip">5:00pm</span><span class="show-time-chip">5:00 PM</span><span class="show-time-chip">7:20pm</span><span class="show-time-chip">7:20 PM</span>
+                  <span class="show-time-chip">2:45pm</span><span class="show-time-chip">2:45 PM</span><span class="show-time-chip">5:00pm</span><span class="show-time-chip">5:00 PM</span><span class="show-time-chip">7:20pm</span><span class="show-time-chip">7:20 PM</span>
                   
                 </div>
               </article><article class="show-day-card">
@@ -904,7 +922,7 @@
                 <h3 class="show-schedule-day">Wed, Oct 7, 2026</h3>
                 
                 <div class="show-times-grid">
-                  <span class="show-time-chip">12:30pm</span><span class="show-time-chip">12:30 PM</span><span class="show-time-chip">2:45pm</span><span class="show-time-chip">2:45 PM</span><span class="show-time-chip">5:00pm</span><span class="show-time-chip">5:00 PM</span><span class="show-time-chip">7:20pm</span><span class="show-time-chip">7:20 PM</span>
+                  <span class="show-time-chip">2:45pm</span><span class="show-time-chip">2:45 PM</span><span class="show-time-chip">5:00pm</span><span class="show-time-chip">5:00 PM</span><span class="show-time-chip">7:20pm</span><span class="show-time-chip">7:20 PM</span>
                   
                 </div>
               </article><article class="show-day-card">
@@ -980,7 +998,7 @@
                 <h3 class="show-schedule-day">Wed, Oct 7, 2026</h3>
                 
                 <div class="show-times-grid">
-                  <span class="show-time-chip">12:30pm</span><span class="show-time-chip">12:30 PM</span><span class="show-time-chip">2:45pm</span><span class="show-time-chip">2:45 PM</span><span class="show-time-chip">5:00pm</span><span class="show-time-chip">5:00 PM</span><span class="show-time-chip">7:20pm</span><span class="show-time-chip">7:20 PM</span>
+                  <span class="show-time-chip">2:45pm</span><span class="show-time-chip">2:45 PM</span><span class="show-time-chip">5:00pm</span><span class="show-time-chip">5:00 PM</span><span class="show-time-chip">7:20pm</span><span class="show-time-chip">7:20 PM</span>
                   
                 </div>
               </article><article class="show-day-card">
@@ -1049,7 +1067,7 @@
                 <h3 class="show-schedule-day">Wed, Oct 7, 2026</h3>
                 
                 <div class="show-times-grid">
-                  <span class="show-time-chip">12:30pm</span><span class="show-time-chip">12:30 PM</span><span class="show-time-chip">2:45pm</span><span class="show-time-chip">2:45 PM</span><span class="show-time-chip">5:00pm</span><span class="show-time-chip">5:00 PM</span><span class="show-time-chip">7:15pm</span><span class="show-time-chip">7:15 PM</span>
+                  <span class="show-time-chip">2:45pm</span><span class="show-time-chip">2:45 PM</span><span class="show-time-chip">5:00pm</span><span class="show-time-chip">5:00 PM</span><span class="show-time-chip">7:15pm</span><span class="show-time-chip">7:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card">

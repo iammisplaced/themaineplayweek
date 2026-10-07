@@ -69,6 +69,23 @@
         margin: 0;
         color: var(--muted);
       }
+      .film-page-title {
+        font-style: italic;
+      }
+      .film-page-meta {
+        order: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: -0.1rem 0 0.55rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
+      }
+      .film-page-meta span + span::before {
+        content: "·";
+        margin: 0 0.45rem;
+      }
       .film-page-facts {
         margin-top: 0.15rem;
       }
@@ -353,7 +370,8 @@
       </div>
       <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">Les Enfants du Paradis</h1>
+        <h1 class="group-title group-title-film"><cite class="film-page-title">Les Enfants du Paradis</cite></h1>
+        <p class="film-page-meta"><span>1945</span></p>
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
             <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/yiy9stl1jjVhW44ypkWMFDT8Ix3.jpg" alt="Poster for Les Enfants du Paradis" loading="lazy" />
@@ -362,7 +380,7 @@
           
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
-              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">In a chaotic 19th-century Paris teeming with aristocrats, thieves, psychics, and courtesans, theater mime Baptiste is in love with the mysterious actress Garance. But Garance, in turn, is loved by three other men: pretentious actor Frederick, conniving thief Lacenaire, and Count Edouard of Montray.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Marcel Carné</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Drama, Romance</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Arletty, Jean-Louis Barrault, Pierre Brasseur</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">1945-03-15</span></div>
+              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">In a chaotic 19th-century Paris teeming with aristocrats, thieves, psychics, and courtesans, theater mime Baptiste is in love with the mysterious actress Garance. But Garance, in turn, is loved by three other men: pretentious actor Frederick, conniving thief Lacenaire, and Count Edouard of Montray.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Marcel Carné</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Drama, Romance</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Arletty, Jean-Louis Barrault, Pierre Brasseur</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">March 15, 1945</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/2457" target="_blank" rel="noopener noreferrer">View on TMDb</a>
           </div>

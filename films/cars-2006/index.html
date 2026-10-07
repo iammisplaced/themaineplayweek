@@ -69,6 +69,23 @@
         margin: 0;
         color: var(--muted);
       }
+      .film-page-title {
+        font-style: italic;
+      }
+      .film-page-meta {
+        order: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: -0.1rem 0 0.55rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
+      }
+      .film-page-meta span + span::before {
+        content: "·";
+        margin: 0 0.45rem;
+      }
       .film-page-facts {
         margin-top: 0.15rem;
       }
@@ -353,7 +370,8 @@
       </div>
       <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">Cars</h1>
+        <h1 class="group-title group-title-film"><cite class="film-page-title">Cars</cite></h1>
+        <p class="film-page-meta"><span>2006</span></p>
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
             <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/2Touk3m5gzsqr1VsvxypdyHY5ci.jpg" alt="Poster for Cars" loading="lazy" />
@@ -362,7 +380,7 @@
           
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
-              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Lightning McQueen, a hotshot rookie race car driven to succeed, discovers that life is about the journey, not the finish line, when he finds himself unexpectedly detoured in the sleepy Route 66 town of Radiator Springs. On route across the country to the big Piston Cup Championship in California to compete against two seasoned pros, McQueen gets to know the town&#39;s offbeat characters.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">John Lasseter</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Animation, Adventure, Comedy, Family</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Owen Wilson, Paul Newman, Bonnie Hunt</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">2006-06-08</span></div>
+              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Lightning McQueen, a hotshot rookie race car driven to succeed, discovers that life is about the journey, not the finish line, when he finds himself unexpectedly detoured in the sleepy Route 66 town of Radiator Springs. On route across the country to the big Piston Cup Championship in California to compete against two seasoned pros, McQueen gets to know the town&#39;s offbeat characters.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">John Lasseter</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Animation, Adventure, Comedy, Family</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Owen Wilson, Paul Newman, Bonnie Hunt</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">June 8, 2006</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/920" target="_blank" rel="noopener noreferrer">View on TMDb</a>
           </div>

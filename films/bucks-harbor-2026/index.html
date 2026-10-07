@@ -69,6 +69,23 @@
         margin: 0;
         color: var(--muted);
       }
+      .film-page-title {
+        font-style: italic;
+      }
+      .film-page-meta {
+        order: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: -0.1rem 0 0.55rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
+      }
+      .film-page-meta span + span::before {
+        content: "·";
+        margin: 0 0.45rem;
+      }
       .film-page-facts {
         margin-top: 0.15rem;
       }
@@ -353,7 +370,8 @@
       </div>
       <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box film-card-featured-playweek">
-        <h1 class="group-title group-title-film">Bucks Harbor</h1>
+        <h1 class="group-title group-title-film"><cite class="film-page-title">Bucks Harbor</cite></h1>
+        <p class="film-page-meta"><span>2026</span></p>
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
             <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/5XYh1GjxJMrs9MvjEp9ueUxsfDu.jpg" alt="Poster for Bucks Harbor" loading="lazy" />
@@ -362,7 +380,7 @@
           <img class="film-featured-stamp" src="../../assets/images/featured%20on%20playweek.png" alt="Featured on the Playweek" loading="lazy" decoding="async" />
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
-              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Boys in Downeast Maine are shaped by the brutal winters, their harvesting of the ocean’s bounty and the rigid codes of their fathers. Bucks Harbor explores growing up in a community where a man’s worth is often defined by the strength of his back.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Pete Muller</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Documentary</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Not listed</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">2026-02-14</span></div>
+              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">Boys in Downeast Maine are shaped by the brutal winters, their harvesting of the ocean’s bounty and the rigid codes of their fathers. Bucks Harbor explores growing up in a community where a man’s worth is often defined by the strength of his back.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Pete Muller</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Documentary</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">February 14, 2026</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/1599770" target="_blank" rel="noopener noreferrer">View on TMDb</a>
           </div>

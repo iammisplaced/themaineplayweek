@@ -69,6 +69,23 @@
         margin: 0;
         color: var(--muted);
       }
+      .film-page-title {
+        font-style: italic;
+      }
+      .film-page-meta {
+        order: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: -0.1rem 0 0.55rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
+      }
+      .film-page-meta span + span::before {
+        content: "·";
+        margin: 0 0.45rem;
+      }
       .film-page-facts {
         margin-top: 0.15rem;
       }
@@ -353,7 +370,8 @@
       </div>
       <a class="film-page-return" href="../..">Go back...</a>
       <article class="group-card film-card film-page-card film-info-box">
-        <h1 class="group-title group-title-film">The Bride of Frankenstein</h1>
+        <h1 class="group-title group-title-film"><cite class="film-page-title">The Bride of Frankenstein</cite></h1>
+        <p class="film-page-meta"><span>1935</span></p>
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
             <img class="group-film-poster" src="https://image.tmdb.org/t/p/w342/5241zUwe7rC17MNc2QpCBKKdp1N.jpg" alt="Poster for The Bride of Frankenstein" loading="lazy" />
@@ -362,7 +380,7 @@
           
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
-              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">After recovering from injuries sustained in the mob attack upon himself and his creation, Dr. Henry Frankenstein falls under control of his former mentor, Dr. Pretorius, who insists the now-chastened doctor resume his experiments in creating new life. Meanwhile, the Monster remains on the run from those who wish to destroy him.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">James Whale</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Horror, Science Fiction</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Boris Karloff, Colin Clive, Valerie Hobson</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">1935-04-20</span></div>
+              <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">After recovering from injuries sustained in the mob attack upon himself and his creation, Dr. Henry Frankenstein falls under control of his former mentor, Dr. Pretorius, who insists the now-chastened doctor resume his experiments in creating new life. Meanwhile, the Monster remains on the run from those who wish to destroy him.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">James Whale</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Horror, Science Fiction</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Boris Karloff, Colin Clive, Valerie Hobson</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">April 20, 1935</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/229" target="_blank" rel="noopener noreferrer">View on TMDb</a>
           </div>
