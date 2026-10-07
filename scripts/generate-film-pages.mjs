@@ -195,6 +195,10 @@ async function loadFilmSourceFromSupabase() {
       genres: Array.isArray(tmdb.genres) ? tmdb.genres.filter(Boolean) : [],
       stars: Array.isArray(tmdb.stars) ? tmdb.stars.filter(Boolean) : [],
       releaseDate: String(tmdb.releaseDate || tmdb.release_date || "").trim(),
+      runtime: firstFiniteNumber(tmdb.runtime),
+      certification: String(tmdb.certification || "").trim(),
+      originalLanguage: String(tmdb.originalLanguage || "").trim(),
+      originalLanguageName: String(tmdb.originalLanguageName || "").trim(),
       popularity: firstFiniteNumber(tmdb.popularity, tmdb.popularity_score),
       voteAverage: firstFiniteNumber(tmdb.voteAverage, tmdb.vote_average),
       voteCount: firstFiniteNumber(tmdb.voteCount, tmdb.vote_count),
@@ -406,6 +410,10 @@ function normalizeFilms(source) {
             genres: Array.isArray(rawFilm?.tmdb?.genres) ? rawFilm.tmdb.genres.filter(Boolean) : [],
             stars: Array.isArray(rawFilm?.tmdb?.stars) ? rawFilm.tmdb.stars.filter(Boolean) : [],
             releaseDate: stringOrEmpty(rawFilm?.tmdb?.releaseDate),
+            runtime: firstFiniteNumber(rawFilm?.tmdb?.runtime),
+            certification: stringOrEmpty(rawFilm?.tmdb?.certification),
+            originalLanguage: stringOrEmpty(rawFilm?.tmdb?.originalLanguage),
+            originalLanguageName: stringOrEmpty(rawFilm?.tmdb?.originalLanguageName),
             popularity: firstFiniteNumber(rawFilm?.tmdb?.popularity, rawFilm?.tmdb?.popularity_score),
             voteAverage: firstFiniteNumber(rawFilm?.tmdb?.voteAverage, rawFilm?.tmdb?.vote_average),
             voteCount: firstFiniteNumber(rawFilm?.tmdb?.voteCount, rawFilm?.tmdb?.vote_count),
@@ -504,6 +512,10 @@ function normalizeFlatFilm(film, festivalNameById = new Map()) {
         ? film.tmdb.stars.filter(Boolean)
         : [],
     releaseDate: stringOrEmpty(film?.releaseDate || film?.release_date || film?.tmdb?.releaseDate || film?.tmdb?.release_date),
+    runtime: firstFiniteNumber(film?.runtime, film?.tmdb?.runtime),
+    certification: stringOrEmpty(film?.certification || film?.tmdb?.certification),
+    originalLanguage: stringOrEmpty(film?.originalLanguage || film?.tmdb?.originalLanguage),
+    originalLanguageName: stringOrEmpty(film?.originalLanguageName || film?.tmdb?.originalLanguageName),
     popularity: firstFiniteNumber(film?.popularity, film?.tmdb?.popularity, film?.tmdb?.popularity_score),
     voteAverage: firstFiniteNumber(film?.voteAverage, film?.vote_average, film?.tmdb?.voteAverage, film?.tmdb?.vote_average),
     voteCount: firstFiniteNumber(film?.voteCount, film?.vote_count, film?.tmdb?.voteCount, film?.tmdb?.vote_count),
@@ -689,6 +701,8 @@ function renderFilmPage(film, slug, siteUrl) {
     description,
     image: absoluteOrPassThrough(film.posterUrl || DEFAULT_NO_POSTER, siteUrl),
     datePublished: film.releaseDate || undefined,
+    duration: film.runtime > 0 ? `PT${Math.round(film.runtime)}M` : undefined,
+    contentRating: film.certification || undefined,
     director: film.director ? [{ "@type": "Person", name: film.director }] : undefined,
     actor: film.stars.map((name) => ({ "@type": "Person", name })),
     genre: film.genres,
@@ -765,6 +779,23 @@ function renderFilmPage(film, slug, siteUrl) {
       .film-page-note {
         margin: 0;
         color: var(--muted);
+      }
+      .film-page-title {
+        font-style: italic;
+      }
+      .film-page-meta {
+        order: 1;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: -0.1rem 0 0.55rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
+      }
+      .film-page-meta span + span::before {
+        content: "·";
+        margin: 0 0.45rem;
       }
       .film-page-facts {
         margin-top: 0.15rem;
@@ -1052,7 +1083,8 @@ function renderFilmPage(film, slug, siteUrl) {
       <article class="group-card film-card film-page-card film-info-box${film.staffFavorite ? " film-card-staff-favorite" : ""}${
         film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
       }">
-        <h1 class="group-title group-title-film">${escapeHtml(filmDisplayTitle)}</h1>
+        <h1 class="group-title group-title-film"><cite class="film-page-title">${escapeHtml(filmDisplayTitle)}</cite></h1>
+        ${buildFilmMetaLineMarkup(film)}
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
             <img class="group-film-poster" src="${escapeHtml(posterUrl)}" alt="Poster for ${escapeHtml(filmDisplayTitle)}" loading="lazy" />
@@ -1065,7 +1097,7 @@ function renderFilmPage(film, slug, siteUrl) {
           ${stampMarkup}
           <div class="group-film-details">
             <div class="group-film-facts film-page-facts">
-              ${buildFilmFactsMarkup(film, description)}
+              ${buildFilmFactsMarkup(film)}
             </div>
             ${tmdbMovieUrl ? `<a class="group-tmdb-link" href="${escapeHtml(tmdbMovieUrl)}" target="_blank" rel="noopener noreferrer">View on TMDb</a>` : ""}
           </div>
@@ -1587,14 +1619,53 @@ function resolveRelativeAssetPath(url, depthToRoot) {
   return `${depthPrefix}${url.replace(/^\//, "")}`;
 }
 
-function buildFilmFactsMarkup(film, synopsis) {
+function buildFilmMetaLineMarkup(film) {
+  const parts = [
+    film.year ? String(film.year) : "",
+    film.certification,
+    formatRuntime(film.runtime),
+  ].filter(Boolean);
+  if (!parts.length) return "";
+  return `<p class="film-page-meta">${parts.map((part) => `<span>${escapeHtml(part)}</span>`).join("")}</p>`;
+}
+
+function formatRuntime(minutes) {
+  const total = Math.round(Number(minutes));
+  if (!Number.isFinite(total) || total <= 0) return "";
+  const hours = Math.floor(total / 60);
+  const mins = total % 60;
+  if (!hours) return `${mins}m`;
+  return mins ? `${hours}h ${mins}m` : `${hours}h`;
+}
+
+function formatReleaseDate(isoDate) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(isoDate || "").trim());
+  if (!match) return String(isoDate || "").trim();
+  const date = new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])));
+  return date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+}
+
+// Only shown for films not originally in English.
+function getOriginalLanguageLabel(film) {
+  const code = String(film.originalLanguage || "").trim().toLowerCase();
+  if (!code || code === "en") return "";
+  if (film.originalLanguageName) return film.originalLanguageName;
+  try {
+    return new Intl.DisplayNames(["en"], { type: "language" }).of(code) || code;
+  } catch {
+    return code;
+  }
+}
+
+function buildFilmFactsMarkup(film) {
   const facts = [
-    { label: "Synopsis", value: synopsis || "Not listed", allowHtml: true },
-    { label: "Director", value: film.director || "Not listed", allowHtml: false },
-    { label: "Genres", value: film.genres.length ? film.genres.join(", ") : "Not listed", allowHtml: false },
-    { label: "Stars", value: film.stars.length ? film.stars.join(", ") : "Not listed", allowHtml: false },
-    { label: "Release Date", value: film.releaseDate || "Not listed", allowHtml: false },
-  ];
+    { label: "Synopsis", value: film.description, allowHtml: true },
+    { label: "Director", value: film.director, allowHtml: false },
+    { label: "Genres", value: film.genres.join(", "), allowHtml: false },
+    { label: "Stars", value: film.stars.join(", "), allowHtml: false },
+    { label: "Language", value: getOriginalLanguageLabel(film), allowHtml: false },
+    { label: "Release Date", value: formatReleaseDate(film.releaseDate), allowHtml: false },
+  ].filter((fact) => String(fact.value || "").trim());
 
   return facts
     .map(
