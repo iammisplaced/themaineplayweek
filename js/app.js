@@ -23,7 +23,6 @@ import {
   toFiniteNumber,
 } from "./shared.js";
 
-const DATA_URL = "./data/showtimes.json";
 const FILM_PAGES_LIVE_SOURCE_URL = "./data/film-pages-source.live.json";
 const FILM_PAGES_SOURCE_URL = "./data/film-pages-source.json";
 const STORAGE_KEY = "showtimes-local-edit";
@@ -113,7 +112,7 @@ const NAV_VIEW_LABELS = Object.freeze({
 const state = {
   data: { theatreGroups: [], festivals: [] },
   view: "days",
-  source: "json",
+  source: "film-pages-json",
   loadedFromSupabaseThisSession: false,
   supabaseBaselinePayload: null,
   expandedFilmGroups: new Set(),
@@ -1982,34 +1981,17 @@ async function loadData() {
     }
   }
 
-  try {
-    const response = await fetch(DATA_URL);
-    if (!response.ok) {
-      throw new Error(`Failed to load ${DATA_URL}`);
-    }
-    const json = await response.json();
-    validateData(json);
-    state.data = {
-      theatreGroups: Array.isArray(json?.theatreGroups) ? json.theatreGroups : [],
-      festivals: Array.isArray(json?.festivals) ? json.festivals : [],
-    };
-    state.source = "json";
-    state.loadedFromSupabaseThisSession = false;
-    state.supabaseBaselinePayload = null;
-    return;
-  } catch (error) {
-    const fallbackData = await loadFallbackDataFromFilmPagesSource();
-    if (!fallbackData) {
-      throw error;
-    }
-    state.data = {
-      theatreGroups: Array.isArray(fallbackData?.theatreGroups) ? fallbackData.theatreGroups : [],
-      festivals: Array.isArray(fallbackData?.festivals) ? fallbackData.festivals : [],
-    };
-    state.source = "film-pages-json";
-    state.loadedFromSupabaseThisSession = false;
-    state.supabaseBaselinePayload = null;
+  const fallbackData = await loadFallbackDataFromFilmPagesSource();
+  if (!fallbackData) {
+    throw new Error("Could not load showtimes from Supabase or the film pages data.");
   }
+  state.data = {
+    theatreGroups: Array.isArray(fallbackData?.theatreGroups) ? fallbackData.theatreGroups : [],
+    festivals: Array.isArray(fallbackData?.festivals) ? fallbackData.festivals : [],
+  };
+  state.source = "film-pages-json";
+  state.loadedFromSupabaseThisSession = false;
+  state.supabaseBaselinePayload = null;
 }
 
 async function loadFallbackDataFromFilmPagesSource() {
