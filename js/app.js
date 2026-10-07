@@ -13,6 +13,7 @@ import {
   getShowtimeNote,
   initShowtimeNoteTooltips,
   isPlainObject,
+  mergeShowtimeNotes,
   normalizeOutboundUrl,
   normalizeSortTitle,
   parseIsoDate,
@@ -3046,7 +3047,7 @@ function importShowtimesCsv(data, csvContent) {
     const ticketLinkRaw = readCsvValue(row, headerIndexByKey, "ticket_link");
     const roomRaw = readCsvValue(row, headerIndexByKey, "room");
     const notesRaw = readCsvValue(row, headerIndexByKey, "notes");
-    // Blank keeps the stored note; a lone "-" clears it.
+    // Blank keeps the stored note, a lone "-" clears it, and anything else is merged into it.
     const clearNotes = notesRaw === "-";
     const csvNotes = clearNotes ? "" : notesRaw;
     const festivalNameRaw = readCsvValue(row, headerIndexByKey, "festival_name");
@@ -3163,7 +3164,8 @@ function importShowtimesCsv(data, csvContent) {
       showing.times = dedupeSortTimes([...(showing.times || []), ...parsedTimes]);
       showing.premiumTimes = dedupeSortTimes([...(showing.premiumTimes || []), ...parsedPremiumTimes]);
       showing.room = roomRaw;
-      if (csvNotes || clearNotes) showing.notes = csvNotes;
+      if (clearNotes) showing.notes = "";
+      else if (csvNotes) showing.notes = mergeShowtimeNotes(showing.notes, csvNotes);
       if (resolvedFestivalId) {
         showing.festivalId = resolvedFestivalId;
       }

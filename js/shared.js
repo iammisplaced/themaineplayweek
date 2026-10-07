@@ -287,6 +287,27 @@ export function getShowtimeNote(notes, time) {
   return parts.join(" · ");
 }
 
+function splitNoteSegments(notes) {
+  return String(notes || "")
+    .split(NOTE_SEGMENT_SPLIT)
+    .map((segment) => segment.trim())
+    .filter(Boolean);
+}
+
+// Adds the entries of `incoming` that `existing` doesn't already have, so importing
+// "7:00 PM: IMAX" keeps a hand-written "9:30 PM: Q&A with director".
+export function mergeShowtimeNotes(existing, incoming) {
+  const merged = splitNoteSegments(existing);
+  const seen = new Set(merged.map((segment) => segment.replace(/\s+/g, " ").toLowerCase()));
+  splitNoteSegments(incoming).forEach((segment) => {
+    const key = segment.replace(/\s+/g, " ").toLowerCase();
+    if (seen.has(key)) return;
+    seen.add(key);
+    merged.push(segment);
+  });
+  return merged.join("; ");
+}
+
 // Shows the note for any `.show-time-noted` element (data-note) in a floating tooltip on
 // hover, keyboard focus, or tap. The tooltip is fixed-positioned on <body> so card
 // overflow can't clip it. Safe to call more than once.

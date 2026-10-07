@@ -92,7 +92,7 @@ Notes:
 - If `room` is provided, it is stored on the showing for that date.
 - If `festival_name` is provided, the showing is linked to that existing festival.
 - Blank `ticket_link` values do not clear or overwrite existing ticket links.
-- Blank `notes` values keep the existing note for that date. Use a single `-` to clear it.
+- Blank `notes` values keep the existing note for that date. Non-blank notes are merged into it: entries the stored note doesn't already have are added, so re-importing scraped notes doesn't erase hand-written ones. Use a single `-` to clear it.
 
 Example CSV:
 
