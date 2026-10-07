@@ -256,3 +256,121 @@ export function getFilmSortBreakdown({
     weights: FILM_SORT_WEIGHTS,
   };
 }
+
+// ---- Showtime notes ----
+
+// A showing's notes field can target specific times with a time prefix, separated by ";":
+//   "7:00 PM: Q&A with director; 9:30 PM: Open captions"
+// Text without a time prefix (e.g. "Members night; 7pm: Q&A") applies to every time that day.
+// Prefix times match regardless of formatting ("7pm" matches "7:00 PM").
+const NOTE_TIME = String.raw`\d{1,2}(?::[0-5]\d)?\s*[ap]\.?m\.?`;
+const NOTE_TIME_SEPARATOR = String.raw`\s*[:\u2013\u2014-]\s*`;
+const NOTE_SEGMENT_SPLIT = new RegExp(String.raw`;\s*(?=${NOTE_TIME}${NOTE_TIME_SEPARATOR})`, "i");
+const NOTE_TIMED_SEGMENT = new RegExp(String.raw`^(${NOTE_TIME})${NOTE_TIME_SEPARATOR}([\s\S]+)$`, "i");
+
+export function getShowtimeNote(notes, time) {
+  const text = String(notes || "").trim();
+  if (!text) return "";
+  const targetTime = to24HourTime(time);
+  const parts = [];
+  text.split(NOTE_SEGMENT_SPLIT).forEach((segment) => {
+    const trimmed = segment.trim();
+    if (!trimmed) return;
+    const timed = NOTE_TIMED_SEGMENT.exec(trimmed);
+    if (!timed) {
+      parts.push(trimmed);
+      return;
+    }
+    const prefixTime = to24HourTime(timed[1].replace(/\./g, "").replace(/\s+/g, " ").trim());
+    if (prefixTime && prefixTime === targetTime) parts.push(timed[2].trim());
+  });
+  return parts.join(" · ");
+}
+
+// Shows the note for any `.show-time-noted` element (data-note) in a floating tooltip on
+// hover, keyboard focus, or tap. The tooltip is fixed-positioned on <body> so card
+// overflow can't clip it. Safe to call more than once.
+export function initShowtimeNoteTooltips(doc = document) {
+  if (doc.documentElement.dataset.showtimeNotesReady) return;
+  doc.documentElement.dataset.showtimeNotesReady = "true";
+
+  const NOTED_SELECTOR = ".show-time-noted";
+  const GUTTER = 8;
+  let tooltip = null;
+  let activeTarget = null;
+  let pinned = false;
+
+  const ensureTooltip = () => {
+    if (tooltip) return tooltip;
+    tooltip = doc.createElement("div");
+    tooltip.className = "show-note-tooltip";
+    tooltip.setAttribute("role", "tooltip");
+    tooltip.hidden = true;
+    doc.body.appendChild(tooltip);
+    return tooltip;
+  };
+
+  const hide = () => {
+    activeTarget?.classList.remove("is-note-open");
+    activeTarget = null;
+    pinned = false;
+    if (tooltip) tooltip.hidden = true;
+  };
+
+  const show = (target) => {
+    const note = String(target?.dataset?.note || "").trim();
+    if (!note) return;
+    const el = ensureTooltip();
+    activeTarget?.classList.remove("is-note-open");
+    activeTarget = target;
+    target.classList.add("is-note-open");
+    el.textContent = note;
+    el.hidden = false;
+
+    const view = doc.defaultView;
+    const rect = target.getBoundingClientRect();
+    const tipRect = el.getBoundingClientRect();
+    const maxLeft = view.innerWidth - tipRect.width - GUTTER;
+    const left = Math.max(GUTTER, Math.min(rect.left + rect.width / 2 - tipRect.width / 2, maxLeft));
+    const above = rect.top - tipRect.height - GUTTER;
+    const placeBelow = above < GUTTER;
+    el.dataset.placement = placeBelow ? "below" : "above";
+    el.style.left = `${left}px`;
+    el.style.top = `${placeBelow ? rect.bottom + GUTTER : above}px`;
+  };
+
+  doc.addEventListener("mouseover", (event) => {
+    const target = event.target.closest?.(NOTED_SELECTOR);
+    if (target && target !== activeTarget && !pinned) show(target);
+  });
+  doc.addEventListener("mouseout", (event) => {
+    if (pinned || !activeTarget) return;
+    if (activeTarget.contains(event.relatedTarget)) return;
+    if (event.target.closest?.(NOTED_SELECTOR) === activeTarget) hide();
+  });
+  doc.addEventListener("focusin", (event) => {
+    const target = event.target.closest?.(NOTED_SELECTOR);
+    if (target) show(target);
+  });
+  doc.addEventListener("focusout", (event) => {
+    if (activeTarget && event.target === activeTarget && !pinned) hide();
+  });
+  doc.addEventListener("click", (event) => {
+    const target = event.target.closest?.(NOTED_SELECTOR);
+    if (!target) {
+      if (activeTarget) hide();
+      return;
+    }
+    if (pinned && target === activeTarget) {
+      hide();
+      return;
+    }
+    show(target);
+    pinned = true;
+  });
+  doc.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && activeTarget) hide();
+  });
+  doc.defaultView.addEventListener("scroll", () => activeTarget && hide(), { capture: true, passive: true });
+  doc.defaultView.addEventListener("resize", () => activeTarget && hide());
+}

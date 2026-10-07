@@ -10,6 +10,8 @@ import {
   getDayDifferenceFromToday,
   getFilmSortBreakdown,
   getShowDateTime,
+  getShowtimeNote,
+  initShowtimeNoteTooltips,
   isPlainObject,
   normalizeOutboundUrl,
   normalizeSortTitle,
@@ -347,6 +349,7 @@ async function init() {
   loadLocationChooserSeen();
   initializeSupabase();
   bindEvents();
+  initShowtimeNoteTooltips();
   void loadLatestSubstackPost();
   await refreshAuthState();
   await loadData();
@@ -4704,7 +4707,7 @@ function render() {
           meta.textContent = singleDateRoom ? `Room: ${singleDateRoom}` : "";
 
           if (state.view === "theatres") {
-            renderSchedule(schedule, show.dates, show.premiumDates, show.noteByDate);
+            renderSchedule(schedule, show.dates, show.premiumDates, show.timeNotes);
           }
 
           if (!rowExpanded) {
@@ -4755,12 +4758,6 @@ function render() {
             ribbon.className = "festival-entry-ribbon";
             ribbon.textContent = "Festival Selection";
             main.prepend(ribbon);
-            if (show.notes) {
-              const notesPill = document.createElement("span");
-              notesPill.className = "special-notes-pill";
-              notesPill.textContent = show.notes;
-              main.appendChild(notesPill);
-            }
           } else {
             main.textContent = `${show.theatre}`;
             const theatreKey = `${show.theatre} · ${show.city}`;
@@ -4774,14 +4771,8 @@ function render() {
               ribbon.textContent = festivalBadgeLabel;
               main.prepend(ribbon);
             }
-            if (show.notes) {
-              const notesPill = document.createElement("span");
-              notesPill.className = "special-notes-pill special-notes-pill-inline";
-              notesPill.textContent = show.notes;
-              main.appendChild(notesPill);
-            }
           }
-          renderSchedule(schedule, show.dates, show.premiumDates);
+          renderSchedule(schedule, show.dates, show.premiumDates, show.timeNotes);
           const ticketUrl = normalizeOutboundUrl(show.ticketLink);
           if (ticketUrl) {
             link.href = ticketUrl;
@@ -5967,7 +5958,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
       const premiumTimes = [];
       const festivalIds = new Set();
       let room = "";
-      let notes = "";
+      const timeNotes = {};
 
       (film.showings || []).forEach((showing) => {
         if (showing.date !== selectedDate) return;
@@ -5976,7 +5967,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
           if (!showDateTime || showDateTime < now) return;
           times.push(time);
           if (!room) room = String(showing?.room || "").trim();
-          if (!notes) notes = String(showing?.notes || "").trim();
+          addTimeNote(timeNotes, showing.date, time, false, showing?.notes);
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) festivalIds.add(festivalId);
         });
@@ -5985,7 +5976,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
           if (!showDateTime || showDateTime < now) return;
           premiumTimes.push(time);
           if (!room) room = String(showing?.room || "").trim();
-          if (!notes) notes = String(showing?.notes || "").trim();
+          addTimeNote(timeNotes, showing.date, time, true, showing?.notes);
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) festivalIds.add(festivalId);
         });
@@ -6031,7 +6022,7 @@ function buildSingleDayGroups(theatres, selectedDate) {
         film: film.title,
         year,
         room,
-        notes,
+        timeNotes,
         festivalIds: Array.from(festivalIds.values()),
         ticketLink: film.ticketLink,
         dates: {
@@ -6071,6 +6062,9 @@ function buildFestivalGroups(theatres, festivals) {
           return Boolean(showDateTime && showDateTime >= now);
         });
         if (!times.length && !premiumTimes.length) return;
+        const timeNotes = {};
+        times.forEach((time) => addTimeNote(timeNotes, showing.date, time, false, showing?.notes));
+        premiumTimes.forEach((time) => addTimeNote(timeNotes, showing.date, time, true, showing?.notes));
 
         const festival = festivalById.get(festivalId);
         if (festival && !festival.enabled) return;
@@ -6099,7 +6093,7 @@ function buildFestivalGroups(theatres, festivals) {
           theatre: theatre.name,
           city: theatre.city,
           room: String(showing?.room || "").trim(),
-          notes: String(showing?.notes || "").trim(),
+          timeNotes,
           film: film.title,
           year: Number.isInteger(Number(film.year)) ? Number(film.year) : null,
           ticketLink: film.ticketLink,
@@ -6186,7 +6180,7 @@ function buildGroups(theatres, view) {
         dates: {},
         premiumDates: {},
         roomByDate: {},
-        noteByDate: {},
+        timeNotes: {},
         festivalIdsSet: new Set(),
       };
 
@@ -6197,7 +6191,7 @@ function buildGroups(theatres, view) {
           if (!row.dates[showing.date]) row.dates[showing.date] = [];
           row.dates[showing.date].push(time);
           if (!row.roomByDate[showing.date]) row.roomByDate[showing.date] = String(showing?.room || "").trim();
-          if (!row.noteByDate[showing.date]) row.noteByDate[showing.date] = String(showing?.notes || "").trim();
+          addTimeNote(row.timeNotes, showing.date, time, false, showing?.notes);
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) row.festivalIdsSet.add(festivalId);
         });
@@ -6207,7 +6201,7 @@ function buildGroups(theatres, view) {
           if (!row.premiumDates[showing.date]) row.premiumDates[showing.date] = [];
           row.premiumDates[showing.date].push(time);
           if (!row.roomByDate[showing.date]) row.roomByDate[showing.date] = String(showing?.room || "").trim();
-          if (!row.noteByDate[showing.date]) row.noteByDate[showing.date] = String(showing?.notes || "").trim();
+          addTimeNote(row.timeNotes, showing.date, time, true, showing?.notes);
           const festivalId = Number.isInteger(Number(showing?.festivalId)) ? Number(showing.festivalId) : null;
           if (festivalId) row.festivalIdsSet.add(festivalId);
         });
@@ -6372,7 +6366,7 @@ function buildExpandRowKey(view, group, show) {
   return `${view}-row::${filmKey}`;
 }
 
-function renderSchedule(container, dates, premiumDates = {}, noteByDate = {}) {
+function renderSchedule(container, dates, premiumDates = {}, timeNotes = {}) {
   container.innerHTML = "";
   const dateKeys = new Set([...Object.keys(dates || {}), ...Object.keys(premiumDates || {})]);
   const dateEntries = Array.from(dateKeys)
@@ -6383,7 +6377,7 @@ function renderSchedule(container, dates, premiumDates = {}, noteByDate = {}) {
   const hiddenEntries = dateEntries.slice(2);
 
   visibleEntries.forEach(([date, times, premiumTimes]) => {
-    container.appendChild(createScheduleRow(date, times, premiumTimes, noteByDate));
+    container.appendChild(createScheduleRow(date, times, premiumTimes, timeNotes));
   });
 
   if (hiddenEntries.length) {
@@ -6397,7 +6391,7 @@ function renderSchedule(container, dates, premiumDates = {}, noteByDate = {}) {
 
     const extra = document.createElement("div");
     hiddenEntries.forEach(([date, times, premiumTimes]) => {
-      extra.appendChild(createScheduleRow(date, times, premiumTimes, noteByDate));
+      extra.appendChild(createScheduleRow(date, times, premiumTimes, timeNotes));
     });
     details.appendChild(extra);
 
@@ -6405,7 +6399,7 @@ function renderSchedule(container, dates, premiumDates = {}, noteByDate = {}) {
   }
 }
 
-function createScheduleRow(date, times, premiumTimes = [], noteByDate = {}) {
+function createScheduleRow(date, times, premiumTimes = [], timeNotes = {}) {
   const row = document.createElement("div");
   row.className = "show-schedule-row";
 
@@ -6429,27 +6423,57 @@ function createScheduleRow(date, times, premiumTimes = [], noteByDate = {}) {
     if (index > 0) {
       value.appendChild(document.createTextNode(", "));
     }
-    if (!entry.isPremium) {
+    const note = timeNotes?.[buildTimeNoteKey(date, entry.time, entry.isPremium)] || "";
+    let timeEl;
+    if (entry.isPremium) {
+      timeEl = document.createElement("span");
+      timeEl.className = "show-premium-pill";
+      timeEl.textContent = `Premium ${entry.time}`;
+    } else if (note) {
+      timeEl = document.createElement("span");
+      timeEl.textContent = entry.time;
+    } else {
       value.appendChild(document.createTextNode(entry.time));
       return;
     }
-    const pill = document.createElement("span");
-    pill.className = "show-premium-pill";
-    pill.textContent = `Premium ${entry.time}`;
-    value.appendChild(pill);
+    if (note) attachShowtimeNote(timeEl, note);
+    value.appendChild(timeEl);
   });
-
-  const noteForDate = String(noteByDate?.[date] || "").trim();
-  if (noteForDate) {
-    const notesPill = document.createElement("span");
-    notesPill.className = "special-notes-pill special-notes-pill-inline";
-    notesPill.textContent = noteForDate;
-    value.appendChild(notesPill);
-  }
 
   row.appendChild(label);
   row.appendChild(value);
   return row;
+}
+
+function buildTimeNoteKey(date, time, isPremium) {
+  return `${date}|${time}|${isPremium ? "premium" : "standard"}`;
+}
+
+function addTimeNote(timeNotes, date, time, isPremium, notes) {
+  const text = getShowtimeNote(notes, time);
+  if (!text) return;
+  const key = buildTimeNoteKey(date, time, isPremium);
+  const existing = timeNotes[key];
+  if (!existing) {
+    timeNotes[key] = text;
+  } else if (!existing.split(" · ").includes(text)) {
+    timeNotes[key] = `${existing} · ${text}`;
+  }
+}
+
+function attachShowtimeNote(timeEl, note) {
+  timeEl.classList.add("show-time-noted");
+  timeEl.dataset.note = note;
+  timeEl.tabIndex = 0;
+  const icon = document.createElement("span");
+  icon.className = "show-note-icon";
+  icon.setAttribute("aria-hidden", "true");
+  icon.textContent = "i";
+  timeEl.appendChild(icon);
+  const srNote = document.createElement("span");
+  srNote.className = "visually-hidden";
+  srNote.textContent = ` (Note: ${note})`;
+  timeEl.appendChild(srNote);
 }
 
 function expandFestivalShowsByDate(shows) {

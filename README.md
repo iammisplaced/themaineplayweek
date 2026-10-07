@@ -79,6 +79,7 @@ Optional headers:
 - `film_year` (only needed if multiple films with same title exist in a theatre)
 - `film_tmdb_id` (only needed if multiple films with same title exist in a theatre)
 - `room` (optional room/screen label, for example `Main Hall`)
+- `notes` (optional; shown when a visitor hovers or taps a showtime). Target specific times with a time prefix, separating entries with `;` — for example `7:00 PM: Q&A with director; 9:30 PM: Open captions`. Text without a time prefix applies to every time that day. Prefix times don't need to match `show_times` formatting exactly (`7pm` matches `7:00 PM`).
 - `festival_name` (must match an existing festival name)
 - `ticket_link`
 
