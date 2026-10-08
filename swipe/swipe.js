@@ -23,6 +23,7 @@ const placeStatus = document.getElementById("place-status");
 const townSelect = document.getElementById("town-select");
 const filmSheet = document.getElementById("film-sheet");
 const introSheet = document.getElementById("intro-sheet");
+const toast = document.getElementById("toast");
 const filmSheetBody = document.getElementById("film-sheet-body");
 
 const MIN_LEAD_MINUTES = 10;
@@ -307,6 +308,14 @@ function renderCard(entry, role) {
       <span class="stamp stamp-no" aria-hidden="true">Not for me</span>`
           : ""
       }
+      ${
+        role === "is-next"
+          ? ""
+          : `<button type="button" class="card-share" data-share="${film.id}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" /></svg>
+        <span class="visually-hidden">Share ${escapeHtml(film.title)}</span>
+      </button>`
+      }
       <div class="card-info">
         ${film.staffFavorite ? `<p class="badge">Staff favourite</p>` : ""}
         <${titleTag} class="card-title">${escapeHtml(film.title)}${film.year ? ` <span class="card-year">${film.year}</span>` : ""}</${titleTag}>
@@ -347,13 +356,6 @@ function renderDetails(entry, { footer = true } = {}) {
   const filmPage = `../films/${buildFilmSlug(film.title, film.year)}/`;
   return `
     <section class="details" aria-label="About ${escapeHtml(film.title)}">
-      <div class="share-row">
-        <button type="button" class="share" data-share="${film.id}">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" /></svg>
-          Share this film
-        </button>
-        <p class="share-status" role="status"></p>
-      </div>
       ${facts.length ? `<p class="facts">${facts.join(", ")}</p>` : ""}
       ${film.genres.length ? `<p class="genres">${film.genres.map((genre) => `<span>${escapeHtml(genre)}</span>`).join("")}</p>` : ""}
       ${film.synopsis ? `<p class="synopsis">${escapeHtml(film.synopsis)}</p>` : ""}
@@ -557,7 +559,7 @@ function attachSwipe(card) {
   };
 
   card.addEventListener("pointerdown", (event) => {
-    if (event.button !== 0) return;
+    if (event.button !== 0 || event.target.closest("[data-share]")) return;
     pointerId = event.pointerId;
     startX = event.clientX;
     startY = event.clientY;
@@ -620,7 +622,7 @@ app.addEventListener("click", (event) => {
   } else if (button.dataset.open) {
     openFilm(Number(button.dataset.open));
   } else if (button.dataset.share) {
-    shareFilm(Number(button.dataset.share), button);
+    shareFilm(Number(button.dataset.share));
   }
 });
 
@@ -648,21 +650,17 @@ function openFilm(filmId) {
 filmSheet.addEventListener("click", (event) => {
   if (event.target === filmSheet || event.target.closest("[data-action='close-film']")) filmSheet.close();
   const shareButton = event.target.closest("[data-share]");
-  if (shareButton) shareFilm(Number(shareButton.dataset.share), shareButton);
+  if (shareButton) shareFilm(Number(shareButton.dataset.share));
 });
 
 // ---- Sharing ----
 
 // Opens the phone's share sheet with the film's page on the live site; where that isn't
 // available (most desktop browsers), copies the link instead.
-async function shareFilm(filmId, button) {
+async function shareFilm(filmId) {
   const entry = deck.find((candidate) => candidate.film.id === filmId);
   if (!entry) return;
   const { film } = entry;
-  const status = button.closest(".share-row")?.querySelector(".share-status");
-  const say = (message) => {
-    if (status) status.textContent = message;
-  };
   const title = film.year ? `${film.title} (${film.year})` : film.title;
   const { next } = getLead(entry);
   const text = `${title} is playing ${deckDay} at ${data.theatres.get(next.theatreId).name}, ${next.time}. Showtimes and tickets on The Maine Playweek:`;
@@ -671,19 +669,31 @@ async function shareFilm(filmId, button) {
   if (navigator.share) {
     try {
       await navigator.share({ title, text, url });
-      say("");
     } catch (error) {
       // Closing the share sheet isn't an error worth showing.
-      if (error?.name !== "AbortError") say(`Sharing didn't work. Here's the link: ${url}`);
+      if (error?.name !== "AbortError") showToast(`Sharing didn't work. Here's the link: ${url}`);
     }
     return;
   }
   try {
     await navigator.clipboard.writeText(`${text} ${url}`);
-    say("Link copied. Paste it anywhere to share or save it.");
+    showToast("Link copied. Paste it anywhere to share or save it.");
   } catch {
-    say(`Copy this link to share or save it: ${url}`);
+    showToast(`Copy this link to share or save it: ${url}`, { long: true });
   }
+}
+
+// A short message above the controls; stays longer when it holds a link to copy by hand.
+let toastTimer = null;
+function showToast(message, { long = false } = {}) {
+  // An open sheet sits in the top layer, so the toast has to go inside it to be seen.
+  (filmSheet.open ? filmSheet : document.body).append(toast);
+  toast.textContent = message;
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.hidden = true;
+  }, long ? 10000 : 3000);
 }
 
 // ---- Place sheet ----

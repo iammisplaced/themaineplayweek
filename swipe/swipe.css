@@ -245,6 +245,37 @@ select {
   background: linear-gradient(to top, rgba(6, 18, 26, 0.95) 0%, rgba(6, 18, 26, 0.75) 45%, transparent 100%);
 }
 
+/* Share sits in the poster's bottom-right corner; the text leaves room for it. */
+.card-share {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid rgba(251, 247, 238, 0.6);
+  border-radius: 50%;
+  background: rgba(6, 18, 26, 0.6);
+  color: var(--on-poster);
+  cursor: pointer;
+}
+
+.card-share svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.card .card-info {
+  padding-right: 4.25rem;
+}
+
 .badge {
   display: inline-block;
   margin: 0 0 0.625rem;
@@ -311,44 +342,6 @@ select {
 .details {
   padding: 1.5rem 0.25rem 0;
   scroll-margin-top: calc(var(--header-h) + env(safe-area-inset-top));
-}
-
-.share-row {
-  margin: 0 0 1rem;
-}
-
-.share {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 2.75rem;
-  padding: 0 1.125rem;
-  border: 2px solid var(--line);
-  border-radius: 999px;
-  background: var(--raised);
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.share svg {
-  width: 1.125rem;
-  height: 1.125rem;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.25;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.share-status {
-  margin: 0.5rem 0 0;
-  color: var(--muted);
-  font-size: 0.9375rem;
-  overflow-wrap: anywhere;
-}
-
-.share-status:empty {
-  display: none;
 }
 
 .facts {
@@ -704,6 +697,29 @@ h2 {
   stroke: currentColor;
   stroke-width: 2.5;
   stroke-linecap: round;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--controls-h) + 0.75rem + env(safe-area-inset-bottom));
+  z-index: 4;
+  width: max-content;
+  max-width: min(26rem, calc(100% - 2rem));
+  margin: 0;
+  padding: 0.625rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--text);
+  color: var(--night);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  transform: translateX(-50%);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.3);
+}
+
+.toast[hidden] {
+  display: none;
 }
 
 /* ---- Controls ---- */
