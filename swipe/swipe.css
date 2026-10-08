@@ -313,6 +313,44 @@ select {
   scroll-margin-top: calc(var(--header-h) + env(safe-area-inset-top));
 }
 
+.share-row {
+  margin: 0 0 1rem;
+}
+
+.share {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1.125rem;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--raised);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.share svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.share-status {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  overflow-wrap: anywhere;
+}
+
+.share-status:empty {
+  display: none;
+}
+
 .facts {
   margin: 0 0 0.75rem;
   color: var(--muted);

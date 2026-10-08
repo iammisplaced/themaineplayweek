@@ -31,6 +31,9 @@ const DRAG_START_PX = 8;
 const PLACE_STORAGE_KEY = "playweek-swipe-place";
 const INTRO_STORAGE_KEY = "playweek-swipe-intro-seen";
 const SUBSTACK_URL = "https://themaineplayweek.substack.com";
+// Shared links always point at the live site's film page, which lists every showtime and
+// keeps working after tonight (preview deployments need a Vercel login).
+const LIVE_SITE_URL = "https://showtimes.themaineplayweek.com";
 const INSTAGRAM_URL = "https://www.instagram.com/themaineplayweek/";
 
 const data = { films: new Map(), theatres: new Map(), ticketLinks: new Map(), showings: [] };
@@ -270,6 +273,7 @@ function getLead(entry) {
       : slots.find((slot) => getTheatreDistance(slot.theatreId) === nearestMiles) || slots[0];
   const others = theatreCount - 1;
   return {
+    next,
     line: `${deckDay === "today" ? "Next at" : "Tomorrow at"} ${next.time}, ${data.theatres.get(next.theatreId).name}`,
     secondLine: [
       nearestMiles !== null ? formatMiles(nearestMiles) : "",
@@ -343,6 +347,13 @@ function renderDetails(entry, { footer = true } = {}) {
   const filmPage = `../films/${buildFilmSlug(film.title, film.year)}/`;
   return `
     <section class="details" aria-label="About ${escapeHtml(film.title)}">
+      <div class="share-row">
+        <button type="button" class="share" data-share="${film.id}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" /></svg>
+          Share this film
+        </button>
+        <p class="share-status" role="status"></p>
+      </div>
       ${facts.length ? `<p class="facts">${facts.join(", ")}</p>` : ""}
       ${film.genres.length ? `<p class="genres">${film.genres.map((genre) => `<span>${escapeHtml(genre)}</span>`).join("")}</p>` : ""}
       ${film.synopsis ? `<p class="synopsis">${escapeHtml(film.synopsis)}</p>` : ""}
@@ -608,6 +619,8 @@ app.addEventListener("click", (event) => {
     render();
   } else if (button.dataset.open) {
     openFilm(Number(button.dataset.open));
+  } else if (button.dataset.share) {
+    shareFilm(Number(button.dataset.share), button);
   }
 });
 
@@ -627,14 +640,51 @@ function openFilm(filmId) {
   filmSheetBody.innerHTML = `
     <div class="sheet-card">${renderCard(entry, "is-static")}</div>
     ${renderDetails(entry, { footer: false })}
-    <p class="temp-note">On your list for this visit only. It clears when you reload or leave the page.</p>`;
+    <p class="temp-note">On your list for this visit only. It clears when you reload or leave the page, so share it to keep the link.</p>`;
   filmSheet.showModal();
   filmSheetBody.scrollTop = 0;
 }
 
 filmSheet.addEventListener("click", (event) => {
   if (event.target === filmSheet || event.target.closest("[data-action='close-film']")) filmSheet.close();
+  const shareButton = event.target.closest("[data-share]");
+  if (shareButton) shareFilm(Number(shareButton.dataset.share), shareButton);
 });
+
+// ---- Sharing ----
+
+// Opens the phone's share sheet with the film's page on the live site; where that isn't
+// available (most desktop browsers), copies the link instead.
+async function shareFilm(filmId, button) {
+  const entry = deck.find((candidate) => candidate.film.id === filmId);
+  if (!entry) return;
+  const { film } = entry;
+  const status = button.closest(".share-row")?.querySelector(".share-status");
+  const say = (message) => {
+    if (status) status.textContent = message;
+  };
+  const title = film.year ? `${film.title} (${film.year})` : film.title;
+  const { next } = getLead(entry);
+  const text = `${title} is playing ${deckDay} at ${data.theatres.get(next.theatreId).name}, ${next.time}. Showtimes and tickets on The Maine Playweek:`;
+  const url = `${LIVE_SITE_URL}/films/${buildFilmSlug(film.title, film.year)}/`;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text, url });
+      say("");
+    } catch (error) {
+      // Closing the share sheet isn't an error worth showing.
+      if (error?.name !== "AbortError") say(`Sharing didn't work. Here's the link: ${url}`);
+    }
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(`${text} ${url}`);
+    say("Link copied. Paste it anywhere to share or save it.");
+  } catch {
+    say(`Copy this link to share or save it: ${url}`);
+  }
+}
 
 // ---- Place sheet ----
 
