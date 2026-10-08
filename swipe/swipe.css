@@ -525,6 +525,87 @@ h2 {
   font-size: 0.9375rem;
 }
 
+/* ---- Intro sheet ---- */
+
+.intro h2 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.intro p {
+  margin: 0 0 1rem;
+}
+
+.intro-steps {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.intro-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  font-weight: 700;
+}
+
+.intro-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--night);
+}
+
+.intro-icon.yes {
+  border-color: var(--bulb);
+  background: var(--bulb);
+  color: var(--on-bulb);
+}
+
+.intro-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.intro-icon .fill {
+  fill: currentColor;
+}
+
+/* The list only lives for the visit; say so wherever it shows up. */
+.temp-note {
+  padding: 0.625rem 0.875rem;
+  border-left: 3px solid var(--bulb);
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: var(--raised);
+  color: var(--text);
+  font-size: 0.9375rem;
+}
+
+.end .temp-note {
+  margin: 0 0 0.5rem;
+  max-width: none;
+}
+
+.film-sheet-body .temp-note {
+  margin: 1.5rem 0 0;
+}
+
+.intro .temp-note {
+  background: var(--night);
+}
+
 /* ---- Film sheet ---- */
 
 .film-sheet {

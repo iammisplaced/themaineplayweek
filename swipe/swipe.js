@@ -22,12 +22,14 @@ const placeSheet = document.getElementById("place-sheet");
 const placeStatus = document.getElementById("place-status");
 const townSelect = document.getElementById("town-select");
 const filmSheet = document.getElementById("film-sheet");
+const introSheet = document.getElementById("intro-sheet");
 const filmSheetBody = document.getElementById("film-sheet-body");
 
 const MIN_LEAD_MINUTES = 10;
 const SWIPE_THRESHOLD = 0.25; // share of the card width a drag must travel to count
 const DRAG_START_PX = 8;
 const PLACE_STORAGE_KEY = "playweek-swipe-place";
+const INTRO_STORAGE_KEY = "playweek-swipe-intro-seen";
 const SUBSTACK_URL = "https://themaineplayweek.substack.com";
 const INSTAGRAM_URL = "https://www.instagram.com/themaineplayweek/";
 
@@ -423,7 +425,8 @@ function renderEnd() {
           </li>`;
             })
             .join("")}
-        </ul>`
+        </ul>
+        <p class="temp-note">This list isn't saved. It clears when you reload or leave the page, so screenshot it if you want to keep it.</p>`
     : `<h1>Nothing caught your eye</h1>
         <p>You passed on all ${deck.length} films playing ${dayWord}. Start over, or see the whole week on the full site.</p>`;
   return `
@@ -605,7 +608,7 @@ app.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
-  if (placeSheet.open || filmSheet.open || event.target.closest?.("select, input, textarea")) return;
+  if (placeSheet.open || filmSheet.open || introSheet.open || event.target.closest?.("select, input, textarea")) return;
   if (event.key === "ArrowRight") decide(1);
   else if (event.key === "ArrowLeft") decide(-1);
   else if (event.key === "Backspace") goBack();
@@ -619,7 +622,8 @@ function openFilm(filmId) {
   filmSheet.setAttribute("aria-label", entry.film.title);
   filmSheetBody.innerHTML = `
     <div class="sheet-card">${renderCard(entry, "is-static")}</div>
-    ${renderDetails(entry, { footer: false })}`;
+    ${renderDetails(entry, { footer: false })}
+    <p class="temp-note">On your list for this visit only. It clears when you reload or leave the page.</p>`;
   filmSheet.showModal();
   filmSheetBody.scrollTop = 0;
 }
@@ -673,8 +677,33 @@ townSelect.addEventListener("change", () => {
   placeSheet.close();
 });
 
+// ---- Intro (first visit only) ----
+
+function showIntroOnce() {
+  try {
+    if (localStorage.getItem(INTRO_STORAGE_KEY)) return;
+  } catch {
+    // Storage blocked: show it, it just won't be remembered.
+  }
+  introSheet.showModal();
+}
+
+// Saved as soon as it's dismissed (Start swiping or Escape) rather than on "close", which
+// browsers may deliver late.
+function markIntroSeen() {
+  try {
+    localStorage.setItem(INTRO_STORAGE_KEY, "1");
+  } catch {
+    // Not remembered between visits, which is fine.
+  }
+}
+
+introSheet.querySelector("form").addEventListener("submit", markIntroSeen);
+introSheet.addEventListener("cancel", markIntroSeen);
+
 // ---- Start ----
 
+showIntroOnce();
 setPlace(place);
 loadData()
   .then(() => {

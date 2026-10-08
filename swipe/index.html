@@ -52,6 +52,30 @@
       </form>
     </dialog>
 
+    <dialog id="intro-sheet" class="sheet intro" aria-labelledby="intro-title">
+      <form method="dialog">
+        <h2 id="intro-title">What's playing tonight?</h2>
+        <p>Every film showing in Maine tonight, one card at a time.</p>
+        <ul class="intro-steps">
+          <li>
+            <span class="intro-icon yes" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path class="fill" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.7A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
+            </span>
+            Swipe right if you might see it. It goes on your list.
+          </li>
+          <li>
+            <span class="intro-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg>
+            </span>
+            Swipe left to skip it.
+          </li>
+        </ul>
+        <p>At the end you'll have a short list to choose from. Tap the location button at the top to see what's closest first.</p>
+        <p class="temp-note">Your list is only kept while this page is open. It isn't saved anywhere.</p>
+        <button class="sheet-close" value="start">Start swiping</button>
+      </form>
+    </dialog>
+
     <dialog id="film-sheet" class="film-sheet">
       <button type="button" class="sheet-x" data-action="close-film">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
