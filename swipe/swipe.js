@@ -374,24 +374,23 @@ function renderFooter() {
 
 function renderControls() {
   const atEnd = index >= deck.length;
-  return `
-    <nav class="controls" aria-label="Cards">
-      <button type="button" class="round small" data-action="back" ${index === 0 ? "disabled" : ""}>
+  const undo = `<button type="button" class="round small" data-action="back" ${index === 0 ? "disabled" : ""}>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5" /><path d="M4 9h10a5 5 0 0 1 0 10h-3" /></svg>
         <span class="visually-hidden">Undo last choice</span>
-      </button>
-      ${
-        atEnd
-          ? ""
-          : `<button type="button" class="round" data-action="no">
+      </button>`;
+  // Not interested, undo, interested; only undo is left at the end of the deck.
+  if (atEnd) return `<nav class="controls" aria-label="Cards">${undo}</nav>`;
+  return `
+    <nav class="controls" aria-label="Cards">
+      <button type="button" class="round" data-action="no">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
         <span class="visually-hidden">Not interested</span>
       </button>
+      ${undo}
       <button type="button" class="round primary" data-action="yes">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.7A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
         <span class="visually-hidden">Interested</span>
-      </button>`
-      }
+      </button>
     </nav>`;
 }
 
