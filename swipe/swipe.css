@@ -172,14 +172,54 @@ select {
   filter: none;
 }
 
-.card.is-returning {
-  animation: card-return 260ms ease-out;
+.card.is-returning-left {
+  animation: return-from-left 260ms ease-out;
 }
 
-@keyframes card-return {
+.card.is-returning-right {
+  animation: return-from-right 260ms ease-out;
+}
+
+@keyframes return-from-left {
   from {
     transform: translateX(-120%) rotate(-18deg);
   }
+}
+
+@keyframes return-from-right {
+  from {
+    transform: translateX(120%) rotate(18deg);
+  }
+}
+
+/* Dating-app stamps, faded in by the drag distance (--yes / --no, 0 to 1). */
+.stamp {
+  position: absolute;
+  top: 1.5rem;
+  z-index: 1;
+  padding: 0.25rem 0.75rem;
+  border: 3px solid currentColor;
+  border-radius: 0.5rem;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  background: rgba(6, 18, 26, 0.55);
+  pointer-events: none;
+}
+
+.stamp-yes {
+  left: 1.25rem;
+  color: var(--bulb);
+  opacity: var(--yes, 0);
+  transform: rotate(-12deg);
+}
+
+.stamp-no {
+  right: 1.25rem;
+  color: #fbf7ee;
+  opacity: var(--no, 0);
+  transform: rotate(12deg);
 }
 
 .card-poster {
@@ -246,6 +286,13 @@ select {
   text-align: center;
   color: var(--muted);
   font-size: 0.9375rem;
+}
+
+.scroll-hint .count {
+  display: block;
+  color: var(--text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .scroll-hint::after {
@@ -426,6 +473,120 @@ h2 {
   max-width: 34ch;
 }
 
+/* ---- Your list ---- */
+
+.my-list {
+  width: 100%;
+  margin: 1.25rem 0 0.5rem;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.625rem;
+}
+
+.my-list button {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 2px solid var(--line);
+  border-radius: 0.875rem;
+  background: var(--raised);
+  text-align: left;
+  cursor: pointer;
+}
+
+.my-list img,
+.my-list .thumb {
+  flex: none;
+  width: 3.5rem;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+
+.list-text {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.list-title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.list-when {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+/* ---- Film sheet ---- */
+
+.film-sheet {
+  width: 100%;
+  max-width: 30rem;
+  height: calc(100dvh - 1.5rem - env(safe-area-inset-top));
+  max-height: none;
+  margin: auto auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: 1.25rem 1.25rem 0 0;
+  background: var(--night);
+  color: var(--text);
+  overflow: hidden;
+}
+
+.film-sheet::backdrop {
+  background: rgba(6, 18, 26, 0.7);
+}
+
+.film-sheet-body {
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.75rem 0.75rem calc(1.5rem + env(safe-area-inset-bottom));
+}
+
+.sheet-card {
+  position: relative;
+  height: min(70dvh, 38rem);
+}
+
+.sheet-card .card {
+  cursor: default;
+  touch-action: auto;
+}
+
+.sheet-x {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(6, 18, 26, 0.7);
+  color: #fbf7ee;
+  cursor: pointer;
+}
+
+.sheet-x svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
 /* ---- Controls ---- */
 
 .controls {
@@ -453,12 +614,29 @@ h2 {
   cursor: pointer;
 }
 
+.round.small {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.round.small svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
 .round.primary {
-  width: 4rem;
-  height: 4rem;
   border-color: var(--bulb);
   background: var(--bulb);
   color: var(--on-bulb);
+}
+
+.round:not(.small) {
+  width: 4rem;
+  height: 4rem;
+}
+
+.round .fill {
+  fill: currentColor;
 }
 
 .round:disabled {
@@ -476,14 +654,6 @@ h2 {
   stroke-linejoin: round;
 }
 
-.count {
-  min-width: 5rem;
-  margin: 0;
-  text-align: center;
-  color: var(--muted);
-  font-size: 0.9375rem;
-  font-variant-numeric: tabular-nums;
-}
 
 /* ---- Place sheet ---- */
 
@@ -571,7 +741,8 @@ h2 {
     transition: none !important;
   }
 
-  .card.is-returning {
+  .card.is-returning-left,
+  .card.is-returning-right {
     animation: none;
   }
 }

@@ -1,6 +1,7 @@
 // Experimental mobile-first "playing tonight" deck. Reads the live Supabase data (read-only)
-// and shows one big card per film playing today; swipe either way (or use the buttons) to
-// move through the deck, scroll down for details and showtimes.
+// and shows one big card per film playing today. Swipe right (interested) or left (not
+// interested), scroll down for details and showtimes, and get your list at the end. The list
+// only lasts for the visit.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   SUPABASE_URL,
@@ -20,6 +21,8 @@ const placeLabel = document.getElementById("place-label");
 const placeSheet = document.getElementById("place-sheet");
 const placeStatus = document.getElementById("place-status");
 const townSelect = document.getElementById("town-select");
+const filmSheet = document.getElementById("film-sheet");
+const filmSheetBody = document.getElementById("film-sheet-body");
 
 const MIN_LEAD_MINUTES = 10;
 const SWIPE_THRESHOLD = 0.25; // share of the card width a drag must travel to count
@@ -36,6 +39,8 @@ let place = readSavedPlace();
 let deck = [];
 let deckDay = "today";
 let index = 0;
+// Film id -> "yes" (interested) or "no", in the order they were swiped.
+const choices = new Map();
 
 // ---- Data ----
 
@@ -180,6 +185,7 @@ function buildDeck() {
     })
     .sort((a, b) => b.score - a.score);
   index = 0;
+  choices.clear();
 }
 
 function groupBy(items, keyOf) {
@@ -249,35 +255,54 @@ function formatMiles(miles) {
   return miles < 1 ? "Under a mile away" : `${Math.round(miles)} mi away`;
 }
 
-function renderCard(entry, role) {
-  const { film, slots, nearestMiles } = entry;
+// Where and when to lead with: the nearest theatre's next showing when a place is set,
+// otherwise the earliest showing anywhere.
+function getLead(entry) {
+  const { slots, nearestMiles } = entry;
   const theatreCount = new Set(slots.map((slot) => slot.theatreId)).size;
-  // With a place set, lead with the nearest theatre's next showing; otherwise the earliest.
   const next =
     nearestMiles === null
       ? slots[0]
       : slots.find((slot) => getTheatreDistance(slot.theatreId) === nearestMiles) || slots[0];
-  const when = deckDay === "today" ? "Next at" : "Tomorrow at";
-  const theatreName = data.theatres.get(next.theatreId).name;
   const others = theatreCount - 1;
-  const secondLine = [
-    nearestMiles !== null ? formatMiles(nearestMiles) : "",
-    others > 0 ? `${nearestMiles !== null ? "plus" : "Also at"} ${others} more ${others === 1 ? "theatre" : "theatres"}` : "",
-  ]
-    .filter(Boolean)
-    .join(", ");
-  const titleTag = role === "is-top" ? "h1" : "p";
+  return {
+    line: `${deckDay === "today" ? "Next at" : "Tomorrow at"} ${next.time}, ${data.theatres.get(next.theatreId).name}`,
+    secondLine: [
+      nearestMiles !== null ? formatMiles(nearestMiles) : "",
+      others > 0 ? `${nearestMiles !== null ? "plus" : "Also at"} ${others} more ${others === 1 ? "theatre" : "theatres"}` : "",
+    ]
+      .filter(Boolean)
+      .join(", "),
+  };
+}
+
+// role: "is-top" (the swipeable card), "is-next" (the one underneath) or "is-static" (in the
+// film sheet opened from your list).
+function renderCard(entry, role) {
+  const { film } = entry;
+  const { line, secondLine } = getLead(entry);
+  const titleTag = { "is-top": "h1", "is-static": "h2" }[role] || "p";
+  const attributes = {
+    "is-top": `tabindex="0" aria-roledescription="card" aria-label="${escapeHtml(film.title)}"`,
+    "is-next": 'aria-hidden="true"',
+  }[role] || "";
   return `
-    <article class="card ${role}" ${role === "is-top" ? `tabindex="0" aria-roledescription="card" aria-label="${escapeHtml(film.title)}"` : 'aria-hidden="true"'}>
+    <article class="card ${role}" ${attributes}>
       ${
         film.cardPosterUrl
           ? `<img class="card-poster" src="${escapeHtml(film.cardPosterUrl)}" alt="" draggable="false" />`
           : `<div class="card-poster no-poster" aria-hidden="true"></div>`
       }
+      ${
+        role === "is-top"
+          ? `<span class="stamp stamp-yes" aria-hidden="true">Interested</span>
+      <span class="stamp stamp-no" aria-hidden="true">Not for me</span>`
+          : ""
+      }
       <div class="card-info">
         ${film.staffFavorite ? `<p class="badge">Staff favourite</p>` : ""}
         <${titleTag} class="card-title">${escapeHtml(film.title)}${film.year ? ` <span class="card-year">${film.year}</span>` : ""}</${titleTag}>
-        <p class="card-meta">${when} ${escapeHtml(next.time)}, ${escapeHtml(theatreName)}</p>
+        <p class="card-meta">${escapeHtml(line)}</p>
         ${secondLine ? `<p class="card-meta card-meta-soft">${escapeHtml(secondLine)}</p>` : ""}
       </div>
     </article>`;
@@ -304,7 +329,7 @@ function renderShowtimes(entry) {
     .join("");
 }
 
-function renderDetails(entry) {
+function renderDetails(entry, { footer = true } = {}) {
   const { film } = entry;
   const facts = [
     film.director ? `Directed by ${escapeHtml(film.director)}` : "",
@@ -334,7 +359,7 @@ function renderDetails(entry) {
       <h2>${deckDay === "today" ? "Showtimes today" : "Showtimes tomorrow"}</h2>
       ${renderShowtimes(entry)}
       <a class="film-page" href="${escapeHtml(filmPage)}">All showtimes for ${escapeHtml(film.title)}</a>
-      ${renderFooter()}
+      ${footer ? renderFooter() : ""}
     </section>`;
 }
 
@@ -351,16 +376,65 @@ function renderControls() {
   const atEnd = index >= deck.length;
   return `
     <nav class="controls" aria-label="Cards">
-      <button type="button" class="round" data-action="back" ${index === 0 ? "disabled" : ""}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
-        <span class="visually-hidden">Previous film</span>
+      <button type="button" class="round small" data-action="back" ${index === 0 ? "disabled" : ""}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5" /><path d="M4 9h10a5 5 0 0 1 0 10h-3" /></svg>
+        <span class="visually-hidden">Undo last choice</span>
       </button>
-      <p class="count">${atEnd ? `${deck.length} of ${deck.length}` : `${index + 1} of ${deck.length}`}</p>
-      <button type="button" class="round primary" data-action="next" ${atEnd ? "disabled" : ""}>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
-        <span class="visually-hidden">Next film</span>
+      ${
+        atEnd
+          ? ""
+          : `<button type="button" class="round" data-action="no">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        <span class="visually-hidden">Not interested</span>
       </button>
+      <button type="button" class="round primary" data-action="yes">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="fill" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.7A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
+        <span class="visually-hidden">Interested</span>
+      </button>`
+      }
     </nav>`;
+}
+
+function getList() {
+  return deck.filter((entry) => choices.get(entry.film.id) === "yes");
+}
+
+function renderEnd() {
+  const list = getList();
+  const dayWord = deckDay === "today" ? "today" : "tomorrow";
+  const intro = list.length
+    ? `<h1>Your list for ${dayWord}</h1>
+        <p>You're interested in ${list.length} of the ${deck.length} films playing ${dayWord}. Tap one for showtimes and tickets.</p>
+        <ul class="my-list">
+          ${list
+            .map((entry) => {
+              const { line } = getLead(entry);
+              return `<li>
+            <button type="button" data-open="${entry.film.id}">
+              ${
+                entry.film.posterUrl
+                  ? `<img src="${escapeHtml(entry.film.posterUrl)}" alt="" width="342" height="513" />`
+                  : `<span class="no-poster thumb" aria-hidden="true"></span>`
+              }
+              <span class="list-text">
+                <span class="list-title">${escapeHtml(entry.film.title)}</span>
+                <span class="list-when">${escapeHtml(line)}</span>
+              </span>
+            </button>
+          </li>`;
+            })
+            .join("")}
+        </ul>`
+    : `<h1>Nothing caught your eye</h1>
+        <p>You passed on all ${deck.length} films playing ${dayWord}. Start over, or see the whole week on the full site.</p>`;
+  return `
+      <section class="end">
+        ${intro}
+        <button type="button" class="button" data-action="restart">Start over</button>
+        <a class="text-link" href="../">See all showtimes</a>
+        ${renderFooter()}
+      </section>
+      ${renderControls()}`;
 }
 
 function render() {
@@ -375,15 +449,7 @@ function render() {
     return;
   }
   if (index >= deck.length) {
-    app.innerHTML = `
-      <section class="end">
-        <h1>That's everything ${deckDay === "today" ? "playing today" : "playing tomorrow"}</h1>
-        <p>You've seen all ${deck.length} films. Go back through them, or see the whole week on the full site.</p>
-        <button type="button" class="button" data-action="restart">Start from the top</button>
-        <a class="text-link" href="../">See all showtimes</a>
-        ${renderFooter()}
-      </section>
-      ${renderControls()}`;
+    app.innerHTML = renderEnd();
     return;
   }
   const entry = deck[index];
@@ -394,16 +460,26 @@ function render() {
       ${nextEntry ? renderCard(nextEntry, "is-next") : ""}
       ${renderCard(entry, "is-top")}
     </div>
-    <p class="scroll-hint">Scroll for showtimes and tickets</p>
+    <p class="scroll-hint">
+      <span class="count">${index + 1} of ${deck.length}${listCountText()}</span>
+      Scroll for showtimes and tickets
+    </p>
     ${renderDetails(entry)}
     ${renderControls()}`;
   attachSwipe(app.querySelector(".card.is-top"));
 }
 
+function listCountText() {
+  const count = getList().length;
+  return count ? `, ${count} on your list` : "";
+}
+
 // ---- Moving through the deck ----
 
-function goNext(direction = 1) {
+// direction 1 = swiped right (interested), -1 = swiped left (not interested).
+function decide(direction) {
   if (index >= deck.length) return;
+  choices.set(deck[index].film.id, direction > 0 ? "yes" : "no");
   const card = app.querySelector(".card.is-top");
   if (!card || reduceMotion.matches) {
     index += 1;
@@ -413,15 +489,20 @@ function goNext(direction = 1) {
   flyOut(card, direction);
 }
 
+// Undo: bring the last card back from the side it left on and forget that choice.
 function goBack() {
   if (index === 0) return;
   index -= 1;
+  const filmId = deck[index].film.id;
+  const side = choices.get(filmId) === "yes" ? "right" : "left";
+  choices.delete(filmId);
   render();
   const card = app.querySelector(".card.is-top");
-  if (card && !reduceMotion.matches) card.classList.add("is-returning");
+  if (card && !reduceMotion.matches) card.classList.add(`is-returning-${side}`);
 }
 
 function flyOut(card, direction) {
+  card.style.setProperty(direction > 0 ? "--yes" : "--no", "1");
   const distance = window.innerWidth * 1.2 * direction;
   card.style.transition = "transform 260ms ease-in";
   card.style.transform = `translateX(${distance}px) rotate(${direction * 18}deg)`;
@@ -451,6 +532,8 @@ function attachSwipe(card) {
   const reset = () => {
     card.style.transition = "transform 200ms ease-out";
     card.style.transform = "";
+    card.style.removeProperty("--yes");
+    card.style.removeProperty("--no");
     if (nextCard) nextCard.style.transform = "";
     dragging = false;
     pointerId = null;
@@ -473,13 +556,17 @@ function attachSwipe(card) {
     if (!dragging) {
       if (Math.abs(dx) < DRAG_START_PX || Math.abs(dx) < Math.abs(dy)) return;
       dragging = true;
-      card.setPointerCapture(pointerId);
+      try {
+        card.setPointerCapture(pointerId);
+      } catch {
+        // Capture only keeps the drag going if the finger leaves the card; it's fine without.
+      }
     }
     card.style.transform = `translateX(${dx}px) rotate(${dx * 0.05}deg)`;
-    if (nextCard) {
-      const progress = Math.min(1, Math.abs(dx) / (card.offsetWidth * SWIPE_THRESHOLD));
-      nextCard.style.transform = `scale(${0.94 + 0.06 * progress})`;
-    }
+    const progress = Math.min(1, Math.abs(dx) / (card.offsetWidth * SWIPE_THRESHOLD));
+    card.style.setProperty("--yes", dx > 0 ? progress : 0);
+    card.style.setProperty("--no", dx < 0 ? progress : 0);
+    if (nextCard) nextCard.style.transform = `scale(${0.94 + 0.06 * progress})`;
   });
 
   card.addEventListener("pointerup", (event) => {
@@ -493,7 +580,7 @@ function attachSwipe(card) {
     }
     if (Math.abs(dx) > card.offsetWidth * SWIPE_THRESHOLD) {
       pointerId = null;
-      flyOut(card, Math.sign(dx));
+      decide(Math.sign(dx));
     } else {
       reset();
     }
@@ -505,18 +592,41 @@ function attachSwipe(card) {
 app.addEventListener("click", (event) => {
   const button = event.target.closest("button");
   if (!button || button.disabled) return;
-  if (button.dataset.action === "next") goNext(1);
-  else if (button.dataset.action === "back") goBack();
-  else if (button.dataset.action === "restart") {
+  const { action } = button.dataset;
+  if (action === "yes") decide(1);
+  else if (action === "no") decide(-1);
+  else if (action === "back") goBack();
+  else if (action === "restart") {
     index = 0;
+    choices.clear();
     render();
+  } else if (button.dataset.open) {
+    openFilm(Number(button.dataset.open));
   }
 });
 
 document.addEventListener("keydown", (event) => {
-  if (placeSheet.open || event.target.closest?.("select, input, textarea")) return;
-  if (event.key === "ArrowRight") goNext(1);
-  else if (event.key === "ArrowLeft") goBack();
+  if (placeSheet.open || filmSheet.open || event.target.closest?.("select, input, textarea")) return;
+  if (event.key === "ArrowRight") decide(1);
+  else if (event.key === "ArrowLeft") decide(-1);
+  else if (event.key === "Backspace") goBack();
+});
+
+// ---- Film sheet (opened from your list) ----
+
+function openFilm(filmId) {
+  const entry = deck.find((candidate) => candidate.film.id === filmId);
+  if (!entry) return;
+  filmSheet.setAttribute("aria-label", entry.film.title);
+  filmSheetBody.innerHTML = `
+    <div class="sheet-card">${renderCard(entry, "is-static")}</div>
+    ${renderDetails(entry, { footer: false })}`;
+  filmSheet.showModal();
+  filmSheetBody.scrollTop = 0;
+}
+
+filmSheet.addEventListener("click", (event) => {
+  if (event.target === filmSheet || event.target.closest("[data-action='close-film']")) filmSheet.close();
 });
 
 // ---- Place sheet ----
