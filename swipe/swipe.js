@@ -41,6 +41,8 @@ let place = readSavedPlace();
 let deck = [];
 let deckDay = "today";
 let index = 0;
+// True while a card is flying off, so a second tap can't overwrite the choice just made.
+let animating = false;
 // Film id -> "yes" (interested) or "no", in the order they were swiped.
 const choices = new Map();
 
@@ -480,7 +482,7 @@ function listCountText() {
 
 // direction 1 = swiped right (interested), -1 = swiped left (not interested).
 function decide(direction) {
-  if (index >= deck.length) return;
+  if (animating || index >= deck.length) return;
   choices.set(deck[index].film.id, direction > 0 ? "yes" : "no");
   const card = app.querySelector(".card.is-top");
   if (!card || reduceMotion.matches) {
@@ -493,7 +495,7 @@ function decide(direction) {
 
 // Undo: bring the last card back from the side it left on and forget that choice.
 function goBack() {
-  if (index === 0) return;
+  if (animating || index === 0) return;
   index -= 1;
   const filmId = deck[index].film.id;
   const side = choices.get(filmId) === "yes" ? "right" : "left";
@@ -509,10 +511,12 @@ function flyOut(card, direction) {
   card.style.transition = "transform 260ms ease-in";
   card.style.transform = `translateX(${distance}px) rotate(${direction * 18}deg)`;
   app.querySelector(".card.is-next")?.classList.add("is-rising");
+  animating = true;
   let done = false;
   const finish = () => {
     if (done) return;
     done = true;
+    animating = false;
     index += 1;
     render();
   };
