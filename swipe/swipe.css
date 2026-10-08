@@ -295,6 +295,12 @@ select {
   line-height: 0.95;
   text-wrap: balance;
   overflow-wrap: anywhere;
+  /* Long titles stop at three lines with an ellipsis; the full title is still read out. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
 }
 
 .card-year {
