@@ -196,7 +196,7 @@ select {
 .stamp {
   position: absolute;
   top: 1.5rem;
-  z-index: 1;
+  z-index: 2;
   padding: 0.25rem 0.75rem;
   border: 3px solid currentColor;
   border-radius: 0.5rem;
@@ -276,15 +276,17 @@ select {
   padding-right: 4.25rem;
 }
 
-.badge {
-  display: inline-block;
-  margin: 0 0 0.625rem;
-  padding: 0.125rem 0.625rem;
-  border-radius: 999px;
-  background: var(--bulb);
-  color: var(--on-bulb);
-  font-size: 0.875rem;
-  font-weight: 700;
+/* The main site's staff-pick stamp, in the poster's top-right corner. */
+.card-stamp {
+  position: absolute;
+  top: 0.875rem;
+  right: 0.875rem;
+  z-index: 1;
+  width: clamp(4.5rem, 22vw, 5.75rem);
+  height: auto;
+  transform: rotate(8deg);
+  filter: drop-shadow(0 0.125rem 0.375rem rgba(0, 0, 0, 0.4));
+  pointer-events: none;
 }
 
 .card-title {
@@ -673,6 +675,13 @@ h2 {
 .sheet-card {
   position: relative;
   height: min(70dvh, 38rem);
+}
+
+/* The sheet's close button has the top-right corner, so the stamp moves left. */
+.sheet-card .card-stamp {
+  right: auto;
+  left: 0.875rem;
+  transform: rotate(-8deg);
 }
 
 .sheet-card .card {

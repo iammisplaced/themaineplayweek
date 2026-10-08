@@ -316,8 +316,14 @@ function renderCard(entry, role) {
         <span class="visually-hidden">Share ${escapeHtml(film.title)}</span>
       </button>`
       }
+      ${
+        film.staffFavorite
+          ? `<img class="card-stamp" src="../assets/images/playweek%20recommends.png" alt="Playweek recommends${
+              film.staffFavoriteBy ? ` (picked by ${escapeHtml(film.staffFavoriteBy)})` : ""
+            }" width="2000" height="2000" draggable="false" />`
+          : ""
+      }
       <div class="card-info">
-        ${film.staffFavorite ? `<p class="badge">Staff favourite</p>` : ""}
         <${titleTag} class="card-title">${escapeHtml(film.title)}${film.year ? ` <span class="card-year">${film.year}</span>` : ""}</${titleTag}>
         <p class="card-meta">${escapeHtml(line)}</p>
         ${secondLine ? `<p class="card-meta card-meta-soft">${escapeHtml(secondLine)}</p>` : ""}
