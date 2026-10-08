@@ -448,7 +448,8 @@ function renderEnd() {
             .join("")}
         </ul>
         <p class="temp-note">This list isn't saved. It clears when you reload or leave the page, so screenshot it if you want to keep it.</p>`
-    : `<h1>Nothing caught your eye</h1>
+    : `<h1>Nothing caught your eye?</h1>
+        <p class="picky">Someone's picky…</p>
         <p>You passed on all ${deck.length} films playing ${dayWord}. Start over, or see the whole week on the full site.</p>`;
   return `
       <section class="end">

@@ -512,6 +512,10 @@ h2 {
   max-width: 34ch;
 }
 
+.end .picky {
+  margin-bottom: 0.5rem;
+}
+
 /* ---- Your list ---- */
 
 .my-list {
