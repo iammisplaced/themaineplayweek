@@ -546,7 +546,7 @@ function renderSeen() {
   show(
     questionShell({
       title: "Have you seen it?",
-      hint: `${seenIndex + 1} of ${seenCards.length}`,
+      hint: `Taste test · ${seenIndex + 1} of ${seenCards.length}`,
       body: `
         <figure class="seen-card">
           <img src="${escapeHtml(film.posterUrl)}" alt="" width="342" height="513" />
