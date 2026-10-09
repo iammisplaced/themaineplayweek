@@ -432,6 +432,42 @@ button.inline {
   border-color: var(--bulb);
 }
 
+/* Shown over the first "Have you seen it?" card so the posters don't read as what's playing. */
+.explainer {
+  width: calc(100% - 2rem);
+  max-width: 24rem;
+  padding: 1.5rem 1.25rem 1.25rem;
+  border: 2px solid var(--line);
+  border-radius: 1.25rem;
+  background: var(--raised);
+  color: var(--text);
+}
+
+.explainer::backdrop {
+  background: rgba(6, 18, 26, 0.7);
+}
+
+.explainer h2 {
+  margin: 0 0 0.75rem;
+  font-family: var(--display);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.explainer p {
+  margin: 0 0 1rem;
+}
+
+.explainer button {
+  width: 100%;
+  min-height: 3.25rem;
+  margin-top: 0.25rem;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 /* ---- Result: the marquee ---- */
 
 .marquee {

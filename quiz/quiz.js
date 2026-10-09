@@ -18,6 +18,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const screen = document.getElementById("screen");
 const progress = document.getElementById("progress");
 const topBar = document.querySelector(".top");
+const seenExplainer = document.getElementById("seen-explainer");
 
 const SEEN_CARD_COUNT = 5;
 const RECOGNIZABLE_VOTE_COUNT = 2000;
@@ -63,6 +64,7 @@ let steps = FULL_STEPS;
 let stepIndex = -1;
 let seenCards = [];
 let seenIndex = 0;
+let seenExplained = false;
 let ranked = [];
 let pickIndex = 0;
 
@@ -559,6 +561,11 @@ function renderSeen() {
     }),
     { focus: seenIndex === 0 }
   );
+  // Testers took these posters for films playing now, so explain them once per quiz.
+  if (!seenExplained) {
+    seenExplained = true;
+    seenExplainer.showModal();
+  }
 }
 
 function renderEra() {
@@ -740,6 +747,7 @@ screen.addEventListener("click", (event) => {
     resetAnswers();
     seenCards = [];
     seenIndex = 0;
+    seenExplained = false;
     goTo(0);
   } else if (action === "reload") {
     window.location.reload();
