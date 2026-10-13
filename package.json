@@ -12,7 +12,8 @@
     "scrape:flagship": "node scripts/scrape-flagship.mjs",
     "scrape:smittys": "node scripts/scrape-smittys.mjs",
     "scrape:regal": "node scripts/scrape-regal.mjs",
-    "scrape:apple": "node scripts/scrape-apple-cinema.mjs"
+    "scrape:apple": "node scripts/scrape-apple-cinema.mjs",
+    "scrape:cinemaplus": "node scripts/scrape-cinemaplus.mjs"
   },
   "dependencies": {
     "puppeteer": "^24.43.1",
