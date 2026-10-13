@@ -25,7 +25,7 @@ npm run scrape -- --days=14          # today plus the next 13 days
 | Smitty's Entertainment | `npm run scrape:smittys` | Sanford, Topsham, Windham | `scraped-{city}-smittys-showtimes.csv` |
 | Regal Cinemas | `npm run scrape:regal` | Augusta | `scraped-{city}-regal-showtimes.csv` |
 | Apple Cinemas | `npm run scrape:apple` | Saco, Westbrook | `scraped-{city}-apple-showtimes.csv` |
-| CinemaPlus sites | `npm run scrape:cinemaplus` | Bangor (Bangor Mall Cinemas) | `scraped-{city}-cinemaplus-showtimes.csv` |
+| CinemaPlus sites | `npm run scrape:cinemaplus` | Bangor (Bangor Mall Cinemas), South Portland (Entertainment Luxury Cinemas) | `scraped-{city}-cinemaplus-showtimes.csv` |
 
 These write one CSV per theatre instead of the combined file. They all work the same way. Run with no options and they ask for a city (or `all`) and an end date, or pass options to skip the questions:
 
@@ -45,8 +45,8 @@ npm run scrape:regal -- --city=all --days=3
 ## Output
 
 Every scraper writes the same columns as the admin CSV template (see README):
-- `theatre_name` - `Flagship Cinemas`, `Smitty's Entertainment`, `Regal Cinemas` or `Apple Cinemas`, or the theatre's own name for CinemaPlus sites (`Bangor Mall Cinemas`); `theatre_city` tells theatres apart
-- `film_title` - movie title as listed by the theatre (Apple titles have extra spaces and a trailing `(2026)` removed; CinemaPlus titles are all caps on the site and are converted to title case)
+- `theatre_name` - `Flagship Cinemas`, `Smitty's Entertainment`, `Regal Cinemas` or `Apple Cinemas`, or the theatre's own name for CinemaPlus sites (`Bangor Mall Cinemas`, `Entertainment Luxury Cinemas`); `theatre_city` tells theatres apart
+- `film_title` - movie title as listed by the theatre (Apple titles have extra spaces and a trailing `(2026)` removed; Bangor's titles are all caps on the site and are converted to title case)
 - `show_date` - `YYYY-MM-DD`
 - `show_times` - pipe-separated, one row per film per date, duplicates removed (e.g. `12:30 PM|3:20 PM|6:00 PM`)
 - `premium_show_times` - premium-format showings: 3D, FPX and 4K Laser at Flagship; 3D, IMAX, RPX, 4DX and ScreenX at Regal; 3D, IMAX, ACX and ScreenX at Apple; 3D and IMAX at CinemaPlus. Smitty's doesn't mark formats.
@@ -76,11 +76,11 @@ All requests are spaced 400 ms apart, and blocked or failed requests (403, 429, 
 
 To add an Apple theatre, add its city and location ID (the last part of its URL on https://www.applecinemas.com/locations) to `THEATRES` in `scrape-apple-cinema.mjs`.
 
-**CinemaPlus** (no browser). Bangor Mall Cinemas (yourneighborhoodtheatre.com) runs on CinemaPlus, which renders each day's showtimes into the theatre page's HTML. The scraper:
-1. Downloads `{theatre URL}?date={today}`. Its date picker links to every date that has showings (`?date=YYYY-MM-DD`), which gives the dates to fetch; dates with nothing posted are skipped.
-2. Downloads the page for each of those dates in the range and reads each film card: the title from its `<h3>`, and the times (`3:00p`) from the `cin-showtimes-button` links under each heading (`Reserved Seating`, `3D • Reserved Seating`).
-3. Lists 3D showings as their own film (`AVENGERS DOOMSDAY 3D`). The scraper strips the format from the title and files those times under the regular film (`Avengers: Doomsday`) in `premium_show_times`, with a `3D` note. A 3D or IMAX heading marks a time as premium too (`PREMIUM_FORMATS`).
-4. Converts the all-caps titles to title case. The admin import matches films ignoring case and punctuation, so `Spider Man Brand New Day` still matches `Spider-Man: Brand New Day`. A title the theatre words differently (`Social Reckoning` vs `The Social Reckoning`) creates a new film on import.
+**CinemaPlus** (no browser). Bangor Mall Cinemas (yourneighborhoodtheatre.com) and Entertainment Luxury Cinemas in South Portland (entertainmentcinemas.com) run on CinemaPlus, which renders each day's showtimes into the theatre page's HTML. The scraper:
+1. Downloads `{theatre URL}?date={today}`. Its date calendar has an entry (`id="js-YYYY-MM-DD"`) for every date with showings, which gives the dates to fetch. For any other date the site quietly shows today's showtimes, so each page's selected date is checked and a mismatch is skipped with a warning.
+2. Downloads the page for each of those dates in the range and reads each film card: the title from its `<h3>`, and the times (`3:00p`) from the `cin-showtimes-button` links. There are two page layouts. In Bangor's, each group of times comes after a heading (`Reserved Seating`, `3D • Reserved Seating`); in South Portland's, the label follows the group (`Open Caption, Reserved Seating`).
+3. Bangor lists 3D showings as their own film (`AVENGERS DOOMSDAY 3D`). The scraper strips the format from the title and files those times under the regular film (`Avengers: Doomsday`) in `premium_show_times`, with a `3D` note. A 3D or IMAX heading marks a time as premium too (`PREMIUM_FORMATS`).
+4. Converts all-caps titles (Bangor's) to title case. The admin import matches films ignoring case and punctuation, so `Spider Man Brand New Day` still matches `Spider-Man: Brand New Day`. A title the theatre words differently (`Social Reckoning` vs `The Social Reckoning`) creates a new film on import.
 
 To add another CinemaPlus theatre, add its city, name (as saved in the admin panel) and showtimes page URL to `THEATRES` in `scrape-cinemaplus.mjs`.
 

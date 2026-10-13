@@ -18,7 +18,7 @@ const SCRAPERS = [
   { name: "Smitty's Entertainment", file: 'scrape-smittys.mjs' },
   { name: 'Regal', file: 'scrape-regal.mjs' },
   { name: 'Apple Cinemas', file: 'scrape-apple-cinema.mjs' },
-  { name: 'CinemaPlus (Bangor Mall Cinemas)', file: 'scrape-cinemaplus.mjs' },
+  { name: 'CinemaPlus (Bangor, South Portland)', file: 'scrape-cinemaplus.mjs' },
 ];
 
 function runScraper(file, args, outputDir) {

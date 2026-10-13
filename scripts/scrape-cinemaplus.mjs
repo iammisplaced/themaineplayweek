@@ -1,13 +1,13 @@
-// Scrapes showtimes from CinemaPlus theatre sites (yourneighborhoodtheatre.com) into admin
-// import CSVs, one per theatre.
+// Scrapes showtimes from CinemaPlus theatre sites (yourneighborhoodtheatre.com,
+// entertainmentcinemas.com) into admin import CSVs, one per theatre.
 //
 // CinemaPlus renders each day's showtimes into the theatre page's HTML (?date=YYYY-MM-DD), so no
-// browser is needed. Each page lists every date that has showings, which tells us which days to
-// fetch. 3D showings are listed as their own film ("AVENGERS DOOMSDAY 3D"); they're merged into
-// the regular film and go to premium_show_times with a note. Titles are all caps on the site, so
-// they're converted to title case.
+// browser is needed. Each page's date calendar lists every date that has showings, which tells us
+// which days to fetch. 3D showings may be listed as their own film ("AVENGERS DOOMSDAY 3D"); they're
+// merged into the regular film and go to premium_show_times with a note. All-caps titles (Bangor)
+// are converted to title case.
 //
-// Usage: node scripts/scrape-cinemaplus.mjs [--city=Bangor|all] [--end=YYYY-MM-DD | --days=7]
+// Usage: node scripts/scrape-cinemaplus.mjs [--city=Bangor|"South Portland"|all] [--end=YYYY-MM-DD | --days=7]
 
 import { compareTimes } from '../js/shared.js';
 import {
@@ -23,6 +23,7 @@ import {
 // To add a theatre, add its city, name (as saved in the admin panel) and showtimes page URL.
 const THEATRES = {
   Bangor: { name: 'Bangor Mall Cinemas', url: 'https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10' },
+  'South Portland': { name: 'Entertainment Luxury Cinemas', url: 'https://www.entertainmentcinemas.com/the-shops-at-clarks-pond' },
 };
 const CITIES = Object.keys(THEATRES);
 const TIME_ZONE = 'America/New_York';
@@ -81,32 +82,58 @@ function parseTime(text) {
   return match ? `${Number(match[1])}:${match[2]} ${match[3].toUpperCase()}M` : null;
 }
 
+// The date calendar has an entry (id="js-YYYY-MM-DD") for every date with showings.
 function datesWithShowings(html) {
-  return [...new Set([...html.matchAll(/[?&]date=(\d{4}-\d{2}-\d{2})/g)].map(match => match[1]))].sort();
+  return [...new Set([...html.matchAll(/id="js-(\d{4}-\d{2}-\d{2})"/g)].map(match => match[1]))].sort();
 }
 
-/** Film cards on one day's page -> [{ rawTitle, format, time }]. */
+// The date the page is showing. For a date with no showings the site quietly shows today instead.
+function selectedDate(html) {
+  return /getElementById\(['"]js-(\d{4}-\d{2}-\d{2})['"]\)/.exec(html)?.[1];
+}
+
+// CinemaPlus has two page layouts. In the older one (Bangor) each group of showtimes comes after
+// a heading like "3D • Reserved Seating"; in the newer one (South Portland) the label follows the
+// group ("Open Caption, Reserved Seating").
+const CARD_START = /<div class="(?:flex flex-col rounded-xl bg-white shadow-lg|cin-movie-card)\b[^"]*"/;
+const SHOWTIME_PARTS = new RegExp([
+  /<div class="mt-3 mb-3 flex[^"]*">([\s\S]*?)<\/div>/.source, // heading before its times
+  /<div class="mb-2 flex flex-wrap items-center border-b[^"]*">([\s\S]*?)<\/div>/.source, // label after
+  /class="cin-showtimes-button\s[^"]*"[^>]*>([^<]+)<\/a>/.source, // a showtime
+].join('|'), 'g');
+
+/** Film cards on one day's page -> [{ rawTitle, heading, time }]. */
 function parseDayPage(html) {
   const showings = [];
-  // Each film card starts with the poster link; split on the card wrapper.
-  const cards = html.split('<div class="flex flex-col rounded-xl bg-white shadow-lg"').slice(1);
-  for (const card of cards) {
+  for (const card of html.split(CARD_START).slice(1)) {
     const titleMatch = /<h3[^>]*>\s*<a[^>]*>([^<]+)<\/a>/.exec(card);
     if (!titleMatch) continue;
     const rawTitle = decodeHtml(titleMatch[1]);
-    // Showtimes are grouped under headings like "Reserved Seating"; each group is a heading div
-    // followed by the buttons.
-    const groups = card.split(/<div class="mt-3 mb-3 flex[^"]*">/).slice(1);
-    for (const group of groups) {
-      const heading = decodeHtml(group.slice(0, group.indexOf('<')));
-      for (const [, text] of group.matchAll(/class="cin-showtimes-button[^"]*"[^>]*>([^<]+)<\/a>/g)) {
+    let heading = '';
+    let unlabelled = [];
+    for (const [, headingHtml, labelHtml, text] of card.matchAll(SHOWTIME_PARTS)) {
+      if (headingHtml !== undefined) {
+        heading = stripTags(headingHtml);
+      } else if (labelHtml !== undefined) {
+        unlabelled.forEach(showing => { showing.heading = stripTags(labelHtml); });
+        unlabelled = [];
+      } else {
         const time = parseTime(decodeHtml(text));
-        if (time) showings.push({ rawTitle, heading, time });
-        else console.warn(`    Unrecognized time "${decodeHtml(text)}" for ${rawTitle}`);
+        if (!time) {
+          console.warn(`    Unrecognized time "${decodeHtml(text)}" for ${rawTitle}`);
+          continue;
+        }
+        const showing = { rawTitle, heading, time };
+        showings.push(showing);
+        if (!heading) unlabelled.push(showing);
       }
     }
   }
   return showings;
+}
+
+function stripTags(html) {
+  return decodeHtml(html.replace(/<[^>]*>/g, ' '));
 }
 
 /**
@@ -118,7 +145,8 @@ function toCsvShowings(rawShowings) {
   const split = rawShowings.map(s => ({ ...s, ...splitFormatFromTitle(s.rawTitle) }));
   // Regular listings name the film first, so their punctuation wins.
   for (const s of [...split].sort((a, b) => Boolean(a.format) - Boolean(b.format))) {
-    if (!titleByKey.has(titleKey(s.title))) titleByKey.set(titleKey(s.title), titleCase(s.title));
+    const title = s.title === s.title.toUpperCase() ? titleCase(s.title) : s.title;
+    if (!titleByKey.has(titleKey(s.title))) titleByKey.set(titleKey(s.title), title);
   }
   return split.map(s => ({
     title: titleByKey.get(titleKey(s.title)),
@@ -142,6 +170,10 @@ async function scrapeCity(city, { fromIso, toIso }) {
   const rawShowings = [];
   for (const date of dates) {
     const html = date === fromIso ? firstPage : await fetchText(`${url}?date=${date}`);
+    if (selectedDate(html) !== date) {
+      console.warn(`  ${date}: the site showed ${selectedDate(html) || 'another date'} instead; skipped`);
+      continue;
+    }
     const dayShowings = parseDayPage(html).map(s => ({ ...s, date }));
     if (dayShowings.length === 0) console.warn(`  ${date}: no showtimes found on the page`);
     else console.log(`  ${date}: ${dayShowings.length} showings`);
@@ -157,7 +189,7 @@ function writeCityCsv(city, showings, toIso) {
   }
   showings.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title) || compareTimes(a.time, b.time));
   const csv = formatShowtimesCsv(showings, THEATRES[city].name, city);
-  const filename = writeScrapedCsv(`scraped-${city.toLowerCase()}-cinemaplus-showtimes.csv`, csv);
+  const filename = writeScrapedCsv(`scraped-${city.toLowerCase().replace(/\s+/g, '-')}-cinemaplus-showtimes.csv`, csv);
   const premiumCount = showings.filter(s => s.premium).length;
   console.log(`${city}: saved ${showings.length} showings (${premiumCount} premium) to ${filename}`);
   logCoverage(showings, toIso);
