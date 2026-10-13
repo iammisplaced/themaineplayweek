@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Playing Tonight | The Maine Playweek</title>
+    <meta name="description" content="Swipe through the films playing in Maine tonight." />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0f2a3a" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Big+Shoulders+Display:wght@600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png" />
+    <link rel="stylesheet" href="swipe.css" />
+  </head>
+  <body>
+    <header class="top">
+      <a class="home" href="../">
+        <picture>
+          <source srcset="../assets/brand/Empire%20-%20Dark%20-%20One%20Line.png" media="(prefers-color-scheme: light)" />
+          <img src="../assets/brand/Empire%20-%20Light%20-%20One%20Line.png" alt="The Maine Playweek" width="2489" height="255" />
+        </picture>
+      </a>
+      <button type="button" class="place" id="place-button" aria-haspopup="dialog" aria-controls="place-sheet">
+        <span id="place-label">All of Maine</span>
+      </button>
+    </header>
+
+    <main id="app" class="app" aria-live="polite">
+      <p class="status">Loading tonight's showtimes…</p>
+    </main>
+
+    <dialog id="place-sheet" class="sheet" aria-labelledby="place-title">
+      <form method="dialog">
+        <h2 id="place-title">Where are you?</h2>
+        <p class="sheet-hint">Films are sorted by how close they're playing.</p>
+        <div class="sheet-options">
+          <button type="button" class="sheet-option" data-place="locate">Use my location</button>
+          <label class="sheet-option sheet-select">
+            <span class="visually-hidden">Choose a town</span>
+            <select id="town-select">
+              <option value="">Near a town…</option>
+            </select>
+          </label>
+          <button type="button" class="sheet-option" data-place="anywhere">All of Maine</button>
+        </div>
+        <p class="sheet-status" id="place-status" role="status"></p>
+        <button class="sheet-close" value="close">Done</button>
+      </form>
+    </dialog>
+
+    <dialog id="intro-sheet" class="sheet intro" aria-labelledby="intro-title">
+      <form method="dialog">
+        <h2 id="intro-title">What's playing tonight?</h2>
+        <p>Every film showing in Maine tonight, one card at a time.</p>
+        <ul class="intro-steps">
+          <li>
+            <span class="intro-icon yes" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path class="fill" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.7A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
+            </span>
+            Swipe right if you might see it. It goes on your list.
+          </li>
+          <li>
+            <span class="intro-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg>
+            </span>
+            Swipe left to skip it.
+          </li>
+        </ul>
+        <p>At the end you'll have a short list to choose from. Tap the location button at the top to see what's closest first.</p>
+        <p class="temp-note">Your list is only kept while this page is open. It isn't saved anywhere.</p>
+        <button class="sheet-close" value="start">Start swiping</button>
+      </form>
+    </dialog>
+
+    <dialog id="film-sheet" class="film-sheet">
+      <button type="button" class="sheet-x" data-action="close-film">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        <span class="visually-hidden">Close</span>
+      </button>
+      <div id="film-sheet-body" class="film-sheet-body"></div>
+    </dialog>
+
+    <p id="toast" class="toast" role="status" hidden></p>
+
+    <script type="module" src="swipe.js"></script>
+  </body>
+</html>
