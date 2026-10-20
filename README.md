@@ -105,7 +105,7 @@ How rows are matched and merged:
 - The theatre must already exist. It's matched on `theatre_name` + `theatre_city`, ignoring case.
 - The film is matched by title, ignoring case and punctuation (`Spider-Man` matches `spider man`), and narrowed by `film_year` or `film_tmdb_id` when given. If there's no match, the film is created at that theatre. A row with `film_tmdb_id` only matches a film with that exact TMDb ID, so a film saved without one gets a duplicate.
 - Times are added to any showings already saved for that date, and duplicates are dropped.
-- A blank `ticket_link` or `notes` keeps what's saved. Non-blank notes are **merged** into the saved note (entries it doesn't already have are added), so re-importing scraped notes keeps hand-written ones. A lone `-` clears the note.
+- A blank `ticket_link`, `room` or `notes` keeps what's saved. Non-blank notes are **merged** into the saved note (entries it doesn't already have are added), so re-importing scraped notes keeps hand-written ones. A lone `-` clears the room or the note.
 
 Example:
 

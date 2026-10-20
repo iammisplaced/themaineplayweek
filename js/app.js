@@ -74,7 +74,6 @@ const BETA_BANNER_MESSAGES = Object.freeze([
 const LOGO_SPIN_ANIMATION_MS = 420;
 const LIGHT_THEME = "light";
 const DARK_THEME = "dark";
-const ENABLE_SUPABASE_DELTA_SAVE = false;
 const LOCATION_ICON_DARK_MODE_SRC = "assets/icons/location-light.png";
 const LOCATION_ICON_LIGHT_MODE_SRC = "assets/icons/location.png";
 const WORDMARK_VARIANTS = Object.freeze([
@@ -116,7 +115,8 @@ const state = {
   view: "days",
   source: "film-pages-json",
   loadedFromSupabaseThisSession: false,
-  supabaseBaselinePayload: null,
+  // data_version when the admin data was loaded; sent with saves so stale tabs are refused.
+  dataVersion: null,
   expandedFilmGroups: new Set(),
   expandedFestivals: new Set(),
   expandedFestivalDays: new Set(),
@@ -1954,7 +1954,7 @@ async function loadData() {
         state.promotedCards = fromDb.promotedCards;
         state.source = "supabase";
         state.loadedFromSupabaseThisSession = true;
-        updateSupabaseBaselinePayload();
+        state.dataVersion = fromDb.dataVersion;
         return;
       }
     } catch (error) {
@@ -1977,7 +1977,7 @@ async function loadData() {
       };
       state.source = "local";
       state.loadedFromSupabaseThisSession = false;
-      state.supabaseBaselinePayload = null;
+      state.dataVersion = null;
       return;
     } catch {
       localStorage.removeItem(STORAGE_KEY);
@@ -1994,7 +1994,7 @@ async function loadData() {
   };
   state.source = "film-pages-json";
   state.loadedFromSupabaseThisSession = false;
-  state.supabaseBaselinePayload = null;
+  state.dataVersion = null;
 }
 
 async function loadFallbackDataFromFilmPagesSource() {
@@ -2135,6 +2135,9 @@ function buildTheatreGroupsFromFilmPagesSource(source) {
 }
 
 async function loadDataFromSupabase() {
+  // Read before the tables: if a save lands mid-load, this version is older and the
+  // next save is refused instead of overwriting it.
+  const dataVersion = await loadDataVersion();
   const [theatres, films, theatreFilms, showings, promos, festivals, festivalFilms] = await Promise.all([
     fetchAllRowsFromSupabase("theatres", () =>
       state.supabase.from("theatres").select("id,name,city,address,website,latitude,longitude").order("id", { ascending: true })
@@ -2320,7 +2323,21 @@ async function loadDataFromSupabase() {
       sortOrder: Number.isInteger(Number(row.sort_order)) ? Number(row.sort_order) : 0,
     })),
     promotedCards: buildPromotedCardsFromSupabaseRows(promos),
+    dataVersion,
   };
+}
+
+// Null if data_version can't be read (e.g. the table isn't there yet); the save then
+// skips the stale-tab check rather than failing, so visitors never notice.
+async function loadDataVersion() {
+  try {
+    const { data, error } = await state.supabase.from("data_version").select("version").eq("id", 1).maybeSingle();
+    if (error || !data) return null;
+    const version = Number(data.version);
+    return Number.isInteger(version) ? version : null;
+  } catch {
+    return null;
+  }
 }
 
 function buildFallbackTheatreFilmLinks(showings, filmById) {
@@ -3031,6 +3048,9 @@ function importShowtimesCsv(data, csvContent) {
     const filmTmdbIdRaw = readCsvValue(row, headerIndexByKey, "film_tmdb_id");
     const ticketLinkRaw = readCsvValue(row, headerIndexByKey, "ticket_link");
     const roomRaw = readCsvValue(row, headerIndexByKey, "room");
+    // Like notes, a blank room keeps the stored one and a lone "-" clears it.
+    const clearRoom = roomRaw === "-";
+    const csvRoom = clearRoom ? "" : roomRaw;
     const notesRaw = readCsvValue(row, headerIndexByKey, "notes");
     // Blank keeps the stored note, a lone "-" clears it, and anything else is merged into it.
     const clearNotes = notesRaw === "-";
@@ -3148,7 +3168,7 @@ function importShowtimesCsv(data, csvContent) {
         (Array.isArray(showing.premiumTimes) ? showing.premiumTimes.length : 0);
       showing.times = dedupeSortTimes([...(showing.times || []), ...parsedTimes]);
       showing.premiumTimes = dedupeSortTimes([...(showing.premiumTimes || []), ...parsedPremiumTimes]);
-      showing.room = roomRaw;
+      if (clearRoom || csvRoom) showing.room = csvRoom;
       if (clearNotes) showing.notes = "";
       else if (csvNotes) showing.notes = mergeShowtimeNotes(showing.notes, csvNotes);
       if (resolvedFestivalId) {
@@ -3161,7 +3181,7 @@ function importShowtimesCsv(data, csvContent) {
     } else {
       film.showings.push({
         date: showDate,
-        room: roomRaw,
+        room: csvRoom,
         notes: csvNotes,
         festivalId: resolvedFestivalId,
         times: dedupeSortTimes(parsedTimes),
@@ -3447,7 +3467,7 @@ async function persistData() {
   state.promotedCards = refreshed.promotedCards;
   state.source = "supabase";
   state.loadedFromSupabaseThisSession = true;
-  updateSupabaseBaselinePayload();
+  state.dataVersion = refreshed.dataVersion;
   syncAdminEditor();
   render();
   return { localDraftWarning };
@@ -3459,10 +3479,6 @@ function isStorageQuotaExceeded(error) {
   if (typeof error?.code === "number" && error.code === 22) return true;
   const message = String(error?.message || "").toLowerCase();
   return message.includes("quota") || message.includes("exceeded");
-}
-
-function updateSupabaseBaselinePayload() {
-  state.supabaseBaselinePayload = buildReplacePayload(state.data, state.promotedCards);
 }
 
 async function saveDataToSupabase() {
@@ -3484,16 +3500,11 @@ async function saveDataToSupabase() {
     );
   }
 
-  const baselinePayload = state.supabaseBaselinePayload;
-  if (ENABLE_SUPABASE_DELTA_SAVE && baselinePayload) {
-    const deltaPayload = buildShowtimesDeltaPayload(baselinePayload, payload);
-    if (isDeltaPayloadEmpty(deltaPayload)) return;
-    const deltaRpc = await supabase.rpc("apply_showtimes_delta", { payload: deltaPayload });
-    if (!deltaRpc.error) return;
-    if (!isMissingDeltaRpcError(deltaRpc.error)) throw deltaRpc.error;
-  }
-
-  const fullReplaceRpc = await supabase.rpc("replace_showtimes_data", { payload, allow_ticket_link_clear: false });
+  const fullReplaceRpc = await supabase.rpc("replace_showtimes_data", {
+    payload,
+    allow_ticket_link_clear: false,
+    expected_version: state.dataVersion,
+  });
   if (fullReplaceRpc.error) throw fullReplaceRpc.error;
 }
 
@@ -3788,297 +3799,11 @@ function buildReplacePayload(data, promotedCards) {
   };
 }
 
-function buildShowtimesDeltaPayload(previousPayload, nextPayload) {
-  const prevFestivalsById = new Map(
-    (previousPayload?.festivals || [])
-      .filter((row) => Number.isInteger(Number(row?.id)))
-      .map((row) => [Number(row.id), row])
-  );
-  const nextFestivalsById = new Map(
-    (nextPayload?.festivals || [])
-      .filter((row) => Number.isInteger(Number(row?.id)))
-      .map((row) => [Number(row.id), row])
-  );
-  const festivalsUpsert = (nextPayload?.festivals || []).filter((row) => {
-    const id = Number(row?.id);
-    if (!Number.isInteger(id)) return true;
-    const prev = prevFestivalsById.get(id);
-    if (!prev) return true;
-    return hasFestivalRowChanges(prev, row);
-  });
-  const festivalsDeleteIds = Array.from(prevFestivalsById.keys()).filter((id) => !nextFestivalsById.has(id));
-
-  const prevTheatresById = new Map(
-    (previousPayload?.theatres || [])
-      .filter((row) => Number.isInteger(Number(row?.db_id)))
-      .map((row) => [Number(row.db_id), row])
-  );
-  const nextTheatresById = new Map(
-    (nextPayload?.theatres || [])
-      .filter((row) => Number.isInteger(Number(row?.db_id)))
-      .map((row) => [Number(row.db_id), row])
-  );
-  const theatresUpsert = (nextPayload?.theatres || []).filter((row) => {
-    const dbId = Number(row?.db_id);
-    if (!Number.isInteger(dbId)) return true;
-    const prev = prevTheatresById.get(dbId);
-    if (!prev) return true;
-    return hasTheatreRowChanges(prev, row);
-  });
-  const theatresDeleteIds = Array.from(prevTheatresById.keys()).filter((id) => !nextTheatresById.has(id));
-
-  const prevFilmsById = new Map(
-    (previousPayload?.films || [])
-      .filter((row) => Number.isInteger(Number(row?.db_id)))
-      .map((row) => [Number(row.db_id), row])
-  );
-  const nextFilmsById = new Map(
-    (nextPayload?.films || [])
-      .filter((row) => Number.isInteger(Number(row?.db_id)))
-      .map((row) => [Number(row.db_id), row])
-  );
-  const filmsUpsert = (nextPayload?.films || []).filter((row) => {
-    const dbId = Number(row?.db_id);
-    if (!Number.isInteger(dbId)) return true;
-    const prev = prevFilmsById.get(dbId);
-    if (!prev) return true;
-    return hasFilmRowChanges(prev, row);
-  });
-  const filmsDeleteIds = Array.from(prevFilmsById.keys()).filter((id) => !nextFilmsById.has(id));
-
-  const prevLinksByKey = new Map((previousPayload?.theatre_films || []).map((row) => [buildTheatreFilmRowKey(row), row]));
-  const nextLinksByKey = new Map((nextPayload?.theatre_films || []).map((row) => [buildTheatreFilmRowKey(row), row]));
-  const theatreFilmsUpsert = (nextPayload?.theatre_films || []).filter((row) => {
-    const prev = prevLinksByKey.get(buildTheatreFilmRowKey(row));
-    if (!prev) return true;
-    return String(prev.ticket_link || "") !== String(row.ticket_link || "");
-  });
-  const theatreFilmsDelete = (previousPayload?.theatre_films || [])
-    .filter((row) => {
-      const key = buildTheatreFilmRowKey(row);
-      if (nextLinksByKey.has(key)) return false;
-      return Number.isInteger(Number(row?.theatre_db_id)) && Number.isInteger(Number(row?.film_db_id));
-    })
-    .map((row) => ({
-      theatre_db_id: Number(row.theatre_db_id),
-      film_db_id: Number(row.film_db_id),
-    }));
-
-  const showingDelta = buildShowingsDelta(previousPayload?.showings || [], nextPayload?.showings || []);
-
-  const prevPromosById = new Map(
-    (previousPayload?.promos || [])
-      .filter((row) => Number.isInteger(Number(row?.db_id)))
-      .map((row) => [Number(row.db_id), row])
-  );
-  const nextPromosById = new Map(
-    (nextPayload?.promos || [])
-      .filter((row) => Number.isInteger(Number(row?.db_id)))
-      .map((row) => [Number(row.db_id), row])
-  );
-  const promosUpsert = (nextPayload?.promos || []).filter((row) => {
-    const dbId = Number(row?.db_id);
-    if (!Number.isInteger(dbId)) return true;
-    const prev = prevPromosById.get(dbId);
-    if (!prev) return true;
-    return hasPromoRowChanges(prev, row);
-  });
-  const promosDeleteIds = Array.from(prevPromosById.keys()).filter((id) => !nextPromosById.has(id));
-
-  return {
-    festivals_upsert: festivalsUpsert,
-    festivals_delete_ids: festivalsDeleteIds,
-    theatres_upsert: theatresUpsert,
-    theatres_delete_ids: theatresDeleteIds,
-    films_upsert: filmsUpsert,
-    films_delete_ids: filmsDeleteIds,
-    theatre_films_upsert: theatreFilmsUpsert,
-    theatre_films_delete: theatreFilmsDelete,
-    showings_replace_pairs: showingDelta.replacePairs,
-    showings_upsert: showingDelta.upsertRows,
-    promos_upsert: promosUpsert,
-    promos_delete_ids: promosDeleteIds,
-  };
-}
-
-function isDeltaPayloadEmpty(deltaPayload) {
-  if (!deltaPayload || typeof deltaPayload !== "object") return true;
-  return Object.values(deltaPayload).every((value) => !Array.isArray(value) || value.length === 0);
-}
-
-function isMissingDeltaRpcError(error) {
-  const message = String(error?.message || "").toLowerCase();
-  if (!message.includes("apply_showtimes_delta")) return false;
-  return (
-    message.includes("could not find") ||
-    message.includes("does not exist") ||
-    message.includes("schema cache")
-  );
-}
-
-function hasTheatreRowChanges(previousRow, nextRow) {
-  return (
-    String(previousRow?.name || "") !== String(nextRow?.name || "") ||
-    String(previousRow?.city || "") !== String(nextRow?.city || "") ||
-    String(previousRow?.address || "") !== String(nextRow?.address || "") ||
-    String(previousRow?.website || "") !== String(nextRow?.website || "") ||
-    nullableNumber(previousRow?.latitude) !== nullableNumber(nextRow?.latitude) ||
-    nullableNumber(previousRow?.longitude) !== nullableNumber(nextRow?.longitude)
-  );
-}
-
-function hasFestivalRowChanges(previousRow, nextRow) {
-  return (
-    String(previousRow?.slug || "") !== String(nextRow?.slug || "") ||
-    String(previousRow?.name || "") !== String(nextRow?.name || "") ||
-    String(previousRow?.description || "") !== String(nextRow?.description || "") ||
-    String(previousRow?.website || "") !== String(nextRow?.website || "") ||
-    String(previousRow?.primary_color || "") !== String(nextRow?.primary_color || "") ||
-    String(previousRow?.start_date || "") !== String(nextRow?.start_date || "") ||
-    String(previousRow?.end_date || "") !== String(nextRow?.end_date || "") ||
-    Boolean(previousRow?.enabled) !== Boolean(nextRow?.enabled) ||
-    nullableInt(previousRow?.sort_order) !== nullableInt(nextRow?.sort_order)
-  );
-}
-
-function hasFilmRowChanges(previousRow, nextRow) {
-  return (
-    String(previousRow?.title || "") !== String(nextRow?.title || "") ||
-    nullableInt(previousRow?.year) !== nullableInt(nextRow?.year) ||
-    nullableInt(previousRow?.tmdb_id) !== nullableInt(nextRow?.tmdb_id) ||
-    String(previousRow?.synopsis || "") !== String(nextRow?.synopsis || "") ||
-    String(previousRow?.metadata_source || "") !== String(nextRow?.metadata_source || "") ||
-    String(previousRow?.ticket_link || "") !== String(nextRow?.ticket_link || "") ||
-    Boolean(previousRow?.staff_favorite) !== Boolean(nextRow?.staff_favorite) ||
-    String(previousRow?.staff_favorite_by || "") !== String(nextRow?.staff_favorite_by || "") ||
-    Boolean(previousRow?.featured_on_playweek) !== Boolean(nextRow?.featured_on_playweek) ||
-    String(previousRow?.featured_on_playweek_url || "") !== String(nextRow?.featured_on_playweek_url || "") ||
-    Boolean(previousRow?.ranking_override) !== Boolean(nextRow?.ranking_override) ||
-    !areJsonValuesEqual(previousRow?.tmdb_json, nextRow?.tmdb_json)
-  );
-}
-
-function hasPromoRowChanges(previousRow, nextRow) {
-  return (
-    String(previousRow?.title || "") !== String(nextRow?.title || "") ||
-    String(previousRow?.button_url || "") !== String(nextRow?.button_url || "") ||
-    String(previousRow?.image_path || "") !== String(nextRow?.image_path || "") ||
-    String(previousRow?.image_alt || "") !== String(nextRow?.image_alt || "") ||
-    String(previousRow?.image_name || "") !== String(nextRow?.image_name || "") ||
-    String(previousRow?.button_label || "") !== String(nextRow?.button_label || "") ||
-    Boolean(previousRow?.enabled) !== Boolean(nextRow?.enabled) ||
-    nullableInt(previousRow?.sort_order) !== nullableInt(nextRow?.sort_order)
-  );
-}
-
 function extractFilmSynopsis(film) {
   const directSynopsis = String(film?.synopsis || "").trim();
   if (directSynopsis) return directSynopsis;
   const tmdbSynopsis = String(film?.tmdb?.overview || "").trim();
   return tmdbSynopsis;
-}
-
-function buildTheatreFilmRowKey(row) {
-  const theatreDbId = Number(row?.theatre_db_id);
-  const filmDbId = Number(row?.film_db_id);
-  if (Number.isInteger(theatreDbId) && Number.isInteger(filmDbId)) {
-    return `db:${theatreDbId}:${filmDbId}`;
-  }
-  return `key:${String(row?.theatre_key || "")}:${String(row?.film_key || "")}`;
-}
-
-function buildShowingsDelta(previousRows, nextRows) {
-  const previousPairs = indexShowingsByPair(previousRows);
-  const nextPairs = indexShowingsByPair(nextRows);
-
-  const replaceKeys = new Set();
-  const upsertRows = [];
-
-  nextPairs.forEach((nextEntry, key) => {
-    const previousEntry = previousPairs.get(key);
-    const previousSignature = previousEntry ? serializeShowingList(previousEntry.showings) : "";
-    const nextSignature = serializeShowingList(nextEntry.showings);
-    if (previousEntry && previousSignature === nextSignature) return;
-    replaceKeys.add(key);
-    nextEntry.showings.forEach((showing) => {
-      upsertRows.push({
-        theatre_key: nextEntry.theatreKey,
-        film_key: nextEntry.filmKey,
-        theatre_db_id: nextEntry.theatreDbId,
-        film_db_id: nextEntry.filmDbId,
-        festival_id: showing.festival_id,
-        show_date: showing.show_date,
-        room: showing.room,
-        times: showing.times,
-        premium_times: showing.premium_times,
-      });
-    });
-  });
-
-  previousPairs.forEach((_entry, key) => {
-    if (!nextPairs.has(key)) replaceKeys.add(key);
-  });
-
-  const replacePairs = Array.from(replaceKeys).map((key) => {
-    const entry = nextPairs.get(key) || previousPairs.get(key);
-    return {
-      theatre_key: entry?.theatreKey || "",
-      film_key: entry?.filmKey || "",
-      theatre_db_id: entry?.theatreDbId,
-      film_db_id: entry?.filmDbId,
-    };
-  });
-
-  return { replacePairs, upsertRows };
-}
-
-function indexShowingsByPair(rows) {
-  const index = new Map();
-  (rows || []).forEach((row) => {
-    const theatreDbId = nullableInt(row?.theatre_db_id);
-    const filmDbId = nullableInt(row?.film_db_id);
-    const theatreKey = String(row?.theatre_key || "");
-    const filmKey = String(row?.film_key || "");
-    const pairKey =
-      Number.isInteger(theatreDbId) && Number.isInteger(filmDbId)
-        ? `db:${theatreDbId}:${filmDbId}`
-        : `key:${theatreKey}:${filmKey}`;
-    if (!index.has(pairKey)) {
-      index.set(pairKey, {
-        theatreDbId,
-        filmDbId,
-        theatreKey,
-        filmKey,
-        showings: [],
-      });
-    }
-    const entry = index.get(pairKey);
-    entry.showings.push({
-      festival_id: nullableInt(row?.festival_id),
-      show_date: String(row?.show_date || ""),
-      room: String(row?.room || ""),
-      times: dedupeSortTimes(row?.times || []),
-      premium_times: dedupeSortTimes(row?.premium_times || []),
-    });
-  });
-
-  index.forEach((entry) => {
-    entry.showings.sort((a, b) => a.show_date.localeCompare(b.show_date));
-  });
-  return index;
-}
-
-function serializeShowingList(showings) {
-  return JSON.stringify(showings || []);
-}
-
-function areJsonValuesEqual(a, b) {
-  return JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
-}
-
-function nullableInt(value) {
-  const parsed = Number(value);
-  return Number.isInteger(parsed) ? parsed : null;
 }
 
 function normalizeNullablePositiveInt(value) {
@@ -4088,11 +3813,6 @@ function normalizeNullablePositiveInt(value) {
   const parsed = Number(text);
   if (!Number.isInteger(parsed) || parsed <= 0) return null;
   return parsed;
-}
-
-function nullableNumber(value) {
-  const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : null;
 }
 
 function stripInternalFields(data) {
