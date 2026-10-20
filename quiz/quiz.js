@@ -5,6 +5,8 @@ import {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
   SUPABASE_CLIENT_OPTIONS,
+  SHOWTIME_COLUMNS,
+  groupShowtimesIntoShowings,
   markStagingPage,
   escapeHtml,
   buildFilmSlug,
@@ -107,10 +109,10 @@ function toIsoDate(date) {
 async function loadData() {
   const today = toIsoDate(new Date());
   const [films, theatres, theatreFilms, showings] = await Promise.all([
-    fetchAll("films", "id,title,year,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,synopsis,tmdb_json", (q) => q.order("id")),
-    fetchAll("theatres", "id,name,city,latitude,longitude", (q) => q.order("id")),
+    fetchAll("films", "id,title,year,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,synopsis,tmdb_json", (q) => q.order("id")),
+    fetchAll("theatres", "id,name,city,website,latitude,longitude", (q) => q.order("id")),
     fetchAll("theatre_films", "theatre_id,film_id,ticket_link", (q) => q.order("theatre_id").order("film_id")),
-    fetchAll("showings", "theatre_id,film_id,show_date,times,premium_times", (q) => q.gte("show_date", today).order("id")),
+    fetchAll("showtimes", SHOWTIME_COLUMNS, (q) => q.gte("show_date", today).order("id")),
   ]);
 
   films.forEach((row) => {
@@ -119,7 +121,6 @@ async function loadData() {
       id: row.id,
       title: row.title,
       year: row.year,
-      ticketLink: row.ticket_link || "",
       staffFavorite: Boolean(row.staff_favorite),
       staffFavoriteBy: String(row.staff_favorite_by || "").trim(),
       articleUrl: row.featured_on_playweek ? normalizeOutboundUrl(row.featured_on_playweek_url) : "",
@@ -140,7 +141,7 @@ async function loadData() {
   theatreFilms.forEach((row) => {
     if (row.ticket_link) data.ticketLinks.set(`${row.theatre_id}:${row.film_id}`, row.ticket_link);
   });
-  data.showings = showings;
+  data.showings = groupShowtimesIntoShowings(showings);
 }
 
 const timeFormat = new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" });
@@ -609,7 +610,7 @@ function renderShowtimes(slots, filmId) {
           if (!byDate.has(slot.date)) byDate.set(slot.date, []);
           byDate.get(slot.date).push(slot);
         });
-      const ticketUrl = normalizeOutboundUrl(data.ticketLinks.get(`${theatre.id}:${filmId}`) || data.films.get(filmId).ticketLink);
+      const ticketUrl = normalizeOutboundUrl(data.ticketLinks.get(`${theatre.id}:${filmId}`) || theatre.website);
       const distance = miles === null ? "" : miles < 1 ? ", under a mile away" : `, ${Math.round(miles)} mi away`;
       return `
         <article class="theatre">
