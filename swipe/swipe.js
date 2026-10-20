@@ -6,6 +6,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
+  SUPABASE_CLIENT_OPTIONS,
+  markStagingPage,
   escapeHtml,
   buildFilmSlug,
   normalizeOutboundUrl,
@@ -14,7 +16,8 @@ import {
   getFilmSortBreakdown,
 } from "../js/shared.js";
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_CLIENT_OPTIONS);
+markStagingPage();
 const app = document.getElementById("app");
 const placeButton = document.getElementById("place-button");
 const placeLabel = document.getElementById("place-label");
