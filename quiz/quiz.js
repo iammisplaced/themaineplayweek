@@ -110,7 +110,7 @@ async function loadData() {
   const today = toIsoDate(new Date());
   const [films, theatres, theatreFilms, showings] = await Promise.all([
     fetchAll("films", "id,title,year,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,synopsis,tmdb_json", (q) => q.order("id")),
-    fetchAll("theatres", "id,name,city,latitude,longitude", (q) => q.order("id")),
+    fetchAll("theatres", "id,name,city,website,latitude,longitude", (q) => q.order("id")),
     fetchAll("theatre_films", "theatre_id,film_id,ticket_link", (q) => q.order("theatre_id").order("film_id")),
     fetchAll("showtimes", SHOWTIME_COLUMNS, (q) => q.gte("show_date", today).order("id")),
   ]);
@@ -610,7 +610,7 @@ function renderShowtimes(slots, filmId) {
           if (!byDate.has(slot.date)) byDate.set(slot.date, []);
           byDate.get(slot.date).push(slot);
         });
-      const ticketUrl = normalizeOutboundUrl(data.ticketLinks.get(`${theatre.id}:${filmId}`));
+      const ticketUrl = normalizeOutboundUrl(data.ticketLinks.get(`${theatre.id}:${filmId}`) || theatre.website);
       const distance = miles === null ? "" : miles < 1 ? ", under a mile away" : `, ${Math.round(miles)} mi away`;
       return `
         <article class="theatre">

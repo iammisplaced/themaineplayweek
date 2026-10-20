@@ -90,7 +90,7 @@ async function loadData() {
       "id,title,year,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,synopsis,tmdb_json",
       (q) => q.order("id")
     ),
-    fetchAll("theatres", "id,name,city,latitude,longitude", (q) => q.order("id")),
+    fetchAll("theatres", "id,name,city,website,latitude,longitude", (q) => q.order("id")),
     fetchAll("theatre_films", "theatre_id,film_id,ticket_link", (q) => q.order("theatre_id").order("film_id")),
     fetchAll("showtimes", SHOWTIME_COLUMNS, (q) => q.gte("show_date", addDays(0)).order("id")),
   ]);
@@ -341,7 +341,7 @@ function renderShowtimes(entry) {
     .map(([theatreId, slots]) => ({ theatre: data.theatres.get(theatreId), miles: getTheatreDistance(theatreId), slots }))
     .sort((a, b) => (a.miles ?? 0) - (b.miles ?? 0) || a.slots[0].at - b.slots[0].at)
     .map(({ theatre, miles, slots }) => {
-      const ticketUrl = normalizeOutboundUrl(data.ticketLinks.get(`${theatre.id}:${entry.film.id}`));
+      const ticketUrl = normalizeOutboundUrl(data.ticketLinks.get(`${theatre.id}:${entry.film.id}`) || theatre.website);
       const distance = miles === null ? "" : `, ${formatMiles(miles).toLowerCase()}`;
       return `
         <article class="theatre">
