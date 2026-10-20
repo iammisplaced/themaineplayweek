@@ -4,6 +4,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
+  SUPABASE_CLIENT_OPTIONS,
+  markStagingPage,
   escapeHtml,
   buildFilmSlug,
   normalizeOutboundUrl,
@@ -14,7 +16,8 @@ import {
   getShowDateTime,
 } from "../js/shared.js";
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_CLIENT_OPTIONS);
+markStagingPage();
 const screen = document.getElementById("screen");
 const progress = document.getElementById("progress");
 const topBar = document.querySelector(".top");

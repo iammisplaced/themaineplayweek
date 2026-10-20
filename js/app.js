@@ -3,6 +3,8 @@ import { renderMapMarkers, showMapToggle, hideMapToggle } from "./map-view.js";
 import {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
+  SUPABASE_CLIENT_OPTIONS,
+  markStagingPage,
   buildFilmPageUrl,
   compareTimes,
   debounce,
@@ -602,7 +604,8 @@ function stripHtml(value) {
 
 function initializeSupabase() {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return;
-  state.supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  state.supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_CLIENT_OPTIONS);
+  markStagingPage();
 
   state.supabase.auth.onAuthStateChange((_event, session) => {
     state.admin.auth.authenticated = Boolean(session?.user);

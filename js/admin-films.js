@@ -2,6 +2,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
+  SUPABASE_CLIENT_OPTIONS,
+  markStagingPage,
   debounce,
   escapeHtml,
   getShowDateTime,
@@ -10,7 +12,8 @@ import {
 } from "./shared.js";
 
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_CLIENT_OPTIONS);
+markStagingPage();
 const QUERY_TIMEOUT_MS = 30000;
 const QUERY_PAGE_SIZE = 1000;
 const SEARCH_INPUT_DEBOUNCE_MS = 180;

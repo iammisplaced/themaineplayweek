@@ -5,6 +5,48 @@ export const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
 export const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqZnNqb3JhdHNmcWN5eWpzZXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2Mzc5MDgsImV4cCI6MjA4ODIxMzkwOH0.dmcQ_ffwmm4JIKTjSUNNYLGQ9w_v1mR6VRMZimVnLNg";
 
+// Vercel branch previews (themaineplayweek-git-<branch>-….vercel.app) and localhost read
+// and save the `staging` copy of the data (supabase/staging/create-staging.sql); any
+// other host, including the live site, Vercel's production addresses and Node scripts,
+// uses `public`. On a staging host, `?db=live` switches that tab to live data and
+// `?db=staging` switches it back.
+const DB_OVERRIDE_KEY = "tmp-db-override";
+
+function pickDbSchema() {
+  const host = String(globalThis.location?.hostname || "");
+  const isStagingHost =
+    host === "localhost" || host === "127.0.0.1" || (host.endsWith(".vercel.app") && host.includes("-git-"));
+  if (!isStagingHost) return "public";
+  let override = "";
+  try {
+    override = new URLSearchParams(globalThis.location.search).get("db") || "";
+    if (override) globalThis.sessionStorage?.setItem(DB_OVERRIDE_KEY, override);
+    else override = globalThis.sessionStorage?.getItem(DB_OVERRIDE_KEY) || "";
+  } catch {
+    // Storage can be blocked; the URL parameter still works for this page.
+  }
+  return override === "live" ? "public" : "staging";
+}
+
+export const SUPABASE_DB_SCHEMA = pickDbSchema();
+export const SUPABASE_CLIENT_OPTIONS = Object.freeze({ db: { schema: SUPABASE_DB_SCHEMA } });
+
+// Adds a fixed "Staging data" label so a preview can't be mistaken for the live site.
+// Does nothing on `public`.
+export function markStagingPage(doc = document) {
+  if (SUPABASE_DB_SCHEMA !== "staging" || !doc?.body || doc.getElementById("staging-data-badge")) return;
+  const badge = doc.createElement("a");
+  badge.id = "staging-data-badge";
+  badge.href = "?db=live";
+  badge.title = "This page uses the staging copy of the data. Click to switch this tab to live data.";
+  badge.textContent = "Staging data";
+  badge.style.cssText =
+    "position:fixed;left:12px;bottom:12px;z-index:2147483647;padding:6px 10px;border-radius:999px;" +
+    "background:#b42318;color:#fff;font:600 12px/1 system-ui,sans-serif;letter-spacing:.04em;" +
+    "text-transform:uppercase;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.3);";
+  doc.body.appendChild(badge);
+}
+
 export const FILM_SORT_WEIGHTS = Object.freeze({
   tmdbPopularity: 0.2,
   tmdbRating: 0.15,
