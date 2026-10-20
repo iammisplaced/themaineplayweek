@@ -5,15 +5,17 @@ export const SUPABASE_URL = "https://rjfsjoratsfqcyyjseqm.supabase.co";
 export const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJqZnNqb3JhdHNmcWN5eWpzZXFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2Mzc5MDgsImV4cCI6MjA4ODIxMzkwOH0.dmcQ_ffwmm4JIKTjSUNNYLGQ9w_v1mR6VRMZimVnLNg";
 
-// Vercel previews and localhost read and save the `staging` copy of the data
-// (supabase/staging/create-staging.sql); any other host, including the live site and
-// Node scripts, uses `public`. On a staging host, `?db=live` switches that tab to live
-// data and `?db=staging` switches it back.
+// Vercel branch previews (themaineplayweek-git-<branch>-….vercel.app) and localhost read
+// and save the `staging` copy of the data (supabase/staging/create-staging.sql); any
+// other host, including the live site, Vercel's production addresses and Node scripts,
+// uses `public`. On a staging host, `?db=live` switches that tab to live data and
+// `?db=staging` switches it back.
 const DB_OVERRIDE_KEY = "tmp-db-override";
 
 function pickDbSchema() {
   const host = String(globalThis.location?.hostname || "");
-  const isStagingHost = host === "localhost" || host === "127.0.0.1" || host.endsWith(".vercel.app");
+  const isStagingHost =
+    host === "localhost" || host === "127.0.0.1" || (host.endsWith(".vercel.app") && host.includes("-git-"));
   if (!isStagingHost) return "public";
   let override = "";
   try {
