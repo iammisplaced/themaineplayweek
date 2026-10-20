@@ -73,7 +73,7 @@ end $$;
 drop function if exists :"schema".apply_showtimes_delta(jsonb);
 drop function if exists :"schema".replace_showtimes_data(jsonb, boolean);
 
-create function :"schema".replace_showtimes_data(
+create or replace function :"schema".replace_showtimes_data(
   payload jsonb,
   allow_ticket_link_clear boolean default false,
   expected_version bigint default null
