@@ -7,6 +7,8 @@ import {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
   SUPABASE_CLIENT_OPTIONS,
+  SHOWTIME_COLUMNS,
+  groupShowtimesIntoShowings,
   markStagingPage,
   escapeHtml,
   buildFilmSlug,
@@ -85,12 +87,12 @@ async function loadData() {
   const [films, theatres, theatreFilms, showings] = await Promise.all([
     fetchAll(
       "films",
-      "id,title,year,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,synopsis,tmdb_json",
+      "id,title,year,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,synopsis,tmdb_json",
       (q) => q.order("id")
     ),
     fetchAll("theatres", "id,name,city,latitude,longitude", (q) => q.order("id")),
     fetchAll("theatre_films", "theatre_id,film_id,ticket_link", (q) => q.order("theatre_id").order("film_id")),
-    fetchAll("showings", "theatre_id,film_id,show_date,times,premium_times", (q) => q.gte("show_date", addDays(0)).order("id")),
+    fetchAll("showtimes", SHOWTIME_COLUMNS, (q) => q.gte("show_date", addDays(0)).order("id")),
   ]);
 
   films.forEach((row) => {
@@ -100,7 +102,6 @@ async function loadData() {
       id: row.id,
       title: row.title,
       year: row.year,
-      ticketLink: row.ticket_link || "",
       staffFavorite: Boolean(row.staff_favorite),
       staffFavoriteBy: String(row.staff_favorite_by || "").trim(),
       articleUrl: row.featured_on_playweek ? normalizeOutboundUrl(row.featured_on_playweek_url) : "",
@@ -123,7 +124,7 @@ async function loadData() {
   theatreFilms.forEach((row) => {
     if (row.ticket_link) data.ticketLinks.set(`${row.theatre_id}:${row.film_id}`, row.ticket_link);
   });
-  data.showings = showings;
+  data.showings = groupShowtimesIntoShowings(showings);
 }
 
 // Every upcoming showtime, flattened, with past times dropped. The data mixes "3:49pm"
@@ -340,7 +341,7 @@ function renderShowtimes(entry) {
     .map(([theatreId, slots]) => ({ theatre: data.theatres.get(theatreId), miles: getTheatreDistance(theatreId), slots }))
     .sort((a, b) => (a.miles ?? 0) - (b.miles ?? 0) || a.slots[0].at - b.slots[0].at)
     .map(({ theatre, miles, slots }) => {
-      const ticketUrl = normalizeOutboundUrl(data.ticketLinks.get(`${theatre.id}:${entry.film.id}`) || entry.film.ticketLink);
+      const ticketUrl = normalizeOutboundUrl(data.ticketLinks.get(`${theatre.id}:${entry.film.id}`));
       const distance = miles === null ? "" : `, ${formatMiles(miles).toLowerCase()}`;
       return `
         <article class="theatre">

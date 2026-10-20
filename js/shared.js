@@ -350,6 +350,66 @@ export function mergeShowtimeNotes(existing, incoming) {
   return merged.join("; ");
 }
 
+// ---- Showtimes table ----
+
+// The `select` that groupShowtimesIntoShowings needs from the `showtimes` table.
+export const SHOWTIME_COLUMNS = "id,theatre_id,film_id,festival_id,show_date,start_time,is_premium,note,room";
+
+// "19:05:00" or "19:05" -> "7:05 PM". "" when unparseable.
+export function from24HourTime(value) {
+  const match = /^(\d{1,2}):([0-5]\d)/.exec(String(value ?? "").trim());
+  if (!match) return "";
+  const hour = Number(match[1]);
+  if (hour > 23) return "";
+  const period = hour < 12 ? "AM" : "PM";
+  return `${hour % 12 || 12}:${match[2]} ${period}`;
+}
+
+// Turns `showtimes` rows (one per time) back into one entry per theatre, film and day,
+// shaped like the old `showings` rows: { theatre_id, film_id, festival_id, show_date,
+// room, notes, times, premium_times }, with times as "7:00 PM". Each time's note goes
+// into `notes` so that getShowtimeNote(notes, time) gives it back: one shared note
+// stays plain, otherwise each note gets its time as a prefix ("7:00 PM: Q&A").
+export function groupShowtimesIntoShowings(rows) {
+  const groups = new Map();
+  (rows || []).forEach((row) => {
+    const time = from24HourTime(row?.start_time);
+    if (!time) return;
+    const key = `${row.theatre_id}|${row.film_id}|${row.show_date}`;
+    if (!groups.has(key)) {
+      groups.set(key, {
+        theatre_id: row.theatre_id,
+        film_id: row.film_id,
+        festival_id: null,
+        show_date: row.show_date,
+        room: "",
+        entries: [],
+      });
+    }
+    const group = groups.get(key);
+    if (group.festival_id == null && row.festival_id != null) group.festival_id = row.festival_id;
+    if (!group.room && row.room) group.room = String(row.room).trim();
+    group.entries.push({ time, premium: Boolean(row.is_premium), note: String(row.note || "").trim() });
+  });
+
+  const byTime = (a, b) => compareTimes(a, b);
+  return Array.from(groups.values()).map(({ entries, ...group }) => {
+    const noted = entries.filter((entry) => entry.note);
+    let notes = "";
+    if (noted.length === entries.length && noted.every((entry) => entry.note === noted[0].note)) {
+      notes = noted[0]?.note || "";
+    } else if (noted.length) {
+      notes = Array.from(new Set(noted.map((entry) => `${entry.time}: ${entry.note}`))).join("; ");
+    }
+    return {
+      ...group,
+      notes,
+      times: Array.from(new Set(entries.filter((entry) => !entry.premium).map((entry) => entry.time))).sort(byTime),
+      premium_times: Array.from(new Set(entries.filter((entry) => entry.premium).map((entry) => entry.time))).sort(byTime),
+    };
+  });
+}
+
 // Shows the note for any `.show-time-noted` element (data-note) in a floating tooltip on
 // hover, keyboard focus, or tap. The tooltip is fixed-positioned on <body> so card
 // overflow can't clip it. Safe to call more than once.

@@ -4,6 +4,7 @@ import {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
   SUPABASE_CLIENT_OPTIONS,
+  SHOWTIME_COLUMNS,
   markStagingPage,
   buildFilmPageUrl,
   compareTimes,
@@ -13,6 +14,7 @@ import {
   getFilmSortBreakdown,
   getShowDateTime,
   getShowtimeNote,
+  groupShowtimesIntoShowings,
   initShowtimeNoteTooltips,
   isPlainObject,
   mergeShowtimeNotes,
@@ -2138,7 +2140,7 @@ async function loadDataFromSupabase() {
   // Read before the tables: if a save lands mid-load, this version is older and the
   // next save is refused instead of overwriting it.
   const dataVersion = await loadDataVersion();
-  const [theatres, films, theatreFilms, showings, promos, festivals, festivalFilms] = await Promise.all([
+  const [theatres, films, theatreFilms, showtimes, promos, festivals] = await Promise.all([
     fetchAllRowsFromSupabase("theatres", () =>
       state.supabase.from("theatres").select("id,name,city,address,website,latitude,longitude").order("id", { ascending: true })
     ),
@@ -2146,7 +2148,7 @@ async function loadDataFromSupabase() {
       state.supabase
         .from("films")
         .select(
-          "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,ranking_override,metadata_source,tmdb_json"
+          "id,title,year,tmdb_id,synopsis,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,ranking_override,metadata_source,tmdb_json"
         )
         .order("id", { ascending: true })
     ),
@@ -2157,11 +2159,8 @@ async function loadDataFromSupabase() {
         .order("theatre_id", { ascending: true })
         .order("film_id", { ascending: true })
     ),
-    fetchAllRowsFromSupabase("showings", () =>
-      state.supabase
-        .from("showings")
-        .select("id,theatre_id,film_id,festival_id,show_date,room,notes,times,premium_times")
-        .order("id", { ascending: true })
+    fetchAllRowsFromSupabase("showtimes", () =>
+      state.supabase.from("showtimes").select(SHOWTIME_COLUMNS).order("id", { ascending: true })
     ),
     fetchAllRowsFromSupabase("promos", () =>
       state.supabase
@@ -2177,27 +2176,12 @@ async function loadDataFromSupabase() {
         .order("sort_order", { ascending: true })
         .order("name", { ascending: true })
     ),
-    fetchAllRowsFromSupabase("festival_films", () =>
-      state.supabase
-        .from("festival_films")
-        .select("festival_id,film_id")
-        .order("festival_id", { ascending: true })
-        .order("film_id", { ascending: true })
-    ),
   ]);
+  // The admin and the site work with one entry per theatre, film and day.
+  const showings = groupShowtimesIntoShowings(showtimes);
 
   const theatreById = new Map();
   const filmById = new Map();
-  const festivalIdsByFilmId = new Map();
-  (festivalFilms || []).forEach((row) => {
-    const filmId = Number(row?.film_id);
-    const festivalId = Number(row?.festival_id);
-    if (!Number.isInteger(filmId) || !Number.isInteger(festivalId)) return;
-    if (!festivalIdsByFilmId.has(filmId)) {
-      festivalIdsByFilmId.set(filmId, new Set());
-    }
-    festivalIdsByFilmId.get(filmId).add(festivalId);
-  });
   const theatreGroups = theatres.map((theatreRow) => {
     const entry = {
       id: theatreRow.id,
@@ -2227,7 +2211,6 @@ async function loadDataFromSupabase() {
       tmdbId: filmRow.tmdb_id,
       synopsis,
       ticketLink: "",
-      legacyTicketLink: filmRow.ticket_link || "",
       staffFavorite: Boolean(filmRow.staff_favorite),
       staffFavoriteBy: String(filmRow.staff_favorite_by || "").trim(),
       featuredOnPlayweek: Boolean(filmRow.featured_on_playweek),
@@ -2263,12 +2246,8 @@ async function loadDataFromSupabase() {
     });
   });
 
-  // Theatre-specific ticket link overrides.
-  const effectiveTheatreFilms = theatreFilms.length
-    ? theatreFilms
-    : buildFallbackTheatreFilmLinks(showings, filmById);
-
-  effectiveTheatreFilms.forEach((linkRow) => {
+  // Theatre-specific ticket links.
+  theatreFilms.forEach((linkRow) => {
     const theatre = theatreById.get(linkRow.theatre_id);
     const film = theatre?._filmMap.get(String(linkRow.film_id));
     if (!theatre || !film) return;
@@ -2282,19 +2261,13 @@ async function loadDataFromSupabase() {
     const filmKey = String(showingRow.film_id);
     const film = theatre._filmMap.get(filmKey);
     if (!film) return;
-    const explicitFestivalId = Number(showingRow.festival_id);
-    const fallbackFestivalIds = festivalIdsByFilmId.get(Number(showingRow.film_id));
-    const inferredFestivalId =
-      fallbackFestivalIds && fallbackFestivalIds.size === 1
-        ? Array.from(fallbackFestivalIds)[0]
-        : null;
-    const resolvedFestivalId = Number.isInteger(explicitFestivalId) ? explicitFestivalId : inferredFestivalId;
+    const festivalId = Number(showingRow.festival_id);
 
     film.showings.push({
       date: showingRow.show_date,
       room: String(showingRow.room || "").trim(),
       notes: String(showingRow.notes || "").trim(),
-      festivalId: Number.isInteger(Number(resolvedFestivalId)) ? Number(resolvedFestivalId) : null,
+      festivalId: showingRow.festival_id != null && Number.isInteger(festivalId) ? festivalId : null,
       times: dedupeSortTimes(Array.isArray(showingRow.times) ? showingRow.times : []),
       premiumTimes: dedupeSortTimes(Array.isArray(showingRow.premium_times) ? showingRow.premium_times : []),
     });
@@ -2338,23 +2311,6 @@ async function loadDataVersion() {
   } catch {
     return null;
   }
-}
-
-function buildFallbackTheatreFilmLinks(showings, filmById) {
-  const seen = new Set();
-  const rows = [];
-  showings.forEach((showing) => {
-    const key = `${showing.theatre_id}::${showing.film_id}`;
-    if (seen.has(key)) return;
-    seen.add(key);
-    const film = filmById.get(showing.film_id);
-    rows.push({
-      theatre_id: showing.theatre_id,
-      film_id: showing.film_id,
-      ticket_link: film?.legacyTicketLink || "",
-    });
-  });
-  return rows;
 }
 
 function validateData(data) {
@@ -3512,7 +3468,7 @@ async function verifySupabaseSchema(supabase) {
   const checks = await Promise.all([
     supabase.from("theatres").select("id").limit(1),
     supabase.from("films").select("id,metadata_source").limit(1),
-    supabase.from("showings").select("id").limit(1),
+    supabase.from("showtimes").select("id").limit(1),
     supabase.from("theatre_films").select("theatre_id").limit(1),
     supabase.from("promos").select("id").limit(1),
     supabase.from("festivals").select("id").limit(1),

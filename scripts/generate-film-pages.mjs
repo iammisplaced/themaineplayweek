@@ -3,6 +3,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import {
+  SHOWTIME_COLUMNS,
+  groupShowtimesIntoShowings,
   buildFilmSlug,
   escapeHtml,
   getFilmSortBreakdown,
@@ -57,11 +59,6 @@ main().catch((error) => {
 });
 
 async function main() {
-  // Prune past showings from Supabase before generating pages
-  if (fromSupabase) {
-    await prunePastShowingsFromSupabase();
-  }
-
   const source = fromSupabase ? await loadFilmSourceFromSupabase() : JSON.parse(await fs.readFile(inputPath, "utf8"));
   const films = normalizeFilms(source)
     .filter(hasUpcomingShowtimes)
@@ -121,7 +118,7 @@ async function loadFilmSourceFromSupabase() {
   }
 
   const restBase = `${supabaseUrl.replace(/\/+$/, "")}/rest/v1`;
-  const [theatres, films, theatreFilms, showings, festivals] = await Promise.all([
+  const [theatres, films, theatreFilms, showtimes, festivals] = await Promise.all([
     fetchAllFromSupabase(
       restBase,
       supabaseAnonKey,
@@ -133,7 +130,7 @@ async function loadFilmSourceFromSupabase() {
       restBase,
       supabaseAnonKey,
       "films",
-      "id,title,year,tmdb_id,synopsis,ticket_link,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json",
+      "id,title,year,tmdb_id,synopsis,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json",
       "id.asc"
     ),
     fetchAllFromSupabase(
@@ -146,9 +143,9 @@ async function loadFilmSourceFromSupabase() {
     fetchAllFromSupabase(
       restBase,
       supabaseAnonKey,
-      "showings",
-      "theatre_id,film_id,festival_id,show_date,room,notes,times,premium_times",
-      "theatre_id.asc,film_id.asc,show_date.asc"
+      "showtimes",
+      SHOWTIME_COLUMNS,
+      "theatre_id.asc,film_id.asc,show_date.asc,start_time.asc"
     ),
     fetchAllFromSupabase(
       restBase,
@@ -158,6 +155,7 @@ async function loadFilmSourceFromSupabase() {
       "id.asc"
     ),
   ]);
+  const showings = groupShowtimesIntoShowings(showtimes);
   const festivalNameById = new Map(
     festivals
       .map((row) => [Number(row.id), String(row.name || "").trim()])
@@ -208,7 +206,6 @@ async function loadFilmSourceFromSupabase() {
       featuredOnPlayweekUrl: String(
         row.featured_on_playweek_url || tmdb.featuredOnPlayweekUrl || tmdb.featured_on_playweek_url || ""
       ).trim(),
-      legacyTicketLink: String(row.ticket_link || "").trim(),
       theatres: [],
       showings: [],
     });
@@ -239,7 +236,7 @@ async function loadFilmSourceFromSupabase() {
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
-        ticketLink: ticketLinkByPair.get(pairKey) || theatre.website || film.legacyTicketLink || "",
+        ticketLink: ticketLinkByPair.get(pairKey) || theatre.website || "",
         latitude: Number.isFinite(Number(theatre.latitude)) ? Number(theatre.latitude) : undefined,
         longitude: Number.isFinite(Number(theatre.longitude)) ? Number(theatre.longitude) : undefined,
       });
@@ -258,7 +255,7 @@ async function loadFilmSourceFromSupabase() {
         theatre: theatre.name || theatreLabel || "Theatre TBA",
         city: theatre.city || "",
         theatreWebsite: theatre.website || "",
-        ticketLink: ticketLinkByPair.get(pairKey) || theatre.website || film.legacyTicketLink || "",
+        ticketLink: ticketLinkByPair.get(pairKey) || theatre.website || "",
         latitude: Number.isFinite(Number(theatre.latitude)) ? Number(theatre.latitude) : undefined,
         longitude: Number.isFinite(Number(theatre.longitude)) ? Number(theatre.longitude) : undefined,
       });
@@ -267,82 +264,6 @@ async function loadFilmSourceFromSupabase() {
 
   const sourceFilms = Array.from(filmById.values()).filter((film) => film.title);
   return { films: sourceFilms };
-}
-
-async function prunePastShowingsFromSupabase() {
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn("Skipping Supabase prune: missing Supabase config");
-    return;
-  }
-
-  const restBase = `${supabaseUrl.replace(/\/+$/, "")}/rest/v1`;
-  const nowEt = getCurrentEasternDateTimeParts();
-
-  // Delete all showings with show_date < today
-  const deleteUrl = `${restBase}/showings?show_date=lt.${nowEt.date}`;
-  const deleteResponse = await fetch(deleteUrl, {
-    method: "DELETE",
-    headers: {
-      apikey: supabaseAnonKey,
-      Authorization: `Bearer ${supabaseAnonKey}`,
-      Prefer: "return=minimal",
-    },
-  });
-
-  if (!deleteResponse.ok) {
-    const text = await deleteResponse.text();
-    throw new Error(`Supabase delete past showings failed (${deleteResponse.status}): ${text}`);
-  }
-
-  // For today's showings, fetch and delete the ones that are in the past
-  const todayShowingsUrl = `${restBase}/showings?show_date=eq.${nowEt.date}&select=id,times,premium_times`;
-  const todayResponse = await fetch(todayShowingsUrl, {
-    headers: {
-      apikey: supabaseAnonKey,
-      Authorization: `Bearer ${supabaseAnonKey}`,
-    },
-  });
-
-  if (!todayResponse.ok) {
-    const text = await todayResponse.text();
-    throw new Error(`Supabase fetch today's showings failed (${todayResponse.status}): ${text}`);
-  }
-
-  const todayShowings = await todayResponse.json();
-  if (!Array.isArray(todayShowings)) return;
-
-  // Delete showings where all times (standard and premium) are in the past
-  for (const showing of todayShowings) {
-    const standardTimes = Array.isArray(showing.times) ? showing.times : [];
-    const premiumTimes = Array.isArray(showing.premium_times) ? showing.premium_times : [];
-    const allTimes = [...standardTimes, ...premiumTimes];
-
-    const hasUpcomingTime = allTimes.some((time) => {
-      const minutes = parseTimeToMinutes(time);
-      return minutes !== null && minutes >= nowEt.minutes;
-    });
-
-    if (!hasUpcomingTime) {
-      const deleteShowingUrl = `${restBase}/showings?id=eq.${showing.id}`;
-      const deleteShowingResponse = await fetch(deleteShowingUrl, {
-        method: "DELETE",
-        headers: {
-          apikey: supabaseAnonKey,
-          Authorization: `Bearer ${supabaseAnonKey}`,
-          Prefer: "return=minimal",
-        },
-      });
-
-      if (!deleteShowingResponse.ok) {
-        const text = await deleteShowingResponse.text();
-        console.warn(
-          `Warning: Failed to delete showing ${showing.id} (${deleteShowingResponse.status}): ${text}`
-        );
-      }
-    }
-  }
-
-  console.log("Pruned past showings from Supabase");
 }
 
 async function fetchAllFromSupabase(restBase, apiKey, table, select, orderBy = "", pageSize = 1000) {

@@ -149,7 +149,7 @@ The Supabase URL and anon key are in `js/shared.js`. The anon key is meant to be
 
 **After `schema.sql` changes**, run it again in the SQL editor. It's written to be re-run safely: it creates what's missing and replaces the functions. If saving fails with `DELETE requires a WHERE clause`, the save function is out of date, and re-running the file fixes it.
 
-Main tables: `theatres`, `films`, `showings` (one row per theatre, film and date, with `times`, `premium_times`, `room`, `notes` and `festival_id`), `theatre_films` (ticket links only), `festivals`, `festival_films` and `promos`.
+Main tables: `theatres`, `films`, `showtimes` (one row per showtime, with `starts_at`, `is_premium`, `format`, `note`, `room` and `festival_id`; the site and apps read this), `theatre_films` (ticket links only), `festivals` and `promos`. Admin saves still write `showings` (one row per theatre, film and date), which fills `showtimes` by trigger until `showings` is retired.
 
 ## Data shape in the app
 

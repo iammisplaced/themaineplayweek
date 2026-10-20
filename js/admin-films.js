@@ -3,6 +3,8 @@ import {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
   SUPABASE_CLIENT_OPTIONS,
+  SHOWTIME_COLUMNS,
+  groupShowtimesIntoShowings,
   markStagingPage,
   debounce,
   escapeHtml,
@@ -208,19 +210,19 @@ async function loadCatalog() {
         "theatre_films"
       ),
       runWithTimeout(
-        fetchAllRows(() => supabase.from("showings").select("theatre_id,film_id,show_date,times,premium_times")),
-        "showings"
+        fetchAllRows(() => supabase.from("showtimes").select(SHOWTIME_COLUMNS)),
+        "showtimes"
       ),
     ]);
     if (theatresResult.error) warnings.push(`theatres: ${theatresResult.error.message}`);
     if (theatreFilmsResult.error) warnings.push(`theatre_films: ${theatreFilmsResult.error.message}`);
-    if (showingsResult.error) warnings.push(`showings: ${showingsResult.error.message}`);
+    if (showingsResult.error) warnings.push(`showtimes: ${showingsResult.error.message}`);
 
     state.films = buildCatalogRows(
       filmsResult.data || [],
       theatresResult.data || [],
       theatreFilmsResult.data || [],
-      showingsResult.data || []
+      groupShowtimesIntoShowings(showingsResult.data || [])
     );
 
     renderSummary();
@@ -281,7 +283,7 @@ function isRankingOverrideSchemaMissing(error) {
 }
 
 function buildFilmSelectColumns() {
-  const columns = ["id", "title", "year", "tmdb_id", "ticket_link", "tmdb_json"];
+  const columns = ["id", "title", "year", "tmdb_id", "tmdb_json"];
   if (state.staffFavoriteSupported) {
     columns.push("staff_favorite", "staff_favorite_by");
   }
@@ -298,7 +300,6 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
   const theatreById = new Map(theatres.map((row) => [String(row.id), row]));
   const theatreFilmsByFilmId = new Map();
   const showingsByFilmId = new Map();
-  const theatreIdsByFilmIdFromShowings = new Map();
 
   theatreFilms.forEach((row) => {
     const key = String(row.film_id);
@@ -310,11 +311,6 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
     const key = String(row.film_id);
     if (!showingsByFilmId.has(key)) showingsByFilmId.set(key, []);
     showingsByFilmId.get(key).push(row);
-
-    if (!theatreIdsByFilmIdFromShowings.has(key)) {
-      theatreIdsByFilmIdFromShowings.set(key, new Set());
-    }
-    theatreIdsByFilmIdFromShowings.get(key).add(String(row.theatre_id));
   });
 
   const rows = films.map((film) => {
@@ -347,26 +343,6 @@ function buildCatalogRows(films, theatres, theatreFilms, showings) {
         ticketLink: String(row.ticket_link || "").trim(),
       };
     });
-    if (!links.length && String(film.ticket_link || "").trim()) {
-      const linkedTheatreIds = theatreIdsByFilmIdFromShowings.get(String(film.id));
-      if (linkedTheatreIds?.size) {
-        linkedTheatreIds.forEach((theatreId) => {
-          const theatre = theatreById.get(String(theatreId));
-          links.push({
-            theatreName: theatre?.name || `Theatre ${theatreId}`,
-            theatreCity: theatre?.city || "",
-            ticketLink: String(film.ticket_link || "").trim(),
-          });
-        });
-      } else {
-        links.push({
-          theatreName: "All theatres",
-          theatreCity: "",
-          ticketLink: String(film.ticket_link || "").trim(),
-        });
-      }
-    }
-
     links.sort((a, b) => `${a.theatreName} ${a.theatreCity}`.localeCompare(`${b.theatreName} ${b.theatreCity}`));
 
     return {
