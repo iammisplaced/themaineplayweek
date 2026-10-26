@@ -63,6 +63,7 @@ const THEATRE_GEO_CACHE_KEY = "theatre-geocode-cache-v1";
 const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
 const LOCATION_PREFERENCE_STORAGE_KEY = "tmp-location-preference-v1";
+const DAYS_VIEW_RADIUS_STORAGE_KEY = "tmp-days-radius-v1";
 const LOCATION_CHOOSER_SEEN_STORAGE_KEY = "tmp-location-chooser-seen-v1";
 const BETA_BANNER_ROTATION_MS = 5200;
 const SEARCH_INPUT_DEBOUNCE_MS = 180;
@@ -181,7 +182,8 @@ const elements = {
   dayPickerWrap: document.getElementById("dayPickerWrap"),
   dayPickerInput: document.getElementById("dayPickerInput"),
   dayPickerDisplayLabel: document.getElementById("dayPickerDisplayLabel"),
-  dayRadiusInput: document.getElementById("dayRadiusInput"),
+  radiusButtonGroup: document.getElementById("radiusButtonGroup"),
+  radiusOptions: Array.from(document.querySelectorAll(".radius-option")),
   dayPrevButton: document.getElementById("dayPrevButton"),
   dayNextButton: document.getElementById("dayNextButton"),
   locationChooserModal: document.getElementById("locationChooserModal"),
@@ -351,6 +353,7 @@ async function init() {
   initializeViewPreference();
   loadLocationPreference();
   loadLocationChooserSeen();
+  loadDaysViewRadius();
   initializeSupabase();
   bindEvents();
   initShowtimeNoteTooltips();
@@ -833,12 +836,14 @@ function bindEvents() {
     render();
   });
 
-  elements.dayRadiusInput?.addEventListener("change", () => {
-    const requestedRadius = Number(elements.dayRadiusInput.value);
-    state.daysViewRadiusMiles =
-      Number.isFinite(requestedRadius) && requestedRadius > 0
-        ? requestedRadius
-        : DEFAULT_DAYS_VIEW_RADIUS_MILES;
+  elements.radiusButtonGroup?.addEventListener("click", (event) => {
+    const option = event.target.closest(".radius-option");
+    if (!option) return;
+    const requestedRadius = Number(option.dataset.value);
+    if (!Number.isFinite(requestedRadius) || requestedRadius <= 0) return;
+    state.daysViewRadiusMiles = requestedRadius;
+    persistDaysViewRadius();
+    syncRadiusButtons();
     render();
   });
 
@@ -5542,6 +5547,34 @@ function getDaysViewRadiusMiles() {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_DAYS_VIEW_RADIUS_MILES;
 }
 
+function loadDaysViewRadius() {
+  try {
+    const stored = Number(localStorage.getItem(DAYS_VIEW_RADIUS_STORAGE_KEY));
+    const isOffered = elements.radiusOptions.some((option) => Number(option.dataset.value) === stored);
+    if (isOffered) state.daysViewRadiusMiles = stored;
+  } catch {
+    // Storage can be blocked; keep the default radius.
+  }
+  syncRadiusButtons();
+}
+
+function persistDaysViewRadius() {
+  try {
+    localStorage.setItem(DAYS_VIEW_RADIUS_STORAGE_KEY, String(getDaysViewRadiusMiles()));
+  } catch {
+    // Storage can be blocked; the choice still applies until reload.
+  }
+}
+
+function syncRadiusButtons() {
+  const radius = getDaysViewRadiusMiles();
+  elements.radiusOptions.forEach((option) => {
+    const selected = Number(option.dataset.value) === radius;
+    option.classList.toggle("is-selected", selected);
+    option.setAttribute("aria-pressed", String(selected));
+  });
+}
+
 function filterSingleDayGroupsByDistance(groups, maxMiles) {
   const filtered = {};
   Object.entries(groups || {}).forEach(([key, group]) => {
@@ -5581,10 +5614,6 @@ function syncDayPickerUI(activeDay) {
 
   elements.dayPickerWrap.classList.remove("hidden");
   elements.dayPickerInput.disabled = false;
-  if (elements.dayRadiusInput) {
-    elements.dayRadiusInput.disabled = false;
-    elements.dayRadiusInput.value = String(getDaysViewRadiusMiles());
-  }
   elements.dayPrevButton.disabled = false;
   elements.dayNextButton.disabled = false;
 
