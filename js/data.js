@@ -11,6 +11,11 @@ import {
   to24HourTime,
 } from "./shared.js";
 
+// The admin's copy of its last save. The site falls back to it if Supabase can't be read.
+export const STORAGE_KEY = "showtimes-local-edit";
+// Supabase Storage bucket holding the promo card images.
+export const PROMO_STORAGE_BUCKET = "promo-images";
+
 export async function loadDataFromSupabase(supabase) {
   // Read before the tables: if a save lands mid-load, this version is older and the
   // next save is refused instead of overwriting it.
