@@ -142,7 +142,6 @@ const state = {
   selectedDay: "",
   daysViewRadiusMiles: DEFAULT_DAYS_VIEW_RADIUS_MILES,
   theme: LIGHT_THEME,
-  themeManuallyOverridden: false,
   brandWordmarkVariant: WORDMARK_VARIANTS[0],
   supabase: null,
   promotedCards: cloneDefaultPromotedCards(),
@@ -623,8 +622,8 @@ function bindEvents() {
   elements.themeToggle?.addEventListener("click", () => {
     animateThemeToggle();
     const nextTheme = state.theme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-    state.themeManuallyOverridden = true;
-    applyTheme(nextTheme, { persist: false });
+    applyTheme(nextTheme);
+    saveThemeChoice(nextTheme);
   });
 
   window.addEventListener("resize", () => {
@@ -1790,22 +1789,39 @@ function bindEvents() {
 
 }
 
-function initializeTheme() {
-  // Clear any stored theme preference - always use system preference
-  localStorage.removeItem(THEME_STORAGE_KEY);
+// The theme follows the system setting unless the visitor picks the other one with the
+// logo button. That choice is saved under THEME_STORAGE_KEY, which the film pages also
+// read; picking the system theme again clears it.
+function getSystemTheme() {
+  return window.matchMedia?.("(prefers-color-scheme: dark)")?.matches ? DARK_THEME : LIGHT_THEME;
+}
 
-  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
-  const initialTheme = prefersDark ? DARK_THEME : LIGHT_THEME;
-  applyTheme(initialTheme, { persist: false });
+function readSavedTheme() {
+  try {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    return stored === LIGHT_THEME || stored === DARK_THEME ? stored : "";
+  } catch {
+    return "";
+  }
+}
 
-  // Listen for system theme preference changes
-  const darkModeQuery = window.matchMedia?.("(prefers-color-scheme: dark)");
-  darkModeQuery?.addEventListener?.("change", (e) => {
-    // Only auto-switch if user hasn't manually overridden the theme
-    if (!state.themeManuallyOverridden) {
-      const newTheme = e.matches ? DARK_THEME : LIGHT_THEME;
-      applyTheme(newTheme, { persist: false });
+function saveThemeChoice(theme) {
+  try {
+    if (theme === getSystemTheme()) {
+      localStorage.removeItem(THEME_STORAGE_KEY);
+    } else {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
     }
+  } catch {
+    // Storage can be blocked; the theme still applies to this page.
+  }
+}
+
+function initializeTheme() {
+  applyTheme(readSavedTheme() || getSystemTheme());
+
+  window.matchMedia?.("(prefers-color-scheme: dark)")?.addEventListener?.("change", () => {
+    if (!readSavedTheme()) applyTheme(getSystemTheme());
   });
 }
 
@@ -1864,8 +1880,7 @@ function setView(view, options = {}) {
   render();
 }
 
-function applyTheme(theme, options = {}) {
-  const { persist = true } = options;
+function applyTheme(theme) {
   const normalizedTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
   state.theme = normalizedTheme;
 
@@ -1899,10 +1914,6 @@ function applyTheme(theme, options = {}) {
 
   if (elements.themeColorMeta) {
     elements.themeColorMeta.setAttribute("content", THEME_COLOR_MAP[normalizedTheme] || THEME_COLOR_MAP[LIGHT_THEME]);
-  }
-
-  if (persist) {
-    localStorage.setItem(THEME_STORAGE_KEY, normalizedTheme);
   }
 }
 
