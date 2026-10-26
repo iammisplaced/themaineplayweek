@@ -40,6 +40,13 @@ function initMapElements() {
     mapElements.sidebarClose.addEventListener('click', closeSidebar);
   }
 
+  // Keep the map sized correctly while it's showing
+  window.addEventListener('resize', () => {
+    if (mapInstance && !mapElements.mapContainer.classList.contains('hidden')) {
+      mapInstance.invalidateSize();
+    }
+  });
+
   // Close sidebar when clicking outside of it
   if (mapElements.mapContainer) {
     mapElements.mapContainer.addEventListener('click', (e) => {
@@ -83,13 +90,6 @@ function toggleMapView() {
     setTimeout(() => mapInstance.invalidateSize(), 300);
     setTimeout(() => mapInstance.invalidateSize(), 500);
   }
-
-  // Listen for window resize to keep map sized correctly
-  window.addEventListener('resize', () => {
-    if (mapInstance && !mapElements.mapContainer.classList.contains('hidden')) {
-      mapInstance.invalidateSize();
-    }
-  });
 }
 
 // Initialize Leaflet map
@@ -251,23 +251,13 @@ function selectTheatre(theatre, marker) {
 // Populate sidebar with theatre card - use theatre group's shows (already processed)
 function populateSidebar(theatre) {
   // Find the theatre group from cached groups
-  if (!cachedTheatreGroups || !Array.isArray(cachedTheatreGroups)) {
-    console.log('ERROR: cachedTheatreGroups not available');
-    return;
-  }
-
-  console.log('DEBUG: Looking for theatre ID', theatre.id, 'in', cachedTheatreGroups.length, 'groups');
-  if (cachedTheatreGroups.length > 0) {
-    console.log('First group:', cachedTheatreGroups[0]);
-  }
+  if (!cachedTheatreGroups || !Array.isArray(cachedTheatreGroups)) return;
 
   const theatreGroup = cachedTheatreGroups.find(group =>
     group.theatreInfo && group.theatreInfo.id === theatre.id
   );
 
-  console.log('DEBUG: theatreGroup found?', !!theatreGroup, 'Shows:', theatreGroup?.shows?.length);
   if (!theatreGroup || !theatreGroup.shows || theatreGroup.shows.length === 0) {
-    console.log('ERROR: Theatre group not found or has no shows');
     mapElements.sidebarContent.innerHTML = `
       <article class="group-card" data-theatre-id="${theatre.id}">
         <h3 class="group-title">${theatre.name}</h3>

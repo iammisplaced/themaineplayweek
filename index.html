@@ -343,10 +343,6 @@
             <textarea id="metadataGenresInput" rows="2" placeholder="Drama, Comedy"></textarea>
             <label for="metadataReleaseDateInput">Release Date (optional)</label>
             <input id="metadataReleaseDateInput" type="date" />
-            <label class="promo-settings-toggle" for="metadataFestivalOnlyInput">
-              <input id="metadataFestivalOnlyInput" type="checkbox" />
-              Festival only (hide from All Films / Near You / Theatres)
-            </label>
             <div class="admin-inline-actions">
               <button id="confirmEditFilmMetadata" value="confirm">Save Metadata</button>
               <button id="cancelEditFilmMetadata" class="ghost-btn" type="button">Cancel</button>
@@ -445,9 +441,9 @@
           <div class="location-chooser-radius-row">
             <span class="location-chooser-radius-label">Search radius</span>
             <div id="radiusButtonGroup" class="radius-button-group" role="group" aria-label="Search radius">
-              <button type="button" class="radius-option" data-value="10">10 mi</button>
-              <button type="button" class="radius-option" data-value="25">25 mi</button>
-              <button type="button" class="radius-option is-selected" data-value="50">50 mi</button>
+              <button type="button" class="radius-option" data-value="10" aria-pressed="false">10 mi</button>
+              <button type="button" class="radius-option" data-value="25" aria-pressed="false">25 mi</button>
+              <button type="button" class="radius-option is-selected" data-value="50" aria-pressed="true">50 mi</button>
             </div>
           </div>
         </div>

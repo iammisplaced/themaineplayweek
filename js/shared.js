@@ -123,6 +123,29 @@ export function toFiniteNumber(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+// ---- Location ----
+
+// Shared by the main app and the film pages so a location set on one is used by the other.
+// Shape: { mode: "zip" | "geolocation", zip, lat, lng }.
+export const LOCATION_PREFERENCE_STORAGE_KEY = "tmp-location-preference-v1";
+
+// Looks up a US ZIP code (ZIP+4 is accepted) and returns { lat, lng }, or null when it
+// can't be found.
+export async function geocodeUsZip(zip) {
+  const zip5 = /^(\d{5})(?:-\d{4})?$/.exec(String(zip || "").trim())?.[1];
+  if (!zip5) return null;
+  try {
+    const response = await fetch(`https://api.zippopotam.us/us/${zip5}`);
+    if (!response.ok) return null;
+    const place = (await response.json())?.places?.[0];
+    const lat = Number(place?.latitude);
+    const lng = Number(place?.longitude);
+    return Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null;
+  } catch {
+    return null;
+  }
+}
+
 export function debounce(fn, waitMs = 150) {
   let timeoutId = null;
   return (...args) => {

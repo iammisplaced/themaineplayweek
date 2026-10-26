@@ -72,7 +72,6 @@ async function main() {
 
   await fs.rm(outputDir, { recursive: true, force: true });
   await fs.mkdir(outputDir, { recursive: true });
-  await writeCss(outputDir);
 
   const pageItems = [];
   for (const film of films) {
@@ -1050,7 +1049,11 @@ function renderFilmPage(film, slug, siteUrl) {
         <p>hello@themaineplayweek.com</p>
       </section>
     </main>
-    <script>
+    <script type="module">
+      import { LOCATION_PREFERENCE_STORAGE_KEY, geocodeUsZip, initShowtimeNoteTooltips } from "../../js/shared.js";
+
+      initShowtimeNoteTooltips();
+
       (() => {
         const LIGHT_THEME = "light";
         const DARK_THEME = "dark";
@@ -1098,7 +1101,9 @@ function renderFilmPage(film, slug, siteUrl) {
           applyTheme(getTheme());
         });
 
-        const STORAGE_KEYS = ["tmp-location-preference-v1", "tmp-film-pages-location-v1"];
+        // Film pages used to keep their own location; it's still read for visitors who set one there.
+        const LEGACY_LOCATION_STORAGE_KEY = "tmp-film-pages-location-v1";
+        const STORAGE_KEYS = [LOCATION_PREFERENCE_STORAGE_KEY, LEGACY_LOCATION_STORAGE_KEY];
         const useDeviceButton = document.getElementById("locationSortUseDevice");
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
@@ -1128,9 +1133,12 @@ function renderFilmPage(film, slug, siteUrl) {
           return null;
         }
 
+        // Saved in the main app's format so the Near You and Theatres views use it too.
         function saveLocation(lat, lng, mode, zip) {
-          const payload = { lat, lng, mode: mode || "", zip: zip || "" };
-          localStorage.setItem("tmp-film-pages-location-v1", JSON.stringify(payload));
+          const payload = { mode, zip: zip || "", lat, lng };
+          try {
+            localStorage.setItem(LOCATION_PREFERENCE_STORAGE_KEY, JSON.stringify(payload));
+          } catch {}
         }
 
         function haversineMiles(lat1, lng1, lat2, lng2) {
@@ -1210,14 +1218,9 @@ function renderFilmPage(film, slug, siteUrl) {
           if (!/^\\d{5}$/.test(cleaned)) {
             throw new Error("Enter a valid 5-digit ZIP code.");
           }
-          const response = await fetch("https://api.zippopotam.us/us/" + cleaned);
-          if (!response.ok) throw new Error("Could not find that ZIP code.");
-          const json = await response.json();
-          const place = Array.isArray(json?.places) ? json.places[0] : null;
-          const lat = Number(place?.latitude);
-          const lng = Number(place?.longitude);
-          if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error("ZIP lookup did not return coordinates.");
-          return { lat, lng, zip: cleaned };
+          const coords = await geocodeUsZip(cleaned);
+          if (!coords) throw new Error("Could not find that ZIP code.");
+          return { ...coords, zip: cleaned };
         }
 
         useDeviceButton?.addEventListener("click", () => {
@@ -1230,7 +1233,7 @@ function renderFilmPage(film, slug, siteUrl) {
             (position) => {
               const lat = Number(position.coords.latitude);
               const lng = Number(position.coords.longitude);
-              saveLocation(lat, lng, "device", "");
+              saveLocation(lat, lng, "geolocation", "");
               sortByDistance(lat, lng, "device location");
             },
             () => {
@@ -1254,7 +1257,7 @@ function renderFilmPage(film, slug, siteUrl) {
 
         const saved = readSavedLocation();
         if (saved) {
-          sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
+          sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "your saved ZIP" : "your saved location");
         } else {
           applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
@@ -1269,10 +1272,6 @@ function renderFilmPage(film, slug, siteUrl) {
           }, 90);
         });
       })();
-    </script>
-    <script type="module">
-      import { initShowtimeNoteTooltips } from "../../js/shared.js";
-      initShowtimeNoteTooltips();
     </script>
   </body>
 </html>`;
@@ -1368,160 +1367,6 @@ function renderIndexPage(items, siteUrl) {
     </main>
   </body>
 </html>`;
-}
-
-async function writeCss(outputDir) {
-  const css = `:root {
-  color-scheme: light;
-  --bg: #f4efe7;
-  --panel: #fffdf8;
-  --ink: #1d1f1f;
-  --muted: #5a6160;
-  --accent: #c54828;
-  --border: #d7d0c2;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: "IBM Plex Sans", sans-serif;
-  color: var(--ink);
-  background:
-    radial-gradient(circle at 10% 10%, #eadac6 0%, transparent 35%),
-    radial-gradient(circle at 100% 0%, #d8e4dd 0%, transparent 30%),
-    var(--bg);
-}
-
-.film-page,
-.film-index {
-  width: min(980px, 100%);
-  margin: 0 auto;
-  padding: 2rem 1rem 3rem;
-}
-
-.back-link {
-  display: inline-block;
-  margin-bottom: 1rem;
-  color: var(--accent);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.hero {
-  display: grid;
-  grid-template-columns: minmax(180px, 260px) 1fr;
-  gap: 1.25rem;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 1rem;
-}
-
-.hero h1 {
-  margin: 0.1rem 0 0.5rem;
-}
-
-.poster {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: #e6e1d6;
-}
-
-.eyebrow {
-  margin: 0;
-  color: var(--accent);
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.meta {
-  list-style: none;
-  margin: 1rem 0 0;
-  padding: 0;
-  display: grid;
-  gap: 0.6rem;
-}
-
-.meta span {
-  display: inline-block;
-  min-width: 110px;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-.panel {
-  margin-top: 1rem;
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 1rem;
-}
-
-.panel h2 {
-  margin: 0 0 0.6rem;
-}
-
-.panel ul {
-  margin: 0;
-  padding-left: 1.1rem;
-  display: grid;
-  gap: 0.3rem;
-}
-
-.film-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-}
-
-.film-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.film-card img {
-  width: 100%;
-  height: 320px;
-  object-fit: cover;
-  display: block;
-  background: #e6e1d6;
-}
-
-.film-link {
-  color: inherit;
-  text-decoration: none;
-}
-
-.film-link h2 {
-  margin: 0.75rem 0.8rem 0.35rem;
-  font-size: 1.06rem;
-}
-
-.film-link p {
-  margin: 0 0.8rem 0.9rem;
-  color: var(--muted);
-}
-
-.intro {
-  color: var(--muted);
-}
-
-@media (max-width: 680px) {
-  .hero {
-    grid-template-columns: 1fr;
-  }
-}`;
-
-  await fs.writeFile(path.join(outputDir, "film-pages.css"), css, "utf8");
 }
 
 function absoluteOrPassThrough(url, siteUrl) {

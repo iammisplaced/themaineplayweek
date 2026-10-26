@@ -10,6 +10,8 @@ import {
   compareTimes,
   debounce,
   formatDisplayDate,
+  geocodeUsZip,
+  LOCATION_PREFERENCE_STORAGE_KEY,
   getDayDifferenceFromToday,
   getFilmSortBreakdown,
   getShowDateTime,
@@ -62,16 +64,10 @@ const SUBSTACK_ARCHIVE_URL = "https://themaineplayweek.substack.com/api/v1/archi
 const THEATRE_GEO_CACHE_KEY = "theatre-geocode-cache-v1";
 const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
-const LOCATION_PREFERENCE_STORAGE_KEY = "tmp-location-preference-v1";
+const DAYS_VIEW_RADIUS_STORAGE_KEY = "tmp-days-radius-v1";
 const LOCATION_CHOOSER_SEEN_STORAGE_KEY = "tmp-location-chooser-seen-v1";
-const BETA_BANNER_ROTATION_MS = 5200;
 const SEARCH_INPUT_DEBOUNCE_MS = 180;
 const MAX_ADMIN_SEARCH_RESULTS = 120;
-const BETA_BANNER_MESSAGES = Object.freeze([
-  "Listings and distance sorting are actively being tuned.",
-  "Showtimes update throughout the day while we refine the feed.",
-  "Near You results are beta and may shift as location data improves.",
-]);
 
 const LOGO_SPIN_ANIMATION_MS = 420;
 const LIGHT_THEME = "light";
@@ -141,7 +137,6 @@ const state = {
   selectedDay: "",
   daysViewRadiusMiles: DEFAULT_DAYS_VIEW_RADIUS_MILES,
   theme: LIGHT_THEME,
-  themeManuallyOverridden: false,
   brandWordmarkVariant: WORDMARK_VARIANTS[0],
   supabase: null,
   promotedCards: cloneDefaultPromotedCards(),
@@ -167,7 +162,6 @@ const state = {
 
 const elements = {
   appLoader: document.getElementById("appLoader"),
-  betaBannerMessage: document.getElementById("betaBannerMessage"),
   themeColorMeta: document.querySelector('meta[name="theme-color"]'),
   themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
@@ -181,7 +175,8 @@ const elements = {
   dayPickerWrap: document.getElementById("dayPickerWrap"),
   dayPickerInput: document.getElementById("dayPickerInput"),
   dayPickerDisplayLabel: document.getElementById("dayPickerDisplayLabel"),
-  dayRadiusInput: document.getElementById("dayRadiusInput"),
+  radiusButtonGroup: document.getElementById("radiusButtonGroup"),
+  radiusOptions: Array.from(document.querySelectorAll(".radius-option")),
   dayPrevButton: document.getElementById("dayPrevButton"),
   dayNextButton: document.getElementById("dayNextButton"),
   locationChooserModal: document.getElementById("locationChooserModal"),
@@ -284,7 +279,6 @@ const elements = {
   showingTimesInput: document.getElementById("showingTimesInput"),
   showingPremiumTimesInput: document.getElementById("showingPremiumTimesInput"),
   showingRoomInput: document.getElementById("showingRoomInput"),
-  showingNotesInput: document.getElementById("showingNotesInput"),
   showingFestivalSelect: document.getElementById("showingFestivalSelect"),
   addShowing: document.getElementById("addShowing"),
   showingsList: document.getElementById("showingsList"),
@@ -298,7 +292,6 @@ const elements = {
 
 let resizeRenderTimeout = null;
 let logoSpinResetTimeout = null;
-let betaBannerRotationInterval = null;
 let lastViewportWidth = window.innerWidth;
 let appBootComplete = false;
 let pageLoadComplete = document.readyState === "complete";
@@ -345,12 +338,12 @@ function waitForNextPaint() {
 }
 
 async function init() {
-  initializeBetaBanner();
   initializeBrandWordmarkVariant();
   initializeTheme();
   initializeViewPreference();
   loadLocationPreference();
   loadLocationChooserSeen();
+  loadDaysViewRadius();
   initializeSupabase();
   bindEvents();
   initShowtimeNoteTooltips();
@@ -367,33 +360,6 @@ async function init() {
   updateTheatreSortStatus();
   render();
   registerSortDebugTools();
-}
-
-function initializeBetaBanner() {
-  const messageNode = elements.betaBannerMessage;
-  if (!messageNode || !BETA_BANNER_MESSAGES.length) return;
-
-  if (betaBannerRotationInterval) {
-    clearInterval(betaBannerRotationInterval);
-    betaBannerRotationInterval = null;
-  }
-
-  let messageIndex = 0;
-  swapBetaBannerMessage(messageNode, BETA_BANNER_MESSAGES[messageIndex]);
-
-  if (BETA_BANNER_MESSAGES.length === 1) return;
-  betaBannerRotationInterval = window.setInterval(() => {
-    messageIndex = (messageIndex + 1) % BETA_BANNER_MESSAGES.length;
-    swapBetaBannerMessage(messageNode, BETA_BANNER_MESSAGES[messageIndex]);
-  }, BETA_BANNER_ROTATION_MS);
-}
-
-function swapBetaBannerMessage(messageNode, nextMessage) {
-  messageNode.classList.remove("is-swapping");
-  messageNode.textContent = nextMessage;
-  requestAnimationFrame(() => {
-    messageNode.classList.add("is-swapping");
-  });
 }
 
 async function loadLatestSubstackPost() {
@@ -513,39 +479,6 @@ function extractImageFromContent(content) {
   return imgMatch ? imgMatch[1] : "";
 }
 
-function parseSubstackRssPost(xmlText) {
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(xmlText, "application/xml");
-    if (doc.getElementsByTagName("parsererror").length) return null;
-
-    const item = doc.querySelector("item");
-    if (!item) return null;
-
-    const title = item.querySelector("title")?.textContent || "";
-    const link = item.querySelector("link")?.textContent || "";
-    const description = item.querySelector("description")?.textContent || "";
-    const pubDate = item.querySelector("pubDate")?.textContent || "";
-
-    // Extract image from description (RSS encodes images as <img> tags in HTML)
-    let coverImage = "";
-    const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/);
-    if (imgMatch) {
-      coverImage = imgMatch[1];
-    }
-
-    return {
-      title,
-      canonical_url: link,
-      description: stripHtmlTags(description),
-      cover_image: coverImage,
-      post_date: pubDate,
-    };
-  } catch (error) {
-    return null;
-  }
-}
-
 function parseSubstackJsonPost(jsonText) {
   try {
     const posts = JSON.parse(jsonText);
@@ -577,20 +510,6 @@ function buildSubtitle(descriptionHtml) {
   return plain.length > 180 ? `${plain.slice(0, 177).trimEnd()}...` : plain;
 }
 
-function buildSubstackByline(post) {
-  const author = "The Maine Playweek";
-  const dateRaw = String(post.post_date || "");
-  if (!dateRaw) return author;
-  const date = new Date(dateRaw);
-  if (Number.isNaN(date.getTime())) return author;
-  const formattedDate = date.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-  return `${author} · ${formattedDate}`;
-}
-
 function normalizeSubstackImageUrl(value) {
   const url = String(value || "").trim();
   if (!url) return "";
@@ -620,8 +539,8 @@ function bindEvents() {
   elements.themeToggle?.addEventListener("click", () => {
     animateThemeToggle();
     const nextTheme = state.theme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-    state.themeManuallyOverridden = true;
-    applyTheme(nextTheme, { persist: false });
+    applyTheme(nextTheme);
+    saveThemeChoice(nextTheme);
   });
 
   window.addEventListener("resize", () => {
@@ -833,12 +752,14 @@ function bindEvents() {
     render();
   });
 
-  elements.dayRadiusInput?.addEventListener("change", () => {
-    const requestedRadius = Number(elements.dayRadiusInput.value);
-    state.daysViewRadiusMiles =
-      Number.isFinite(requestedRadius) && requestedRadius > 0
-        ? requestedRadius
-        : DEFAULT_DAYS_VIEW_RADIUS_MILES;
+  elements.radiusButtonGroup?.addEventListener("click", (event) => {
+    const option = event.target.closest(".radius-option");
+    if (!option) return;
+    const requestedRadius = Number(option.dataset.value);
+    if (!Number.isFinite(requestedRadius) || requestedRadius <= 0) return;
+    state.daysViewRadiusMiles = requestedRadius;
+    persistDaysViewRadius();
+    syncRadiusButtons();
     render();
   });
 
@@ -884,14 +805,12 @@ function bindEvents() {
         timeout: 7000,
         maximumAge: 5 * 60 * 1000,
       });
-      console.log('Geolocation position:', position);
       state.locationPreference = {
         mode: "geolocation",
         zip: "",
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       };
-      console.log('Saved location preference:', state.locationPreference);
       persistLocationPreference();
       state.locationChooserSeen = true;
       persistLocationChooserSeen();
@@ -1465,7 +1384,6 @@ function bindEvents() {
     const times = parseTimesInput(elements.showingTimesInput.value);
     const premiumTimes = parseTimesInput(elements.showingPremiumTimesInput?.value || "");
     const room = String(elements.showingRoomInput?.value || "").trim();
-    const notes = String(elements.showingNotesInput?.value || "").trim();
     const selectedFestivalIdRaw = String(elements.showingFestivalSelect?.value || "").trim();
     const selectedFestivalId = Number(selectedFestivalIdRaw);
     const showingFestivalId =
@@ -1485,12 +1403,11 @@ function bindEvents() {
         existing.premiumTimes = dedupeSortTimes([...(existing.premiumTimes || []), ...premiumTimes]);
         existing.festivalId = showingFestivalId;
         existing.room = room;
-        existing.notes = notes;
       } else {
         film.showings.push({
           date: targetDate,
           room,
-          notes,
+          notes: "",
           festivalId: showingFestivalId,
           times: dedupeSortTimes(times),
           premiumTimes: dedupeSortTimes(premiumTimes),
@@ -1506,9 +1423,6 @@ function bindEvents() {
     }
     if (elements.showingRoomInput) {
       elements.showingRoomInput.value = "";
-    }
-    if (elements.showingNotesInput) {
-      elements.showingNotesInput.value = "";
     }
     if (elements.showingFestivalSelect) {
       elements.showingFestivalSelect.value = "";
@@ -1785,22 +1699,39 @@ function bindEvents() {
 
 }
 
-function initializeTheme() {
-  // Clear any stored theme preference - always use system preference
-  localStorage.removeItem(THEME_STORAGE_KEY);
+// The theme follows the system setting unless the visitor picks the other one with the
+// logo button. That choice is saved under THEME_STORAGE_KEY, which the film pages also
+// read; picking the system theme again clears it.
+function getSystemTheme() {
+  return window.matchMedia?.("(prefers-color-scheme: dark)")?.matches ? DARK_THEME : LIGHT_THEME;
+}
 
-  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
-  const initialTheme = prefersDark ? DARK_THEME : LIGHT_THEME;
-  applyTheme(initialTheme, { persist: false });
+function readSavedTheme() {
+  try {
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    return stored === LIGHT_THEME || stored === DARK_THEME ? stored : "";
+  } catch {
+    return "";
+  }
+}
 
-  // Listen for system theme preference changes
-  const darkModeQuery = window.matchMedia?.("(prefers-color-scheme: dark)");
-  darkModeQuery?.addEventListener?.("change", (e) => {
-    // Only auto-switch if user hasn't manually overridden the theme
-    if (!state.themeManuallyOverridden) {
-      const newTheme = e.matches ? DARK_THEME : LIGHT_THEME;
-      applyTheme(newTheme, { persist: false });
+function saveThemeChoice(theme) {
+  try {
+    if (theme === getSystemTheme()) {
+      localStorage.removeItem(THEME_STORAGE_KEY);
+    } else {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
     }
+  } catch {
+    // Storage can be blocked; the theme still applies to this page.
+  }
+}
+
+function initializeTheme() {
+  applyTheme(readSavedTheme() || getSystemTheme());
+
+  window.matchMedia?.("(prefers-color-scheme: dark)")?.addEventListener?.("change", () => {
+    if (!readSavedTheme()) applyTheme(getSystemTheme());
   });
 }
 
@@ -1859,8 +1790,7 @@ function setView(view, options = {}) {
   render();
 }
 
-function applyTheme(theme, options = {}) {
-  const { persist = true } = options;
+function applyTheme(theme) {
   const normalizedTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
   state.theme = normalizedTheme;
 
@@ -1894,10 +1824,6 @@ function applyTheme(theme, options = {}) {
 
   if (elements.themeColorMeta) {
     elements.themeColorMeta.setAttribute("content", THEME_COLOR_MAP[normalizedTheme] || THEME_COLOR_MAP[LIGHT_THEME]);
-  }
-
-  if (persist) {
-    localStorage.setItem(THEME_STORAGE_KEY, normalizedTheme);
   }
 }
 
@@ -3429,14 +3355,6 @@ async function persistData() {
   return { localDraftWarning };
 }
 
-function isStorageQuotaExceeded(error) {
-  if (!error) return false;
-  if (error?.name === "QuotaExceededError") return true;
-  if (typeof error?.code === "number" && error.code === 22) return true;
-  const message = String(error?.message || "").toLowerCase();
-  return message.includes("quota") || message.includes("exceeded");
-}
-
 async function saveDataToSupabase() {
   const supabase = state.supabase;
   if (state.source !== "supabase" || !state.loadedFromSupabaseThisSession) {
@@ -4693,12 +4611,6 @@ function isPreferredAdSlot(stateAtIndex, columns) {
   return stateAtIndex.colUsed <= columns - 2;
 }
 
-function isAcceptableAdSlot(stateAtIndex, columns) {
-  if (!stateAtIndex) return false;
-  if (columns <= 1) return true;
-  return stateAtIndex.colUsed === 0;
-}
-
 function getGridInsertionStates(cards, columns) {
   const states = [{ row: 0, colUsed: 0 }];
   if (columns <= 1) {
@@ -5092,6 +5004,8 @@ function isValidZipCode(zip) {
 }
 
 async function geocodeZipCode(zip) {
+  const viaZipLookup = await geocodeUsZip(zip);
+  if (viaZipLookup) return viaZipLookup;
   const query = `${zip}, USA`;
   const viaNominatim = await geocodeWithNominatimJsonp(query);
   if (viaNominatim) return viaNominatim;
@@ -5542,6 +5456,34 @@ function getDaysViewRadiusMiles() {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_DAYS_VIEW_RADIUS_MILES;
 }
 
+function loadDaysViewRadius() {
+  try {
+    const stored = Number(localStorage.getItem(DAYS_VIEW_RADIUS_STORAGE_KEY));
+    const isOffered = elements.radiusOptions.some((option) => Number(option.dataset.value) === stored);
+    if (isOffered) state.daysViewRadiusMiles = stored;
+  } catch {
+    // Storage can be blocked; keep the default radius.
+  }
+  syncRadiusButtons();
+}
+
+function persistDaysViewRadius() {
+  try {
+    localStorage.setItem(DAYS_VIEW_RADIUS_STORAGE_KEY, String(getDaysViewRadiusMiles()));
+  } catch {
+    // Storage can be blocked; the choice still applies until reload.
+  }
+}
+
+function syncRadiusButtons() {
+  const radius = getDaysViewRadiusMiles();
+  elements.radiusOptions.forEach((option) => {
+    const selected = Number(option.dataset.value) === radius;
+    option.classList.toggle("is-selected", selected);
+    option.setAttribute("aria-pressed", String(selected));
+  });
+}
+
 function filterSingleDayGroupsByDistance(groups, maxMiles) {
   const filtered = {};
   Object.entries(groups || {}).forEach(([key, group]) => {
@@ -5581,10 +5523,6 @@ function syncDayPickerUI(activeDay) {
 
   elements.dayPickerWrap.classList.remove("hidden");
   elements.dayPickerInput.disabled = false;
-  if (elements.dayRadiusInput) {
-    elements.dayRadiusInput.disabled = false;
-    elements.dayRadiusInput.value = String(getDaysViewRadiusMiles());
-  }
   elements.dayPrevButton.disabled = false;
   elements.dayNextButton.disabled = false;
 
@@ -5909,79 +5847,9 @@ function buildGroups(theatres, view) {
           };
         }
         grouped[key].shows.push(row);
-        return;
-      }
-
-      if (view === "days") {
-        const dateKeys = new Set([...Object.keys(row.dates), ...Object.keys(row.premiumDates)]);
-        dateKeys.forEach((date) => {
-          const times = row.dates[date] || [];
-          const premiumTimes = row.premiumDates[date] || [];
-          if (!grouped[date]) {
-            grouped[date] = {
-              theatreInfo: null,
-              dayInfo: { date },
-              filmInfo: null,
-              shows: [],
-              byFilm: {},
-            };
-          }
-          const filmKey = buildFilmGroupKey(row.film, row.year);
-          if (!grouped[date].byFilm[filmKey]) {
-            const dayRow = {
-              film: row.film,
-              year: row.year,
-              tmdbId: row.tmdbId,
-              posterUrl: row.posterUrl,
-              director: row.director,
-              stars: row.stars,
-              genres: row.genres,
-              festivalIds: [],
-              roomByTheatre: {},
-              theatres: {},
-              premiumTheatres: {},
-            };
-            grouped[date].byFilm[filmKey] = dayRow;
-            grouped[date].shows.push(dayRow);
-          }
-          const dayRow = grouped[date].byFilm[filmKey];
-          if (Array.isArray(row.festivalIds) && row.festivalIds.length) {
-            const seenFestivalIds = new Set(dayRow.festivalIds);
-            row.festivalIds.forEach((id) => {
-              if (!Number.isInteger(Number(id))) return;
-              const parsedId = Number(id);
-              if (seenFestivalIds.has(parsedId)) return;
-              seenFestivalIds.add(parsedId);
-              dayRow.festivalIds.push(parsedId);
-            });
-          }
-          const theatreKey = `${row.theatre} · ${row.city}`;
-          if (!dayRow.roomByTheatre[theatreKey] && row.roomByDate[date]) {
-            dayRow.roomByTheatre[theatreKey] = row.roomByDate[date];
-          }
-          if (!dayRow.theatres[theatreKey]) dayRow.theatres[theatreKey] = [];
-          dayRow.theatres[theatreKey].push(...times);
-          if (!dayRow.premiumTheatres[theatreKey]) dayRow.premiumTheatres[theatreKey] = [];
-          dayRow.premiumTheatres[theatreKey].push(...premiumTimes);
-        });
-        return;
       }
     });
   });
-
-  if (view === "days") {
-    Object.values(grouped).forEach((group) => {
-      group.shows.forEach((show) => {
-        Object.keys(show.theatres).forEach((theatreKey) => {
-          show.theatres[theatreKey].sort(compareTimes);
-        });
-        Object.keys(show.premiumTheatres || {}).forEach((theatreKey) => {
-          show.premiumTheatres[theatreKey].sort(compareTimes);
-        });
-      });
-      delete group.byFilm;
-    });
-  }
 
   return grouped;
 }
@@ -6014,13 +5882,6 @@ function buildExpandRowKey(view, group, show) {
       "theatres-row",
       group?.theatreInfo?.name || "",
       group?.theatreInfo?.city || "",
-      filmKey,
-    ].join("::");
-  }
-  if (view === "days") {
-    return [
-      "days-row",
-      group?.dayInfo?.date || "",
       filmKey,
     ].join("::");
   }

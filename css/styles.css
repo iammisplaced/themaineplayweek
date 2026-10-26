@@ -400,29 +400,6 @@ h1 {
   cursor: not-allowed;
 }
 
-.day-radius-input {
-  width: 100%;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  background: transparent;
-  box-shadow: none;
-  padding: 0.5rem 0.8rem;
-  font-family: "IBM Plex Sans", sans-serif;
-  font-size: 0.92rem;
-  text-align: center;
-  color: var(--ink);
-}
-
-.day-radius-input:focus-visible {
-  outline: none;
-  background: var(--surface-soft);
-}
-
-.day-radius-input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 .day-picker-nav {
   padding: 0.5rem 0.95rem;
   font-size: 0.92rem;
