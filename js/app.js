@@ -4440,10 +4440,14 @@ function buildTheatreShowItem(group, show, rowExpanded) {
   );
   if (!showsEverything) schedule.appendChild(rowToggle);
 
+  // The links go in the text column, under the times, so a short row doesn't push them
+  // below the poster.
+  const textColumn = schedule.parentElement;
   const ticketUrl = normalizeOutboundUrl(show.ticketLink);
   if (showsEverything && ticketUrl) {
     link.href = ticketUrl;
     link.classList.remove("hidden");
+    textColumn.appendChild(link);
   } else {
     link.classList.add("hidden");
   }
@@ -4458,7 +4462,7 @@ function buildTheatreShowItem(group, show, rowExpanded) {
     rowActions.className = "theatre-row-actions";
     if (hasMoreDates) rowActions.appendChild(rowToggle);
     rowActions.appendChild(rowFilmPageLink);
-    item.appendChild(rowActions);
+    textColumn.appendChild(rowActions);
   }
   return item;
 }

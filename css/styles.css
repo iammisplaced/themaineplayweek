@@ -1426,7 +1426,8 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   gap: 0.35rem;
 }
 
-.show-item > .theatre-row-actions {
+.show-item > .theatre-row-actions,
+.show-row .theatre-row-actions {
   margin-top: 0.42rem;
 }
 
