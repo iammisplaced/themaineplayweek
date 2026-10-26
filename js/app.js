@@ -4384,8 +4384,9 @@ function render() {
 }
 
 // One film row of a theatre's card: poster, title, and the next day's times, or every
-// date plus the ticket and film page links when `rowExpanded`. Used by the Theatres list
-// and the map's side panel.
+// date plus the ticket and film page links when `rowExpanded`. A film playing on only
+// one date always shows its links, with no toggle. Used by the Theatres list and the
+// map's side panel.
 function buildTheatreShowItem(group, show, rowExpanded) {
   const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
   const main = item.querySelector(".show-main");
@@ -4395,6 +4396,9 @@ function buildTheatreShowItem(group, show, rowExpanded) {
   const poster = item.querySelector(".show-poster");
   const link = item.querySelector(".show-link");
   const showFestivalIds = Array.isArray(show?.festivalIds) ? show.festivalIds : [];
+  const showDates = Object.keys({ ...show.dates, ...show.premiumDates }).sort();
+  const hasMoreDates = showDates.length > 1;
+  const showsEverything = rowExpanded || !hasMoreDates;
 
   const rowToggle = document.createElement("button");
   rowToggle.type = "button";
@@ -4428,27 +4432,22 @@ function buildTheatreShowItem(group, show, rowExpanded) {
       : "";
   meta.textContent = singleDateRoom ? `Room: ${singleDateRoom}` : "";
 
-  if (rowExpanded) {
-    renderSchedule(schedule, show.dates, show.premiumDates, show.timeNotes);
-  } else {
-    const nextDate = Object.keys({ ...show.dates, ...show.premiumDates }).sort()[0];
-    schedule.replaceChildren();
-    if (nextDate) {
-      schedule.appendChild(
-        createScheduleRow(nextDate, show.dates?.[nextDate], show.premiumDates?.[nextDate], show.timeNotes)
-      );
-    }
-    schedule.appendChild(rowToggle);
-  }
+  const visibleDates = showsEverything ? showDates : showDates.slice(0, 1);
+  schedule.replaceChildren(
+    ...visibleDates.map((date) =>
+      createScheduleRow(date, show.dates?.[date], show.premiumDates?.[date], show.timeNotes)
+    )
+  );
+  if (!showsEverything) schedule.appendChild(rowToggle);
 
   const ticketUrl = normalizeOutboundUrl(show.ticketLink);
-  if (rowExpanded && ticketUrl) {
+  if (showsEverything && ticketUrl) {
     link.href = ticketUrl;
     link.classList.remove("hidden");
   } else {
     link.classList.add("hidden");
   }
-  if (rowExpanded) {
+  if (showsEverything) {
     const rowFilmPageLink = document.createElement("a");
     rowFilmPageLink.className = "theatre-row-film-link";
     rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
@@ -4457,7 +4456,7 @@ function buildTheatreShowItem(group, show, rowExpanded) {
     rowFilmPageLink.textContent = "View Film Page";
     const rowActions = document.createElement("div");
     rowActions.className = "theatre-row-actions";
-    rowActions.appendChild(rowToggle);
+    if (hasMoreDates) rowActions.appendChild(rowToggle);
     rowActions.appendChild(rowFilmPageLink);
     item.appendChild(rowActions);
   }
