@@ -5814,7 +5814,7 @@ function buildGroups(theatres, view) {
       if (Object.keys(row.dates).length || Object.keys(row.premiumDates).length) {
         row.festivalIds = Array.from(row.festivalIdsSet.values());
         delete row.festivalIdsSet;
-        rowsByFilm[film.title] = row;
+        rowsByFilm[buildFilmGroupKey(row.film, row.year)] = row;
       }
     });
 
