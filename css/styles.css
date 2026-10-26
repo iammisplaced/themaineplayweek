@@ -966,6 +966,10 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   cursor: pointer;
 }
 
+a.film-expand-toggle {
+  text-decoration: none;
+}
+
 .film-expand-toggle:hover,
 .film-expand-toggle:focus-visible {
   background: var(--hover-soft-2);
@@ -1426,7 +1430,8 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   gap: 0.35rem;
 }
 
-.show-item > .theatre-row-actions {
+.show-item > .theatre-row-actions,
+.show-row .theatre-row-actions {
   margin-top: 0.42rem;
 }
 
@@ -2660,5 +2665,20 @@ textarea {
 
   .map-view-container {
     height: 500px;
+  }
+}
+
+/* Visitors who ask their OS for less motion get a still background and logo. Loading
+   spinners keep turning, since they show that something is happening. */
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .brand-logo,
+  .brand-logo.is-animating,
+  .theatre-sidebar-content .group-card {
+    animation: none;
+  }
+
+  .brand-logo {
+    transition: none;
   }
 }

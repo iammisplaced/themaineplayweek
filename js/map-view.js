@@ -3,15 +3,18 @@
  * Manages the interactive map for displaying nearby theatres
  */
 
-import { buildFilmPageUrl, compareTimes, formatDisplayDate, normalizeOutboundUrl } from "./shared.js";
-
 let mapInstance = null;
 let markers = [];
 let currentTheatreId = null;
 let cachedTheatres = [];
 let cachedUserLocation = null;
-let cachedGroups = null;
-let cachedTheatreGroups = null;
+// Builds the side panel card for a theatre id; supplied by app.js so the panel shows the
+// same film rows as the Theatres list.
+let buildTheatreCard = null;
+let panelTheatreId = null;
+// Row keys (data-film-key) the visitor has expanded in the side panel. Kept apart from
+// the list's so expanding a row in one doesn't change the other.
+const expandedPanelRows = new Set();
 
 const mapElements = {
   toggleWrap: null,
@@ -38,6 +41,22 @@ function initMapElements() {
   }
   if (mapElements.sidebarClose) {
     mapElements.sidebarClose.addEventListener('click', closeSidebar);
+  }
+  if (mapElements.sidebarContent) {
+    mapElements.sidebarContent.addEventListener('click', (e) => {
+      const toggle = e.target.closest('.film-expand-toggle[data-film-key]');
+      if (!toggle) return;
+      // The card is rebuilt below, which detaches the button; stop here so the
+      // "click outside the panel" handler doesn't mistake it for an outside click.
+      e.stopPropagation();
+      const key = toggle.dataset.filmKey;
+      if (expandedPanelRows.has(key)) {
+        expandedPanelRows.delete(key);
+      } else {
+        expandedPanelRows.add(key);
+      }
+      renderPanel();
+    });
   }
 
   // Keep the map sized correctly while it's showing
@@ -214,13 +233,13 @@ function createMarkerIcon(isSelected = false) {
   });
 }
 
-// Add theatre markers to map
-export function renderMapMarkers(theatres, userLocation, groups = null, theatreGroups = null) {
+// Add theatre markers to map. `theatreCardBuilder(theatreId, isRowExpanded)` returns the
+// side panel card for a theatre, or null.
+export function renderMapMarkers(theatres, userLocation, theatreCardBuilder) {
   // Cache the data for when map is initialized
   cachedTheatres = theatres;
   cachedUserLocation = userLocation;
-  cachedGroups = groups;
-  cachedTheatreGroups = theatreGroups;
+  buildTheatreCard = theatreCardBuilder;
 
   if (!mapInstance) {
     return;
@@ -228,6 +247,9 @@ export function renderMapMarkers(theatres, userLocation, groups = null, theatreG
 
   // If map exists, render immediately
   renderCachedMarkers();
+  if (mapElements.sidebar && !mapElements.sidebar.classList.contains('hidden')) {
+    renderPanel();
+  }
 }
 
 // Select theatre and show sidebar
@@ -247,202 +269,16 @@ function selectTheatre(theatre, marker) {
   mapElements.sidebar.classList.remove('hidden');
 }
 
-// Populate sidebar with theatre card - use theatre group's shows (already processed)
+// Show a theatre's card in the side panel
 function populateSidebar(theatre) {
-  // Find the theatre group from cached groups
-  if (!cachedTheatreGroups || !Array.isArray(cachedTheatreGroups)) return;
-
-  const theatreGroup = cachedTheatreGroups.find(group =>
-    group.theatreInfo && group.theatreInfo.id === theatre.id
-  );
-
-  // Use the shows array from the theatre group - it already has dates/premiumDates processed
-  const shows = theatreGroup?.shows || [];
-
-  // Build the theatre card HTML
-  const card = document.createElement('article');
-  card.className = 'group-card';
-  card.setAttribute('data-theatre-id', theatre.id);
-
-  // Title
-  const title = document.createElement('h3');
-  title.className = 'group-title';
-  title.textContent = theatre.name;
-  card.appendChild(title);
-
-  // Subtitle
-  const subtitle = document.createElement('p');
-  subtitle.className = 'group-subtitle';
-  subtitle.textContent = theatre.city;
-  card.appendChild(subtitle);
-
-  // Website link
-  const link = document.createElement('a');
-  link.className = 'group-link';
-  link.href = normalizeOutboundUrl(theatre.website);
-  link.target = '_blank';
-  link.rel = 'noopener noreferrer';
-  link.textContent = 'Visit theatre website';
-  card.appendChild(link);
-
-  // Shows list
-  const list = document.createElement('ul');
-  list.className = 'show-list';
-
-  // Render all shows - same as list view
-  shows.forEach((show, idx) => {
-    const item = document.createElement('li');
-    item.className = 'show-item';
-    item.innerHTML = `
-      <div class="show-row has-poster">
-        <img class="show-poster" alt="" />
-        <div>
-          <div class="show-main"></div>
-          <div class="show-meta"></div>
-          <div class="show-schedule hidden"></div>
-        </div>
-      </div>
-      <a class="show-link hidden" target="_blank" rel="noopener noreferrer">Tickets</a>
-    `;
-
-    item.querySelector('.show-main').textContent = show.film;
-
-    // Set poster
-    const poster = item.querySelector('.show-poster');
-    poster.src = show.posterUrl || './assets/images/noposter.webp';
-    poster.alt = `Poster for ${show.film}`;
-
-    // Set up expand button - same as list view
-    const meta = item.querySelector('.show-meta');
-    const expandBtn = document.createElement('button');
-    expandBtn.type = 'button';
-    expandBtn.className = 'film-expand-toggle theatre-row-toggle';
-    expandBtn.textContent = 'Expand';
-    expandBtn.dataset.showIndex = idx;
-    meta.appendChild(expandBtn);
-
-    // Set ticket link - same as list view
-    const ticketLink = item.querySelector('.show-link');
-    if (show.ticketLink) {
-      ticketLink.href = normalizeOutboundUrl(show.ticketLink);
-    }
-
-    list.appendChild(item);
-  });
-
-  card.appendChild(list);
-  mapElements.sidebarContent.innerHTML = '';
-  mapElements.sidebarContent.appendChild(card);
-
-  // Attach event listeners
-  attachCardEventListeners(card, shows);
+  if (panelTheatreId !== theatre.id) expandedPanelRows.clear();
+  panelTheatreId = theatre.id;
+  renderPanel();
 }
 
-// Attach event listeners to card elements
-function attachCardEventListeners(card, shows) {
-  const expandButtons = card.querySelectorAll('.film-expand-toggle.theatre-row-toggle');
-
-  expandButtons.forEach((button) => {
-    button.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const showItem = button.closest('.show-item');
-      if (!showItem) return;
-
-      const schedule = showItem.querySelector('.show-schedule');
-      if (!schedule) return;
-
-      const showIndex = Number(button.dataset.showIndex);
-      const show = shows[showIndex];
-      if (!show) return;
-
-      const isExpanded = !schedule.classList.contains('hidden');
-
-      if (isExpanded) {
-        // COLLAPSING
-        schedule.classList.add('hidden');
-        button.textContent = 'Expand';
-
-        const ticketLink = showItem.querySelector('.show-link');
-        if (ticketLink) ticketLink.classList.add('hidden');
-
-        const rowActions = showItem.querySelector('.theatre-row-actions');
-        if (rowActions) rowActions.remove();
-
-        const meta = showItem.querySelector('.show-meta');
-        if (meta && !meta.contains(button)) {
-          meta.appendChild(button);
-        }
-      } else {
-        // EXPANDING - same as list view
-        schedule.classList.remove('hidden');
-        button.textContent = 'Collapse';
-
-        // Populate schedule with dates/times (same format as renderSchedule)
-        if (!schedule.hasChildNodes()) {
-          const allDates = new Set([
-            ...Object.keys(show.dates || {}),
-            ...Object.keys(show.premiumDates || {})
-          ]);
-          Array.from(allDates).sort().forEach(date => {
-            const times = show.dates[date] || [];
-            const premiumTimes = show.premiumDates[date] || [];
-            const allTimes = [...times, ...premiumTimes].sort(compareTimes);
-
-            const row = document.createElement('div');
-            row.className = 'show-schedule-row';
-
-            const label = document.createElement('span');
-            label.className = 'show-schedule-day';
-            label.textContent = formatDisplayDate(date);
-
-            const value = document.createElement('span');
-            value.className = 'show-schedule-times';
-            value.textContent = allTimes.join(', ');
-
-            row.appendChild(label);
-            row.appendChild(value);
-            schedule.appendChild(row);
-          });
-        }
-
-        // Show ticket link
-        const ticketLink = showItem.querySelector('.show-link');
-        if (ticketLink && show.ticketLink) {
-          ticketLink.classList.remove('hidden');
-        }
-
-        // Create row actions
-        let rowActions = showItem.querySelector('.theatre-row-actions');
-        if (!rowActions) {
-          rowActions = document.createElement('div');
-          rowActions.className = 'theatre-row-actions';
-
-          // Move button to row actions
-          const meta = showItem.querySelector('.show-meta');
-          if (meta && meta.contains(button)) {
-            meta.removeChild(button);
-          }
-          button.textContent = 'Collapse';
-          rowActions.appendChild(button);
-
-          // Add film page link
-          if (show.film) {
-            const filmPageLink = document.createElement('a');
-            filmPageLink.className = 'theatre-row-film-link';
-            filmPageLink.href = buildFilmPageUrl(show.film, show.year);
-            filmPageLink.target = '_blank';
-            filmPageLink.rel = 'noopener noreferrer';
-            filmPageLink.textContent = 'View Film Page';
-            rowActions.appendChild(filmPageLink);
-          }
-
-          showItem.appendChild(rowActions);
-        }
-      }
-    });
-  });
+function renderPanel() {
+  const card = buildTheatreCard?.(panelTheatreId, (key) => expandedPanelRows.has(key));
+  mapElements.sidebarContent.replaceChildren(...(card ? [card] : []));
 }
 
 // Close sidebar
