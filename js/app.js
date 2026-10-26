@@ -3652,7 +3652,6 @@ function buildReplacePayload(data, promotedCards) {
       if (!filmKey) {
         filmKey = `f_${filmCounter++}`;
         filmKeyByUniq.set(uniq, filmKey);
-        const filmTicketLink = String(film.ticketLink || "").trim();
         films.push({
           key: filmKey,
           db_id: Number.isInteger(Number(film._dbId)) ? Number(film._dbId) : null,
@@ -3661,7 +3660,6 @@ function buildReplacePayload(data, promotedCards) {
           tmdb_id: Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : null,
           synopsis: extractFilmSynopsis(film),
           metadata_source: normalizeMetadataSource(film.metadataSource, film),
-          ticket_link: filmTicketLink,
           staff_favorite: Boolean(film.staffFavorite),
           staff_favorite_by: String(film.staffFavoriteBy || "").trim(),
           featured_on_playweek: Boolean(film.featuredOnPlayweek),
@@ -3705,9 +3703,6 @@ function buildReplacePayload(data, promotedCards) {
           films[existingFilmIndex].ranking_override = true;
         }
         if (filmTicketLink) {
-          if (typeof existingFilmIndex === "number" && !films[existingFilmIndex].ticket_link) {
-            films[existingFilmIndex].ticket_link = filmTicketLink;
-          }
           if (typeof existingFilmIndex === "number" && !films[existingFilmIndex].db_id) {
             const filmDbId = Number.isInteger(Number(film._dbId)) ? Number(film._dbId) : null;
             if (filmDbId) films[existingFilmIndex].db_id = filmDbId;
