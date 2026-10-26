@@ -4439,9 +4439,9 @@ function render() {
       .map(([, group]) => group.theatreInfo)
       .filter(theatre => theatre && theatre.latitude && theatre.longitude);
 
-    const userLocation = state.locationPreference && state.locationPreference.lat && state.locationPreference.lng
-      ? { lat: state.locationPreference.lat, lng: state.locationPreference.lng }
-      : null;
+    // The location the distances were measured from: the saved ZIP or this visit's device
+    // location. The map never asks for location itself.
+    const userLocation = state.userCoords ? { ...state.userCoords } : null;
 
     // Pass the theatre groups - they already have shows with dates/premiumDates processed
     const groupsArray = Array.from(entries.values());

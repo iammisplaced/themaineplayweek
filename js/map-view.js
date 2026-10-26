@@ -77,9 +77,8 @@ function toggleMapView() {
     initializeMap();
   }
 
-  // Request fresh location when opening map
   if (!isMapActive) {
-    requestFreshLocation();
+    renderCachedMarkers();
   }
 
   // Refresh map size when shown
@@ -475,40 +474,6 @@ export function hideMapToggle() {
   // Reset to list view if map was open
   if (mapElements.mapContainer && !mapElements.mapContainer.classList.contains('hidden')) {
     toggleMapView();
-  }
-}
-
-// Request fresh geolocation and update map
-async function requestFreshLocation() {
-  if (!("geolocation" in navigator)) {
-    // Still render with fallback
-    if (mapInstance) {
-      renderCachedMarkers();
-    }
-    return;
-  }
-
-  try {
-    const position = await new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject, {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0, // Don't use cached position
-      });
-    });
-
-    // Update cached location
-    cachedUserLocation = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-    };
-  } catch (error) {
-    // Geolocation failed - will use fallback in renderCachedMarkers
-  } finally {
-    // Always render the map with whatever location we have (or fallback)
-    if (mapInstance) {
-      renderCachedMarkers();
-    }
   }
 }
 
