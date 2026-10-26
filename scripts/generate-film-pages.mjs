@@ -1050,7 +1050,11 @@ function renderFilmPage(film, slug, siteUrl) {
         <p>hello@themaineplayweek.com</p>
       </section>
     </main>
-    <script>
+    <script type="module">
+      import { LOCATION_PREFERENCE_STORAGE_KEY, geocodeUsZip, initShowtimeNoteTooltips } from "../../js/shared.js";
+
+      initShowtimeNoteTooltips();
+
       (() => {
         const LIGHT_THEME = "light";
         const DARK_THEME = "dark";
@@ -1098,7 +1102,9 @@ function renderFilmPage(film, slug, siteUrl) {
           applyTheme(getTheme());
         });
 
-        const STORAGE_KEYS = ["tmp-location-preference-v1", "tmp-film-pages-location-v1"];
+        // Film pages used to keep their own location; it's still read for visitors who set one there.
+        const LEGACY_LOCATION_STORAGE_KEY = "tmp-film-pages-location-v1";
+        const STORAGE_KEYS = [LOCATION_PREFERENCE_STORAGE_KEY, LEGACY_LOCATION_STORAGE_KEY];
         const useDeviceButton = document.getElementById("locationSortUseDevice");
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
@@ -1128,9 +1134,12 @@ function renderFilmPage(film, slug, siteUrl) {
           return null;
         }
 
+        // Saved in the main app's format so the Near You and Theatres views use it too.
         function saveLocation(lat, lng, mode, zip) {
-          const payload = { lat, lng, mode: mode || "", zip: zip || "" };
-          localStorage.setItem("tmp-film-pages-location-v1", JSON.stringify(payload));
+          const payload = { mode, zip: zip || "", lat, lng };
+          try {
+            localStorage.setItem(LOCATION_PREFERENCE_STORAGE_KEY, JSON.stringify(payload));
+          } catch {}
         }
 
         function haversineMiles(lat1, lng1, lat2, lng2) {
@@ -1210,14 +1219,9 @@ function renderFilmPage(film, slug, siteUrl) {
           if (!/^\\d{5}$/.test(cleaned)) {
             throw new Error("Enter a valid 5-digit ZIP code.");
           }
-          const response = await fetch("https://api.zippopotam.us/us/" + cleaned);
-          if (!response.ok) throw new Error("Could not find that ZIP code.");
-          const json = await response.json();
-          const place = Array.isArray(json?.places) ? json.places[0] : null;
-          const lat = Number(place?.latitude);
-          const lng = Number(place?.longitude);
-          if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error("ZIP lookup did not return coordinates.");
-          return { lat, lng, zip: cleaned };
+          const coords = await geocodeUsZip(cleaned);
+          if (!coords) throw new Error("Could not find that ZIP code.");
+          return { ...coords, zip: cleaned };
         }
 
         useDeviceButton?.addEventListener("click", () => {
@@ -1230,7 +1234,7 @@ function renderFilmPage(film, slug, siteUrl) {
             (position) => {
               const lat = Number(position.coords.latitude);
               const lng = Number(position.coords.longitude);
-              saveLocation(lat, lng, "device", "");
+              saveLocation(lat, lng, "geolocation", "");
               sortByDistance(lat, lng, "device location");
             },
             () => {
@@ -1254,7 +1258,7 @@ function renderFilmPage(film, slug, siteUrl) {
 
         const saved = readSavedLocation();
         if (saved) {
-          sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
+          sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "your saved ZIP" : "your saved location");
         } else {
           applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
@@ -1269,10 +1273,6 @@ function renderFilmPage(film, slug, siteUrl) {
           }, 90);
         });
       })();
-    </script>
-    <script type="module">
-      import { initShowtimeNoteTooltips } from "../../js/shared.js";
-      initShowtimeNoteTooltips();
     </script>
   </body>
 </html>`;

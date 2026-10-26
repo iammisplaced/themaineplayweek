@@ -10,6 +10,8 @@ import {
   compareTimes,
   debounce,
   formatDisplayDate,
+  geocodeUsZip,
+  LOCATION_PREFERENCE_STORAGE_KEY,
   getDayDifferenceFromToday,
   getFilmSortBreakdown,
   getShowDateTime,
@@ -62,7 +64,6 @@ const SUBSTACK_ARCHIVE_URL = "https://themaineplayweek.substack.com/api/v1/archi
 const THEATRE_GEO_CACHE_KEY = "theatre-geocode-cache-v1";
 const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
-const LOCATION_PREFERENCE_STORAGE_KEY = "tmp-location-preference-v1";
 const DAYS_VIEW_RADIUS_STORAGE_KEY = "tmp-days-radius-v1";
 const LOCATION_CHOOSER_SEEN_STORAGE_KEY = "tmp-location-chooser-seen-v1";
 const BETA_BANNER_ROTATION_MS = 5200;
@@ -5108,6 +5109,8 @@ function isValidZipCode(zip) {
 }
 
 async function geocodeZipCode(zip) {
+  const viaZipLookup = await geocodeUsZip(zip);
+  if (viaZipLookup) return viaZipLookup;
   const query = `${zip}, USA`;
   const viaNominatim = await geocodeWithNominatimJsonp(query);
   if (viaNominatim) return viaNominatim;
