@@ -4238,6 +4238,12 @@ function render() {
 
           showsInCurrentDay++;
         }
+        if (state.view === "theatres") {
+          list.appendChild(
+            buildTheatreShowItem(group, show, state.expandedFilmGroups.has(buildExpandRowKey(state.view, group, show)))
+          );
+          continue;
+        }
         const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
         const main = item.querySelector(".show-main");
         const meta = item.querySelector(".show-meta");
@@ -4245,26 +4251,11 @@ function render() {
         const row = item.querySelector(".show-row");
         const poster = item.querySelector(".show-poster");
         const link = item.querySelector(".show-link");
-        const filmLabel = show.film;
         const showFestivalIds = Array.isArray(show?.festivalIds) ? show.festivalIds : [];
-        const showFestivalNames = showFestivalIds
-          .map((id) => (state.data.festivals || []).find((festival) => Number(festival?.id) === Number(id))?.name || "")
-          .map((name) => String(name).trim())
-          .filter(Boolean);
-        const festivalBadgeLabel = showFestivalNames.length
-          ? showFestivalNames[0]
-          : "Festival Selection";
+        const festivalBadgeLabel = getFestivalBadgeLabel(showFestivalIds);
 
-        if (state.view === "theatres") {
-          const rowExpandKey = buildExpandRowKey(state.view, group, show);
-          const rowExpanded = state.expandedFilmGroups.has(rowExpandKey);
-          const rowToggle = document.createElement("button");
-          rowToggle.type = "button";
-          rowToggle.className = "film-expand-toggle theatre-row-toggle";
-          rowToggle.dataset.filmKey = rowExpandKey;
-          rowToggle.textContent = rowExpanded ? "Collapse" : "More Dates & Tickets";
-          rowToggle.setAttribute("aria-expanded", String(rowExpanded));
-
+        if (state.view === "festivals") {
+          item.classList.add("festival-show-item");
           row.classList.add("has-poster");
           poster.onerror = () => {
             poster.onerror = null;
@@ -4275,112 +4266,48 @@ function render() {
             ? `Poster for ${show.film}`
             : `No poster available for ${show.film}`;
           poster.classList.remove("hidden");
-
-          main.textContent = filmLabel;
+          main.textContent = show.film || show.theatre || "Showtime";
+          meta.textContent = [show.theatre || "", show.room || show.city || ""]
+            .filter(Boolean)
+            .join(", ");
+          const ribbon = document.createElement("span");
+          ribbon.className = "festival-entry-ribbon";
+          ribbon.textContent = "Festival Selection";
+          main.prepend(ribbon);
+        } else {
+          main.textContent = `${show.theatre}`;
+          const theatreKey = `${show.theatre} · ${show.city}`;
+          const roomValue =
+            String(show?.room || "").trim() ||
+            String(show?.roomByTheatre?.[theatreKey] || "").trim();
+          meta.textContent = [show.city || "", roomValue ? `Room: ${roomValue}` : ""].filter(Boolean).join(" · ");
           if (showFestivalIds.length) {
             const ribbon = document.createElement("span");
             ribbon.className = "festival-entry-ribbon festival-entry-ribbon-inline";
             ribbon.textContent = festivalBadgeLabel;
             main.prepend(ribbon);
           }
-          const showDateKeys = Object.keys(show?.dates || {});
-          const singleDateRoom =
-            showDateKeys.length === 1
-              ? String(show?.roomByDate?.[showDateKeys[0]] || "").trim()
-              : "";
-          meta.textContent = singleDateRoom ? `Room: ${singleDateRoom}` : "";
-
-          // Collapsed rows show the next day's times; expanding shows every date plus the
-          // ticket and film page links.
-          if (rowExpanded) {
-            renderSchedule(schedule, show.dates, show.premiumDates, show.timeNotes);
-          } else {
-            const nextDate = Object.keys({ ...show.dates, ...show.premiumDates }).sort()[0];
-            schedule.replaceChildren();
-            if (nextDate) {
-              schedule.appendChild(
-                createScheduleRow(nextDate, show.dates?.[nextDate], show.premiumDates?.[nextDate], show.timeNotes)
-              );
-            }
-            schedule.appendChild(rowToggle);
+        }
+        renderSchedule(schedule, show.dates, show.premiumDates, show.timeNotes);
+        const ticketUrl = normalizeOutboundUrl(show.ticketLink);
+        if (ticketUrl) {
+          link.href = ticketUrl;
+          link.classList.remove("hidden");
+        }
+        if (state.view === "festivals") {
+          const rowActions = document.createElement("div");
+          rowActions.className = "theatre-row-actions";
+          if (!link.classList.contains("hidden")) {
+            rowActions.appendChild(link);
           }
-
-          const ticketUrl = normalizeOutboundUrl(show.ticketLink);
-          if (state.view === "theatres" && rowExpanded && ticketUrl) {
-            link.href = ticketUrl;
-            link.classList.remove("hidden");
-          } else {
-            link.classList.add("hidden");
-          }
-          if (rowExpanded) {
-            const rowFilmPageLink = document.createElement("a");
-            rowFilmPageLink.className = "theatre-row-film-link";
-            rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
-            rowFilmPageLink.target = "_blank";
-            rowFilmPageLink.rel = "noopener noreferrer";
-            rowFilmPageLink.textContent = "View Film Page";
-            const rowActions = document.createElement("div");
-            rowActions.className = "theatre-row-actions";
-            rowActions.appendChild(rowToggle);
-            rowActions.appendChild(rowFilmPageLink);
-            item.appendChild(rowActions);
-          }
-        } else {
-          if (state.view === "festivals") {
-            item.classList.add("festival-show-item");
-            row.classList.add("has-poster");
-            poster.onerror = () => {
-              poster.onerror = null;
-              poster.src = NO_POSTER_IMAGE_URL;
-            };
-            poster.src = show.posterUrl || NO_POSTER_IMAGE_URL;
-            poster.alt = show.posterUrl
-              ? `Poster for ${show.film}`
-              : `No poster available for ${show.film}`;
-            poster.classList.remove("hidden");
-            main.textContent = show.film || show.theatre || "Showtime";
-            meta.textContent = [show.theatre || "", show.room || show.city || ""]
-              .filter(Boolean)
-              .join(", ");
-            const ribbon = document.createElement("span");
-            ribbon.className = "festival-entry-ribbon";
-            ribbon.textContent = "Festival Selection";
-            main.prepend(ribbon);
-          } else {
-            main.textContent = `${show.theatre}`;
-            const theatreKey = `${show.theatre} · ${show.city}`;
-            const roomValue =
-              String(show?.room || "").trim() ||
-              String(show?.roomByTheatre?.[theatreKey] || "").trim();
-            meta.textContent = [show.city || "", roomValue ? `Room: ${roomValue}` : ""].filter(Boolean).join(" · ");
-            if (showFestivalIds.length) {
-              const ribbon = document.createElement("span");
-              ribbon.className = "festival-entry-ribbon festival-entry-ribbon-inline";
-              ribbon.textContent = festivalBadgeLabel;
-              main.prepend(ribbon);
-            }
-          }
-          renderSchedule(schedule, show.dates, show.premiumDates, show.timeNotes);
-          const ticketUrl = normalizeOutboundUrl(show.ticketLink);
-          if (ticketUrl) {
-            link.href = ticketUrl;
-            link.classList.remove("hidden");
-          }
-          if (state.view === "festivals") {
-            const rowActions = document.createElement("div");
-            rowActions.className = "theatre-row-actions";
-            if (!link.classList.contains("hidden")) {
-              rowActions.appendChild(link);
-            }
-            const rowFilmPageLink = document.createElement("a");
-            rowFilmPageLink.className = "theatre-row-film-link";
-            rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
-            rowFilmPageLink.target = "_blank";
-            rowFilmPageLink.rel = "noopener noreferrer";
-            rowFilmPageLink.textContent = "View Film Page";
-            rowActions.appendChild(rowFilmPageLink);
-            item.appendChild(rowActions);
-          }
+          const rowFilmPageLink = document.createElement("a");
+          rowFilmPageLink.className = "theatre-row-film-link";
+          rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
+          rowFilmPageLink.target = "_blank";
+          rowFilmPageLink.rel = "noopener noreferrer";
+          rowFilmPageLink.textContent = "View Film Page";
+          rowActions.appendChild(rowFilmPageLink);
+          item.appendChild(rowActions);
         }
 
         if (state.view === "festivals") {
@@ -4447,12 +4374,143 @@ function render() {
     // location. The map never asks for location itself.
     const userLocation = state.userCoords ? { ...state.userCoords } : null;
 
-    // Pass the theatre groups - they already have shows with dates/premiumDates processed
-    const groupsArray = Array.from(entries.values());
-    // Extract just the group objects from the [key, group] pairs
-    const theatreGroupsForMap = entries.map(([, group]) => group);
-    renderMapMarkers(theatreList, userLocation, groupsArray, theatreGroupsForMap);
+    // The side panel shows the same film rows as the list, built from these groups.
+    const groupByTheatreId = new Map(entries.map(([, group]) => [group.theatreInfo?.id, group]));
+    renderMapMarkers(theatreList, userLocation, (theatreId, isRowExpanded) => {
+      const group = groupByTheatreId.get(theatreId);
+      return group ? buildTheatreMapCard(group, isRowExpanded) : null;
+    });
   }
+}
+
+// One film row of a theatre's card: poster, title, and the next day's times, or every
+// date plus the ticket and film page links when `rowExpanded`. Used by the Theatres list
+// and the map's side panel.
+function buildTheatreShowItem(group, show, rowExpanded) {
+  const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
+  const main = item.querySelector(".show-main");
+  const meta = item.querySelector(".show-meta");
+  const schedule = item.querySelector(".show-schedule");
+  const row = item.querySelector(".show-row");
+  const poster = item.querySelector(".show-poster");
+  const link = item.querySelector(".show-link");
+  const showFestivalIds = Array.isArray(show?.festivalIds) ? show.festivalIds : [];
+
+  const rowToggle = document.createElement("button");
+  rowToggle.type = "button";
+  rowToggle.className = "film-expand-toggle theatre-row-toggle";
+  rowToggle.dataset.filmKey = buildExpandRowKey("theatres", group, show);
+  rowToggle.textContent = rowExpanded ? "Collapse" : "More Dates & Tickets";
+  rowToggle.setAttribute("aria-expanded", String(rowExpanded));
+
+  row.classList.add("has-poster");
+  poster.onerror = () => {
+    poster.onerror = null;
+    poster.src = NO_POSTER_IMAGE_URL;
+  };
+  poster.src = show.posterUrl || NO_POSTER_IMAGE_URL;
+  poster.alt = show.posterUrl
+    ? `Poster for ${show.film}`
+    : `No poster available for ${show.film}`;
+  poster.classList.remove("hidden");
+
+  main.textContent = show.film;
+  if (showFestivalIds.length) {
+    const ribbon = document.createElement("span");
+    ribbon.className = "festival-entry-ribbon festival-entry-ribbon-inline";
+    ribbon.textContent = getFestivalBadgeLabel(showFestivalIds);
+    main.prepend(ribbon);
+  }
+  const showDateKeys = Object.keys(show?.dates || {});
+  const singleDateRoom =
+    showDateKeys.length === 1
+      ? String(show?.roomByDate?.[showDateKeys[0]] || "").trim()
+      : "";
+  meta.textContent = singleDateRoom ? `Room: ${singleDateRoom}` : "";
+
+  if (rowExpanded) {
+    renderSchedule(schedule, show.dates, show.premiumDates, show.timeNotes);
+  } else {
+    const nextDate = Object.keys({ ...show.dates, ...show.premiumDates }).sort()[0];
+    schedule.replaceChildren();
+    if (nextDate) {
+      schedule.appendChild(
+        createScheduleRow(nextDate, show.dates?.[nextDate], show.premiumDates?.[nextDate], show.timeNotes)
+      );
+    }
+    schedule.appendChild(rowToggle);
+  }
+
+  const ticketUrl = normalizeOutboundUrl(show.ticketLink);
+  if (rowExpanded && ticketUrl) {
+    link.href = ticketUrl;
+    link.classList.remove("hidden");
+  } else {
+    link.classList.add("hidden");
+  }
+  if (rowExpanded) {
+    const rowFilmPageLink = document.createElement("a");
+    rowFilmPageLink.className = "theatre-row-film-link";
+    rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
+    rowFilmPageLink.target = "_blank";
+    rowFilmPageLink.rel = "noopener noreferrer";
+    rowFilmPageLink.textContent = "View Film Page";
+    const rowActions = document.createElement("div");
+    rowActions.className = "theatre-row-actions";
+    rowActions.appendChild(rowToggle);
+    rowActions.appendChild(rowFilmPageLink);
+    item.appendChild(rowActions);
+  }
+  return item;
+}
+
+// The map side panel's card for a theatre: the same heading and film rows as its card in
+// the Theatres list, with every film shown. `isRowExpanded(key)` reports the panel's own
+// expanded rows.
+function buildTheatreMapCard(group, isRowExpanded) {
+  const theatre = group.theatreInfo || {};
+  const card = document.createElement("article");
+  card.className = "group-card";
+  card.dataset.theatreId = String(theatre.id ?? "");
+
+  const title = document.createElement("h3");
+  title.className = "group-title";
+  title.textContent = `${theatre.name} · ${theatre.city}`;
+  card.appendChild(title);
+
+  if (theatre.address) {
+    const subtitle = document.createElement("p");
+    subtitle.className = "group-subtitle";
+    subtitle.textContent = theatre.address;
+    card.appendChild(subtitle);
+  }
+
+  const website = normalizeOutboundUrl(theatre.website);
+  if (website) {
+    const link = document.createElement("a");
+    link.className = "group-link";
+    link.href = website;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Visit theatre website";
+    card.appendChild(link);
+  }
+
+  const list = document.createElement("ul");
+  list.className = "show-list";
+  (group.shows || []).forEach((show) => {
+    list.appendChild(buildTheatreShowItem(group, show, isRowExpanded(buildExpandRowKey("theatres", group, show))));
+  });
+  card.appendChild(list);
+  return card;
+}
+
+function getFestivalBadgeLabel(festivalIds) {
+  const name = (festivalIds || [])
+    .map((id) => (state.data.festivals || []).find((festival) => Number(festival?.id) === Number(id))?.name || "")
+    .map((value) => String(value).trim())
+    .find(Boolean);
+  return name || "Festival Selection";
 }
 
 function buildPromotedAdCards() {
