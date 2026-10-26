@@ -65,7 +65,6 @@ const THEATRE_GEO_CACHE_KEY = "theatre-geocode-cache-v1";
 const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
 const DAYS_VIEW_RADIUS_STORAGE_KEY = "tmp-days-radius-v1";
-const LOCATION_CHOOSER_SEEN_STORAGE_KEY = "tmp-location-chooser-seen-v1";
 const SEARCH_INPUT_DEBOUNCE_MS = 180;
 const MAX_ADMIN_SEARCH_RESULTS = 120;
 
@@ -110,7 +109,7 @@ const NAV_VIEW_LABELS = Object.freeze({
 
 const state = {
   data: { theatreGroups: [], festivals: [] },
-  view: "days",
+  view: "films",
   source: "film-pages-json",
   loadedFromSupabaseThisSession: false,
   // data_version when the admin data was loaded; sent with saves so stale tabs are refused.
@@ -128,7 +127,6 @@ const state = {
     lat: null,
     lng: null,
   },
-  locationChooserSeen: false,
   publicSearch: {
     films: "",
     theatres: "",
@@ -340,9 +338,8 @@ function waitForNextPaint() {
 async function init() {
   initializeBrandWordmarkVariant();
   initializeTheme();
-  initializeViewPreference();
   loadLocationPreference();
-  loadLocationChooserSeen();
+  initializeViewPreference();
   loadDaysViewRadius();
   initializeSupabase();
   bindEvents();
@@ -353,7 +350,6 @@ async function init() {
   initializeAdminState();
   syncPublicSearchUI();
   refreshLocationChooser();
-  maybeShowLocationChooserOnFirstVisit();
   if ((state.view === "theatres" || state.view === "days") && hasConfiguredLocationPreference()) {
     void ensureTheatreDistanceSort();
   }
@@ -775,8 +771,6 @@ function bindEvents() {
   });
 
   elements.closeLocationChooser?.addEventListener("click", () => {
-    state.locationChooserSeen = true;
-    persistLocationChooserSeen();
     closeLocationChooserModal();
     if (state.view === "days" && !hasConfiguredLocationPreference()) {
       setView("films", { persist: true });
@@ -784,8 +778,6 @@ function bindEvents() {
   });
 
   elements.locationChooserModal?.addEventListener("cancel", () => {
-    state.locationChooserSeen = true;
-    persistLocationChooserSeen();
     setLocationChooserMessage("");
     if (state.view === "days" && !hasConfiguredLocationPreference()) {
       setView("films", { persist: true });
@@ -812,8 +804,6 @@ function bindEvents() {
         lng: position.coords.longitude,
       };
       persistLocationPreference();
-      state.locationChooserSeen = true;
-      persistLocationChooserSeen();
       closeLocationChooserModal();
       refreshLocationChooser();
       state.theatreDistanceByKey.clear();
@@ -850,8 +840,6 @@ function bindEvents() {
         lng: coords.lng,
       };
       persistLocationPreference();
-      state.locationChooserSeen = true;
-      persistLocationChooserSeen();
       closeLocationChooserModal();
       refreshLocationChooser();
       state.theatreDistanceByKey.clear();
@@ -1749,6 +1737,13 @@ function initializeViewPreference() {
   const storedView = String(localStorage.getItem(VIEW_STORAGE_KEY) || "").trim();
   if (VALID_VIEWS.has(storedView)) {
     state.view = storedView;
+  } else if (hasConfiguredLocationPreference()) {
+    // First visit, but a location was already saved (e.g. on a film page).
+    state.view = "days";
+  }
+  // Near You needs a location; without one, open All Films rather than a pop-up.
+  if (state.view === "days" && !hasConfiguredLocationPreference()) {
+    state.view = "films";
   }
   syncViewTabSelection();
 }
@@ -1777,9 +1772,7 @@ function setView(view, options = {}) {
   }
   syncPublicSearchUI();
   refreshLocationChooser();
-  maybeShowLocationChooserOnFirstVisit();
   if (state.view === "days" && !hasConfiguredLocationPreference()) {
-    state.locationChooserSeen = false;
     openLocationChooserModal();
   }
   if ((state.view === "theatres" || state.view === "days") && hasConfiguredLocationPreference()) {
@@ -5004,25 +4997,12 @@ function loadLocationPreference() {
   }
 }
 
-function loadLocationChooserSeen() {
-  state.locationChooserSeen = localStorage.getItem(LOCATION_CHOOSER_SEEN_STORAGE_KEY) === "1";
-}
-
-function persistLocationChooserSeen() {
-  localStorage.setItem(LOCATION_CHOOSER_SEEN_STORAGE_KEY, state.locationChooserSeen ? "1" : "0");
-}
-
 function persistLocationPreference() {
   localStorage.setItem(LOCATION_PREFERENCE_STORAGE_KEY, JSON.stringify(state.locationPreference));
 }
 
 function hasConfiguredLocationPreference() {
   return state.locationPreference.mode === "zip" || state.locationPreference.mode === "geolocation";
-}
-
-function maybeShowLocationChooserOnFirstVisit() {
-  if (state.locationChooserSeen || hasConfiguredLocationPreference()) return;
-  openLocationChooserModal();
 }
 
 function openLocationChooserModal() {

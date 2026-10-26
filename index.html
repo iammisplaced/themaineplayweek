@@ -63,23 +63,23 @@
     <main>
       <section class="controls" aria-label="View controls">
         <div class="tabs" role="tablist" aria-label="Showtimes view type">
-          <button class="tab active" role="tab" data-view="days" aria-selected="true">
+          <button class="tab" role="tab" data-view="days" aria-selected="false">
             Near You
             <span class="tab-beta-chip">Beta</span>
           </button>
           <button class="tab" role="tab" data-view="theatres" aria-selected="false">Theatres</button>
-          <button class="tab" role="tab" data-view="films" aria-selected="false">All Films</button>
+          <button class="tab active" role="tab" data-view="films" aria-selected="true">All Films</button>
           <button class="tab" role="tab" data-view="festivals" aria-selected="false">Festivals</button>
         </div>
         <details class="nav-menu-wrap" id="navMenuWrap">
           <summary id="navMenuButton" class="nav-menu-button">
-            <span id="navMenuLabel" class="nav-menu-label">Near You</span>
+            <span id="navMenuLabel" class="nav-menu-label">All Films</span>
             <span class="nav-menu-chevron" aria-hidden="true"></span>
           </summary>
           <div id="navMenu" class="nav-menu" role="menu">
-            <button class="nav-menu-item active" role="menuitem" data-view="days" type="button">Near You <span class="nav-menu-beta-chip">Beta</span></button>
+            <button class="nav-menu-item" role="menuitem" data-view="days" type="button">Near You <span class="nav-menu-beta-chip">Beta</span></button>
             <button class="nav-menu-item" role="menuitem" data-view="theatres" type="button">Theatres</button>
-            <button class="nav-menu-item" role="menuitem" data-view="films" type="button">All Films</button>
+            <button class="nav-menu-item active" role="menuitem" data-view="films" type="button">All Films</button>
             <button class="nav-menu-item" role="menuitem" data-view="festivals" type="button">Festivals</button>
           </div>
         </details>
