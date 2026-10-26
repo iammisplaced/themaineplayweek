@@ -286,7 +286,6 @@ const elements = {
   showingTimesInput: document.getElementById("showingTimesInput"),
   showingPremiumTimesInput: document.getElementById("showingPremiumTimesInput"),
   showingRoomInput: document.getElementById("showingRoomInput"),
-  showingNotesInput: document.getElementById("showingNotesInput"),
   showingFestivalSelect: document.getElementById("showingFestivalSelect"),
   addShowing: document.getElementById("addShowing"),
   showingsList: document.getElementById("showingsList"),
@@ -1470,7 +1469,6 @@ function bindEvents() {
     const times = parseTimesInput(elements.showingTimesInput.value);
     const premiumTimes = parseTimesInput(elements.showingPremiumTimesInput?.value || "");
     const room = String(elements.showingRoomInput?.value || "").trim();
-    const notes = String(elements.showingNotesInput?.value || "").trim();
     const selectedFestivalIdRaw = String(elements.showingFestivalSelect?.value || "").trim();
     const selectedFestivalId = Number(selectedFestivalIdRaw);
     const showingFestivalId =
@@ -1490,12 +1488,11 @@ function bindEvents() {
         existing.premiumTimes = dedupeSortTimes([...(existing.premiumTimes || []), ...premiumTimes]);
         existing.festivalId = showingFestivalId;
         existing.room = room;
-        existing.notes = notes;
       } else {
         film.showings.push({
           date: targetDate,
           room,
-          notes,
+          notes: "",
           festivalId: showingFestivalId,
           times: dedupeSortTimes(times),
           premiumTimes: dedupeSortTimes(premiumTimes),
@@ -1511,9 +1508,6 @@ function bindEvents() {
     }
     if (elements.showingRoomInput) {
       elements.showingRoomInput.value = "";
-    }
-    if (elements.showingNotesInput) {
-      elements.showingNotesInput.value = "";
     }
     if (elements.showingFestivalSelect) {
       elements.showingFestivalSelect.value = "";
