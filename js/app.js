@@ -587,11 +587,8 @@ function bindEvents() {
 
     const filmExpandToggle = event.target.closest(".film-expand-toggle");
     if (filmExpandToggle) {
-      const filmPageUrl = String(filmExpandToggle.dataset.filmPageUrl || "").trim();
-      if (filmPageUrl) {
-        window.location.assign(filmPageUrl);
-        return;
-      }
+      // All Films' "View Film Page" is a plain link; let the browser follow it.
+      if (filmExpandToggle.matches("a")) return;
       const key = filmExpandToggle.dataset.filmKey || filmExpandToggle.closest(".group-card")?.dataset.filmKey;
       if (!key) return;
       const scrollTopBefore = getPageScrollTop();
@@ -4013,17 +4010,18 @@ function render() {
 
       if (filmExpandToggle) {
         if (shouldLinkToFilmPage) {
-          filmExpandToggle.dataset.filmPageUrl = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
-          filmExpandToggle.removeAttribute("data-film-key");
-          filmExpandToggle.textContent = "View Film Page";
-          filmExpandToggle.removeAttribute("aria-expanded");
+          // A real link, so it can be opened in a new tab or copied like any other.
+          const filmPageLink = document.createElement("a");
+          filmPageLink.className = "film-expand-toggle";
+          filmPageLink.href = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+          filmPageLink.textContent = "View Film Page";
+          filmExpandToggle.replaceWith(filmPageLink);
         } else {
           filmExpandToggle.dataset.filmKey = filmGroupKey;
-          filmExpandToggle.removeAttribute("data-film-page-url");
           filmExpandToggle.textContent = filmGroupExpanded ? "Collapse" : "Expand";
           filmExpandToggle.setAttribute("aria-expanded", String(filmGroupExpanded));
+          filmExpandToggle.classList.remove("hidden");
         }
-        filmExpandToggle.classList.remove("hidden");
       }
 
       const facts = buildFilmFacts(group.filmInfo);
@@ -4088,10 +4086,14 @@ function render() {
       if (groupTmdbLink) {
         if (isNearYouView) {
           groupTmdbLink.classList.add("group-view-film-link");
-          groupTmdbLink.textContent = "View film";
+          groupTmdbLink.textContent = "View Film Page";
+          groupTmdbLink.removeAttribute("target");
+          groupTmdbLink.removeAttribute("rel");
         } else {
           groupTmdbLink.classList.remove("group-view-film-link");
           groupTmdbLink.textContent = "View on TMDb";
+          groupTmdbLink.target = "_blank";
+          groupTmdbLink.rel = "noopener noreferrer";
         }
         const actionUrl = isNearYouView ? filmPageUrl : tmdbUrl;
         if (filmGroupExpanded && actionUrl) {
@@ -4296,8 +4298,6 @@ function render() {
           const rowFilmPageLink = document.createElement("a");
           rowFilmPageLink.className = "theatre-row-film-link";
           rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
-          rowFilmPageLink.target = "_blank";
-          rowFilmPageLink.rel = "noopener noreferrer";
           rowFilmPageLink.textContent = "View Film Page";
           rowActions.appendChild(rowFilmPageLink);
           item.appendChild(rowActions);
@@ -4448,8 +4448,6 @@ function buildTheatreShowItem(group, show, rowExpanded) {
     const rowFilmPageLink = document.createElement("a");
     rowFilmPageLink.className = "theatre-row-film-link";
     rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
-    rowFilmPageLink.target = "_blank";
-    rowFilmPageLink.rel = "noopener noreferrer";
     rowFilmPageLink.textContent = "View Film Page";
     const rowActions = document.createElement("div");
     rowActions.className = "theatre-row-actions";

@@ -966,6 +966,10 @@ button:not(.theme-toggle):not(.ghost-btn):hover,
   cursor: pointer;
 }
 
+a.film-expand-toggle {
+  text-decoration: none;
+}
+
 .film-expand-toggle:hover,
 .film-expand-toggle:focus-visible {
   background: var(--hover-soft-2);
