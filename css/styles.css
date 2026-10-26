@@ -2667,3 +2667,18 @@ textarea {
     height: 500px;
   }
 }
+
+/* Visitors who ask their OS for less motion get a still background and logo. Loading
+   spinners keep turning, since they show that something is happening. */
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .brand-logo,
+  .brand-logo.is-animating,
+  .theatre-sidebar-content .group-card {
+    animation: none;
+  }
+
+  .brand-logo {
+    transition: none;
+  }
+}
