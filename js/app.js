@@ -3882,8 +3882,13 @@ function render() {
       card.classList.add("film-card");
       // Add line break after colon in film title
       const filmTitle = group.filmInfo.film;
-      if (filmTitle.includes(":")) {
-        groupTitle.innerHTML = filmTitle.replace(":", ":<br>");
+      const colonIndex = filmTitle.indexOf(":");
+      if (colonIndex >= 0) {
+        groupTitle.replaceChildren(
+          filmTitle.slice(0, colonIndex + 1),
+          document.createElement("br"),
+          filmTitle.slice(colonIndex + 1)
+        );
       } else {
         groupTitle.textContent = filmTitle;
       }
@@ -4434,9 +4439,9 @@ function render() {
       .map(([, group]) => group.theatreInfo)
       .filter(theatre => theatre && theatre.latitude && theatre.longitude);
 
-    const userLocation = state.locationPreference && state.locationPreference.lat && state.locationPreference.lng
-      ? { lat: state.locationPreference.lat, lng: state.locationPreference.lng }
-      : null;
+    // The location the distances were measured from: the saved ZIP or this visit's device
+    // location. The map never asks for location itself.
+    const userLocation = state.userCoords ? { ...state.userCoords } : null;
 
     // Pass the theatre groups - they already have shows with dates/premiumDates processed
     const groupsArray = Array.from(entries.values());
@@ -5809,7 +5814,7 @@ function buildGroups(theatres, view) {
       if (Object.keys(row.dates).length || Object.keys(row.premiumDates).length) {
         row.festivalIds = Array.from(row.festivalIdsSet.values());
         delete row.festivalIdsSet;
-        rowsByFilm[film.title] = row;
+        rowsByFilm[buildFilmGroupKey(row.film, row.year)] = row;
       }
     });
 
