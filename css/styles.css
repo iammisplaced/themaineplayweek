@@ -1913,6 +1913,12 @@ body.no-scroll {
   display: none;
 }
 
+/* Lets the map's "Show List" toggle hide the results, which `.results.results-masonry`
+   would otherwise keep displayed as a grid. */
+.results.hidden {
+  display: none;
+}
+
 .no-results-message {
   grid-column: 1 / -1;
   justify-self: center;
