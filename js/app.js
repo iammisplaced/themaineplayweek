@@ -66,14 +66,8 @@ const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
 const DAYS_VIEW_RADIUS_STORAGE_KEY = "tmp-days-radius-v1";
 const LOCATION_CHOOSER_SEEN_STORAGE_KEY = "tmp-location-chooser-seen-v1";
-const BETA_BANNER_ROTATION_MS = 5200;
 const SEARCH_INPUT_DEBOUNCE_MS = 180;
 const MAX_ADMIN_SEARCH_RESULTS = 120;
-const BETA_BANNER_MESSAGES = Object.freeze([
-  "Listings and distance sorting are actively being tuned.",
-  "Showtimes update throughout the day while we refine the feed.",
-  "Near You results are beta and may shift as location data improves.",
-]);
 
 const LOGO_SPIN_ANIMATION_MS = 420;
 const LIGHT_THEME = "light";
@@ -168,7 +162,6 @@ const state = {
 
 const elements = {
   appLoader: document.getElementById("appLoader"),
-  betaBannerMessage: document.getElementById("betaBannerMessage"),
   themeColorMeta: document.querySelector('meta[name="theme-color"]'),
   themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
@@ -299,7 +292,6 @@ const elements = {
 
 let resizeRenderTimeout = null;
 let logoSpinResetTimeout = null;
-let betaBannerRotationInterval = null;
 let lastViewportWidth = window.innerWidth;
 let appBootComplete = false;
 let pageLoadComplete = document.readyState === "complete";
@@ -346,7 +338,6 @@ function waitForNextPaint() {
 }
 
 async function init() {
-  initializeBetaBanner();
   initializeBrandWordmarkVariant();
   initializeTheme();
   initializeViewPreference();
@@ -369,33 +360,6 @@ async function init() {
   updateTheatreSortStatus();
   render();
   registerSortDebugTools();
-}
-
-function initializeBetaBanner() {
-  const messageNode = elements.betaBannerMessage;
-  if (!messageNode || !BETA_BANNER_MESSAGES.length) return;
-
-  if (betaBannerRotationInterval) {
-    clearInterval(betaBannerRotationInterval);
-    betaBannerRotationInterval = null;
-  }
-
-  let messageIndex = 0;
-  swapBetaBannerMessage(messageNode, BETA_BANNER_MESSAGES[messageIndex]);
-
-  if (BETA_BANNER_MESSAGES.length === 1) return;
-  betaBannerRotationInterval = window.setInterval(() => {
-    messageIndex = (messageIndex + 1) % BETA_BANNER_MESSAGES.length;
-    swapBetaBannerMessage(messageNode, BETA_BANNER_MESSAGES[messageIndex]);
-  }, BETA_BANNER_ROTATION_MS);
-}
-
-function swapBetaBannerMessage(messageNode, nextMessage) {
-  messageNode.classList.remove("is-swapping");
-  messageNode.textContent = nextMessage;
-  requestAnimationFrame(() => {
-    messageNode.classList.add("is-swapping");
-  });
 }
 
 async function loadLatestSubstackPost() {
@@ -515,39 +479,6 @@ function extractImageFromContent(content) {
   return imgMatch ? imgMatch[1] : "";
 }
 
-function parseSubstackRssPost(xmlText) {
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(xmlText, "application/xml");
-    if (doc.getElementsByTagName("parsererror").length) return null;
-
-    const item = doc.querySelector("item");
-    if (!item) return null;
-
-    const title = item.querySelector("title")?.textContent || "";
-    const link = item.querySelector("link")?.textContent || "";
-    const description = item.querySelector("description")?.textContent || "";
-    const pubDate = item.querySelector("pubDate")?.textContent || "";
-
-    // Extract image from description (RSS encodes images as <img> tags in HTML)
-    let coverImage = "";
-    const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/);
-    if (imgMatch) {
-      coverImage = imgMatch[1];
-    }
-
-    return {
-      title,
-      canonical_url: link,
-      description: stripHtmlTags(description),
-      cover_image: coverImage,
-      post_date: pubDate,
-    };
-  } catch (error) {
-    return null;
-  }
-}
-
 function parseSubstackJsonPost(jsonText) {
   try {
     const posts = JSON.parse(jsonText);
@@ -577,20 +508,6 @@ function buildSubtitle(descriptionHtml) {
   const plain = stripHtml(descriptionHtml).replace(/\s+/g, " ").trim();
   if (!plain) return "";
   return plain.length > 180 ? `${plain.slice(0, 177).trimEnd()}...` : plain;
-}
-
-function buildSubstackByline(post) {
-  const author = "The Maine Playweek";
-  const dateRaw = String(post.post_date || "");
-  if (!dateRaw) return author;
-  const date = new Date(dateRaw);
-  if (Number.isNaN(date.getTime())) return author;
-  const formattedDate = date.toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-  return `${author} · ${formattedDate}`;
 }
 
 function normalizeSubstackImageUrl(value) {
@@ -888,14 +805,12 @@ function bindEvents() {
         timeout: 7000,
         maximumAge: 5 * 60 * 1000,
       });
-      console.log('Geolocation position:', position);
       state.locationPreference = {
         mode: "geolocation",
         zip: "",
         lat: position.coords.latitude,
         lng: position.coords.longitude,
       };
-      console.log('Saved location preference:', state.locationPreference);
       persistLocationPreference();
       state.locationChooserSeen = true;
       persistLocationChooserSeen();
@@ -3440,14 +3355,6 @@ async function persistData() {
   return { localDraftWarning };
 }
 
-function isStorageQuotaExceeded(error) {
-  if (!error) return false;
-  if (error?.name === "QuotaExceededError") return true;
-  if (typeof error?.code === "number" && error.code === 22) return true;
-  const message = String(error?.message || "").toLowerCase();
-  return message.includes("quota") || message.includes("exceeded");
-}
-
 async function saveDataToSupabase() {
   const supabase = state.supabase;
   if (state.source !== "supabase" || !state.loadedFromSupabaseThisSession) {
@@ -4704,12 +4611,6 @@ function isPreferredAdSlot(stateAtIndex, columns) {
   return stateAtIndex.colUsed <= columns - 2;
 }
 
-function isAcceptableAdSlot(stateAtIndex, columns) {
-  if (!stateAtIndex) return false;
-  if (columns <= 1) return true;
-  return stateAtIndex.colUsed === 0;
-}
-
 function getGridInsertionStates(cards, columns) {
   const states = [{ row: 0, colUsed: 0 }];
   if (columns <= 1) {
@@ -5946,79 +5847,9 @@ function buildGroups(theatres, view) {
           };
         }
         grouped[key].shows.push(row);
-        return;
-      }
-
-      if (view === "days") {
-        const dateKeys = new Set([...Object.keys(row.dates), ...Object.keys(row.premiumDates)]);
-        dateKeys.forEach((date) => {
-          const times = row.dates[date] || [];
-          const premiumTimes = row.premiumDates[date] || [];
-          if (!grouped[date]) {
-            grouped[date] = {
-              theatreInfo: null,
-              dayInfo: { date },
-              filmInfo: null,
-              shows: [],
-              byFilm: {},
-            };
-          }
-          const filmKey = buildFilmGroupKey(row.film, row.year);
-          if (!grouped[date].byFilm[filmKey]) {
-            const dayRow = {
-              film: row.film,
-              year: row.year,
-              tmdbId: row.tmdbId,
-              posterUrl: row.posterUrl,
-              director: row.director,
-              stars: row.stars,
-              genres: row.genres,
-              festivalIds: [],
-              roomByTheatre: {},
-              theatres: {},
-              premiumTheatres: {},
-            };
-            grouped[date].byFilm[filmKey] = dayRow;
-            grouped[date].shows.push(dayRow);
-          }
-          const dayRow = grouped[date].byFilm[filmKey];
-          if (Array.isArray(row.festivalIds) && row.festivalIds.length) {
-            const seenFestivalIds = new Set(dayRow.festivalIds);
-            row.festivalIds.forEach((id) => {
-              if (!Number.isInteger(Number(id))) return;
-              const parsedId = Number(id);
-              if (seenFestivalIds.has(parsedId)) return;
-              seenFestivalIds.add(parsedId);
-              dayRow.festivalIds.push(parsedId);
-            });
-          }
-          const theatreKey = `${row.theatre} · ${row.city}`;
-          if (!dayRow.roomByTheatre[theatreKey] && row.roomByDate[date]) {
-            dayRow.roomByTheatre[theatreKey] = row.roomByDate[date];
-          }
-          if (!dayRow.theatres[theatreKey]) dayRow.theatres[theatreKey] = [];
-          dayRow.theatres[theatreKey].push(...times);
-          if (!dayRow.premiumTheatres[theatreKey]) dayRow.premiumTheatres[theatreKey] = [];
-          dayRow.premiumTheatres[theatreKey].push(...premiumTimes);
-        });
-        return;
       }
     });
   });
-
-  if (view === "days") {
-    Object.values(grouped).forEach((group) => {
-      group.shows.forEach((show) => {
-        Object.keys(show.theatres).forEach((theatreKey) => {
-          show.theatres[theatreKey].sort(compareTimes);
-        });
-        Object.keys(show.premiumTheatres || {}).forEach((theatreKey) => {
-          show.premiumTheatres[theatreKey].sort(compareTimes);
-        });
-      });
-      delete group.byFilm;
-    });
-  }
 
   return grouped;
 }
@@ -6051,13 +5882,6 @@ function buildExpandRowKey(view, group, show) {
       "theatres-row",
       group?.theatreInfo?.name || "",
       group?.theatreInfo?.city || "",
-      filmKey,
-    ].join("::");
-  }
-  if (view === "days") {
-    return [
-      "days-row",
-      group?.dayInfo?.date || "",
       filmKey,
     ].join("::");
   }
