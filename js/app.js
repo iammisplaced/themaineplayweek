@@ -4262,7 +4262,7 @@ function render() {
           rowToggle.type = "button";
           rowToggle.className = "film-expand-toggle theatre-row-toggle";
           rowToggle.dataset.filmKey = rowExpandKey;
-          rowToggle.textContent = rowExpanded ? "Collapse" : "Expand";
+          rowToggle.textContent = rowExpanded ? "Collapse" : "More Dates & Tickets";
           rowToggle.setAttribute("aria-expanded", String(rowExpanded));
 
           row.classList.add("has-poster");
@@ -4290,15 +4290,19 @@ function render() {
               : "";
           meta.textContent = singleDateRoom ? `Room: ${singleDateRoom}` : "";
 
-          if (state.view === "theatres") {
+          // Collapsed rows show the next day's times; expanding shows every date plus the
+          // ticket and film page links.
+          if (rowExpanded) {
             renderSchedule(schedule, show.dates, show.premiumDates, show.timeNotes);
-          }
-
-          if (!rowExpanded) {
-            meta.appendChild(rowToggle);
-            schedule.classList.add("hidden");
           } else {
-            schedule.classList.remove("hidden");
+            const nextDate = Object.keys({ ...show.dates, ...show.premiumDates }).sort()[0];
+            schedule.replaceChildren();
+            if (nextDate) {
+              schedule.appendChild(
+                createScheduleRow(nextDate, show.dates?.[nextDate], show.premiumDates?.[nextDate], show.timeNotes)
+              );
+            }
+            schedule.appendChild(rowToggle);
           }
 
           const ticketUrl = normalizeOutboundUrl(show.ticketLink);
