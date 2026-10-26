@@ -3,7 +3,7 @@
  * Manages the interactive map for displaying nearby theatres
  */
 
-import { buildFilmPageUrl, compareTimes, formatDisplayDate } from "./shared.js";
+import { buildFilmPageUrl, compareTimes, formatDisplayDate, normalizeOutboundUrl } from "./shared.js";
 
 let mapInstance = null;
 let markers = [];
@@ -257,20 +257,8 @@ function populateSidebar(theatre) {
     group.theatreInfo && group.theatreInfo.id === theatre.id
   );
 
-  if (!theatreGroup || !theatreGroup.shows || theatreGroup.shows.length === 0) {
-    mapElements.sidebarContent.innerHTML = `
-      <article class="group-card" data-theatre-id="${theatre.id}">
-        <h3 class="group-title">${theatre.name}</h3>
-        <p class="group-subtitle">${theatre.city}</p>
-        <a class="group-link" href="${theatre.website}" target="_blank" rel="noopener noreferrer">Visit theatre website</a>
-        <ul class="show-list"></ul>
-      </article>
-    `;
-    return;
-  }
-
   // Use the shows array from the theatre group - it already has dates/premiumDates processed
-  const shows = theatreGroup.shows;
+  const shows = theatreGroup?.shows || [];
 
   // Build the theatre card HTML
   const card = document.createElement('article');
@@ -292,7 +280,7 @@ function populateSidebar(theatre) {
   // Website link
   const link = document.createElement('a');
   link.className = 'group-link';
-  link.href = theatre.website;
+  link.href = normalizeOutboundUrl(theatre.website);
   link.target = '_blank';
   link.rel = 'noopener noreferrer';
   link.textContent = 'Visit theatre website';
@@ -310,13 +298,15 @@ function populateSidebar(theatre) {
       <div class="show-row has-poster">
         <img class="show-poster" alt="" />
         <div>
-          <div class="show-main">${show.film}</div>
+          <div class="show-main"></div>
           <div class="show-meta"></div>
           <div class="show-schedule hidden"></div>
         </div>
       </div>
       <a class="show-link hidden" target="_blank" rel="noopener noreferrer">Tickets</a>
     `;
+
+    item.querySelector('.show-main').textContent = show.film;
 
     // Set poster
     const poster = item.querySelector('.show-poster');
@@ -335,7 +325,7 @@ function populateSidebar(theatre) {
     // Set ticket link - same as list view
     const ticketLink = item.querySelector('.show-link');
     if (show.ticketLink) {
-      ticketLink.href = show.ticketLink;
+      ticketLink.href = normalizeOutboundUrl(show.ticketLink);
     }
 
     list.appendChild(item);

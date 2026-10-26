@@ -3882,8 +3882,13 @@ function render() {
       card.classList.add("film-card");
       // Add line break after colon in film title
       const filmTitle = group.filmInfo.film;
-      if (filmTitle.includes(":")) {
-        groupTitle.innerHTML = filmTitle.replace(":", ":<br>");
+      const colonIndex = filmTitle.indexOf(":");
+      if (colonIndex >= 0) {
+        groupTitle.replaceChildren(
+          filmTitle.slice(0, colonIndex + 1),
+          document.createElement("br"),
+          filmTitle.slice(colonIndex + 1)
+        );
       } else {
         groupTitle.textContent = filmTitle;
       }
