@@ -648,6 +648,10 @@ function bindAdminEvents() {
         `This film can't be deleted here: it has a ticket link at ${theatresWithLink} theatre(s), and saves that clear ticket links are blocked.`;
       return;
     }
+    const confirmed = window.confirm(
+      `Delete ${buildFilmGroupKey(film.title, film.year)} from all theatres? Its showtimes everywhere are removed when you save.`
+    );
+    if (!confirmed) return;
     removeFilmFromAllTheatres(film);
     state.admin.filmIndex = Math.max(0, state.admin.filmIndex - 1);
     state.admin.filmQuery = "";
