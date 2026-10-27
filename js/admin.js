@@ -443,15 +443,12 @@ function bindAdminEvents() {
     const rawValue = elements.selectedTicketLinkInput.value.trim();
     const normalizedValue = normalizeOutboundUrl(rawValue);
     const existingValue = normalizeOutboundUrl(film.ticketLink || "");
+    // Saves that would clear a ticket link are blocked (here and in the database).
     if (!rawValue && existingValue) {
-      const confirmed = window.confirm(
-        "This will clear the existing ticket link for this theatre + film. Continue?"
-      );
-      if (!confirmed) {
-        elements.selectedTicketLinkInput.value = film.ticketLink || "";
-        elements.adminMessage.textContent = "Ticket link clear cancelled.";
-        return;
-      }
+      elements.selectedTicketLinkInput.value = film.ticketLink || "";
+      elements.adminMessage.textContent =
+        "Ticket links can't be cleared here, because saves that clear one are blocked. Replace it with a new link instead.";
+      return;
     }
     film.ticketLink = normalizedValue;
     syncAdminEditor();
@@ -645,6 +642,12 @@ function bindAdminEvents() {
     const theatre = getSelectedTheatre();
     if (!theatre || !theatre.films.length) return;
     const film = theatre.films[state.admin.filmIndex];
+    const theatresWithLink = countTheatresWithTicketLink(film);
+    if (theatresWithLink) {
+      elements.adminMessage.textContent =
+        `This film can't be deleted here: it has a ticket link at ${theatresWithLink} theatre(s), and saves that clear ticket links are blocked.`;
+      return;
+    }
     removeFilmFromAllTheatres(film);
     state.admin.filmIndex = Math.max(0, state.admin.filmIndex - 1);
     state.admin.filmQuery = "";
@@ -1926,6 +1929,14 @@ function addFilmToAllTheatres(baseFilm) {
     }
     sortFilms(theatre.films);
   });
+}
+
+function countTheatresWithTicketLink(targetFilm) {
+  return state.data.theatreGroups.filter((theatre) =>
+    (theatre.films || []).some(
+      (film) => filmsMatch(film, targetFilm) && String(film.ticketLink || "").trim()
+    )
+  ).length;
 }
 
 function removeFilmFromAllTheatres(targetFilm) {
