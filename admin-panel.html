@@ -282,7 +282,10 @@
   <div class="admin-save-bar">
     <div class="admin-save-row">
       <p id="adminSaveStatus" class="admin-save-status">No unsaved changes</p>
-      <button id="saveAllAdmin" type="button">Save</button>
+      <div class="admin-save-buttons">
+        <button id="discardAdminChanges" class="ghost-btn" type="button" hidden>Discard changes</button>
+        <button id="saveAllAdmin" type="button">Save</button>
+      </div>
     </div>
     <p id="adminMessage" class="admin-message" role="status"></p>
   </div>
