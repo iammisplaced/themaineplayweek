@@ -1,0 +1,259 @@
+<!-- The admin editor, minus the heading, spinner and intro text that stay in index.html.
+     js/admin.js loads this into #adminPanel the first time the panel opens. -->
+<section id="adminAuthGate" class="admin-auth-gate hidden">
+  <h3>Admin Login</h3>
+  <p class="admin-help">Enter your email to receive a magic link.</p>
+  <label for="adminEmailInput">Email</label>
+  <input id="adminEmailInput" type="email" />
+  <div class="admin-inline-actions">
+    <button id="adminLoginButton">Send Magic Link</button>
+  </div>
+  <p id="adminAuthMessage" class="admin-message" role="status"></p>
+</section>
+
+<div id="adminControls" class="hidden">
+  <div class="admin-inline-actions admin-top-actions">
+    <button id="adminLogoutButton" class="ghost-btn">Log Out</button>
+    <button id="openFilmCatalogButton" class="ghost-btn" type="button">Open Film Catalog</button>
+    <a class="ghost-btn" href="films/" target="_blank" rel="noopener noreferrer">Film Pages Prototype</a>
+  </div>
+  <div class="admin-section-tabs" role="tablist" aria-label="Admin editing section">
+    <button
+      id="adminMoviesTab"
+      class="admin-section-tab active"
+      type="button"
+      role="tab"
+      data-admin-section="movies"
+      aria-selected="true"
+    >
+      Movies
+    </button>
+    <button
+      id="adminPromosTab"
+      class="admin-section-tab"
+      type="button"
+      role="tab"
+      data-admin-section="promos"
+      aria-selected="false"
+    >
+      Promos
+    </button>
+    <button
+      id="adminFestivalsTab"
+      class="admin-section-tab"
+      type="button"
+      role="tab"
+      data-admin-section="festivals"
+      aria-selected="false"
+    >
+      Festivals
+    </button>
+  </div>
+
+  <section id="adminMoviesPanel" class="admin-section-panel" role="tabpanel" aria-labelledby="adminMoviesTab">
+    <div class="admin-grid">
+      <section class="admin-card admin-card-wide">
+        <h3>Quick Admin</h3>
+        <label for="adminTheatreSearch">Theatre</label>
+        <input id="adminTheatreSearch" type="text" placeholder="Search theatre, city, or address..." />
+        <ul id="adminTheatreResults" class="admin-search-results"></ul>
+        <label for="adminFilmSearch">Film</label>
+        <input id="adminFilmSearch" type="text" placeholder="Search films..." />
+        <ul id="adminFilmResults" class="admin-search-results"></ul>
+        <label for="selectedTicketLinkInput">Ticket Link (selected theatre + film)</label>
+        <input id="selectedTicketLinkInput" type="url" placeholder="https://tickets.example.com/..." />
+        <div class="admin-inline-actions">
+          <button id="saveSelectedTicketLink">Save Ticket Link</button>
+        </div>
+        <label for="tmdbApiKeyInput">TMDb API Key (local)</label>
+        <input id="tmdbApiKeyInput" type="password" placeholder="Used only in this browser" />
+        <div class="admin-inline-actions">
+          <button id="addTheatre" class="ghost-btn">+ Add Theatre</button>
+          <button id="addFilm" class="ghost-btn">+ Add Film</button>
+          <button id="editFilmMetadata" class="ghost-btn">Edit Film Metadata</button>
+          <button id="deleteFilm" class="ghost-btn">Delete Film</button>
+          <button id="refreshTmdb" class="ghost-btn">Refresh TMDb</button>
+        </div>
+      </section>
+
+      <section class="admin-card admin-card-wide">
+        <h3>Showings</h3>
+        <p class="admin-help">Tip: keep times as <code>h:mm AM/PM</code> and separate multiple times with commas.</p>
+        <label for="showingDateInput">Date</label>
+        <input id="showingDateInput" type="date" />
+        <label for="showingSpanDaysInput">Number of days</label>
+        <input id="showingSpanDaysInput" type="number" min="1" step="1" value="1" />
+        <label for="showingTimesInput">Times (comma separated)</label>
+        <input id="showingTimesInput" type="text" placeholder="1:30 PM, 6:50 PM" />
+        <label for="showingPremiumTimesInput">Premium Times (comma separated)</label>
+        <input id="showingPremiumTimesInput" type="text" placeholder="4:10 PM, 7:40 PM" />
+        <label for="showingRoomInput">Room (optional)</label>
+        <input id="showingRoomInput" type="text" placeholder="Main Hall" />
+        <label for="showingFestivalSelect">Festival (optional)</label>
+        <select id="showingFestivalSelect">
+          <option value="">None</option>
+        </select>
+        <div class="admin-inline-actions">
+          <button id="addShowing">+ Add Showing</button>
+        </div>
+        <ul id="showingsList" class="admin-list"></ul>
+      </section>
+    </div>
+
+    <div class="admin-actions">
+      <button id="saveAllAdmin">Save All Changes</button>
+      <button id="downloadCsvTemplate" class="ghost-btn">Download CSV Template</button>
+      <label class="upload-label">
+        Import CSV
+        <input id="uploadCsv" type="file" accept=".csv,text/csv" />
+      </label>
+    </div>
+  </section>
+
+  <section
+    id="adminPromosPanel"
+    class="admin-section-panel hidden"
+    role="tabpanel"
+    aria-labelledby="adminPromosTab"
+  >
+    <div class="admin-grid">
+      <section class="admin-card admin-card-wide">
+        <h3>Promos</h3>
+        <p class="admin-help">Toggle promo visibility and edit title/button URL. Leave title blank to hide it.</p>
+        <div class="admin-inline-actions">
+          <button id="openAddPromoModalButton" type="button">+ Add Promo</button>
+        </div>
+        <div id="promoSettingsList" class="promo-settings-list"></div>
+        <div class="admin-inline-actions">
+          <button id="saveAllPromos">Save All Changes</button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section
+    id="adminFestivalsPanel"
+    class="admin-section-panel hidden"
+    role="tabpanel"
+    aria-labelledby="adminFestivalsTab"
+  >
+    <div class="admin-grid">
+      <section class="admin-card admin-card-wide">
+        <h3>Festivals</h3>
+        <p class="admin-help">Add/edit festivals used by showings CSV and manual showing assignment.</p>
+        <div class="admin-inline-actions">
+          <button id="openAddFestivalModalButton" type="button">+ Add Festival</button>
+        </div>
+        <div id="festivalSettingsList" class="promo-settings-list"></div>
+        <div class="admin-inline-actions">
+          <button id="saveAllFestivals">Save All Changes</button>
+        </div>
+      </section>
+    </div>
+  </section>
+
+<dialog id="addFilmModal" class="admin-modal">
+  <form id="addFilmForm" method="dialog" class="admin-modal-body">
+    <h3>Add Film</h3>
+    <label for="modalFilmTitleInput">Title</label>
+    <input id="modalFilmTitleInput" type="text" required />
+    <label for="modalFilmYearInput">Year (optional if TMDb ID used)</label>
+    <input id="modalFilmYearInput" type="number" />
+    <label for="modalFilmTmdbIdInput">TMDb ID (optional if year used)</label>
+    <input id="modalFilmTmdbIdInput" type="number" />
+    <div class="admin-inline-actions">
+      <button id="confirmAddFilm" value="confirm">Add Film</button>
+      <button id="cancelAddFilm" class="ghost-btn" type="button">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="editFilmMetadataModal" class="admin-modal">
+  <form id="editFilmMetadataForm" method="dialog" class="admin-modal-body">
+    <h3>Edit Film Metadata</h3>
+    <p class="admin-help">
+      Use this when TMDb data is missing or you want manual overrides.
+    </p>
+    <label for="metadataSourceInput">Metadata Source</label>
+    <input id="metadataSourceInput" type="text" readonly />
+    <label for="metadataPosterUrlInput">Poster URL (optional)</label>
+    <input id="metadataPosterUrlInput" type="url" placeholder="https://..." />
+    <label for="metadataDirectorInput">Director (optional)</label>
+    <input id="metadataDirectorInput" type="text" />
+    <label for="metadataStarsInput">Actors/Stars (comma separated)</label>
+    <textarea id="metadataStarsInput" rows="3" placeholder="Actor One, Actor Two"></textarea>
+    <label for="metadataGenresInput">Genres (comma separated)</label>
+    <textarea id="metadataGenresInput" rows="2" placeholder="Drama, Comedy"></textarea>
+    <label for="metadataReleaseDateInput">Release Date (optional)</label>
+    <input id="metadataReleaseDateInput" type="date" />
+    <div class="admin-inline-actions">
+      <button id="confirmEditFilmMetadata" value="confirm">Save Metadata</button>
+      <button id="cancelEditFilmMetadata" class="ghost-btn" type="button">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="addTheatreModal" class="admin-modal">
+  <form id="addTheatreForm" method="dialog" class="admin-modal-body">
+    <h3>Add Theatre</h3>
+    <label for="modalTheatreNameInput">Name</label>
+    <input id="modalTheatreNameInput" type="text" required />
+    <label for="modalTheatreCityInput">City</label>
+    <input id="modalTheatreCityInput" type="text" required />
+    <label for="modalTheatreAddressInput">Address</label>
+    <input id="modalTheatreAddressInput" type="text" required />
+    <label for="modalTheatreWebsiteInput">Website</label>
+    <input id="modalTheatreWebsiteInput" type="url" required />
+    <label for="modalTheatreLatitudeInput">Latitude (optional)</label>
+    <input id="modalTheatreLatitudeInput" type="number" step="any" placeholder="43.6591" />
+    <label for="modalTheatreLongitudeInput">Longitude (optional)</label>
+    <input id="modalTheatreLongitudeInput" type="number" step="any" placeholder="-70.2568" />
+    <div class="admin-inline-actions">
+      <button id="confirmAddTheatre" value="confirm">Add Theatre</button>
+      <button id="cancelAddTheatre" class="ghost-btn" type="button">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="addPromoModal" class="admin-modal">
+  <form id="addPromoForm" method="dialog" class="admin-modal-body">
+    <h3>Add Promo</h3>
+    <label for="modalPromoImageInput">Image</label>
+    <input id="modalPromoImageInput" type="file" accept="image/*" required />
+    <label for="modalPromoTitleInput">Title (optional)</label>
+    <input id="modalPromoTitleInput" type="text" placeholder="Optional" />
+    <label for="modalPromoButtonUrlInput">Button URL</label>
+    <input id="modalPromoButtonUrlInput" type="url" placeholder="https://example.com" />
+    <div class="admin-inline-actions">
+      <button id="confirmAddPromo" value="confirm">Add Promo</button>
+      <button id="cancelAddPromo" class="ghost-btn" type="button">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="addFestivalModal" class="admin-modal">
+  <form id="addFestivalForm" method="dialog" class="admin-modal-body">
+    <h3>Add Festival</h3>
+    <label for="modalFestivalNameInput">Name</label>
+    <input id="modalFestivalNameInput" type="text" required />
+    <label for="modalFestivalSlugInput">Slug (optional)</label>
+    <input id="modalFestivalSlugInput" type="text" placeholder="auto-from-name" />
+    <label for="modalFestivalWebsiteInput">Website (optional)</label>
+    <input id="modalFestivalWebsiteInput" type="url" placeholder="https://..." />
+    <label for="modalFestivalPrimaryColorInput">Primary Color (optional, hex)</label>
+    <input id="modalFestivalPrimaryColorInput" type="text" placeholder="#C54828" />
+    <label for="modalFestivalStartDateInput">Start Date (optional)</label>
+    <input id="modalFestivalStartDateInput" type="date" />
+    <label for="modalFestivalEndDateInput">End Date (optional)</label>
+    <input id="modalFestivalEndDateInput" type="date" />
+    <label for="modalFestivalDescriptionInput">Description (optional)</label>
+    <textarea id="modalFestivalDescriptionInput" rows="3"></textarea>
+    <div class="admin-inline-actions">
+      <button id="confirmAddFestival" value="confirm">Add Festival</button>
+      <button id="cancelAddFestival" class="ghost-btn" type="button">Cancel</button>
+    </div>
+  </form>
+</dialog>
+
+  <p id="adminMessage" class="admin-message" role="status"></p>
+</div>
