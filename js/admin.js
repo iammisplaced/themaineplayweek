@@ -65,6 +65,7 @@ export async function initAdmin(app) {
     isSaving: false,
     isRefreshingTmdb: false,
     tmdbApiKey: "",
+    promoImagesToDelete: [],
     auth: {
       authenticated: false,
       email: "",
@@ -293,7 +294,7 @@ function bindAdminEvents() {
     elements.adminMessage.textContent = "Promo settings updated.";
   });
 
-  elements.promoSettingsList?.addEventListener("click", async (event) => {
+  elements.promoSettingsList?.addEventListener("click", (event) => {
     if (!requireAdminAuth()) return;
     const removeButton = event.target.closest("button[data-remove-promo-index]");
     if (!removeButton) return;
@@ -303,13 +304,9 @@ function bindAdminEvents() {
     const label = String(promo?.title || promo?.imageName || "this promo").trim();
     const confirmed = window.confirm(`Delete ${label}?`);
     if (!confirmed) return;
-    if (promo?.imagePath) {
-      try {
-        await deletePromoImageFromStorage(promo.imagePath);
-      } catch {
-        // Non-blocking: allow metadata delete even if storage cleanup fails.
-      }
-    }
+    // The live promo keeps showing this image until the next save, so the file is
+    // removed only after that save succeeds.
+    if (promo?.imagePath) state.admin.promoImagesToDelete.push(promo.imagePath);
     state.promotedCards.splice(promoIndex, 1);
     renderPromoSettingsEditor();
     render();
@@ -446,15 +443,12 @@ function bindAdminEvents() {
     const rawValue = elements.selectedTicketLinkInput.value.trim();
     const normalizedValue = normalizeOutboundUrl(rawValue);
     const existingValue = normalizeOutboundUrl(film.ticketLink || "");
+    // Saves that would clear a ticket link are blocked (here and in the database).
     if (!rawValue && existingValue) {
-      const confirmed = window.confirm(
-        "This will clear the existing ticket link for this theatre + film. Continue?"
-      );
-      if (!confirmed) {
-        elements.selectedTicketLinkInput.value = film.ticketLink || "";
-        elements.adminMessage.textContent = "Ticket link clear cancelled.";
-        return;
-      }
+      elements.selectedTicketLinkInput.value = film.ticketLink || "";
+      elements.adminMessage.textContent =
+        "Ticket links can't be cleared here, because saves that clear one are blocked. Replace it with a new link instead.";
+      return;
     }
     film.ticketLink = normalizedValue;
     syncAdminEditor();
@@ -648,6 +642,16 @@ function bindAdminEvents() {
     const theatre = getSelectedTheatre();
     if (!theatre || !theatre.films.length) return;
     const film = theatre.films[state.admin.filmIndex];
+    const theatresWithLink = countTheatresWithTicketLink(film);
+    if (theatresWithLink) {
+      elements.adminMessage.textContent =
+        `This film can't be deleted here: it has a ticket link at ${theatresWithLink} theatre(s), and saves that clear ticket links are blocked.`;
+      return;
+    }
+    const confirmed = window.confirm(
+      `Delete ${buildFilmGroupKey(film.title, film.year)} from all theatres? Its showtimes everywhere are removed when you save.`
+    );
+    if (!confirmed) return;
     removeFilmFromAllTheatres(film);
     state.admin.filmIndex = Math.max(0, state.admin.filmIndex - 1);
     state.admin.filmQuery = "";
@@ -717,6 +721,12 @@ function bindAdminEvents() {
       elements.adminMessage.textContent = "Add a date and at least one standard or premium time.";
       return;
     }
+    // The database skips times it can't read, so they would vanish on save.
+    const invalidTime = [...times, ...premiumTimes].find((time) => !to24HourTime(time));
+    if (invalidTime) {
+      elements.adminMessage.textContent = `"${invalidTime}" isn't a valid time. Use h:mm AM/PM, like 7:30 PM.`;
+      return;
+    }
 
     for (let offset = 0; offset < spanDays; offset += 1) {
       const targetDate = addDaysIso(date, offset);
@@ -724,8 +734,9 @@ function bindAdminEvents() {
       if (existing) {
         existing.times = dedupeSortTimes([...(existing.times || []), ...times]);
         existing.premiumTimes = dedupeSortTimes([...(existing.premiumTimes || []), ...premiumTimes]);
-        existing.festivalId = showingFestivalId;
-        existing.room = room;
+        // Like the CSV import, a blank festival or room keeps the date's existing one.
+        if (showingFestivalId) existing.festivalId = showingFestivalId;
+        if (room) existing.room = room;
       } else {
         film.showings.push({
           date: targetDate,
@@ -787,7 +798,7 @@ function bindAdminEvents() {
         elements.adminMessage.textContent = "All changes saved to Supabase.";
       }
     } catch (error) {
-      elements.adminMessage.textContent = `Save failed: ${error.message}. Run latest supabase/schema.sql and try again.`;
+      elements.adminMessage.textContent = `Save failed: ${error.message}`;
     } finally {
       state.admin.isSaving = false;
       syncAdminEditor();
@@ -1931,6 +1942,14 @@ function addFilmToAllTheatres(baseFilm) {
   });
 }
 
+function countTheatresWithTicketLink(targetFilm) {
+  return state.data.theatreGroups.filter((theatre) =>
+    (theatre.films || []).some(
+      (film) => filmsMatch(film, targetFilm) && String(film.ticketLink || "").trim()
+    )
+  ).length;
+}
+
 function removeFilmFromAllTheatres(targetFilm) {
   state.data.theatreGroups.forEach((theatre) => {
     theatre.films = (theatre.films || []).filter((film) => !filmsMatch(film, targetFilm));
@@ -1978,6 +1997,7 @@ async function persistData() {
   }
   await saveDataToSupabase();
   applyFullData(await loadDataFromSupabase(state.supabase));
+  await deleteRemovedPromoImages();
   syncAdminEditor();
   render();
   return { localDraftWarning };
@@ -1987,7 +2007,7 @@ async function saveDataToSupabase() {
   const supabase = state.supabase;
   if (state.source !== "supabase" || !state.loadedFromSupabaseThisSession) {
     throw new Error(
-      "Blocked save: current admin data was not loaded from Supabase. Use Reset from source to reload live data before saving."
+      "Blocked save: current admin data was not loaded from Supabase. Reload the page and try again."
     );
   }
   await verifySupabaseSchema(supabase);
@@ -2389,6 +2409,20 @@ async function uploadPromoImageToStorage(file) {
     .upload(path, file, { upsert: false, contentType: file.type || undefined });
   if (result.error) throw result.error;
   return path;
+}
+
+// Runs after a successful save. An image still used by a saved promo is kept.
+async function deleteRemovedPromoImages() {
+  const inUse = new Set((state.promotedCards || []).map((promo) => promo.imagePath));
+  const paths = state.admin.promoImagesToDelete.filter((path) => !inUse.has(path));
+  state.admin.promoImagesToDelete = [];
+  for (const path of paths) {
+    try {
+      await deletePromoImageFromStorage(path);
+    } catch {
+      // Non-blocking: the save already succeeded; the file is only left unused.
+    }
+  }
 }
 
 async function deletePromoImageFromStorage(path) {

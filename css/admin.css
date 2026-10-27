@@ -237,6 +237,8 @@
   min-height: 1.4rem;
   margin-top: 0.6rem;
   color: var(--accent);
+  /* Some messages list examples on separate lines. */
+  white-space: pre-line;
 }
 
 .admin-message.admin-message-success {
