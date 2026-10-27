@@ -309,10 +309,10 @@ function setLatestPostFallback() {
   syncLatestPostVisibility();
 }
 
-// data/latest-post.json is refreshed daily by a GitHub Action
-// (scripts/fetch-latest-post.mjs), since Substack can't be read from the browser.
+// Served by the Vercel function in api/latest-post.js, since Substack can't be read from
+// the browser.
 async function fetchLatestSubstackPost() {
-  const response = await fetch("./data/latest-post.json", { cache: "no-cache" });
+  const response = await fetch("/api/latest-post");
   if (!response.ok) throw new Error(`Request failed (${response.status})`);
   return response.json();
 }
