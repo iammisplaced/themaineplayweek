@@ -169,7 +169,6 @@ const elements = {
   appLoader: document.getElementById("appLoader"),
   controls: document.querySelector(".controls"),
   themeColorMeta: document.querySelector('meta[name="theme-color"]'),
-  themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
   brandWordmark: document.getElementById("brandWordmark"),
   brandWordmarkOneLine: document.getElementById("brandWordmarkOneLine"),
@@ -207,7 +206,8 @@ const elements = {
   posterLightbox: document.getElementById("posterLightbox"),
   posterLightboxImage: document.getElementById("posterLightboxImage"),
   posterLightboxClose: document.getElementById("posterLightboxClose"),
-  tabs: Array.from(document.querySelectorAll(".tab")),
+  tabs: Array.from(document.querySelectorAll(".tab, .tabbar-item")),
+  themeToggles: Array.from(document.querySelectorAll("[data-theme-toggle]")),
   groupTemplate: document.getElementById("groupTemplate"),
   showItemTemplate: document.getElementById("showItemTemplate"),
   adminToggle: document.getElementById("adminToggle"),
@@ -378,11 +378,13 @@ function syncControlsStuck() {
 }
 
 function bindEvents() {
-  elements.themeToggle?.addEventListener("click", () => {
-    animateThemeToggle();
-    const nextTheme = state.theme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-    applyTheme(nextTheme);
-    saveThemeChoice(nextTheme);
+  elements.themeToggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      animateThemeToggle();
+      const nextTheme = state.theme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+      applyTheme(nextTheme);
+      saveThemeChoice(nextTheme);
+    });
   });
 
   window.addEventListener("scroll", syncControlsStuck, { passive: true });
@@ -861,12 +863,11 @@ function applyTheme(theme) {
     }
   }
 
-  if (elements.themeToggle) {
-    const isDark = normalizedTheme === DARK_THEME;
-    const nextThemeLabel = isDark ? "light" : "dark";
-    elements.themeToggle.setAttribute("aria-label", `Switch to ${nextThemeLabel} mode`);
-    elements.themeToggle.setAttribute("title", `Switch to ${nextThemeLabel} mode`);
-  }
+  const nextThemeLabel = normalizedTheme === DARK_THEME ? "light" : "dark";
+  elements.themeToggles.forEach((toggle) => {
+    toggle.setAttribute("aria-label", `Switch to ${nextThemeLabel} mode`);
+    toggle.setAttribute("title", `Switch to ${nextThemeLabel} mode`);
+  });
 
   if (elements.locationControlIcon) {
     elements.locationControlIcon.src =
