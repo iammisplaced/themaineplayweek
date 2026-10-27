@@ -30,7 +30,7 @@ It's a plain static site (HTML, CSS and JavaScript, with no build step) that rea
 | `index.html`, `css/styles.css`, `js/app.js` | The site: the public views plus the admin panel |
 | `js/shared.js` | Helpers shared by the site and the scripts: Supabase URL and public key, dates and times, film slugs and ranking, showtime notes |
 | `js/map-view.js` | The theatre map in the Near You view |
-| `js/admin-csv.js`, `test/` | The admin's showtimes CSV import, and its tests (`npm test`) |
+| `js/admin-csv.js`, `js/admin-changes.js`, `test/` | The admin's showtimes CSV import, what a save sends and how the Save bar describes it, and their tests (`npm test`) |
 | `admin-films.html`, `css/admin-films.css`, `js/admin-films.js` | Admin film catalog page (staff favourites, featured films, ranking overrides) |
 | `films/` | Static film pages, **generated; don't edit by hand** |
 | `data/film-pages-source.live.json` | Snapshot of the Supabase data used for the last film-page build (generated); also the site's offline fallback |
@@ -69,7 +69,7 @@ Showtimes that have already passed are hidden automatically. Premium showings sh
 
 Click **Admin** at the bottom of the site and sign in with a magic link. Enter your email, click the link in the email, and you're back on the site, signed in. Admin accounts are Supabase Auth users.
 
-Nothing is written to Supabase until you click **Save All Changes**. Until then, edits only live in your browser.
+Nothing is written to Supabase until you click **Save**. Until then, edits only live in your browser. The bar at the bottom of the panel says what a save would send ("Unsaved: 2 showtime days changed, 1 new film"), and an edit undone by hand doesn't count. **Discard changes** (click it twice) downloads the saved data again and drops everything unsaved.
 
 What you can do in the panel:
 

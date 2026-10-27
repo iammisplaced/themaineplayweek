@@ -30,6 +30,7 @@ import {
   summarizeCsvDays,
   toCsvCell,
 } from "./admin-csv.js";
+import { buildChangesPayload, changesAddRows, describeChanges } from "./admin-changes.js";
 
 const MAX_ADMIN_SEARCH_RESULTS = 120;
 // Where earlier versions kept a TMDb key in the browser; removed on open now that the server holds it.
@@ -45,11 +46,16 @@ let elements;
 // What the database holds, as buildReplacePayload gives it, as of the last load or save.
 // A save sends only what differs from it.
 let savedPayload = null;
+// What a save would send now: buildChangesPayload against savedPayload, or null if nothing
+// differs. Worked out after each edit rather than on every Save bar update.
+let unsavedChanges = null;
 // The CSV import waiting in the preview: the data it was made from, the changed copy, and
 // what the preview lists. Null when the preview is closed.
 let pendingCsvImport = null;
 // The showing day open in the inline editor under the Showings list, or null.
 let editingShowing = null;
+// While Discard waits for its second click: the timer that puts it back.
+let discardArmTimer = null;
 
 // Downloads the markup, styles and full data before changing anything else, so if any
 // of them fails app.js can simply call this again. Visitors only have the films with
@@ -79,10 +85,8 @@ export async function initAdmin(app) {
     filmSearching: false,
     isSaving: false,
     isRefreshingTmdb: false,
+    isDiscarding: false,
     promoImagesToDelete: [],
-    // Edits since the page loaded and how many of them the last save covered.
-    changeCount: 0,
-    savedChangeCount: 0,
     auth: {
       authenticated: false,
       email: "",
@@ -126,6 +130,7 @@ function applyFullData(fullData) {
   state.dataVersion = fullData.dataVersion;
   state.dataLoadError = "";
   savedPayload = buildSavedPayload();
+  unsavedChanges = null;
 }
 
 // A copy, since buildReplacePayload shares objects (tmdb_json) that edits change in place.
@@ -236,6 +241,7 @@ function findAdminElements() {
     showingsList: document.getElementById("showingsList"),
     promoSettingsList: document.getElementById("promoSettingsList"),
     saveAllAdmin: document.getElementById("saveAllAdmin"),
+    discardAdminChanges: document.getElementById("discardAdminChanges"),
     adminSaveStatus: document.getElementById("adminSaveStatus"),
     downloadCsvTemplate: document.getElementById("downloadCsvTemplate"),
     uploadCsv: document.getElementById("uploadCsv"),
@@ -853,7 +859,6 @@ function bindAdminEvents() {
       syncAdminEditor();
       validateData(state.data);
       const saveResult = await persistData();
-      state.admin.savedChangeCount = state.admin.changeCount;
       elements.adminMessage.textContent = saveResult.saved ? "All changes saved to Supabase." : "No changes to save.";
     } catch (error) {
       elements.adminMessage.textContent = `Save failed: ${error.message}`;
@@ -864,6 +869,7 @@ function bindAdminEvents() {
   };
 
   elements.saveAllAdmin.addEventListener("click", handleSaveAllChanges);
+  elements.discardAdminChanges.addEventListener("click", handleDiscardChanges);
 
   elements.festivalSettingsList?.addEventListener("change", (event) => {
     if (!requireAdminAuth()) return;
@@ -1324,23 +1330,32 @@ function hasPendingTicketLink() {
 }
 
 function hasUnsavedChanges() {
-  return state.admin.changeCount !== state.admin.savedChangeCount || hasPendingTicketLink();
+  return Boolean(unsavedChanges) || hasPendingTicketLink();
 }
 
+// Called after every edit. An edit undone by hand leaves nothing unsaved.
 function markUnsaved() {
-  state.admin.changeCount += 1;
+  unsavedChanges = buildChangesPayload(savedPayload, buildReplacePayload(state.data, state.promotedCards));
   updateSaveBar();
 }
 
 function updateSaveBar() {
   const unsaved = hasUnsavedChanges();
-  elements.saveAllAdmin.disabled = !unsaved || state.admin.isSaving || state.admin.isRefreshingTmdb;
+  const busy = state.admin.isSaving || state.admin.isDiscarding || state.admin.isRefreshingTmdb;
+  elements.saveAllAdmin.disabled = !unsaved || busy;
+  elements.discardAdminChanges.hidden = !unsaved;
+  elements.discardAdminChanges.disabled = busy;
+  if (!unsaved || busy) disarmDiscard();
+  const parts = describeChanges(unsavedChanges);
+  if (hasPendingTicketLink()) parts.push("typed ticket link");
   elements.adminSaveStatus.textContent = state.admin.isSaving
     ? "Saving..."
-    : unsaved
-      ? "Unsaved changes"
-      : "No unsaved changes";
-  elements.adminSaveStatus.classList.toggle("unsaved", unsaved && !state.admin.isSaving);
+    : state.admin.isDiscarding
+      ? "Discarding..."
+      : unsaved
+        ? `Unsaved: ${parts.join(", ")}`
+        : "No unsaved changes";
+  elements.adminSaveStatus.classList.toggle("unsaved", unsaved && !busy);
 }
 
 function renderShowingFestivalOptions() {
@@ -2074,6 +2089,58 @@ function findFilmIndex(films, targetFilm) {
   return idx >= 0 ? idx : 0;
 }
 
+// The first click arms the button for a few seconds and the second discards: everything
+// is downloaded again, so the admin matches the database, including other admins' saves.
+async function handleDiscardChanges() {
+  if (!requireAdminAuth() || state.admin.isSaving || state.admin.isDiscarding) return;
+  if (!discardArmTimer) {
+    elements.discardAdminChanges.textContent = "Click again to discard";
+    elements.discardAdminChanges.classList.add("armed");
+    discardArmTimer = setTimeout(disarmDiscard, 4000);
+    return;
+  }
+  disarmDiscard();
+  const theatre = getSelectedTheatre();
+  const film = getSelectedFilm();
+  try {
+    state.admin.isDiscarding = true;
+    updateSaveBar();
+    applyFullData(await loadDataFromSupabase(state.supabase));
+    // Unsaved promos never reached the database, so removed images stay in storage.
+    state.admin.promoImagesToDelete = [];
+    editingShowing = null;
+    reselectAfterReload(theatre, film);
+    elements.adminMessage.textContent = "Unsaved changes discarded.";
+  } catch (error) {
+    elements.adminMessage.textContent = `Discard failed: ${error.message}`;
+  } finally {
+    state.admin.isDiscarding = false;
+    syncAdminEditor();
+    render();
+  }
+}
+
+function disarmDiscard() {
+  clearTimeout(discardArmTimer);
+  discardArmTimer = null;
+  elements.discardAdminChanges.textContent = "Discard changes";
+  elements.discardAdminChanges.classList.remove("armed");
+}
+
+// Selects the same theatre and film in freshly loaded data, or the first ones if they're gone.
+function reselectAfterReload(theatre, film) {
+  const theatres = state.data.theatreGroups;
+  const key = theatre && buildAdminTheatreNameCityKey(theatre);
+  const theatreIndex = theatre
+    ? theatres.findIndex((candidate) =>
+        theatre._dbId != null ? candidate._dbId === theatre._dbId : buildAdminTheatreNameCityKey(candidate) === key
+      )
+    : -1;
+  state.admin.theatreIndex = Math.max(theatreIndex, 0);
+  const films = theatres[state.admin.theatreIndex]?.films || [];
+  state.admin.filmIndex = theatreIndex >= 0 && film ? findFilmIndex(films, film) : 0;
+}
+
 async function persistData() {
   if (!state.supabase || !state.admin.auth.authenticated) {
     syncAdminEditor();
@@ -2091,6 +2158,7 @@ async function persistData() {
       state.dataVersion = version;
       prunePastShowtimes(state.data);
       savedPayload = buildSavedPayload();
+      unsavedChanges = null;
     }
   }
   await deleteRemovedPromoImages();
@@ -2113,112 +2181,6 @@ async function saveChangesToSupabase(changes) {
   });
   if (error) throw error;
   return version;
-}
-
-// The rows added, changed or removed between two payloads from buildReplacePayload, or
-// null if there are none. Rows are matched on their database id, and ones without an id
-// are new. Showtimes are compared a day (theatre, film and date) at a time, and a changed
-// day is sent whole. Ticket links and days name their theatre and film by id, or by the
-// payload key of a new one.
-function buildChangesPayload(before, after) {
-  const rowRefs = (rows) => {
-    const seen = new Set();
-    return new Map(
-      rows.map((row) => {
-        // A second row with the same id is saved as a new row, as the full save did.
-        if (row.db_id != null && seen.has(row.db_id)) row.db_id = null;
-        if (row.db_id != null) seen.add(row.db_id);
-        const ref = row.db_id != null ? `id:${row.db_id}` : `new:${row.key}`;
-        return [row.key, { ref, db_id: row.db_id, key: row.key }];
-      })
-    );
-  };
-  const locator = (payload) => {
-    const theatres = rowRefs(payload.theatres);
-    const films = rowRefs(payload.films);
-    return (item) => {
-      const theatre = theatres.get(item.theatre_key);
-      const film = films.get(item.film_key);
-      return {
-        ref: `${theatre.ref}|${film.ref}`,
-        names: { theatre_db_id: theatre.db_id, theatre_key: theatre.key, film_db_id: film.db_id, film_key: film.key },
-      };
-    };
-  };
-  const locateBefore = locator(before);
-  const locateAfter = locator(after);
-
-  // Keys are positions in the payload, so they don't count as a change.
-  const sameRow = (a, b) => JSON.stringify({ ...a, key: undefined }) === JSON.stringify({ ...b, key: undefined });
-  const diffRows = (beforeRows, afterRows, idField) => {
-    const beforeById = new Map(beforeRows.filter((row) => row[idField] != null).map((row) => [row[idField], row]));
-    const kept = new Set();
-    const upsert = afterRows.filter((row) => {
-      if (row[idField] == null) return true;
-      kept.add(row[idField]);
-      const previous = beforeById.get(row[idField]);
-      return !previous || !sameRow(previous, row);
-    });
-    return { upsert, delete: [...beforeById.keys()].filter((id) => !kept.has(id)) };
-  };
-
-  const linksBy = (payload, locate) =>
-    new Map(
-      payload.theatre_films.map((link) => {
-        const at = locate(link);
-        return [at.ref, { ...at.names, ticket_link: link.ticket_link }];
-      })
-    );
-  const linksBefore = linksBy(before, locateBefore);
-  const linksAfter = linksBy(after, locateAfter);
-
-  const daysBy = (payload, locate) => {
-    const days = new Map();
-    payload.showings.forEach(({ theatre_key, film_key, ...showing }) => {
-      const at = locate({ theatre_key, film_key });
-      const ref = `${at.ref}|${showing.show_date}`;
-      if (!days.has(ref)) days.set(ref, { day: { ...at.names, show_date: showing.show_date }, showings: [] });
-      days.get(ref).showings.push(showing);
-    });
-    return days;
-  };
-  const daysBefore = daysBy(before, locateBefore);
-  const daysAfter = daysBy(after, locateAfter);
-  const days = [];
-  const entries = [];
-  daysAfter.forEach(({ day, showings }, ref) => {
-    const previous = daysBefore.get(ref);
-    if (previous && JSON.stringify(previous.showings) === JSON.stringify(showings)) return;
-    days.push(day);
-    showings.forEach((showing) => entries.push({ ...showing, ...day }));
-  });
-  // A day that's gone is sent with no entries, which clears it.
-  daysBefore.forEach(({ day }, ref) => {
-    if (!daysAfter.has(ref)) days.push(day);
-  });
-
-  const changes = {
-    festivals: diffRows(before.festivals, after.festivals, "id"),
-    theatres: diffRows(before.theatres, after.theatres, "db_id"),
-    films: diffRows(before.films, after.films, "db_id"),
-    promos: diffRows(before.promos, after.promos, "db_id"),
-    theatre_films: {
-      upsert: [...linksAfter].filter(([ref, link]) => linksBefore.get(ref)?.ticket_link !== link.ticket_link).map(([, link]) => link),
-      delete: [...linksBefore]
-        .filter(([ref]) => !linksAfter.has(ref))
-        .map(([, link]) => ({ theatre_db_id: link.theatre_db_id, film_db_id: link.film_db_id })),
-    },
-    showings: { days, entries },
-  };
-  const hasChanges = Object.values(changes).some((table) => Object.values(table).some((rows) => rows.length));
-  return hasChanges ? changes : null;
-}
-
-function changesAddRows(changes) {
-  return (
-    changes.festivals.upsert.some((row) => row.id == null) ||
-    ["theatres", "films", "promos"].some((table) => changes[table].upsert.some((row) => row.db_id == null))
-  );
 }
 
 function buildFilmUniqKey(film) {
