@@ -12,7 +12,6 @@ import {
 } from "./shared.js";
 import {
   PROMO_STORAGE_BUCKET,
-  STORAGE_KEY,
   addDaysIso,
   buildFilmGroupKey,
   dedupeSortTimes,
@@ -29,17 +28,22 @@ import {
 const MAX_ADMIN_SEARCH_RESULTS = 120;
 // Where earlier versions kept a TMDb key in the browser; removed on open now that the server holds it.
 const OLD_TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
+// Saves used to keep a copy of all the data here; it outgrew the browser's storage.
+const OLD_DRAFT_STORAGE_KEY = "showtimes-local-edit";
 const ADMIN_MARKUP_URL = new URL("../admin-panel.html", import.meta.url);
 const ADMIN_STYLESHEET_URL = new URL("../css/admin.css", import.meta.url);
 
 let state;
 let render;
 let elements;
+// What the database holds, as buildReplacePayload gives it, as of the last load or save.
+// A save sends only what differs from it.
+let savedPayload = null;
 
 // Downloads the markup, styles and full data before changing anything else, so if any
 // of them fails app.js can simply call this again. Visitors only have the films with
-// upcoming showtimes, and a save replaces everything, so the admin never opens without
-// the full data.
+// upcoming showtimes, and a save works out what changed against the full data, so the
+// admin never opens without it.
 export async function initAdmin(app) {
   if (!app.state.supabase) throw new Error("Supabase is not configured");
   const [markup, , fullData] = await Promise.all([
@@ -110,6 +114,12 @@ function applyFullData(fullData) {
   state.loadedFromSupabaseThisSession = true;
   state.dataVersion = fullData.dataVersion;
   state.dataLoadError = "";
+  savedPayload = buildSavedPayload();
+}
+
+// A copy, since buildReplacePayload shares objects (tmdb_json) that edits change in place.
+function buildSavedPayload() {
+  return structuredClone(buildReplacePayload(state.data, state.promotedCards));
 }
 
 async function fetchAdminMarkup() {
@@ -771,15 +781,9 @@ function bindAdminEvents() {
       state.admin.isSaving = true;
       syncAdminEditor();
       validateData(state.data);
-      prunePastShowtimes(state.data);
       const saveResult = await persistData();
-      // The save reloads everything from Supabase, so nothing is left unsaved.
       state.admin.savedChangeCount = state.admin.changeCount;
-      if (saveResult.localDraftWarning) {
-        elements.adminMessage.textContent = `All changes saved to Supabase. ${saveResult.localDraftWarning}`;
-      } else {
-        elements.adminMessage.textContent = "All changes saved to Supabase.";
-      }
+      elements.adminMessage.textContent = saveResult.saved ? "All changes saved to Supabase." : "No changes to save.";
     } catch (error) {
       elements.adminMessage.textContent = `Save failed: ${error.message}`;
     } finally {
@@ -1063,6 +1067,7 @@ function initializeAdminState() {
 function loadAdminSettings() {
   try {
     localStorage.removeItem(OLD_TMDB_KEY_STORAGE_KEY);
+    localStorage.removeItem(OLD_DRAFT_STORAGE_KEY);
   } catch {
     // Storage can be blocked; nothing to clean up then.
   }
@@ -1993,42 +1998,150 @@ function findFilmIndex(films, targetFilm) {
 }
 
 async function persistData() {
-  let localDraftWarning = "";
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(stripInternalFields(state.data)));
-  } catch {
-    // Silently skip localStorage cache if it fails; Supabase is the authoritative source
-  }
-
   if (!state.supabase || !state.admin.auth.authenticated) {
     syncAdminEditor();
     render();
-    return { localDraftWarning };
+    return { saved: false };
   }
-  await saveDataToSupabase();
-  applyFullData(await loadDataFromSupabase(state.supabase));
+  const changes = buildChangesPayload(savedPayload, buildReplacePayload(state.data, state.promotedCards));
+  if (changes) {
+    const version = await saveChangesToSupabase(changes);
+    if (changesAddRows(changes)) {
+      // New rows need their ids, and a new film or theatre joins every theatre's catalog.
+      applyFullData(await loadDataFromSupabase(state.supabase));
+    } else {
+      // The admin already has what was saved, less the showtimes the save found started.
+      state.dataVersion = version;
+      prunePastShowtimes(state.data);
+      savedPayload = buildSavedPayload();
+    }
+  }
   await deleteRemovedPromoImages();
   syncAdminEditor();
   render();
-  return { localDraftWarning };
+  return { saved: Boolean(changes) };
 }
 
-async function saveDataToSupabase() {
-  const supabase = state.supabase;
+async function saveChangesToSupabase(changes) {
   if (state.source !== "supabase" || !state.loadedFromSupabaseThisSession) {
     throw new Error(
       "Blocked save: current admin data was not loaded from Supabase. Reload the page and try again."
     );
   }
-  // replace_showtimes_data makes the safety checks itself: it refuses saves that would
+  // apply_showtimes_changes makes the safety checks itself: it refuses saves that would
   // clear a ticket link, delete many rows, or overwrite data that changed since loading.
-  const payload = buildReplacePayload(state.data, state.promotedCards);
-  const fullReplaceRpc = await supabase.rpc("replace_showtimes_data", {
-    payload,
-    allow_ticket_link_clear: false,
+  const { data: version, error } = await state.supabase.rpc("apply_showtimes_changes", {
+    changes,
     expected_version: state.dataVersion,
   });
-  if (fullReplaceRpc.error) throw fullReplaceRpc.error;
+  if (error) throw error;
+  return version;
+}
+
+// The rows added, changed or removed between two payloads from buildReplacePayload, or
+// null if there are none. Rows are matched on their database id, and ones without an id
+// are new. Showtimes are compared a day (theatre, film and date) at a time, and a changed
+// day is sent whole. Ticket links and days name their theatre and film by id, or by the
+// payload key of a new one.
+function buildChangesPayload(before, after) {
+  const rowRefs = (rows) => {
+    const seen = new Set();
+    return new Map(
+      rows.map((row) => {
+        // A second row with the same id is saved as a new row, as the full save did.
+        if (row.db_id != null && seen.has(row.db_id)) row.db_id = null;
+        if (row.db_id != null) seen.add(row.db_id);
+        const ref = row.db_id != null ? `id:${row.db_id}` : `new:${row.key}`;
+        return [row.key, { ref, db_id: row.db_id, key: row.key }];
+      })
+    );
+  };
+  const locator = (payload) => {
+    const theatres = rowRefs(payload.theatres);
+    const films = rowRefs(payload.films);
+    return (item) => {
+      const theatre = theatres.get(item.theatre_key);
+      const film = films.get(item.film_key);
+      return {
+        ref: `${theatre.ref}|${film.ref}`,
+        names: { theatre_db_id: theatre.db_id, theatre_key: theatre.key, film_db_id: film.db_id, film_key: film.key },
+      };
+    };
+  };
+  const locateBefore = locator(before);
+  const locateAfter = locator(after);
+
+  // Keys are positions in the payload, so they don't count as a change.
+  const sameRow = (a, b) => JSON.stringify({ ...a, key: undefined }) === JSON.stringify({ ...b, key: undefined });
+  const diffRows = (beforeRows, afterRows, idField) => {
+    const beforeById = new Map(beforeRows.filter((row) => row[idField] != null).map((row) => [row[idField], row]));
+    const kept = new Set();
+    const upsert = afterRows.filter((row) => {
+      if (row[idField] == null) return true;
+      kept.add(row[idField]);
+      const previous = beforeById.get(row[idField]);
+      return !previous || !sameRow(previous, row);
+    });
+    return { upsert, delete: [...beforeById.keys()].filter((id) => !kept.has(id)) };
+  };
+
+  const linksBy = (payload, locate) =>
+    new Map(
+      payload.theatre_films.map((link) => {
+        const at = locate(link);
+        return [at.ref, { ...at.names, ticket_link: link.ticket_link }];
+      })
+    );
+  const linksBefore = linksBy(before, locateBefore);
+  const linksAfter = linksBy(after, locateAfter);
+
+  const daysBy = (payload, locate) => {
+    const days = new Map();
+    payload.showings.forEach(({ theatre_key, film_key, ...showing }) => {
+      const at = locate({ theatre_key, film_key });
+      const ref = `${at.ref}|${showing.show_date}`;
+      if (!days.has(ref)) days.set(ref, { day: { ...at.names, show_date: showing.show_date }, showings: [] });
+      days.get(ref).showings.push(showing);
+    });
+    return days;
+  };
+  const daysBefore = daysBy(before, locateBefore);
+  const daysAfter = daysBy(after, locateAfter);
+  const days = [];
+  const entries = [];
+  daysAfter.forEach(({ day, showings }, ref) => {
+    const previous = daysBefore.get(ref);
+    if (previous && JSON.stringify(previous.showings) === JSON.stringify(showings)) return;
+    days.push(day);
+    showings.forEach((showing) => entries.push({ ...showing, ...day }));
+  });
+  // A day that's gone is sent with no entries, which clears it.
+  daysBefore.forEach(({ day }, ref) => {
+    if (!daysAfter.has(ref)) days.push(day);
+  });
+
+  const changes = {
+    festivals: diffRows(before.festivals, after.festivals, "id"),
+    theatres: diffRows(before.theatres, after.theatres, "db_id"),
+    films: diffRows(before.films, after.films, "db_id"),
+    promos: diffRows(before.promos, after.promos, "db_id"),
+    theatre_films: {
+      upsert: [...linksAfter].filter(([ref, link]) => linksBefore.get(ref)?.ticket_link !== link.ticket_link).map(([, link]) => link),
+      delete: [...linksBefore]
+        .filter(([ref]) => !linksAfter.has(ref))
+        .map(([, link]) => ({ theatre_db_id: link.theatre_db_id, film_db_id: link.film_db_id })),
+    },
+    showings: { days, entries },
+  };
+  const hasChanges = Object.values(changes).some((table) => Object.values(table).some((rows) => rows.length));
+  return hasChanges ? changes : null;
+}
+
+function changesAddRows(changes) {
+  return (
+    changes.festivals.upsert.some((row) => row.id == null) ||
+    ["theatres", "films", "promos"].some((table) => changes[table].upsert.some((row) => row.db_id == null))
+  );
 }
 
 function buildFilmUniqKey(film) {
@@ -2198,15 +2311,6 @@ function extractFilmSynopsis(film) {
   if (directSynopsis) return directSynopsis;
   const tmdbSynopsis = String(film?.tmdb?.overview || "").trim();
   return tmdbSynopsis;
-}
-
-function stripInternalFields(data) {
-  return JSON.parse(
-    JSON.stringify(data, (key, value) => {
-      if (key.startsWith("_")) return undefined;
-      return value;
-    })
-  );
 }
 
 function requireAdminAuth() {

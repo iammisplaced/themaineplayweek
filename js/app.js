@@ -24,7 +24,6 @@ import {
 } from "./shared.js";
 import {
   PROMO_STORAGE_BUCKET,
-  STORAGE_KEY,
   addDaysIso,
   buildFilmGroupKey,
   dedupeSortTimes,
@@ -881,26 +880,8 @@ async function loadData() {
       }
     } catch (error) {
       // Shown in the admin, where saving and CSV import are blocked on fallback data.
-      state.dataLoadError = `Supabase data load failed; falling back to local/static data. ${String(error?.message || "")}`.trim();
-      // fall through to local fallback
-    }
-  }
-
-  const localData = localStorage.getItem(STORAGE_KEY);
-  if (localData) {
-    try {
-      const parsed = JSON.parse(localData);
-      validateData(parsed);
-      state.data = {
-        theatreGroups: Array.isArray(parsed?.theatreGroups) ? parsed.theatreGroups : [],
-        festivals: Array.isArray(parsed?.festivals) ? parsed.festivals : [],
-      };
-      state.source = "local";
-      state.loadedFromSupabaseThisSession = false;
-      state.dataVersion = null;
-      return;
-    } catch {
-      localStorage.removeItem(STORAGE_KEY);
+      state.dataLoadError = `Supabase data load failed; falling back to static data. ${String(error?.message || "")}`.trim();
+      // fall through to the static fallback
     }
   }
 
