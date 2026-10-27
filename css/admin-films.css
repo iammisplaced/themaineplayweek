@@ -220,21 +220,24 @@ label {
 .catalog-table th:nth-child(2),
 .catalog-table td:nth-child(2),
 .catalog-table th:nth-child(3),
-.catalog-table td:nth-child(3),
-.catalog-table th:nth-child(5),
-.catalog-table td:nth-child(5) {
+.catalog-table td:nth-child(3) {
   width: 60px;
   text-align: center;
 }
 
+.catalog-table th:nth-child(8),
+.catalog-table td:nth-child(8) {
+  width: 200px;
+}
+
 .catalog-table th:nth-child(9),
 .catalog-table td:nth-child(9) {
-  width: 200px;
+  width: 210px;
 }
 
 .catalog-table th:nth-child(10),
 .catalog-table td:nth-child(10) {
-  width: 240px;
+  width: 100px;
 }
 
 .catalog-table thead th {
@@ -295,7 +298,12 @@ label {
 .featured-controls {
   display: grid;
   gap: 0.35rem;
-  min-width: 220px;
+  min-width: 190px;
+}
+
+.ranking-override-controls {
+  display: grid;
+  gap: 0.35rem;
 }
 
 .featured-toggle-wrap {

@@ -416,7 +416,6 @@ function renderCatalog() {
         <th>Year</th>
         <th>TMDb</th>
         <th>Upcoming</th>
-        <th>Ticket<br />Links</th>
         <th>Director</th>
         <th>Starring</th>
         <th>Genre</th>
@@ -480,7 +479,6 @@ function renderCatalog() {
         <td>${Number.isInteger(Number(film.year)) ? Number(film.year) : ""}</td>
         <td>${Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : ""}</td>
         <td>${film.futureTimes}</td>
-        <td>${film.links.filter((entry) => entry.ticketLink).length}/${film.links.length}</td>
         <td>${escapeHtml(director)}</td>
         <td>${escapeHtml(stars.join(", "))}</td>
         <td>${escapeHtml(genres.join(", "))}</td>
@@ -540,7 +538,7 @@ function renderCatalog() {
               ? '<span class="muted-inline">Schema update required</span>'
               : state.isAuthed
                 ? `
-            <div class="featured-controls">
+            <div class="ranking-override-controls">
               <label class="featured-toggle-wrap">
                 <input data-role="ranking-override-toggle" type="checkbox" ${film.rankingOverride ? "checked" : ""} ${isRankingOverrideBusy ? "disabled" : ""} />
                 Pin to top
