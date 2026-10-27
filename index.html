@@ -36,21 +36,21 @@
       </div>
     </div>
 
-    <section class="beta-banner" role="status" aria-label="Beta notice" aria-live="polite">
-      <p class="beta-banner-line"><strong>Currently in Beta</strong></p>
-      <p class="beta-banner-line">
-        See something off? Email <a href="mailto:hello@themaineplayweek.com">hello@themaineplayweek.com</a>.
-      </p>
-    </section>
-
     <header class="site-header">
       <div class="brand-wordmark-wrap">
-        <img
-          id="brandWordmark"
-          class="brand-wordmark"
-          src="assets/brand/TMP Wordmark v01 Dark.png"
-          alt="The Maine Playweek"
-        />
+        <picture>
+          <source
+            id="brandWordmarkOneLine"
+            media="(max-width: 640px)"
+            srcset="assets/brand/Empire%20-%20Dark%20-%20One%20Line.png"
+          />
+          <img
+            id="brandWordmark"
+            class="brand-wordmark"
+            src="assets/brand/TMP Wordmark v01 Dark.png"
+            alt="The Maine Playweek"
+          />
+        </picture>
         <h1 class="visually-hidden">Maine Showtimes</h1>
       </div>
       <button id="themeToggle" class="theme-toggle" type="button" aria-label="Switch to dark mode">
