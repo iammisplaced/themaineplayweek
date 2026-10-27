@@ -734,8 +734,9 @@ function bindAdminEvents() {
       if (existing) {
         existing.times = dedupeSortTimes([...(existing.times || []), ...times]);
         existing.premiumTimes = dedupeSortTimes([...(existing.premiumTimes || []), ...premiumTimes]);
-        existing.festivalId = showingFestivalId;
-        existing.room = room;
+        // Like the CSV import, a blank festival or room keeps the date's existing one.
+        if (showingFestivalId) existing.festivalId = showingFestivalId;
+        if (room) existing.room = room;
       } else {
         film.showings.push({
           date: targetDate,
