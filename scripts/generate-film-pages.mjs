@@ -661,7 +661,7 @@ function renderFilmPage(film, slug, siteUrl) {
         <img id="filmPageWordmark" class="film-page-wordmark" src="${escapeHtml(wordmarksLight[0] || "")}" alt="${BRAND_NAME}" />
         <img id="filmPageLogo" class="film-page-logo" src="${escapeHtml(logoDarkSrc)}" alt="" aria-hidden="true" />
       </div>
-      <a class="film-page-return" href="${escapeHtml(mainAppUrl)}">Go back...</a>
+      <a class="film-page-return" href="${escapeHtml(mainAppUrl)}">&larr; All showtimes</a>
       <article class="group-card film-card film-page-card film-info-box${film.staffFavorite ? " film-card-staff-favorite" : ""}${
         film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
       }">
