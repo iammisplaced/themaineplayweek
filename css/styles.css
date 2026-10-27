@@ -1,5 +1,6 @@
 :root {
   --bg: #f3efe5;
+  --controls-backdrop: color-mix(in srgb, var(--bg) 82%, transparent);
   --panel: #fffef9;
   --ink: #1d1f1f;
   --muted: #5e6464;
@@ -382,6 +383,32 @@ h1 {
   grid-template-columns: max-content minmax(0, 1fr) max-content;
   align-items: center;
   gap: 1rem;
+}
+
+/* The backdrop is fixed to the screen (from the top down to the controls' bottom edge) so
+   it spans the full width without making the page scroll sideways. */
+.controls::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--controls-bottom, 0px);
+  background: var(--controls-backdrop);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 16px -10px rgba(29, 31, 31, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 160ms ease, visibility 0s linear 160ms;
+}
+
+.controls.is-stuck::before {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 160ms ease;
 }
 
 .tabs {

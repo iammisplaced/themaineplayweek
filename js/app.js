@@ -167,6 +167,7 @@ const state = {
 
 const elements = {
   appLoader: document.getElementById("appLoader"),
+  controls: document.querySelector(".controls"),
   themeColorMeta: document.querySelector('meta[name="theme-color"]'),
   themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
@@ -363,6 +364,19 @@ function initializeSupabase() {
   markStagingPage();
 }
 
+// Once the controls stick to the top of the screen they get a backdrop (see .controls.is-stuck
+// in styles.css), so listings don't show around them. --controls-bottom is how far down
+// the screen that backdrop reaches.
+function syncControlsStuck() {
+  const controls = elements.controls;
+  if (!controls) return;
+  const rect = controls.getBoundingClientRect();
+  const stickyTop = parseFloat(getComputedStyle(controls).top) || 0;
+  const isStuck = window.scrollY > 0 && rect.top <= stickyTop + 0.5;
+  controls.classList.toggle("is-stuck", isStuck);
+  if (isStuck) controls.style.setProperty("--controls-bottom", `${Math.ceil(rect.bottom)}px`);
+}
+
 function bindEvents() {
   elements.themeToggle?.addEventListener("click", () => {
     animateThemeToggle();
@@ -370,6 +384,10 @@ function bindEvents() {
     applyTheme(nextTheme);
     saveThemeChoice(nextTheme);
   });
+
+  window.addEventListener("scroll", syncControlsStuck, { passive: true });
+  window.addEventListener("resize", syncControlsStuck);
+  syncControlsStuck();
 
   window.addEventListener("resize", () => {
     const currentWidth = window.innerWidth;
