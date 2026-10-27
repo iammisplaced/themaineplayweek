@@ -1856,6 +1856,8 @@ textarea {
   }
 
   .site-header {
+    align-items: center;
+    gap: 0.75rem;
     margin-bottom: 0.65rem;
   }
 
@@ -1868,8 +1870,9 @@ textarea {
     display: none;
   }
 
+  /* Phones show the one-line wordmark, beside the logo. */
   .brand-wordmark-wrap {
-    max-width: min(220px, 52vw);
+    max-width: min(300px, 100%);
   }
 
   .controls {

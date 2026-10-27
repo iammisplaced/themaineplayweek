@@ -83,26 +83,38 @@ const LIGHT_THEME = "light";
 const DARK_THEME = "dark";
 const LOCATION_ICON_DARK_MODE_SRC = "assets/icons/location-light.png";
 const LOCATION_ICON_LIGHT_MODE_SRC = "assets/icons/location.png";
+// Each stacked wordmark has a one-line version, which phones show (see the <picture> in
+// index.html). The one-line paths are URL-encoded because they go in a srcset.
 const WORDMARK_VARIANTS = Object.freeze([
   {
     darkSrc: "assets/brand/TMP Wordmark v01 Dark.png",
     lightSrc: "assets/brand/TMP Wordmark v01 Light.png",
+    oneLineDarkSrc: "assets/brand/Empire%20-%20Dark%20-%20One%20Line.png",
+    oneLineLightSrc: "assets/brand/Empire%20-%20Light%20-%20One%20Line.png",
   },
   {
     darkSrc: "assets/brand/TMP Wordmark v02 Dark.png",
     lightSrc: "assets/brand/TMP Wordmark v02 Light.png",
+    oneLineDarkSrc: "assets/brand/Act%20III%20-%20Dark%20-%20One%20Line.png",
+    oneLineLightSrc: "assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png",
   },
   {
     darkSrc: "assets/brand/TMP Wordmark v03 Dark.png",
     lightSrc: "assets/brand/TMP Wordmark v03 Light.png",
+    oneLineDarkSrc: "assets/brand/Deering%20-%20Dark%20-%20One%20Line.png",
+    oneLineLightSrc: "assets/brand/Deering%20-%20Light%20-%20One%20Line.png",
   },
   {
     darkSrc: "assets/brand/TMP Wordmark v04 Dark.png",
     lightSrc: "assets/brand/TMP Wordmark v04 Light.png",
+    oneLineDarkSrc: "assets/brand/Fine%20Arts%20-%20Dark%20-%20One%20Line.png",
+    oneLineLightSrc: "assets/brand/Fine%20Arts%20-%20Light%20-%20One%20Line.png",
   },
   {
     darkSrc: "assets/brand/TMP Wordmark v05 Dark.png",
     lightSrc: "assets/brand/TMP Wordmark v05 Light.png",
+    oneLineDarkSrc: "assets/brand/Strand%20-%20Dark%20-%20One%20Line.png",
+    oneLineLightSrc: "assets/brand/Strand%20-%20Light%20-%20One%20Line.png",
   },
 ]);
 const THEME_COLOR_MAP = {
@@ -159,6 +171,7 @@ const elements = {
   themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
   brandWordmark: document.getElementById("brandWordmark"),
+  brandWordmarkOneLine: document.getElementById("brandWordmarkOneLine"),
   navMenuWrap: document.getElementById("navMenuWrap"),
   navMenu: document.getElementById("navMenu"),
   navMenuLabel: document.getElementById("navMenuLabel"),
@@ -822,6 +835,12 @@ function applyTheme(theme) {
       normalizedTheme === DARK_THEME
         ? variant.lightSrc
         : variant.darkSrc;
+    if (elements.brandWordmarkOneLine) {
+      elements.brandWordmarkOneLine.srcset =
+        normalizedTheme === DARK_THEME
+          ? variant.oneLineLightSrc
+          : variant.oneLineDarkSrc;
+    }
   }
 
   if (elements.themeToggle) {
