@@ -11,8 +11,6 @@ import {
   to24HourTime,
 } from "./shared.js";
 
-// The admin's copy of its last save. The site falls back to it if Supabase can't be read.
-export const STORAGE_KEY = "showtimes-local-edit";
 // Supabase Storage bucket holding the promo card images.
 export const PROMO_STORAGE_BUCKET = "promo-images";
 

@@ -12,7 +12,6 @@ import {
 } from "./shared.js";
 import {
   PROMO_STORAGE_BUCKET,
-  STORAGE_KEY,
   addDaysIso,
   buildFilmGroupKey,
   dedupeSortTimes,
@@ -29,6 +28,8 @@ import {
 const MAX_ADMIN_SEARCH_RESULTS = 120;
 // Where earlier versions kept a TMDb key in the browser; removed on open now that the server holds it.
 const OLD_TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
+// Saves used to keep a copy of all the data here; it outgrew the browser's storage.
+const OLD_DRAFT_STORAGE_KEY = "showtimes-local-edit";
 const ADMIN_MARKUP_URL = new URL("../admin-panel.html", import.meta.url);
 const ADMIN_STYLESHEET_URL = new URL("../css/admin.css", import.meta.url);
 
@@ -782,13 +783,7 @@ function bindAdminEvents() {
       validateData(state.data);
       const saveResult = await persistData();
       state.admin.savedChangeCount = state.admin.changeCount;
-      if (!saveResult.saved) {
-        elements.adminMessage.textContent = "No changes to save.";
-      } else if (saveResult.localDraftWarning) {
-        elements.adminMessage.textContent = `All changes saved to Supabase. ${saveResult.localDraftWarning}`;
-      } else {
-        elements.adminMessage.textContent = "All changes saved to Supabase.";
-      }
+      elements.adminMessage.textContent = saveResult.saved ? "All changes saved to Supabase." : "No changes to save.";
     } catch (error) {
       elements.adminMessage.textContent = `Save failed: ${error.message}`;
     } finally {
@@ -1072,6 +1067,7 @@ function initializeAdminState() {
 function loadAdminSettings() {
   try {
     localStorage.removeItem(OLD_TMDB_KEY_STORAGE_KEY);
+    localStorage.removeItem(OLD_DRAFT_STORAGE_KEY);
   } catch {
     // Storage can be blocked; nothing to clean up then.
   }
@@ -2002,17 +1998,10 @@ function findFilmIndex(films, targetFilm) {
 }
 
 async function persistData() {
-  let localDraftWarning = "";
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(stripInternalFields(state.data)));
-  } catch {
-    // Silently skip localStorage cache if it fails; Supabase is the authoritative source
-  }
-
   if (!state.supabase || !state.admin.auth.authenticated) {
     syncAdminEditor();
     render();
-    return { localDraftWarning };
+    return { saved: false };
   }
   const changes = buildChangesPayload(savedPayload, buildReplacePayload(state.data, state.promotedCards));
   if (changes) {
@@ -2030,7 +2019,7 @@ async function persistData() {
   await deleteRemovedPromoImages();
   syncAdminEditor();
   render();
-  return { localDraftWarning, saved: Boolean(changes) };
+  return { saved: Boolean(changes) };
 }
 
 async function saveChangesToSupabase(changes) {
@@ -2322,15 +2311,6 @@ function extractFilmSynopsis(film) {
   if (directSynopsis) return directSynopsis;
   const tmdbSynopsis = String(film?.tmdb?.overview || "").trim();
   return tmdbSynopsis;
-}
-
-function stripInternalFields(data) {
-  return JSON.parse(
-    JSON.stringify(data, (key, value) => {
-      if (key.startsWith("_")) return undefined;
-      return value;
-    })
-  );
 }
 
 function requireAdminAuth() {
