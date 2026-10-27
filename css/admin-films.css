@@ -65,7 +65,7 @@ body {
 }
 
 .page {
-  width: min(1080px, 100%);
+  width: min(1440px, 100%);
   margin-inline: auto;
 }
 
@@ -192,6 +192,8 @@ label {
 
 .table-wrap {
   padding: 0;
+  /* Lets the table scroll sideways instead of stretching the .catalog grid. */
+  min-width: 0;
 }
 
 .virtual-scroll-container {
@@ -199,11 +201,13 @@ label {
   border-radius: 8px;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden;
+  overflow-x: auto;
 }
 
+/* Below this width the text columns get too narrow to read, so the table scrolls sideways instead. */
 .catalog-table {
   width: 100%;
+  min-width: 1240px;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -211,7 +215,7 @@ label {
 .catalog-table th,
 .catalog-table td {
   border-bottom: 1px solid var(--border);
-  padding: 0.5rem 0.6rem;
+  padding: 0.5rem 0.45rem;
   vertical-align: top;
   text-align: left;
   font-size: 0.86rem;
@@ -223,6 +227,22 @@ label {
 .catalog-table td:nth-child(3) {
   width: 60px;
   text-align: center;
+}
+
+/* Wide enough for a 7-digit TMDb id. */
+.catalog-table th:nth-child(3),
+.catalog-table td:nth-child(3) {
+  width: 80px;
+}
+
+.catalog-table th:nth-child(1),
+.catalog-table td:nth-child(1) {
+  width: 15%;
+}
+
+.catalog-table th:nth-child(4),
+.catalog-table td:nth-child(4) {
+  width: 96px;
 }
 
 .catalog-table th:nth-child(8),
@@ -238,6 +258,11 @@ label {
 .catalog-table th:nth-child(10),
 .catalog-table td:nth-child(10) {
   width: 100px;
+}
+
+/* Rare long single words (e.g. a long surname) wrap instead of spilling into the next column. */
+.catalog-table td {
+  overflow-wrap: break-word;
 }
 
 .catalog-table thead th {

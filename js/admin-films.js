@@ -453,7 +453,8 @@ function renderCatalog() {
     for (let i = startIndex; i < endIndex; i++) {
       const film = filtered[i];
       const tmdb = film.tmdb || {};
-      const director = String(tmdb.director || "").trim();
+      // Some stored director lists have no space after the commas, which stops them wrapping.
+      const director = String(tmdb.director || "").trim().replace(/,(?=\S)/g, ", ");
       const stars = Array.isArray(tmdb.stars) ? tmdb.stars.filter(Boolean) : [];
       const genres = Array.isArray(tmdb.genres) ? tmdb.genres.filter(Boolean) : [];
       const statusClass = film.futureTimes > 0 ? "badge badge-on" : "badge badge-off";
