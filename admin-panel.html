@@ -63,7 +63,7 @@
         <label for="selectedTicketLinkInput">Ticket Link (selected theatre + film)</label>
         <input id="selectedTicketLinkInput" type="url" placeholder="https://tickets.example.com/..." />
         <div class="admin-inline-actions">
-          <button id="saveSelectedTicketLink">Save Ticket Link</button>
+          <button id="saveSelectedTicketLink">Apply Ticket Link</button>
         </div>
         <label for="tmdbApiKeyInput">TMDb API Key (local)</label>
         <input id="tmdbApiKeyInput" type="password" placeholder="Used only in this browser" />
@@ -101,7 +101,6 @@
     </div>
 
     <div class="admin-actions">
-      <button id="saveAllAdmin">Save All Changes</button>
       <button id="downloadCsvTemplate" class="ghost-btn">Download CSV Template</button>
       <label class="upload-label">
         Import CSV
@@ -124,9 +123,6 @@
           <button id="openAddPromoModalButton" type="button">+ Add Promo</button>
         </div>
         <div id="promoSettingsList" class="promo-settings-list"></div>
-        <div class="admin-inline-actions">
-          <button id="saveAllPromos">Save All Changes</button>
-        </div>
       </section>
     </div>
   </section>
@@ -145,9 +141,6 @@
           <button id="openAddFestivalModalButton" type="button">+ Add Festival</button>
         </div>
         <div id="festivalSettingsList" class="promo-settings-list"></div>
-        <div class="admin-inline-actions">
-          <button id="saveAllFestivals">Save All Changes</button>
-        </div>
       </section>
     </div>
   </section>
@@ -187,7 +180,7 @@
     <label for="metadataReleaseDateInput">Release Date (optional)</label>
     <input id="metadataReleaseDateInput" type="date" />
     <div class="admin-inline-actions">
-      <button id="confirmEditFilmMetadata" value="confirm">Save Metadata</button>
+      <button id="confirmEditFilmMetadata" value="confirm">Apply</button>
       <button id="cancelEditFilmMetadata" class="ghost-btn" type="button">Cancel</button>
     </div>
   </form>
@@ -255,5 +248,12 @@
   </form>
 </dialog>
 
-  <p id="adminMessage" class="admin-message" role="status"></p>
+  <!-- Every edit above changes only this page until Save sends it all to Supabase. -->
+  <div class="admin-save-bar">
+    <div class="admin-save-row">
+      <p id="adminSaveStatus" class="admin-save-status">No unsaved changes</p>
+      <button id="saveAllAdmin" type="button">Save</button>
+    </div>
+    <p id="adminMessage" class="admin-message" role="status"></p>
+  </div>
 </div>
