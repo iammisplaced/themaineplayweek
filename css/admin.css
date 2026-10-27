@@ -62,6 +62,11 @@
   margin-top: 0.55rem;
 }
 
+/* A destructive button sits at the end of its row, apart from the others. */
+.admin-inline-actions > .admin-danger-btn {
+  margin-left: auto;
+}
+
 .admin-top-actions {
   padding-bottom: 0.55rem;
 }
@@ -288,7 +293,8 @@
   display: none;
 }
 
-/* Waiting for the second click that discards. */
+/* Destructive buttons, and Discard while it waits for the second click. */
+.admin-danger-btn,
 #discardAdminChanges.armed {
   border-color: var(--accent);
   color: var(--accent);

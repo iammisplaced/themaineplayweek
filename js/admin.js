@@ -1484,7 +1484,7 @@ function renderShowingsList() {
       ].forEach(([action, text]) => {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = "ghost-btn";
+        button.className = action === "delete-day" ? "ghost-btn admin-danger-btn" : "ghost-btn";
         button.dataset.action = action;
         button.dataset.showingIndex = String(index);
         button.textContent = text;
@@ -1605,7 +1605,7 @@ function renderPromoSettingsEditor() {
     item.appendChild(fieldsWrap);
     const removeButton = document.createElement("button");
     removeButton.type = "button";
-    removeButton.className = "ghost-btn promo-remove-btn";
+    removeButton.className = "ghost-btn admin-danger-btn promo-remove-btn";
     removeButton.dataset.removePromoIndex = String(index);
     removeButton.textContent = "Delete Promo";
     item.appendChild(removeButton);
@@ -1733,7 +1733,7 @@ function renderFestivalSettingsEditor() {
 
     const removeButton = document.createElement("button");
     removeButton.type = "button";
-    removeButton.className = "ghost-btn promo-remove-btn";
+    removeButton.className = "ghost-btn admin-danger-btn promo-remove-btn";
     removeButton.dataset.removeFestivalIndex = String(index);
     removeButton.textContent = "Delete Festival";
 
