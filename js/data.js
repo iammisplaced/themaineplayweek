@@ -16,21 +16,19 @@ export const STORAGE_KEY = "showtimes-local-edit";
 // Supabase Storage bucket holding the promo card images.
 export const PROMO_STORAGE_BUCKET = "promo-images";
 
+const FILM_COLUMNS =
+  "id,title,year,tmdb_id,synopsis,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,ranking_override,metadata_source,tmdb_json";
+
+// Everything, for the admin: every film is listed under every theatre (the admin picks a
+// theatre's films from that catalog), plus the data_version its saves are checked against.
 export async function loadDataFromSupabase(supabase) {
   // Read before the tables: if a save lands mid-load, this version is older and the
   // next save is refused instead of overwriting it.
   const dataVersion = await loadDataVersion(supabase);
   const [theatres, films, theatreFilms, showtimes, promos, festivals] = await Promise.all([
-    fetchAllRowsFromSupabase("theatres", () =>
-      supabase.from("theatres").select("id,name,city,address,website,latitude,longitude").order("id", { ascending: true })
-    ),
+    fetchTheatreRows(supabase),
     fetchAllRowsFromSupabase("films", () =>
-      supabase
-        .from("films")
-        .select(
-          "id,title,year,tmdb_id,synopsis,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,ranking_override,metadata_source,tmdb_json"
-        )
-        .order("id", { ascending: true })
+      supabase.from("films").select(FILM_COLUMNS).order("id", { ascending: true })
     ),
     fetchAllRowsFromSupabase("theatre_films", () =>
       supabase
@@ -42,21 +40,65 @@ export async function loadDataFromSupabase(supabase) {
     fetchAllRowsFromSupabase("showtimes", () =>
       supabase.from("showtimes").select(SHOWTIME_COLUMNS).order("id", { ascending: true })
     ),
-    fetchAllRowsFromSupabase("promos", () =>
+    fetchPromoRows(supabase),
+    fetchFestivalRows(supabase),
+  ]);
+  const data = buildDataFromRows({ theatres, films, theatreFilms, showtimes, promos, festivals }, { filmCatalog: true });
+  return { ...data, dataVersion };
+}
+
+// What visitors need: only the films with a showtime on or after `todayIso`, each listed
+// only under the theatres showing it. Never save this; the admin loads the full data.
+export async function loadActiveDataFromSupabase(supabase, todayIso) {
+  const [theatres, activeFilms, promos, festivals] = await Promise.all([
+    fetchTheatreRows(supabase),
+    // One request: the films with an upcoming showtime, each with those showtimes and
+    // its ticket links nested inside.
+    fetchAllRowsFromSupabase("films", () =>
       supabase
-        .from("promos")
-        .select("id,title,button_url,image_path,image_alt,image_name,button_label,enabled,sort_order")
-        .order("sort_order", { ascending: true })
+        .from("films")
+        .select(`${FILM_COLUMNS},showtimes!inner(${SHOWTIME_COLUMNS}),theatre_films(theatre_id,film_id,ticket_link)`)
+        .gte("showtimes.show_date", todayIso)
         .order("id", { ascending: true })
     ),
-    fetchAllRowsFromSupabase("festivals", () =>
-      supabase
-        .from("festivals")
-        .select("id,slug,name,description,website,primary_color,start_date,end_date,enabled,sort_order")
-        .order("sort_order", { ascending: true })
-        .order("name", { ascending: true })
-    ),
+    fetchPromoRows(supabase),
+    fetchFestivalRows(supabase),
   ]);
+  const films = activeFilms.map(({ showtimes, theatre_films, ...film }) => film);
+  const showtimes = activeFilms.flatMap((film) => film.showtimes || []);
+  const theatreFilms = activeFilms.flatMap((film) => film.theatre_films || []);
+  return buildDataFromRows({ theatres, films, theatreFilms, showtimes, promos, festivals }, { filmCatalog: false });
+}
+
+function fetchTheatreRows(supabase) {
+  return fetchAllRowsFromSupabase("theatres", () =>
+    supabase.from("theatres").select("id,name,city,address,website,latitude,longitude").order("id", { ascending: true })
+  );
+}
+
+function fetchPromoRows(supabase) {
+  return fetchAllRowsFromSupabase("promos", () =>
+    supabase
+      .from("promos")
+      .select("id,title,button_url,image_path,image_alt,image_name,button_label,enabled,sort_order")
+      .order("sort_order", { ascending: true })
+      .order("id", { ascending: true })
+  );
+}
+
+function fetchFestivalRows(supabase) {
+  return fetchAllRowsFromSupabase("festivals", () =>
+    supabase
+      .from("festivals")
+      .select("id,slug,name,description,website,primary_color,start_date,end_date,enabled,sort_order")
+      .order("sort_order", { ascending: true })
+      .order("name", { ascending: true })
+  );
+}
+
+// Turns table rows into theatres -> films -> showings. With `filmCatalog`, every film is
+// listed under every theatre; without it, a film appears only where it has showings.
+function buildDataFromRows({ theatres, films, theatreFilms, showtimes, promos, festivals }, { filmCatalog }) {
   // The admin and the site work with one entry per theatre, film and day.
   const showings = groupShowtimesIntoShowings(showtimes);
 
@@ -102,44 +144,44 @@ export async function loadDataFromSupabase(supabase) {
     });
   });
 
-  // Global film catalog: every theatre sees every film.
-  theatreGroups.forEach((theatre) => {
-    filmById.forEach((filmTemplate) => {
-      const filmCopy = {
-        title: filmTemplate.title,
-        year: filmTemplate.year,
-        tmdbId: filmTemplate.tmdbId,
-        synopsis: String(filmTemplate.synopsis || ""),
-        ticketLink: "",
-        staffFavorite: Boolean(filmTemplate.staffFavorite),
-        staffFavoriteBy: String(filmTemplate.staffFavoriteBy || ""),
-        featuredOnPlayweek: Boolean(filmTemplate.featuredOnPlayweek),
-        featuredOnPlayweekUrl: String(filmTemplate.featuredOnPlayweekUrl || ""),
-        rankingOverride: Boolean(filmTemplate.rankingOverride),
-        metadataSource: normalizeMetadataSource(filmTemplate.metadataSource, filmTemplate),
-        tmdb: filmTemplate.tmdb,
-        showings: [],
-        _dbId: filmTemplate._dbId,
-      };
-      theatre._filmMap.set(String(filmTemplate._dbId), filmCopy);
-      theatre.films.push(filmCopy);
-    });
-  });
+  const addFilmToTheatre = (theatre, filmTemplate) => {
+    const filmCopy = {
+      title: filmTemplate.title,
+      year: filmTemplate.year,
+      tmdbId: filmTemplate.tmdbId,
+      synopsis: String(filmTemplate.synopsis || ""),
+      ticketLink: "",
+      staffFavorite: Boolean(filmTemplate.staffFavorite),
+      staffFavoriteBy: String(filmTemplate.staffFavoriteBy || ""),
+      featuredOnPlayweek: Boolean(filmTemplate.featuredOnPlayweek),
+      featuredOnPlayweekUrl: String(filmTemplate.featuredOnPlayweekUrl || ""),
+      rankingOverride: Boolean(filmTemplate.rankingOverride),
+      metadataSource: normalizeMetadataSource(filmTemplate.metadataSource, filmTemplate),
+      tmdb: filmTemplate.tmdb,
+      showings: [],
+      _dbId: filmTemplate._dbId,
+    };
+    theatre._filmMap.set(String(filmTemplate._dbId), filmCopy);
+    theatre.films.push(filmCopy);
+    return filmCopy;
+  };
 
-  // Theatre-specific ticket links.
-  theatreFilms.forEach((linkRow) => {
-    const theatre = theatreById.get(linkRow.theatre_id);
-    const film = theatre?._filmMap.get(String(linkRow.film_id));
-    if (!theatre || !film) return;
-    film.ticketLink = linkRow.ticket_link || "";
-  });
+  if (filmCatalog) {
+    // Global film catalog: every theatre sees every film.
+    theatreGroups.forEach((theatre) => {
+      filmById.forEach((filmTemplate) => addFilmToTheatre(theatre, filmTemplate));
+    });
+  }
 
   showings.forEach((showingRow) => {
     const theatre = theatreById.get(showingRow.theatre_id);
     if (!theatre) return;
 
     const filmKey = String(showingRow.film_id);
-    const film = theatre._filmMap.get(filmKey);
+    let film = theatre._filmMap.get(filmKey);
+    if (!film && !filmCatalog && filmById.has(showingRow.film_id)) {
+      film = addFilmToTheatre(theatre, filmById.get(showingRow.film_id));
+    }
     if (!film) return;
     const festivalId = Number(showingRow.festival_id);
 
@@ -151,6 +193,14 @@ export async function loadDataFromSupabase(supabase) {
       times: dedupeSortTimes(Array.isArray(showingRow.times) ? showingRow.times : []),
       premiumTimes: dedupeSortTimes(Array.isArray(showingRow.premium_times) ? showingRow.premium_times : []),
     });
+  });
+
+  // Theatre-specific ticket links.
+  theatreFilms.forEach((linkRow) => {
+    const theatre = theatreById.get(linkRow.theatre_id);
+    const film = theatre?._filmMap.get(String(linkRow.film_id));
+    if (!theatre || !film) return;
+    film.ticketLink = linkRow.ticket_link || "";
   });
 
   theatreGroups.forEach((theatre) => {
@@ -176,7 +226,6 @@ export async function loadDataFromSupabase(supabase) {
       sortOrder: Number.isInteger(Number(row.sort_order)) ? Number(row.sort_order) : 0,
     })),
     promotedCards: buildPromotedCardsFromSupabaseRows(promos),
-    dataVersion,
   };
 }
 
