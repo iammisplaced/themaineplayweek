@@ -849,12 +849,6 @@ h1 {
   background: var(--control-hover-bg);
 }
 
-/* Film pages style these buttons inline but take their hover from here. */
-.location-sort-actions button:hover {
-  border-color: var(--control-hover-border);
-  background: var(--control-hover-bg);
-}
-
 .tab:hover,
 .tab:focus-visible {
   transform: translateY(-0.5px);
