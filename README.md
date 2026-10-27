@@ -30,6 +30,7 @@ It's a plain static site (HTML, CSS and JavaScript, with no build step) that rea
 | `index.html`, `css/styles.css`, `js/app.js` | The site: the public views plus the admin panel |
 | `js/shared.js` | Helpers shared by the site and the scripts: Supabase URL and public key, dates and times, film slugs and ranking, showtime notes |
 | `js/map-view.js` | The theatre map in the Near You view |
+| `js/admin-csv.js`, `test/` | The admin's showtimes CSV import, and its tests (`npm test`) |
 | `admin-films.html`, `css/admin-films.css`, `js/admin-films.js` | Admin film catalog page (staff favourites, featured films, ranking overrides) |
 | `films/` | Static film pages, **generated; don't edit by hand** |
 | `data/film-pages-source.live.json` | Snapshot of the Supabase data used for the last film-page build (generated); also the site's offline fallback |
@@ -83,7 +84,7 @@ What you can do in the panel:
 
 ## Getting showtimes in
 
-The scrapers do most of the work. `npm run scrape` scrapes every Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus and Mobile Moviegoing theatre and writes one file, `scraped-all-showtimes.csv`. Import that file in the admin panel, then click **Save All Changes**. `SCRAPER_GUIDE.md` covers options, how each scraper works, and troubleshooting.
+The scrapers do most of the work. `npm run scrape` scrapes every Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus and Mobile Moviegoing theatre and writes one file, `scraped-all-showtimes.csv`. Import that file in the admin panel, check the preview and click **Apply**, then click **Save**. `SCRAPER_GUIDE.md` covers options, how each scraper works, and troubleshooting.
 
 ### CSV import format
 
@@ -104,7 +105,8 @@ Optional columns:
 How rows are matched and merged:
 - The theatre must already exist. It's matched on `theatre_name` + `theatre_city`, ignoring case.
 - The film is matched by title, ignoring case and punctuation (`Spider-Man` matches `spider man`), and narrowed by `film_year` or `film_tmdb_id` when given. If there's no match, the film is created at that theatre. A row with `film_tmdb_id` only matches a film with that exact TMDb ID, so a film saved without one gets a duplicate.
-- Times are added to any showings already saved for that date, and duplicates are dropped.
+- Times are added to any showings already saved for that date, and duplicates are dropped (`7:00 pm` and `7:00 PM` count as the same time).
+- An import never removes anything by itself, since the CSV lists showtimes known to be happening, not every showtime. Before anything changes, a preview lists the times and films it adds, plus the times already saved for the same theatre and date that the CSV doesn't list (a moved or cancelled show, or one the scraper missed). Those stay unless you tick them; ticked ones are removed when you click **Apply**. Times that have already started aren't listed.
 - A blank `ticket_link`, `room` or `notes` keeps what's saved. Non-blank notes are **merged** into the saved note (entries it doesn't already have are added), so re-importing scraped notes keeps hand-written ones. A lone `-` clears the room or the note.
 
 Example:

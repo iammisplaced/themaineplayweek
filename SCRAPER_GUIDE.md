@@ -101,7 +101,8 @@ Timing: a full 7-day `npm run scrape` takes a few minutes; Apple is the slowest,
 
 1. Open the admin panel.
 2. **Import CSV** and choose `scraped-all-showtimes.csv` (or a single theatre's file).
-3. **Save All Changes**.
+3. Check the preview. Times already on the site that the CSV doesn't list stay unless you tick them, so tick only shows that moved or were cancelled. Click **Apply**.
+4. **Save**.
 
 ## Troubleshooting
 
