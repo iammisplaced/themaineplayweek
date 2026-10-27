@@ -289,6 +289,87 @@
   }
 }
 
+/* A day in the Showings list: date and details, time chips, then actions; the inline
+   editor opens below. */
+.admin-list li.showing-day {
+  display: block;
+}
+
+.showing-day-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.7rem;
+}
+
+.showing-day-label {
+  display: grid;
+  min-width: 7.5rem;
+}
+
+.showing-day-meta {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.showing-day-times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  flex: 1 1 12rem;
+}
+
+.showing-day-actions {
+  display: flex;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.showing-day-actions button {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.time-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--control-border);
+  border-radius: 999px;
+  background: var(--control-bg);
+  color: var(--control-ink);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.time-chip:hover,
+.time-chip:focus-visible {
+  border-color: var(--accent);
+  background: var(--hover-soft);
+}
+
+.time-chip.premium {
+  border-style: dashed;
+}
+
+.time-chip.started {
+  color: var(--muted);
+  opacity: 0.6;
+}
+
+.time-chip-x {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.showing-day-editor {
+  margin-top: 0.4rem;
+  padding-top: 0.2rem;
+  border-top: 1px dashed var(--border);
+}
+
 /* The Import CSV preview. */
 .admin-modal-wide {
   width: min(720px, calc(100vw - 2rem));
