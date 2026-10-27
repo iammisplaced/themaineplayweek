@@ -70,6 +70,14 @@ const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
 const DAYS_VIEW_RADIUS_STORAGE_KEY = "tmp-days-radius-v1";
 const SEARCH_INPUT_DEBOUNCE_MS = 180;
 
+// The long hints don't fit the narrow search box on phones, so phones get short ones.
+const PUBLIC_SEARCH_PLACEHOLDERS = {
+  films: { wide: "Search films or genres...", narrow: "Search films" },
+  theatres: { wide: "Search theatres, town, or film...", narrow: "Search" },
+  festivals: { wide: "Search festivals, films, or theatres...", narrow: "Search festivals" },
+};
+const NARROW_SEARCH_MEDIA = window.matchMedia("(max-width: 640px)");
+
 const LOGO_SPIN_ANIMATION_MS = 420;
 const LIGHT_THEME = "light";
 const DARK_THEME = "dark";
@@ -526,6 +534,8 @@ function bindEvents() {
   const debouncedPublicSearchRender = debounce(() => {
     render();
   }, SEARCH_INPUT_DEBOUNCE_MS);
+
+  NARROW_SEARCH_MEDIA.addEventListener?.("change", syncPublicSearchPlaceholder);
 
   elements.publicSearchInput?.addEventListener("input", () => {
     const value = elements.publicSearchInput.value || "";
@@ -2162,21 +2172,19 @@ function animateFilmCardLayout(previousRects) {
   });
 }
 
+function syncPublicSearchPlaceholder() {
+  const placeholders = PUBLIC_SEARCH_PLACEHOLDERS[state.view];
+  if (!placeholders || !elements.publicSearchInput) return;
+  elements.publicSearchInput.placeholder = NARROW_SEARCH_MEDIA.matches ? placeholders.narrow : placeholders.wide;
+}
+
 function syncPublicSearchUI() {
   if (!elements.publicSearchWrap || !elements.publicSearchInput) return;
   syncLatestPostVisibility();
-  if (state.view === "films") {
+  if (state.view === "films" || state.view === "theatres" || state.view === "festivals") {
     elements.publicSearchWrap.classList.remove("hidden");
-    elements.publicSearchInput.placeholder = "Search films or genres...";
-    elements.publicSearchInput.value = state.publicSearch.films;
-  } else if (state.view === "theatres") {
-    elements.publicSearchWrap.classList.remove("hidden");
-    elements.publicSearchInput.placeholder = "Search theatres, town, or film...";
-    elements.publicSearchInput.value = state.publicSearch.theatres;
-  } else if (state.view === "festivals") {
-    elements.publicSearchWrap.classList.remove("hidden");
-    elements.publicSearchInput.placeholder = "Search festivals, films, or theatres...";
-    elements.publicSearchInput.value = state.publicSearch.festivals;
+    syncPublicSearchPlaceholder();
+    elements.publicSearchInput.value = state.publicSearch[state.view];
   } else {
     elements.publicSearchWrap.classList.add("hidden");
     elements.publicSearchInput.value = "";
@@ -3250,9 +3258,13 @@ function createScheduleRow(date, times, premiumTimes = [], timeNotes = {}) {
       timeEl.textContent = `Premium ${entry.time}`;
     } else if (note) {
       timeEl = document.createElement("span");
+      timeEl.className = "show-time";
       timeEl.textContent = entry.time;
     } else {
-      value.appendChild(document.createTextNode(entry.time));
+      timeEl = document.createElement("span");
+      timeEl.className = "show-time";
+      timeEl.textContent = entry.time;
+      value.appendChild(timeEl);
       return;
     }
     if (note) attachShowtimeNote(timeEl, note);

@@ -1469,6 +1469,10 @@ a.film-expand-toggle {
   margin-bottom: 0.28rem;
 }
 
+.show-time {
+  white-space: nowrap;
+}
+
 .show-time-noted {
   display: inline-flex;
   align-items: center;
@@ -2261,7 +2265,7 @@ textarea {
     right: 0;
     width: auto;
     max-width: 400px;
-    max-height: 20vh;
+    max-height: 55%;
     border-radius: 14px;
     margin: auto;
   }
@@ -2378,6 +2382,59 @@ textarea {
 
   .map-view-container {
     height: 500px;
+  }
+}
+
+/* Touch screens: the small pill buttons and text links get an invisible tap area
+   44px tall, so they're easier to hit without looking any bigger. */
+@media (pointer: coarse) {
+  .film-expand-toggle,
+  .theatre-row-film-link,
+  .theatre-sort-change-link,
+  .group-link,
+  .show-link,
+  .group-tmdb-link,
+  .promo-card-cta,
+  .film-page-return,
+  .film-index-header a {
+    position: relative;
+  }
+
+  .film-expand-toggle::after,
+  .theatre-row-film-link::after,
+  .theatre-sort-change-link::after,
+  .group-link::after,
+  .show-link::after,
+  .group-tmdb-link::after,
+  .promo-card-cta::after,
+  .film-page-return::after,
+  .film-index-header a::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -2px;
+    right: -2px;
+    height: 44px;
+    transform: translateY(-50%);
+  }
+
+  /* "Tickets" sits just above "View Film Page" in theatre rows, so its tap area stops
+     short of that link, and it wins where the two overlap. */
+  .show-link {
+    z-index: 1;
+  }
+
+  .show-link::after {
+    height: 40px;
+  }
+}
+
+/* Phones: the smallest pill labels (about 10px) move up to about 11px. */
+@media (max-width: 640px) {
+  .film-expand-toggle.theatre-card-toggle,
+  .film-expand-toggle.theatre-row-toggle,
+  .theatre-row-film-link {
+    font-size: 0.7rem;
   }
 }
 
