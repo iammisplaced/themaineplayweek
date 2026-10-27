@@ -21,345 +21,7 @@
     <link rel="icon" href="../../assets/icons/favicon.ico" />
     <link rel="manifest" href="../../site.webmanifest" />
     <link rel="stylesheet" href="../../css/styles.css" />
-    <style>
-      .film-page-shell {
-        width: min(1024px, 100%);
-        margin: 0 auto;
-      }
-      .film-page-brandbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 1rem;
-        margin: 0 0 0.5rem;
-      }
-      .film-page-wordmark {
-        display: block;
-        height: 72px;
-        width: auto;
-        max-width: min(72vw, 520px);
-        object-fit: contain;
-        object-position: left center;
-      }
-      .film-page-logo {
-        width: 72px;
-        height: 72px;
-        object-fit: contain;
-      }
-      .film-page-return {
-        display: inline-block;
-        margin: 0 0 0.9rem;
-        color: var(--accent-2);
-        font-weight: 700;
-        text-decoration: none;
-      }
-      .film-page-card {
-        width: 100%;
-      }
-      .film-showtimes-heading {
-        margin: 0 0 0.6rem;
-        color: var(--accent-2);
-        font-size: 1rem;
-      }
-      .film-page-empty {
-        margin: 0.45rem 0 0;
-        color: var(--muted);
-      }
-      .film-page-note {
-        margin: 0;
-        color: var(--muted);
-      }
-      .film-page-title {
-        font-style: italic;
-      }
-      .film-page-meta {
-        order: 1;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin: -0.1rem 0 0.55rem;
-        color: var(--muted);
-        font-size: 0.88rem;
-        letter-spacing: 0.02em;
-      }
-      .film-page-meta span + span::before {
-        content: "·";
-        margin: 0 0.45rem;
-      }
-      .film-page-facts {
-        margin-top: 0.15rem;
-      }
-      .film-page-facts .film-fact:first-child .film-fact-value {
-        line-height: 1.5;
-      }
-      .film-page-card .group-film-summary {
-        grid-template-columns: minmax(0, 1fr) 104px;
-      }
-      .film-page-card .group-film-details {
-        grid-column: 1;
-        grid-row: 1;
-      }
-      .film-page-card .film-page-poster-rail {
-        grid-column: 2;
-        grid-row: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 0.45rem;
-      }
-      .film-page-card .group-film-poster {
-        grid-column: auto;
-        grid-row: auto;
-        justify-self: auto;
-        width: 104px;
-        height: 156px;
-      }
-      .film-page-card .film-page-feature-link {
-        margin-top: 0;
-        text-align: center;
-        justify-content: center;
-      }
-      .group-card.film-card.film-page-card:not(.film-card-collapsed) .film-favorite-stamp {
-        top: auto;
-        bottom: 0.45rem;
-      }
-      .group-card.film-card.film-page-card:not(.film-card-collapsed) .film-featured-stamp {
-        top: auto;
-        bottom: 0.45rem;
-      }
-      .group-card.film-card.film-page-card.film-card-staff-favorite.film-card-featured-playweek:not(.film-card-collapsed) .film-favorite-stamp {
-        top: auto;
-        bottom: 0.45rem;
-      }
-      .group-card.film-card.film-page-card.film-card-staff-favorite.film-card-featured-playweek:not(.film-card-collapsed) .film-featured-stamp {
-        top: auto;
-        bottom: 0.45rem;
-      }
-      .film-info-box {
-        margin-bottom: 0.9rem;
-      }
-      .film-showtimes-box {
-        width: 100%;
-      }
-      .film-showtimes-box .show-item {
-        border: 1px solid var(--border);
-        border-style: solid;
-        background: var(--surface-alt);
-        padding: 0.72rem 0.74rem;
-        border-radius: 12px;
-      }
-      .film-showtimes-box .show-list {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 0.7rem;
-      }
-      .film-showtimes-box .show-list.show-list-masonry {
-        grid-template-columns: repeat(var(--show-columns, 2), minmax(0, 1fr));
-        align-items: start;
-      }
-      .film-showtimes-box .show-masonry-column {
-        display: flex;
-        flex-direction: column;
-        gap: 0.7rem;
-      }
-      .film-showtimes-box .show-main {
-        margin-bottom: 0.5rem;
-      }
-      .film-showtimes-box .film-page-festival-ribbon {
-        width: fit-content;
-        display: inline-flex;
-        align-items: center;
-        margin: 0 0 0.34rem;
-        border-radius: 999px;
-        padding: 0.16rem 0.54rem;
-        font-size: 0.62rem;
-        line-height: 1;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        font-weight: 700;
-        color: #fff9ec;
-        background: var(--accent);
-        box-shadow: 0 2px 6px rgba(29, 31, 31, 0.18);
-      }
-      .film-showtimes-box .show-main-theatre {
-        font-size: 1rem;
-        font-weight: 700;
-        line-height: 1.25;
-      }
-      .film-showtimes-box .show-main-city {
-        color: var(--muted);
-        font-weight: 600;
-      }
-      .film-showtimes-box .show-schedule {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 0.55rem;
-        margin-top: 0;
-      }
-      .film-showtimes-box .show-day-card {
-        margin: 0;
-        padding: 0.55rem 0.62rem;
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        background: var(--surface-soft);
-      }
-      .film-showtimes-box .show-day-card-empty {
-        display: grid;
-        align-items: center;
-      }
-      .film-showtimes-box .show-schedule-day {
-        margin: 0 0 0.38rem;
-      }
-      .film-showtimes-box .show-times-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.34rem;
-      }
-      .film-showtimes-box .show-room-label {
-        margin: 0 0 0.34rem;
-        color: var(--accent-2);
-        font-size: 0.78rem;
-        font-weight: 600;
-      }
-      .film-showtimes-box .show-more-days {
-        margin-top: 0.5rem;
-      }
-      .film-showtimes-box .show-more-days-toggle {
-        list-style: none;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        background: #f8f2ea;
-        color: var(--accent-2);
-        font-size: 0.74rem;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        padding: 0.22rem 0.62rem;
-      }
-      .film-showtimes-box .show-more-days-toggle::-webkit-details-marker {
-        display: none;
-      }
-      .film-showtimes-box .show-more-days-toggle:hover,
-      .film-showtimes-box .show-more-days-toggle:focus-visible {
-        background: var(--hover-soft-2);
-        border-color: #c8beb1;
-      }
-      .film-showtimes-box .show-schedule-extra {
-        margin-top: 0.48rem;
-      }
-      .film-showtimes-box .show-time-chip {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 1.7rem;
-        padding: 0.12rem 0.46rem;
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        background: var(--panel);
-        color: var(--ink);
-        font-size: 0.84rem;
-        font-weight: 600;
-        line-height: 1;
-        white-space: nowrap;
-      }
-      .film-showtimes-box .show-time-chip.show-time-chip-premium {
-        border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
-        background: color-mix(in srgb, var(--accent) 12%, var(--panel));
-      }
-      .film-showtimes-box .show-item {
-        align-self: stretch;
-        width: 100%;
-        margin: 0;
-      }
-      .location-sort-controls {
-        margin: 0 0 0.75rem;
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        background: var(--surface-alt);
-        padding: 0.66rem 0.7rem;
-      }
-      .location-sort-title {
-        margin: 0 0 0.2rem;
-        color: var(--accent-2);
-        font-size: 0.84rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-      .location-sort-copy {
-        margin: 0;
-        color: var(--muted);
-        font-size: 0.9rem;
-      }
-      .location-sort-actions {
-        margin-top: 0.56rem;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.45rem;
-      }
-      .location-sort-actions button,
-      .location-sort-actions input {
-        min-height: 2rem;
-      }
-      .location-sort-actions input {
-        width: 7.2rem;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 0 0.5rem;
-        background: var(--panel);
-        color: var(--ink);
-      }
-      .location-sort-actions button {
-        border: 1px solid var(--border);
-        border-radius: 999px;
-        background: #f8f2ea;
-        color: var(--accent-2);
-        font-size: 0.74rem;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        padding: 0.2rem 0.62rem;
-        cursor: pointer;
-      }
-      .location-sort-status {
-        margin: 0.5rem 0 0;
-        font-size: 0.84rem;
-        color: var(--muted);
-      }
-      :root[data-theme="dark"] .film-showtimes-box .show-more-days-toggle,
-      :root[data-theme="dark"] .location-sort-actions button {
-        border-color: #3c504a;
-        background: #1a2522;
-        color: #deeee9;
-      }
-      :root[data-theme="dark"] .film-showtimes-box .film-page-festival-ribbon {
-        color: #141615;
-      }
-      :root[data-theme="dark"] .film-showtimes-box .show-more-days-toggle:hover,
-      :root[data-theme="dark"] .film-showtimes-box .show-more-days-toggle:focus-visible,
-      :root[data-theme="dark"] .location-sort-actions button:hover,
-      :root[data-theme="dark"] .location-sort-actions button:focus-visible {
-        border-color: #4f665f;
-        background: #24312d;
-      }
-      @media (min-width: 860px) {
-        .film-page-card .group-film-summary {
-          grid-template-columns: minmax(0, 1fr) 124px;
-        }
-        .film-page-card .group-film-poster {
-          width: 124px;
-          height: 186px;
-        }
-        .film-showtimes-box .show-list {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="../../css/film-pages.css" />
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Paging Hezbollah 2026","description":"Paging Hezbollah showtimes, theatres, and details from The Maine Playweek.","image":"https://image.tmdb.org/t/p/w342/CCFiWX5MFh7UukM5oMoBe2VpNg.jpg","datePublished":"2026-10-30","director":[{"@type":"Person","name":"Justin Folk"}],"actor":[],"genre":["Documentary"],"url":"https://showtimes.themaineplayweek.com/films/paging-hezbollah-2026/"}</script>
   </head>
   <body>
@@ -368,7 +30,7 @@
         <img id="filmPageWordmark" class="film-page-wordmark" src="../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png" alt="The Maine Playweek" />
         <img id="filmPageLogo" class="film-page-logo" src="../../assets/brand/TMP%20logo%20dark.png" alt="" aria-hidden="true" />
       </div>
-      <a class="film-page-return" href="../..">Go back...</a>
+      <a class="film-page-return" href="../..">&larr; All showtimes</a>
       <article class="group-card film-card film-page-card film-info-box">
         <h1 class="group-title group-title-film"><cite class="film-page-title">Paging Hezbollah</cite></h1>
         <p class="film-page-meta"><span>2026</span></p>
@@ -430,7 +92,16 @@
         <p>hello@themaineplayweek.com</p>
       </section>
     </main>
-    <script>
+    <script type="module">
+      import {
+        LOCATION_PREFERENCE_STORAGE_KEY,
+        geocodeUsZip,
+        haversineMiles,
+        initShowtimeNoteTooltips,
+      } from "../../js/shared.js";
+
+      initShowtimeNoteTooltips();
+
       (() => {
         const LIGHT_THEME = "light";
         const DARK_THEME = "dark";
@@ -478,7 +149,9 @@
           applyTheme(getTheme());
         });
 
-        const STORAGE_KEYS = ["tmp-location-preference-v1", "tmp-film-pages-location-v1"];
+        // Film pages used to keep their own location; it's still read for visitors who set one there.
+        const LEGACY_LOCATION_STORAGE_KEY = "tmp-film-pages-location-v1";
+        const STORAGE_KEYS = [LOCATION_PREFERENCE_STORAGE_KEY, LEGACY_LOCATION_STORAGE_KEY];
         const useDeviceButton = document.getElementById("locationSortUseDevice");
         const zipForm = document.getElementById("locationSortZipForm");
         const zipInput = document.getElementById("locationSortZipInput");
@@ -508,20 +181,12 @@
           return null;
         }
 
+        // Saved in the main app's format so the Near You and Theatres views use it too.
         function saveLocation(lat, lng, mode, zip) {
-          const payload = { lat, lng, mode: mode || "", zip: zip || "" };
-          localStorage.setItem("tmp-film-pages-location-v1", JSON.stringify(payload));
-        }
-
-        function haversineMiles(lat1, lng1, lat2, lng2) {
-          const toRad = (d) => (d * Math.PI) / 180;
-          const R = 3958.8;
-          const dLat = toRad(lat2 - lat1);
-          const dLng = toRad(lng2 - lng1);
-          const a =
-            Math.sin(dLat / 2) ** 2 +
-            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
-          return 2 * R * Math.asin(Math.sqrt(a));
+          const payload = { mode, zip: zip || "", lat, lng };
+          try {
+            localStorage.setItem(LOCATION_PREFERENCE_STORAGE_KEY, JSON.stringify(payload));
+          } catch {}
         }
 
         function getMasonryColumnCount() {
@@ -590,14 +255,9 @@
           if (!/^\d{5}$/.test(cleaned)) {
             throw new Error("Enter a valid 5-digit ZIP code.");
           }
-          const response = await fetch("https://api.zippopotam.us/us/" + cleaned);
-          if (!response.ok) throw new Error("Could not find that ZIP code.");
-          const json = await response.json();
-          const place = Array.isArray(json?.places) ? json.places[0] : null;
-          const lat = Number(place?.latitude);
-          const lng = Number(place?.longitude);
-          if (!Number.isFinite(lat) || !Number.isFinite(lng)) throw new Error("ZIP lookup did not return coordinates.");
-          return { lat, lng, zip: cleaned };
+          const coords = await geocodeUsZip(cleaned);
+          if (!coords) throw new Error("Could not find that ZIP code.");
+          return { ...coords, zip: cleaned };
         }
 
         useDeviceButton?.addEventListener("click", () => {
@@ -610,7 +270,7 @@
             (position) => {
               const lat = Number(position.coords.latitude);
               const lng = Number(position.coords.longitude);
-              saveLocation(lat, lng, "device", "");
+              saveLocation(lat, lng, "geolocation", "");
               sortByDistance(lat, lng, "device location");
             },
             () => {
@@ -634,7 +294,7 @@
 
         const saved = readSavedLocation();
         if (saved) {
-          sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "saved ZIP" : "saved location");
+          sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "your saved ZIP" : "your saved location");
         } else {
           applyShowtimesLayout(theatreItems);
           setStatus("Choose your location to sort theatres by distance.");
@@ -649,10 +309,6 @@
           }, 90);
         });
       })();
-    </script>
-    <script type="module">
-      import { initShowtimeNoteTooltips } from "../../js/shared.js";
-      initShowtimeNoteTooltips();
     </script>
   </body>
 </html>
