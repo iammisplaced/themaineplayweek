@@ -1,6 +1,6 @@
 // Experimental mobile-first "find your film" quiz. Reads the live Supabase data (read-only),
 // asks a few questions, and recommends one film with upcoming showtimes in Maine.
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.118.0";
 import {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
