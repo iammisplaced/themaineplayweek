@@ -24,10 +24,6 @@
   --success-border: #b8ddcf;
   --controls-shadow: 0 0 18px rgba(29, 31, 31, 0.1);
   --control-pill-height: 50px;
-  --beta-bg: #fff6df;
-  --beta-border: #e1cca0;
-  --beta-ink: #5a3f1d;
-  --beta-link: #8d4e1e;
   --beta-chip-bg: #fff2cd;
   --beta-chip-border: #d7be8b;
   --beta-chip-ink: #6b471b;
@@ -114,10 +110,6 @@
   --success-bg: rgba(34, 72, 57, 0.42);
   --success-border: rgba(118, 181, 151, 0.58);
   --controls-shadow: 0 0 22px rgba(219, 242, 232, 0.26);
-  --beta-bg: rgba(97, 68, 24, 0.3);
-  --beta-border: rgba(224, 194, 135, 0.45);
-  --beta-ink: #f4e3bd;
-  --beta-link: #ffd495;
   --beta-chip-bg: rgba(128, 92, 36, 0.45);
   --beta-chip-border: rgba(243, 220, 170, 0.6);
   --beta-chip-ink: #ffdfab;
@@ -275,42 +267,13 @@ body.app-loading {
 }
 
 main,
-.site-header,
-.beta-banner {
+.site-header {
   width: min(1024px, 100%);
   margin-inline: auto;
 }
 
 main {
   min-height: 100vh;
-}
-
-.beta-banner {
-  margin-bottom: 0.75rem;
-  padding: 0.45rem 0.75rem;
-  border: 1px solid var(--beta-border);
-  border-radius: 14px;
-  background: var(--beta-bg);
-  color: var(--beta-ink);
-  font-size: 0.8rem;
-  line-height: 1.25;
-  display: grid;
-  gap: 0.18rem;
-  justify-items: center;
-  text-align: center;
-}
-
-.beta-banner-line {
-  margin: 0;
-}
-
-.beta-banner a {
-  color: var(--beta-link);
-  font-weight: 600;
-}
-
-.beta-banner strong {
-  letter-spacing: 0.02em;
 }
 
 .site-header {
@@ -1859,11 +1822,6 @@ textarea {
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 0.65rem;
-  }
-
-  .beta-banner {
-    border-radius: 12px;
-    font-size: 0.78rem;
   }
 
   .tab-beta-chip {
