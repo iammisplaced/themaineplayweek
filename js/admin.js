@@ -27,7 +27,8 @@ import {
 } from "./data.js";
 
 const MAX_ADMIN_SEARCH_RESULTS = 120;
-const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
+// Where earlier versions kept a TMDb key in the browser; removed on open now that the server holds it.
+const OLD_TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
 const ADMIN_MARKUP_URL = new URL("../admin-panel.html", import.meta.url);
 const ADMIN_STYLESHEET_URL = new URL("../css/admin.css", import.meta.url);
 
@@ -63,7 +64,6 @@ export async function initAdmin(app) {
     filmSearching: false,
     isSaving: false,
     isRefreshingTmdb: false,
-    tmdbApiKey: "",
     promoImagesToDelete: [],
     // Edits since the page loaded and how many of them the last save covered.
     changeCount: 0,
@@ -161,7 +161,6 @@ function findAdminElements() {
     modalTheatreWebsiteInput: document.getElementById("modalTheatreWebsiteInput"),
     modalTheatreLatitudeInput: document.getElementById("modalTheatreLatitudeInput"),
     modalTheatreLongitudeInput: document.getElementById("modalTheatreLongitudeInput"),
-    tmdbApiKeyInput: document.getElementById("tmdbApiKeyInput"),
     adminFilmSearch: document.getElementById("adminFilmSearch"),
     adminFilmResults: document.getElementById("adminFilmResults"),
     adminSearchStatus: document.getElementById("adminSearchStatus"),
@@ -272,11 +271,6 @@ function bindAdminEvents() {
 
   elements.openFilmCatalogButton?.addEventListener("click", () => {
     window.location.href = "admin-films.html";
-  });
-
-  elements.tmdbApiKeyInput.addEventListener("input", () => {
-    state.admin.tmdbApiKey = elements.tmdbApiKeyInput.value.trim();
-    localStorage.setItem(TMDB_KEY_STORAGE_KEY, state.admin.tmdbApiKey);
   });
 
   elements.promoSettingsList?.addEventListener("change", (event) => {
@@ -653,10 +647,6 @@ function bindAdminEvents() {
     }
     const film = getSelectedFilm();
     if (!film) return;
-    if (!state.admin.tmdbApiKey) {
-      elements.adminMessage.textContent = "Add TMDb API key above, then click Refresh TMDb.";
-      return;
-    }
     if (!film.tmdbId) {
       elements.adminMessage.textContent = "Set a TMDb ID for this film first.";
       return;
@@ -674,7 +664,7 @@ function bindAdminEvents() {
     try {
       state.admin.isRefreshingTmdb = true;
       syncAdminEditor();
-      const details = await fetchTmdbMovieById(state.admin.tmdbApiKey, Number(film.tmdbId));
+      const details = await fetchTmdbMovieById(Number(film.tmdbId));
       film.tmdb = buildTmdbRecord(details);
       film.metadataSource = "tmdb";
       syncFilmMetadataAcrossTheatres(film);
@@ -1071,8 +1061,11 @@ function initializeAdminState() {
 }
 
 function loadAdminSettings() {
-  state.admin.tmdbApiKey = localStorage.getItem(TMDB_KEY_STORAGE_KEY) || "";
-  elements.tmdbApiKeyInput.value = state.admin.tmdbApiKey;
+  try {
+    localStorage.removeItem(OLD_TMDB_KEY_STORAGE_KEY);
+  } catch {
+    // Storage can be blocked; nothing to clean up then.
+  }
   renderPromoSettingsEditor();
 }
 
@@ -2417,19 +2410,20 @@ function isValidCssColor(value) {
   return /^#[0-9a-f]{3}([0-9a-f]{3})?$/i.test(raw);
 }
 
-async function fetchTmdbMovieById(apiKey, tmdbId) {
-  const url =
-    `https://api.themoviedb.org/3/movie/${encodeURIComponent(tmdbId)}` +
-    `?api_key=${encodeURIComponent(apiKey)}&append_to_response=credits`;
+// api/tmdb-movie.js holds the TMDb key and checks the caller is signed in.
+async function fetchTmdbMovieById(tmdbId) {
+  const { data } = await state.supabase.auth.getSession();
+  const token = data.session?.access_token;
+  if (!token) throw new Error("Sign in again, then retry.");
 
-  const response = await fetch(url, {
-    headers: { Accept: "application/json" },
+  const response = await fetch(`/api/tmdb-movie?id=${encodeURIComponent(tmdbId)}`, {
+    headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
   });
+  const body = await response.json().catch(() => null);
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`TMDb ${response.status}: ${text || "request failed"}`);
+    throw new Error(body?.error || `request failed (${response.status})`);
   }
-  return response.json();
+  return body;
 }
 
 function buildTmdbRecord(details) {

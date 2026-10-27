@@ -74,7 +74,7 @@ What you can do in the panel:
 
 - **Theatre and film:** search for and select a theatre and film. **+ Add Theatre** and **+ Add Film** create new ones (a new film is added at every theatre). **Delete Film** removes one.
 - **Ticket link:** set per theatre and film.
-- **Film details:** **Refresh TMDb** pulls the selected film's poster, director, cast, genres, runtime, rating and synopsis from TMDb. It needs the film's TMDb ID and a TMDb API key, which you paste into the panel once (it's kept in your browser only). **Edit Film Metadata** sets those details by hand for films that aren't on TMDb, or overrides TMDb.
+- **Film details:** **Refresh TMDb** pulls the selected film's poster, director, cast, genres, runtime, rating and synopsis from TMDb. It needs the film's TMDb ID. The request goes through `api/tmdb-movie.js`, a Vercel function that holds the TMDb key (the `TMDB_API_KEY` environment variable in Vercel) and answers only signed-in admins, so the button works on the Vercel site and its previews, not on GitHub Pages or a plain local server. **Edit Film Metadata** sets those details by hand for films that aren't on TMDb, or overrides TMDb.
 - **Showings:** pick a date (and optionally a number of days to repeat it), then enter times, premium times, a room, a festival and a note.
 - **Import CSV / Download CSV Template:** bulk-add showtimes (format below).
 - **Promos:** the promo cards shown on the site.
