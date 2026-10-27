@@ -856,7 +856,6 @@ h1 {
 }
 
 .tab:hover,
-.tab:focus-visible,
 .tab:focus-visible {
   transform: translateY(-0.5px);
 }
@@ -2106,7 +2105,7 @@ textarea {
   align-items: center;
   justify-content: center;
   margin: 0;
-  transition: all 200ms ease;
+  transition: background 200ms ease, border-color 200ms ease;
   position: absolute;
   top: 2.4rem;
   right: 0.9rem;
@@ -2118,7 +2117,6 @@ textarea {
 .festival-toggle:hover {
   border-color: var(--control-hover-border);
   background: var(--control-hover-bg);
-  opacity: 0.6;
 }
 
 .festival-chevron {
@@ -2159,7 +2157,7 @@ textarea {
   font-size: 0.55rem;
   font-weight: 500;
   border-radius: 2px;
-  transition: all 200ms ease;
+  transition: background 200ms ease, border-color 200ms ease;
   display: inline-block;
   margin-right: 0;
   line-height: 1;

@@ -98,7 +98,7 @@ const WORDMARK_VARIANTS = Object.freeze([
   },
 ]);
 const THEME_COLOR_MAP = {
-  [LIGHT_THEME]: "#ECE5E0",
+  [LIGHT_THEME]: "#f3efe5",
   [DARK_THEME]: "#121816",
 };
 const VALID_VIEWS = new Set(["films", "theatres", "days", "festivals"]);
