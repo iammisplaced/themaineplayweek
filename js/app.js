@@ -1064,14 +1064,40 @@ function render() {
     hideMapToggle();
   }
 
+  const entries = getVisibleGroupEntries();
+
+  elements.results.classList.add("results-masonry");
+  elements.results.dataset.view = state.view;
+  elements.results.innerHTML = "";
+
+  if (!entries.length) {
+    elements.results.innerHTML = `<p class="no-results-message">${getNoResultsMessage()}</p>`;
+    return;
+  }
+
+  sortGroupEntries(entries);
+  const cards = entries.map(([groupName, group]) => buildGroupCard(groupName, group));
+
+  if (state.view === "films" || state.view === "days") {
+    insertPromotedCards(cards, buildPromotedAdCards());
+  }
+
+  renderResultCards(cards);
+
+  if (state.view === "theatres") {
+    renderTheatreMap(entries);
+  }
+}
+
+// The current view's [groupName, group] pairs, after the search filter.
+function getVisibleGroupEntries() {
   let grouped = {};
-  let activeDay = "";
   if (state.view === "days") {
     const selectedRadiusMiles = getDaysViewRadiusMiles();
     if (state.theatreDistanceStatus === "idle") {
       void ensureTheatreDistanceSort();
     }
-    activeDay = ensureSelectedDay();
+    const activeDay = ensureSelectedDay();
     syncDayPickerUI(activeDay);
     grouped = activeDay ? buildSingleDayGroups(state.data.theatreGroups, activeDay) : {};
     grouped = filterSingleDayGroupsByDistance(grouped, selectedRadiusMiles);
@@ -1082,42 +1108,36 @@ function render() {
       : buildGroups(state.data.theatreGroups, state.view);
   }
 
-  elements.results.classList.add("results-masonry");
-  elements.results.dataset.view = state.view;
-  elements.results.innerHTML = "";
-  const cards = [];
-  const isFilmStyleView = state.view === "films" || state.view === "days";
-
-  let entries = Object.entries(grouped);
+  const entries = Object.entries(grouped);
   const searchQuery = getPublicSearchQueryForView(state.view);
-  if (searchQuery) {
-    if (isFilmStyleView) {
-      entries = entries.filter(([, group]) => doesFilmStyleGroupMatchSearch(group, searchQuery));
-    } else if (state.view === "theatres") {
-      entries = entries.filter(([groupName, group]) => doesTheatreGroupMatchSearch(groupName, group, searchQuery));
-    } else if (state.view === "festivals") {
-      entries = entries.filter(([groupName, group]) => doesFestivalGroupMatchSearch(groupName, group, searchQuery));
-    }
+  if (!searchQuery) return entries;
+  if (state.view === "films" || state.view === "days") {
+    return entries.filter(([, group]) => doesFilmStyleGroupMatchSearch(group, searchQuery));
   }
-  if (!entries.length) {
-    const message = state.view === "films"
-      ? "No films found..."
-      : state.view === "theatres"
-        ? "No theatres found..."
-        : state.view === "festivals"
-          ? "No festivals found..."
-        : state.theatreDistanceStatus === "loading"
-          ? "Finding nearby showtimes..."
-          : state.theatreDistanceError === "location-not-configured"
-            ? "Set your location or ZIP code to view nearby showtimes."
-          : state.theatreDistanceStatus !== "ready"
-            ? "Nearby showtimes require location access."
-            : `No showtimes within ${getDaysViewRadiusMiles()} miles for this day...`;
-    elements.results.innerHTML = `<p class="no-results-message">${message}</p>`;
-    return;
+  if (state.view === "theatres") {
+    return entries.filter(([groupName, group]) => doesTheatreGroupMatchSearch(groupName, group, searchQuery));
   }
+  if (state.view === "festivals") {
+    return entries.filter(([groupName, group]) => doesFestivalGroupMatchSearch(groupName, group, searchQuery));
+  }
+  return entries;
+}
 
-  if (isFilmStyleView) {
+function getNoResultsMessage() {
+  if (state.view === "films") return "No films found...";
+  if (state.view === "theatres") return "No theatres found...";
+  if (state.view === "festivals") return "No festivals found...";
+  if (state.theatreDistanceStatus === "loading") return "Finding nearby showtimes...";
+  if (state.theatreDistanceError === "location-not-configured") {
+    return "Set your location or ZIP code to view nearby showtimes.";
+  }
+  if (state.theatreDistanceStatus !== "ready") return "Nearby showtimes require location access.";
+  return `No showtimes within ${getDaysViewRadiusMiles()} miles for this day...`;
+}
+
+// Sorts the cards in place: films by ranking, theatres by distance, festivals by start date.
+function sortGroupEntries(entries) {
+  if (state.view === "films" || state.view === "days") {
     entries.sort(([, groupA], [, groupB]) => {
       const overrideA = Boolean(groupA?.filmInfo?.rankingOverride);
       const overrideB = Boolean(groupB?.filmInfo?.rankingOverride);
@@ -1168,529 +1188,559 @@ function render() {
   } else {
     entries.sort(([a], [b]) => a.localeCompare(b));
   }
+}
 
-  for (const [groupName, group] of entries) {
-    const card = elements.groupTemplate.content.firstElementChild.cloneNode(true);
+// One result card: a film (All Films, Near You), a theatre or a festival.
+function buildGroupCard(groupName, group) {
+  const card = elements.groupTemplate.content.firstElementChild.cloneNode(true);
 
-    // Add data-theatre-id for map view lookup
-    if (state.view === "theatres" && group.theatreInfo) {
-      card.setAttribute("data-theatre-id", group.theatreInfo.id);
-    }
-
-    const groupTitle = card.querySelector(".group-title");
-    const isFilmsView = isFilmStyleView && Boolean(group.filmInfo);
-    if (isFilmsView) {
-      card.classList.add("film-card");
-      // Add line break after colon in film title
-      const filmTitle = group.filmInfo.film;
-      const colonIndex = filmTitle.indexOf(":");
-      if (colonIndex >= 0) {
-        groupTitle.replaceChildren(
-          filmTitle.slice(0, colonIndex + 1),
-          document.createElement("br"),
-          filmTitle.slice(colonIndex + 1)
-        );
-      } else {
-        groupTitle.textContent = filmTitle;
-      }
-      groupTitle.classList.add("group-title-film");
-      if (group.filmInfo.staffFavorite) {
-        card.classList.add("film-card-staff-favorite");
-        const favoriteStamp = document.createElement("img");
-        favoriteStamp.className = "film-favorite-stamp";
-        favoriteStamp.src = PLAYWEEK_RECOMMENDS_STAMP_URL;
-        favoriteStamp.alt = "Playweek recommends";
-        favoriteStamp.loading = "lazy";
-        favoriteStamp.decoding = "async";
-        if (group.filmInfo.staffFavoriteBy) {
-          favoriteStamp.title = `Playweek recommends (${group.filmInfo.staffFavoriteBy})`;
-        }
-        favoriteStamp.onerror = () => {
-          favoriteStamp.remove();
-        };
-        card.appendChild(favoriteStamp);
-      }
-      if (group.filmInfo.featuredOnPlayweek) {
-        card.classList.add("film-card-featured-playweek");
-        const featuredStamp = document.createElement("img");
-        featuredStamp.className = "film-featured-stamp";
-        featuredStamp.src = FEATURED_ON_PLAYWEEK_STAMP_URL;
-        featuredStamp.alt = "Featured on the Playweek";
-        featuredStamp.loading = "lazy";
-        featuredStamp.decoding = "async";
-        featuredStamp.onerror = () => {
-          featuredStamp.remove();
-        };
-        card.appendChild(featuredStamp);
-      }
-    } else {
-      groupTitle.textContent = state.view === "festivals"
-        ? String(group?.festivalInfo?.name || groupName)
-        : groupName;
-    }
-    const subtitle = card.querySelector(".group-subtitle");
-    const groupLink = card.querySelector(".group-link");
-    const filmExpandToggle = card.querySelector(".film-expand-toggle");
-    const groupFilmSummary = card.querySelector(".group-film-summary");
-    const groupFilmPoster = card.querySelector(".group-film-poster");
-    const groupFilmFacts = card.querySelector(".group-film-facts");
-    const groupFeatureLink = card.querySelector(".group-feature-link");
-    const list = card.querySelector(".show-list");
-    const shows = group.shows;
-    let filmGroupExpanded = true;
-    let theatreGroupExpanded = true;
-
-    if (group.theatreInfo && state.view === "theatres") {
-      subtitle.textContent = `${group.theatreInfo.address}`;
-      subtitle.classList.remove("hidden");
-      const theatreWebsite = normalizeOutboundUrl(group.theatreInfo.website);
-      if (theatreWebsite) {
-        groupLink.href = theatreWebsite;
-        groupLink.classList.remove("hidden");
-      }
-
-      const theatreExpandKey = buildExpandCardKey(state.view, group);
-      const theatreHasOverflow = shows.length > THEATRE_COLLAPSED_FILM_COUNT;
-      const hiddenFilmCount = Math.max(0, shows.length - THEATRE_COLLAPSED_FILM_COUNT);
-      theatreGroupExpanded = !theatreHasOverflow || state.expandedFilmGroups.has(theatreExpandKey);
-      if (filmExpandToggle && theatreHasOverflow) {
-        filmExpandToggle.classList.add("theatre-card-toggle");
-        filmExpandToggle.dataset.filmKey = theatreExpandKey;
-        filmExpandToggle.textContent = theatreGroupExpanded
-          ? "Show less"
-          : `Show all (+${hiddenFilmCount})`;
-        filmExpandToggle.setAttribute("aria-expanded", String(theatreGroupExpanded));
-        filmExpandToggle.classList.remove("hidden");
-      }
-    }
-    if (group.festivalInfo && state.view === "festivals") {
-      card.classList.add("festival-card");
-      const festivalKey = `festival-${group.festivalInfo.id || groupName}`;
-      const festivalExpanded = state.expandedFestivals.has(festivalKey);
-      card.dataset.festivalKey = festivalKey;
-      card.classList.toggle("festival-card-collapsed", !festivalExpanded);
-
-      const festivalPrimaryColor = String(group.festivalInfo.primaryColor || "").trim();
-      if (festivalPrimaryColor) {
-        card.style.setProperty("--festival-accent", festivalPrimaryColor);
-      } else {
-        card.style.removeProperty("--festival-accent");
-      }
-      const details = formatFestivalDateRange(group.festivalInfo.startDate, group.festivalInfo.endDate);
-      subtitle.textContent = "";
-      subtitle.classList.add("hidden");
-      if (details) {
-        let dateStamp = card.querySelector(".festival-date-stamp");
-        if (!dateStamp) {
-          dateStamp = document.createElement("span");
-          dateStamp.className = "festival-date-stamp";
-          card.insertBefore(dateStamp, subtitle);
-        }
-        dateStamp.textContent = details;
-      }
-      const festivalWebsite = normalizeOutboundUrl(group.festivalInfo.website);
-      if (festivalWebsite) {
-        groupLink.href = festivalWebsite;
-        groupLink.textContent = "Visit festival website";
-        groupLink.classList.remove("hidden");
-      }
-
-      if (filmExpandToggle) {
-        filmExpandToggle.classList.add("festival-toggle");
-        filmExpandToggle.dataset.festivalKey = festivalKey;
-        const chevron = festivalExpanded ? "▼" : "▶";
-        filmExpandToggle.innerHTML = `<span class="festival-chevron">${chevron}</span>`;
-        filmExpandToggle.setAttribute("aria-expanded", String(festivalExpanded));
-        filmExpandToggle.setAttribute("aria-label", festivalExpanded ? `Collapse ${group.festivalInfo.name}` : `Expand ${group.festivalInfo.name}`);
-        filmExpandToggle.classList.remove("hidden");
-      }
-    }
-    if (isFilmsView) {
-      const filmGroupKey = buildExpandCardKey(state.view, group);
-      const shouldLinkToFilmPage = state.view === "films";
-      filmGroupExpanded = shouldLinkToFilmPage ? false : state.expandedFilmGroups.has(filmGroupKey);
-      card.dataset.filmKey = filmGroupKey;
-      card.classList.toggle("film-card-collapsed", !filmGroupExpanded);
-
-      if (filmGroupExpanded && groupFilmSummary) {
-        const stamps = Array.from(card.querySelectorAll(".film-favorite-stamp, .film-featured-stamp"));
-        stamps.forEach((stamp) => {
-          groupFilmSummary.appendChild(stamp);
-        });
-      }
-
-      if (filmExpandToggle) {
-        if (shouldLinkToFilmPage) {
-          // A real link, so it can be opened in a new tab or copied like any other.
-          const filmPageLink = document.createElement("a");
-          filmPageLink.className = "film-expand-toggle";
-          filmPageLink.href = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
-          filmPageLink.textContent = "View Film Page";
-          filmExpandToggle.replaceWith(filmPageLink);
-        } else {
-          filmExpandToggle.dataset.filmKey = filmGroupKey;
-          filmExpandToggle.textContent = filmGroupExpanded ? "Collapse" : "Expand";
-          filmExpandToggle.setAttribute("aria-expanded", String(filmGroupExpanded));
-          filmExpandToggle.classList.remove("hidden");
-        }
-      }
-
-      const facts = buildFilmFacts(group.filmInfo);
-      if (groupFilmPoster) {
-        groupFilmPoster.onerror = () => {
-          groupFilmPoster.onerror = null;
-          groupFilmPoster.src = NO_POSTER_IMAGE_URL;
-        };
-        groupFilmPoster.src = group.filmInfo.posterUrl || NO_POSTER_IMAGE_URL;
-        groupFilmPoster.alt = group.filmInfo.posterUrl
-          ? `Poster for ${group.filmInfo.film}`
-          : `No poster available for ${group.filmInfo.film}`;
-        if (shouldLinkToFilmPage) {
-          // Wrapped in a real link so it can be middle-clicked or opened in a new tab.
-          // Kept out of the tab order: "View Film Page" goes to the same place.
-          const posterLink = document.createElement("a");
-          posterLink.className = "group-film-poster-link";
-          posterLink.href = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
-          posterLink.tabIndex = -1;
-          posterLink.setAttribute("aria-hidden", "true");
-          groupFilmPoster.replaceWith(posterLink);
-          posterLink.appendChild(groupFilmPoster);
-        }
-        groupFilmPoster.classList.remove("hidden");
-      }
-      if (facts.length) {
-        groupFilmFacts.innerHTML = "";
-        facts.forEach((fact) => {
-          const row = document.createElement("div");
-          row.className = "film-fact";
-
-          const label = document.createElement("span");
-          label.className = "film-fact-label";
-          label.textContent = fact.label;
-
-          const value = document.createElement("span");
-          value.className = "film-fact-value";
-          value.textContent = fact.value;
-
-          row.appendChild(label);
-          row.appendChild(value);
-          groupFilmFacts.appendChild(row);
-        });
-        if (filmGroupExpanded) {
-          groupFilmFacts.classList.remove("hidden");
-        } else {
-          groupFilmFacts.classList.add("hidden");
-        }
-      }
-      groupFilmSummary.classList.remove("hidden");
-      const tmdbUrl = buildTmdbMovieUrl(group.filmInfo.tmdbId);
-      const filmPageUrl = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
-      const isNearYouView = state.view === "days";
-      const groupFilmDetails = groupFilmFacts?.parentElement || groupFilmSummary;
-      let groupTmdbLink = groupFilmDetails?.querySelector(".group-tmdb-link");
-      if (!groupTmdbLink && groupFilmDetails) {
-        groupTmdbLink = document.createElement("a");
-        groupTmdbLink.className = "group-tmdb-link hidden";
-        groupTmdbLink.target = "_blank";
-        groupTmdbLink.rel = "noopener noreferrer";
-        groupTmdbLink.textContent = "View on TMDb";
-        if (groupFeatureLink && groupFeatureLink.parentElement === groupFilmDetails) {
-          groupFilmDetails.insertBefore(groupTmdbLink, groupFeatureLink);
-        } else {
-          groupFilmDetails.appendChild(groupTmdbLink);
-        }
-      }
-      if (groupTmdbLink) {
-        if (isNearYouView) {
-          groupTmdbLink.classList.add("group-view-film-link");
-          groupTmdbLink.textContent = "View Film Page";
-          groupTmdbLink.removeAttribute("target");
-          groupTmdbLink.removeAttribute("rel");
-        } else {
-          groupTmdbLink.classList.remove("group-view-film-link");
-          groupTmdbLink.textContent = "View on TMDb";
-          groupTmdbLink.target = "_blank";
-          groupTmdbLink.rel = "noopener noreferrer";
-        }
-        const actionUrl = isNearYouView ? filmPageUrl : tmdbUrl;
-        if (filmGroupExpanded && actionUrl) {
-          groupTmdbLink.href = actionUrl;
-          groupTmdbLink.classList.remove("hidden");
-        } else {
-          groupTmdbLink.classList.add("hidden");
-          groupTmdbLink.removeAttribute("href");
-        }
-      }
-      if (groupFeatureLink) {
-        const featuredUrl = normalizeOutboundUrl(group.filmInfo.featuredOnPlayweekUrl || "");
-        const canShowFeatureLink = filmGroupExpanded && group.filmInfo.featuredOnPlayweek && Boolean(featuredUrl);
-        if (canShowFeatureLink) {
-          groupFeatureLink.href = featuredUrl;
-          groupFeatureLink.classList.remove("hidden");
-        } else {
-          groupFeatureLink.classList.add("hidden");
-          groupFeatureLink.removeAttribute("href");
-        }
-      }
-      if (!filmGroupExpanded) {
-        list.classList.add("hidden");
-      }
-    }
-
-    if (!isFilmsView || filmGroupExpanded) {
-      shows.sort((a, b) => {
-        if (state.view === "theatres") {
-          const earliestA = getRowEarliestShowtimeTimestamp(a);
-          const earliestB = getRowEarliestShowtimeTimestamp(b);
-          if (earliestA !== earliestB) return earliestA - earliestB;
-          return buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
-        }
-        if (state.view === "festivals") {
-          const earliestA = getRowEarliestShowtimeTimestamp(a);
-          const earliestB = getRowEarliestShowtimeTimestamp(b);
-          if (earliestA !== earliestB) return earliestA - earliestB;
-          const filmComparison = buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
-          if (filmComparison !== 0) return filmComparison;
-          return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
-        }
-        if (state.view === "days") {
-          const keyA = buildTheatreDistanceKey({ name: a.theatre, city: a.city, address: a.address });
-          const keyB = buildTheatreDistanceKey({ name: b.theatre, city: b.city, address: b.address });
-          const distanceA = state.theatreDistanceByKey.get(keyA);
-          const distanceB = state.theatreDistanceByKey.get(keyB);
-          const hasDistanceA = Number.isFinite(distanceA);
-          const hasDistanceB = Number.isFinite(distanceB);
-          if (hasDistanceA && hasDistanceB && distanceA !== distanceB) return distanceA - distanceB;
-          if (hasDistanceA !== hasDistanceB) return hasDistanceA ? -1 : 1;
-        }
-        return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
-      });
-
-      const showsToRender =
-        state.view === "theatres" && !theatreGroupExpanded
-          ? shows.slice(0, THEATRE_COLLAPSED_FILM_COUNT)
-          : shows;
-
-      const festivalShowsToRender = state.view === "festivals"
-        ? expandFestivalShowsByDate(showsToRender)
-        : null;
-      let lastFestivalDateHeader = "";
-      let showsInCurrentDay = 0;
-      let showMoreButtonAddedForDay = false;
-      const festivalKey = `festival-${group.festivalInfo?.id || groupName}`;
-      const festivalExpanded = state.view === "festivals" && state.expandedFestivals.has(festivalKey);
-
-      // Group shows by date for festivals to track show counts
-      const showsByDate = {};
-      if (state.view === "festivals" && festivalShowsToRender) {
-        for (const show of festivalShowsToRender) {
-          const showDate = String(show?.festivalDate || "").trim();
-          if (showDate) {
-            if (!showsByDate[showDate]) showsByDate[showDate] = [];
-            showsByDate[showDate].push(show);
-          }
-        }
-      }
-
-      for (const show of (festivalShowsToRender || showsToRender)) {
-        if (state.view === "festivals") {
-          const showDate = String(show?.festivalDate || "").trim();
-          if (showDate && showDate !== lastFestivalDateHeader) {
-            // Add "Show fewer" button for the previous day if it was expanded
-            if (lastFestivalDateHeader && showMoreButtonAddedForDay) {
-              const previousDayKey = `day-${festivalKey}-${lastFestivalDateHeader}`;
-              if (state.expandedFestivalDays.has(previousDayKey)) {
-                const showFewerButton = document.createElement("li");
-                showFewerButton.className = "festival-show-more-button";
-                const button = document.createElement("button");
-                button.type = "button";
-                button.className = "festival-show-fewer";
-                button.dataset.dayKey = previousDayKey;
-                button.textContent = "Show fewer";
-                showFewerButton.appendChild(button);
-                list.appendChild(showFewerButton);
-              }
-            }
-
-            const dateDivider = document.createElement("li");
-            dateDivider.className = "festival-date-divider";
-            dateDivider.textContent = formatDisplayDate(showDate);
-            list.appendChild(dateDivider);
-            lastFestivalDateHeader = showDate;
-            showsInCurrentDay = 0;
-            showMoreButtonAddedForDay = false;
-          }
-
-          // For festivals, limit to first 4 shows per day unless day is expanded
-          const dayKey = `day-${festivalKey}-${String(show?.festivalDate || "").trim()}`;
-          const dayExpanded = state.expandedFestivalDays.has(dayKey);
-          const totalShowsForDay = showsByDate[String(show?.festivalDate || "").trim()]?.length || 0;
-
-          if (!dayExpanded && showsInCurrentDay >= 4) {
-            // Add "Show more" button once after 4th show
-            if (!showMoreButtonAddedForDay && totalShowsForDay > 4) {
-              const showMoreButton = document.createElement("li");
-              showMoreButton.className = "festival-show-more-button";
-              const button = document.createElement("button");
-              button.type = "button";
-              button.className = "festival-show-more";
-              button.dataset.dayKey = dayKey;
-              button.textContent = "Show more";
-              showMoreButton.appendChild(button);
-              list.appendChild(showMoreButton);
-              showMoreButtonAddedForDay = true;
-            }
-            continue;
-          }
-
-          // Mark that we should add "show fewer" after all shows for this day
-          if (dayExpanded && !showMoreButtonAddedForDay && totalShowsForDay > 4) {
-            showMoreButtonAddedForDay = true; // Reuse flag to track we've handled this day
-          }
-
-          showsInCurrentDay++;
-        }
-        if (state.view === "theatres") {
-          list.appendChild(
-            buildTheatreShowItem(group, show, state.expandedFilmGroups.has(buildExpandRowKey(state.view, group, show)))
-          );
-          continue;
-        }
-        const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
-        const main = item.querySelector(".show-main");
-        const meta = item.querySelector(".show-meta");
-        const schedule = item.querySelector(".show-schedule");
-        const row = item.querySelector(".show-row");
-        const poster = item.querySelector(".show-poster");
-        const link = item.querySelector(".show-link");
-        const showFestivalIds = Array.isArray(show?.festivalIds) ? show.festivalIds : [];
-        const festivalBadgeLabel = getFestivalBadgeLabel(showFestivalIds);
-
-        if (state.view === "festivals") {
-          item.classList.add("festival-show-item");
-          row.classList.add("has-poster");
-          poster.onerror = () => {
-            poster.onerror = null;
-            poster.src = NO_POSTER_IMAGE_URL;
-          };
-          poster.src = show.posterUrl || NO_POSTER_IMAGE_URL;
-          poster.alt = show.posterUrl
-            ? `Poster for ${show.film}`
-            : `No poster available for ${show.film}`;
-          poster.classList.remove("hidden");
-          main.textContent = show.film || show.theatre || "Showtime";
-          meta.textContent = [show.theatre || "", show.room || show.city || ""]
-            .filter(Boolean)
-            .join(", ");
-          const ribbon = document.createElement("span");
-          ribbon.className = "festival-entry-ribbon";
-          ribbon.textContent = "Festival Selection";
-          main.prepend(ribbon);
-        } else {
-          main.textContent = `${show.theatre}`;
-          const theatreKey = `${show.theatre} · ${show.city}`;
-          const roomValue =
-            String(show?.room || "").trim() ||
-            String(show?.roomByTheatre?.[theatreKey] || "").trim();
-          meta.textContent = [show.city || "", roomValue ? `Room: ${roomValue}` : ""].filter(Boolean).join(" · ");
-          if (showFestivalIds.length) {
-            const ribbon = document.createElement("span");
-            ribbon.className = "festival-entry-ribbon festival-entry-ribbon-inline";
-            ribbon.textContent = festivalBadgeLabel;
-            main.prepend(ribbon);
-          }
-        }
-        renderSchedule(schedule, show.dates, show.premiumDates, show.timeNotes);
-        const ticketUrl = normalizeOutboundUrl(show.ticketLink);
-        if (ticketUrl) {
-          link.href = ticketUrl;
-          link.classList.remove("hidden");
-        }
-        if (state.view === "festivals") {
-          const rowActions = document.createElement("div");
-          rowActions.className = "theatre-row-actions";
-          if (!link.classList.contains("hidden")) {
-            rowActions.appendChild(link);
-          }
-          const rowFilmPageLink = document.createElement("a");
-          rowFilmPageLink.className = "theatre-row-film-link";
-          rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
-          rowFilmPageLink.textContent = "View Film Page";
-          rowActions.appendChild(rowFilmPageLink);
-          item.appendChild(rowActions);
-        }
-
-        if (state.view === "festivals") {
-          const showDate = String(show?.festivalDate || "").trim();
-          const dayKey = `day-${festivalKey}-${showDate}`;
-          const dayExpanded = state.expandedFestivalDays.has(dayKey);
-          // Show first 4 shows always, then only show more if day is expanded
-          if (festivalExpanded && (showsInCurrentDay <= 4 || dayExpanded)) {
-            list.appendChild(item);
-          }
-        } else {
-          list.appendChild(item);
-        }
-      }
-
-      if (state.view === "festivals") {
-        // Add "Show fewer" button for the last day if it was expanded
-        if (lastFestivalDateHeader && showMoreButtonAddedForDay) {
-          const lastDayKey = `day-${festivalKey}-${lastFestivalDateHeader}`;
-          const showsByLastDay = showsByDate[lastFestivalDateHeader]?.length || 0;
-          if (state.expandedFestivalDays.has(lastDayKey) && showsByLastDay > 4) {
-            const showFewerButton = document.createElement("li");
-            showFewerButton.className = "festival-show-more-button";
-            const button = document.createElement("button");
-            button.type = "button";
-            button.className = "festival-show-fewer";
-            button.dataset.dayKey = lastDayKey;
-            button.textContent = "Show fewer";
-            showFewerButton.appendChild(button);
-            list.appendChild(showFewerButton);
-          }
-        }
-
-        list.classList.toggle("hidden", !festivalExpanded);
-        if (festivalExpanded && shows.length === 0) {
-          const placeholder = document.createElement("li");
-          placeholder.className = "festival-empty-placeholder";
-          placeholder.textContent = "Programming coming soon.";
-          list.appendChild(placeholder);
-        }
-      }
-    }
-
-    if ((state.view === "theatres" || state.view === "festivals") && filmExpandToggle && !filmExpandToggle.classList.contains("hidden")) {
-      card.appendChild(filmExpandToggle);
-    }
-
-    cards.push(card);
+  // Add data-theatre-id for map view lookup
+  if (state.view === "theatres" && group.theatreInfo) {
+    card.setAttribute("data-theatre-id", group.theatreInfo.id);
   }
 
-  if (state.view === "films" || state.view === "days") {
-    insertPromotedCards(cards, buildPromotedAdCards());
+  const groupTitle = card.querySelector(".group-title");
+  const isFilmsView = (state.view === "films" || state.view === "days") && Boolean(group.filmInfo);
+  if (isFilmsView) {
+    setFilmCardTitleAndStamps(card, groupTitle, group.filmInfo);
+  } else {
+    groupTitle.textContent = state.view === "festivals"
+      ? String(group?.festivalInfo?.name || groupName)
+      : groupName;
+  }
+  const filmExpandToggle = card.querySelector(".film-expand-toggle");
+  const list = card.querySelector(".show-list");
+  let filmGroupExpanded = true;
+  let theatreGroupExpanded = true;
+
+  if (group.theatreInfo && state.view === "theatres") {
+    theatreGroupExpanded = setUpTheatreCard(card, group);
+  }
+  if (group.festivalInfo && state.view === "festivals") {
+    setUpFestivalCard(card, groupName, group);
+  }
+  if (isFilmsView) {
+    filmGroupExpanded = setUpFilmCard(card, group);
   }
 
-  renderResultCards(cards);
+  if (!isFilmsView || filmGroupExpanded) {
+    sortGroupShows(group.shows);
+    appendGroupShows(list, groupName, group, theatreGroupExpanded);
+  }
 
-  // Render theatres on map if in theatre view
-  if (state.view === "theatres" && entries.length > 0) {
-    const theatreList = entries
-      .map(([, group]) => group.theatreInfo)
-      .filter(theatre => theatre && theatre.latitude && theatre.longitude);
+  if ((state.view === "theatres" || state.view === "festivals") && filmExpandToggle && !filmExpandToggle.classList.contains("hidden")) {
+    card.appendChild(filmExpandToggle);
+  }
 
-    // The location the distances were measured from: the saved ZIP or this visit's device
-    // location. The map never asks for location itself.
-    const userLocation = state.userCoords ? { ...state.userCoords } : null;
+  return card;
+}
 
-    // The side panel shows the same film rows as the list, built from these groups.
-    const groupByTheatreId = new Map(entries.map(([, group]) => [group.theatreInfo?.id, group]));
-    renderMapMarkers(theatreList, userLocation, (theatreId, isRowExpanded) => {
-      const group = groupByTheatreId.get(theatreId);
-      return group ? buildTheatreMapCard(group, isRowExpanded) : null;
+function setFilmCardTitleAndStamps(card, groupTitle, filmInfo) {
+  card.classList.add("film-card");
+  // Add line break after colon in film title
+  const filmTitle = filmInfo.film;
+  const colonIndex = filmTitle.indexOf(":");
+  if (colonIndex >= 0) {
+    groupTitle.replaceChildren(
+      filmTitle.slice(0, colonIndex + 1),
+      document.createElement("br"),
+      filmTitle.slice(colonIndex + 1)
+    );
+  } else {
+    groupTitle.textContent = filmTitle;
+  }
+  groupTitle.classList.add("group-title-film");
+  if (filmInfo.staffFavorite) {
+    card.classList.add("film-card-staff-favorite");
+    const favoriteStamp = document.createElement("img");
+    favoriteStamp.className = "film-favorite-stamp";
+    favoriteStamp.src = PLAYWEEK_RECOMMENDS_STAMP_URL;
+    favoriteStamp.alt = "Playweek recommends";
+    favoriteStamp.loading = "lazy";
+    favoriteStamp.decoding = "async";
+    if (filmInfo.staffFavoriteBy) {
+      favoriteStamp.title = `Playweek recommends (${filmInfo.staffFavoriteBy})`;
+    }
+    favoriteStamp.onerror = () => {
+      favoriteStamp.remove();
+    };
+    card.appendChild(favoriteStamp);
+  }
+  if (filmInfo.featuredOnPlayweek) {
+    card.classList.add("film-card-featured-playweek");
+    const featuredStamp = document.createElement("img");
+    featuredStamp.className = "film-featured-stamp";
+    featuredStamp.src = FEATURED_ON_PLAYWEEK_STAMP_URL;
+    featuredStamp.alt = "Featured on the Playweek";
+    featuredStamp.loading = "lazy";
+    featuredStamp.decoding = "async";
+    featuredStamp.onerror = () => {
+      featuredStamp.remove();
+    };
+    card.appendChild(featuredStamp);
+  }
+}
+
+// Address, website link and the "Show all" toggle. Returns whether every film row is shown.
+function setUpTheatreCard(card, group) {
+  const subtitle = card.querySelector(".group-subtitle");
+  const groupLink = card.querySelector(".group-link");
+  const filmExpandToggle = card.querySelector(".film-expand-toggle");
+  const shows = group.shows;
+
+  subtitle.textContent = `${group.theatreInfo.address}`;
+  subtitle.classList.remove("hidden");
+  const theatreWebsite = normalizeOutboundUrl(group.theatreInfo.website);
+  if (theatreWebsite) {
+    groupLink.href = theatreWebsite;
+    groupLink.classList.remove("hidden");
+  }
+
+  const theatreExpandKey = buildExpandCardKey(state.view, group);
+  const theatreHasOverflow = shows.length > THEATRE_COLLAPSED_FILM_COUNT;
+  const hiddenFilmCount = Math.max(0, shows.length - THEATRE_COLLAPSED_FILM_COUNT);
+  const theatreGroupExpanded = !theatreHasOverflow || state.expandedFilmGroups.has(theatreExpandKey);
+  if (filmExpandToggle && theatreHasOverflow) {
+    filmExpandToggle.classList.add("theatre-card-toggle");
+    filmExpandToggle.dataset.filmKey = theatreExpandKey;
+    filmExpandToggle.textContent = theatreGroupExpanded
+      ? "Show less"
+      : `Show all (+${hiddenFilmCount})`;
+    filmExpandToggle.setAttribute("aria-expanded", String(theatreGroupExpanded));
+    filmExpandToggle.classList.remove("hidden");
+  }
+  return theatreGroupExpanded;
+}
+
+// Accent colour, date stamp, website link and the chevron toggle.
+function setUpFestivalCard(card, groupName, group) {
+  const subtitle = card.querySelector(".group-subtitle");
+  const groupLink = card.querySelector(".group-link");
+  const filmExpandToggle = card.querySelector(".film-expand-toggle");
+
+  card.classList.add("festival-card");
+  const festivalKey = `festival-${group.festivalInfo.id || groupName}`;
+  const festivalExpanded = state.expandedFestivals.has(festivalKey);
+  card.dataset.festivalKey = festivalKey;
+  card.classList.toggle("festival-card-collapsed", !festivalExpanded);
+
+  const festivalPrimaryColor = String(group.festivalInfo.primaryColor || "").trim();
+  if (festivalPrimaryColor) {
+    card.style.setProperty("--festival-accent", festivalPrimaryColor);
+  } else {
+    card.style.removeProperty("--festival-accent");
+  }
+  const details = formatFestivalDateRange(group.festivalInfo.startDate, group.festivalInfo.endDate);
+  subtitle.textContent = "";
+  subtitle.classList.add("hidden");
+  if (details) {
+    let dateStamp = card.querySelector(".festival-date-stamp");
+    if (!dateStamp) {
+      dateStamp = document.createElement("span");
+      dateStamp.className = "festival-date-stamp";
+      card.insertBefore(dateStamp, subtitle);
+    }
+    dateStamp.textContent = details;
+  }
+  const festivalWebsite = normalizeOutboundUrl(group.festivalInfo.website);
+  if (festivalWebsite) {
+    groupLink.href = festivalWebsite;
+    groupLink.textContent = "Visit festival website";
+    groupLink.classList.remove("hidden");
+  }
+
+  if (filmExpandToggle) {
+    filmExpandToggle.classList.add("festival-toggle");
+    filmExpandToggle.dataset.festivalKey = festivalKey;
+    const chevron = festivalExpanded ? "▼" : "▶";
+    filmExpandToggle.innerHTML = `<span class="festival-chevron">${chevron}</span>`;
+    filmExpandToggle.setAttribute("aria-expanded", String(festivalExpanded));
+    filmExpandToggle.setAttribute("aria-label", festivalExpanded ? `Collapse ${group.festivalInfo.name}` : `Expand ${group.festivalInfo.name}`);
+    filmExpandToggle.classList.remove("hidden");
+  }
+}
+
+// Poster, facts, links and the expand toggle (or All Films' "View Film Page" link).
+// Returns whether the card is expanded.
+function setUpFilmCard(card, group) {
+  const filmExpandToggle = card.querySelector(".film-expand-toggle");
+  const groupFilmSummary = card.querySelector(".group-film-summary");
+  const groupFilmPoster = card.querySelector(".group-film-poster");
+  const groupFilmFacts = card.querySelector(".group-film-facts");
+  const groupFeatureLink = card.querySelector(".group-feature-link");
+  const list = card.querySelector(".show-list");
+
+  const filmGroupKey = buildExpandCardKey(state.view, group);
+  const shouldLinkToFilmPage = state.view === "films";
+  const filmGroupExpanded = shouldLinkToFilmPage ? false : state.expandedFilmGroups.has(filmGroupKey);
+  card.dataset.filmKey = filmGroupKey;
+  card.classList.toggle("film-card-collapsed", !filmGroupExpanded);
+
+  if (filmGroupExpanded && groupFilmSummary) {
+    const stamps = Array.from(card.querySelectorAll(".film-favorite-stamp, .film-featured-stamp"));
+    stamps.forEach((stamp) => {
+      groupFilmSummary.appendChild(stamp);
     });
   }
+
+  if (filmExpandToggle) {
+    if (shouldLinkToFilmPage) {
+      // A real link, so it can be opened in a new tab or copied like any other.
+      const filmPageLink = document.createElement("a");
+      filmPageLink.className = "film-expand-toggle";
+      filmPageLink.href = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+      filmPageLink.textContent = "View Film Page";
+      filmExpandToggle.replaceWith(filmPageLink);
+    } else {
+      filmExpandToggle.dataset.filmKey = filmGroupKey;
+      filmExpandToggle.textContent = filmGroupExpanded ? "Collapse" : "Expand";
+      filmExpandToggle.setAttribute("aria-expanded", String(filmGroupExpanded));
+      filmExpandToggle.classList.remove("hidden");
+    }
+  }
+
+  const facts = buildFilmFacts(group.filmInfo);
+  if (groupFilmPoster) {
+    groupFilmPoster.onerror = () => {
+      groupFilmPoster.onerror = null;
+      groupFilmPoster.src = NO_POSTER_IMAGE_URL;
+    };
+    groupFilmPoster.src = group.filmInfo.posterUrl || NO_POSTER_IMAGE_URL;
+    groupFilmPoster.alt = group.filmInfo.posterUrl
+      ? `Poster for ${group.filmInfo.film}`
+      : `No poster available for ${group.filmInfo.film}`;
+    if (shouldLinkToFilmPage) {
+      // Wrapped in a real link so it can be middle-clicked or opened in a new tab.
+      // Kept out of the tab order: "View Film Page" goes to the same place.
+      const posterLink = document.createElement("a");
+      posterLink.className = "group-film-poster-link";
+      posterLink.href = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+      posterLink.tabIndex = -1;
+      posterLink.setAttribute("aria-hidden", "true");
+      groupFilmPoster.replaceWith(posterLink);
+      posterLink.appendChild(groupFilmPoster);
+    }
+    groupFilmPoster.classList.remove("hidden");
+  }
+  if (facts.length) {
+    groupFilmFacts.innerHTML = "";
+    facts.forEach((fact) => {
+      const row = document.createElement("div");
+      row.className = "film-fact";
+
+      const label = document.createElement("span");
+      label.className = "film-fact-label";
+      label.textContent = fact.label;
+
+      const value = document.createElement("span");
+      value.className = "film-fact-value";
+      value.textContent = fact.value;
+
+      row.appendChild(label);
+      row.appendChild(value);
+      groupFilmFacts.appendChild(row);
+    });
+    if (filmGroupExpanded) {
+      groupFilmFacts.classList.remove("hidden");
+    } else {
+      groupFilmFacts.classList.add("hidden");
+    }
+  }
+  groupFilmSummary.classList.remove("hidden");
+  const tmdbUrl = buildTmdbMovieUrl(group.filmInfo.tmdbId);
+  const filmPageUrl = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+  const isNearYouView = state.view === "days";
+  const groupFilmDetails = groupFilmFacts?.parentElement || groupFilmSummary;
+  let groupTmdbLink = groupFilmDetails?.querySelector(".group-tmdb-link");
+  if (!groupTmdbLink && groupFilmDetails) {
+    groupTmdbLink = document.createElement("a");
+    groupTmdbLink.className = "group-tmdb-link hidden";
+    groupTmdbLink.target = "_blank";
+    groupTmdbLink.rel = "noopener noreferrer";
+    groupTmdbLink.textContent = "View on TMDb";
+    if (groupFeatureLink && groupFeatureLink.parentElement === groupFilmDetails) {
+      groupFilmDetails.insertBefore(groupTmdbLink, groupFeatureLink);
+    } else {
+      groupFilmDetails.appendChild(groupTmdbLink);
+    }
+  }
+  if (groupTmdbLink) {
+    if (isNearYouView) {
+      groupTmdbLink.classList.add("group-view-film-link");
+      groupTmdbLink.textContent = "View Film Page";
+      groupTmdbLink.removeAttribute("target");
+      groupTmdbLink.removeAttribute("rel");
+    } else {
+      groupTmdbLink.classList.remove("group-view-film-link");
+      groupTmdbLink.textContent = "View on TMDb";
+      groupTmdbLink.target = "_blank";
+      groupTmdbLink.rel = "noopener noreferrer";
+    }
+    const actionUrl = isNearYouView ? filmPageUrl : tmdbUrl;
+    if (filmGroupExpanded && actionUrl) {
+      groupTmdbLink.href = actionUrl;
+      groupTmdbLink.classList.remove("hidden");
+    } else {
+      groupTmdbLink.classList.add("hidden");
+      groupTmdbLink.removeAttribute("href");
+    }
+  }
+  if (groupFeatureLink) {
+    const featuredUrl = normalizeOutboundUrl(group.filmInfo.featuredOnPlayweekUrl || "");
+    const canShowFeatureLink = filmGroupExpanded && group.filmInfo.featuredOnPlayweek && Boolean(featuredUrl);
+    if (canShowFeatureLink) {
+      groupFeatureLink.href = featuredUrl;
+      groupFeatureLink.classList.remove("hidden");
+    } else {
+      groupFeatureLink.classList.add("hidden");
+      groupFeatureLink.removeAttribute("href");
+    }
+  }
+  if (!filmGroupExpanded) {
+    list.classList.add("hidden");
+  }
+  return filmGroupExpanded;
+}
+
+// Sorts a card's rows in place: theatres and festivals by earliest time, Near You by distance.
+function sortGroupShows(shows) {
+  shows.sort((a, b) => {
+    if (state.view === "theatres") {
+      const earliestA = getRowEarliestShowtimeTimestamp(a);
+      const earliestB = getRowEarliestShowtimeTimestamp(b);
+      if (earliestA !== earliestB) return earliestA - earliestB;
+      return buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
+    }
+    if (state.view === "festivals") {
+      const earliestA = getRowEarliestShowtimeTimestamp(a);
+      const earliestB = getRowEarliestShowtimeTimestamp(b);
+      if (earliestA !== earliestB) return earliestA - earliestB;
+      const filmComparison = buildFilmGroupKey(a.film, a.year).localeCompare(buildFilmGroupKey(b.film, b.year));
+      if (filmComparison !== 0) return filmComparison;
+      return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
+    }
+    if (state.view === "days") {
+      const keyA = buildTheatreDistanceKey({ name: a.theatre, city: a.city, address: a.address });
+      const keyB = buildTheatreDistanceKey({ name: b.theatre, city: b.city, address: b.address });
+      const distanceA = state.theatreDistanceByKey.get(keyA);
+      const distanceB = state.theatreDistanceByKey.get(keyB);
+      const hasDistanceA = Number.isFinite(distanceA);
+      const hasDistanceB = Number.isFinite(distanceB);
+      if (hasDistanceA && hasDistanceB && distanceA !== distanceB) return distanceA - distanceB;
+      if (hasDistanceA !== hasDistanceB) return hasDistanceA ? -1 : 1;
+    }
+    return `${a.theatre} ${a.city}`.localeCompare(`${b.theatre} ${b.city}`);
+  });
+}
+
+// Adds a card's rows to its list. Festivals get a divider per day and show four rows a
+// day until that day is expanded.
+function appendGroupShows(list, groupName, group, theatreGroupExpanded) {
+  const shows = group.shows;
+  const showsToRender =
+    state.view === "theatres" && !theatreGroupExpanded
+      ? shows.slice(0, THEATRE_COLLAPSED_FILM_COUNT)
+      : shows;
+
+  const festivalShowsToRender = state.view === "festivals"
+    ? expandFestivalShowsByDate(showsToRender)
+    : null;
+  let lastFestivalDateHeader = "";
+  let showsInCurrentDay = 0;
+  let showMoreButtonAddedForDay = false;
+  const festivalKey = `festival-${group.festivalInfo?.id || groupName}`;
+  const festivalExpanded = state.view === "festivals" && state.expandedFestivals.has(festivalKey);
+
+  // Group shows by date for festivals to track show counts
+  const showsByDate = {};
+  if (state.view === "festivals" && festivalShowsToRender) {
+    for (const show of festivalShowsToRender) {
+      const showDate = String(show?.festivalDate || "").trim();
+      if (showDate) {
+        if (!showsByDate[showDate]) showsByDate[showDate] = [];
+        showsByDate[showDate].push(show);
+      }
+    }
+  }
+
+  for (const show of (festivalShowsToRender || showsToRender)) {
+    if (state.view === "festivals") {
+      const showDate = String(show?.festivalDate || "").trim();
+      if (showDate && showDate !== lastFestivalDateHeader) {
+        // Add "Show fewer" button for the previous day if it was expanded
+        if (lastFestivalDateHeader && showMoreButtonAddedForDay) {
+          const previousDayKey = `day-${festivalKey}-${lastFestivalDateHeader}`;
+          if (state.expandedFestivalDays.has(previousDayKey)) {
+            list.appendChild(buildFestivalDayButton("festival-show-fewer", previousDayKey, "Show fewer"));
+          }
+        }
+
+        const dateDivider = document.createElement("li");
+        dateDivider.className = "festival-date-divider";
+        dateDivider.textContent = formatDisplayDate(showDate);
+        list.appendChild(dateDivider);
+        lastFestivalDateHeader = showDate;
+        showsInCurrentDay = 0;
+        showMoreButtonAddedForDay = false;
+      }
+
+      // For festivals, limit to first 4 shows per day unless day is expanded
+      const dayKey = `day-${festivalKey}-${String(show?.festivalDate || "").trim()}`;
+      const dayExpanded = state.expandedFestivalDays.has(dayKey);
+      const totalShowsForDay = showsByDate[String(show?.festivalDate || "").trim()]?.length || 0;
+
+      if (!dayExpanded && showsInCurrentDay >= 4) {
+        // Add "Show more" button once after 4th show
+        if (!showMoreButtonAddedForDay && totalShowsForDay > 4) {
+          list.appendChild(buildFestivalDayButton("festival-show-more", dayKey, "Show more"));
+          showMoreButtonAddedForDay = true;
+        }
+        continue;
+      }
+
+      // Mark that we should add "show fewer" after all shows for this day
+      if (dayExpanded && !showMoreButtonAddedForDay && totalShowsForDay > 4) {
+        showMoreButtonAddedForDay = true; // Reuse flag to track we've handled this day
+      }
+
+      showsInCurrentDay++;
+    }
+    if (state.view === "theatres") {
+      list.appendChild(
+        buildTheatreShowItem(group, show, state.expandedFilmGroups.has(buildExpandRowKey(state.view, group, show)))
+      );
+      continue;
+    }
+    const item = buildShowItem(show);
+
+    if (state.view === "festivals") {
+      const showDate = String(show?.festivalDate || "").trim();
+      const dayKey = `day-${festivalKey}-${showDate}`;
+      const dayExpanded = state.expandedFestivalDays.has(dayKey);
+      // Show first 4 shows always, then only show more if day is expanded
+      if (festivalExpanded && (showsInCurrentDay <= 4 || dayExpanded)) {
+        list.appendChild(item);
+      }
+    } else {
+      list.appendChild(item);
+    }
+  }
+
+  if (state.view === "festivals") {
+    // Add "Show fewer" button for the last day if it was expanded
+    if (lastFestivalDateHeader && showMoreButtonAddedForDay) {
+      const lastDayKey = `day-${festivalKey}-${lastFestivalDateHeader}`;
+      const showsByLastDay = showsByDate[lastFestivalDateHeader]?.length || 0;
+      if (state.expandedFestivalDays.has(lastDayKey) && showsByLastDay > 4) {
+        list.appendChild(buildFestivalDayButton("festival-show-fewer", lastDayKey, "Show fewer"));
+      }
+    }
+
+    list.classList.toggle("hidden", !festivalExpanded);
+    if (festivalExpanded && shows.length === 0) {
+      const placeholder = document.createElement("li");
+      placeholder.className = "festival-empty-placeholder";
+      placeholder.textContent = "Programming coming soon.";
+      list.appendChild(placeholder);
+    }
+  }
+}
+
+function buildFestivalDayButton(className, dayKey, label) {
+  const item = document.createElement("li");
+  item.className = "festival-show-more-button";
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = className;
+  button.dataset.dayKey = dayKey;
+  button.textContent = label;
+  item.appendChild(button);
+  return item;
+}
+
+// One row of a Near You film card (a theatre and its times) or a festival card (a film).
+function buildShowItem(show) {
+  const item = elements.showItemTemplate.content.firstElementChild.cloneNode(true);
+  const main = item.querySelector(".show-main");
+  const meta = item.querySelector(".show-meta");
+  const schedule = item.querySelector(".show-schedule");
+  const row = item.querySelector(".show-row");
+  const poster = item.querySelector(".show-poster");
+  const link = item.querySelector(".show-link");
+  const showFestivalIds = Array.isArray(show?.festivalIds) ? show.festivalIds : [];
+  const festivalBadgeLabel = getFestivalBadgeLabel(showFestivalIds);
+
+  if (state.view === "festivals") {
+    item.classList.add("festival-show-item");
+    row.classList.add("has-poster");
+    poster.onerror = () => {
+      poster.onerror = null;
+      poster.src = NO_POSTER_IMAGE_URL;
+    };
+    poster.src = show.posterUrl || NO_POSTER_IMAGE_URL;
+    poster.alt = show.posterUrl
+      ? `Poster for ${show.film}`
+      : `No poster available for ${show.film}`;
+    poster.classList.remove("hidden");
+    main.textContent = show.film || show.theatre || "Showtime";
+    meta.textContent = [show.theatre || "", show.room || show.city || ""]
+      .filter(Boolean)
+      .join(", ");
+    const ribbon = document.createElement("span");
+    ribbon.className = "festival-entry-ribbon";
+    ribbon.textContent = "Festival Selection";
+    main.prepend(ribbon);
+  } else {
+    main.textContent = `${show.theatre}`;
+    const theatreKey = `${show.theatre} · ${show.city}`;
+    const roomValue =
+      String(show?.room || "").trim() ||
+      String(show?.roomByTheatre?.[theatreKey] || "").trim();
+    meta.textContent = [show.city || "", roomValue ? `Room: ${roomValue}` : ""].filter(Boolean).join(" · ");
+    if (showFestivalIds.length) {
+      const ribbon = document.createElement("span");
+      ribbon.className = "festival-entry-ribbon festival-entry-ribbon-inline";
+      ribbon.textContent = festivalBadgeLabel;
+      main.prepend(ribbon);
+    }
+  }
+  renderSchedule(schedule, show.dates, show.premiumDates, show.timeNotes);
+  const ticketUrl = normalizeOutboundUrl(show.ticketLink);
+  if (ticketUrl) {
+    link.href = ticketUrl;
+    link.classList.remove("hidden");
+  }
+  if (state.view === "festivals") {
+    const rowActions = document.createElement("div");
+    rowActions.className = "theatre-row-actions";
+    if (!link.classList.contains("hidden")) {
+      rowActions.appendChild(link);
+    }
+    const rowFilmPageLink = document.createElement("a");
+    rowFilmPageLink.className = "theatre-row-film-link";
+    rowFilmPageLink.href = buildFilmPageUrl(show.film, show.year);
+    rowFilmPageLink.textContent = "View Film Page";
+    rowActions.appendChild(rowFilmPageLink);
+    item.appendChild(rowActions);
+  }
+  return item;
+}
+
+// Theatres that have coordinates go on the map; its side panel reuses the cards' film rows.
+function renderTheatreMap(entries) {
+  const theatreList = entries
+    .map(([, group]) => group.theatreInfo)
+    .filter(theatre => theatre && theatre.latitude && theatre.longitude);
+
+  // The location the distances were measured from: the saved ZIP or this visit's device
+  // location. The map never asks for location itself.
+  const userLocation = state.userCoords ? { ...state.userCoords } : null;
+
+  const groupByTheatreId = new Map(entries.map(([, group]) => [group.theatreInfo?.id, group]));
+  renderMapMarkers(theatreList, userLocation, (theatreId, isRowExpanded) => {
+    const group = groupByTheatreId.get(theatreId);
+    return group ? buildTheatreMapCard(group, isRowExpanded) : null;
+  });
 }
 
 // One film row of a theatre's card: poster, title, and the next day's times, or every
