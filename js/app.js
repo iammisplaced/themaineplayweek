@@ -27,7 +27,7 @@ import {
   addDaysIso,
   buildFilmGroupKey,
   dedupeSortTimes,
-  loadDataFromSupabase,
+  loadActiveDataFromSupabase,
   normalizeFilmTitle,
   normalizeMetadataSource,
   normalizePosterUrl,
@@ -113,6 +113,8 @@ const NAV_VIEW_LABELS = Object.freeze({
 const state = {
   data: { theatreGroups: [], festivals: [] },
   view: "films",
+  // Where state.data came from. Visitors get "supabase-active" (only films with upcoming
+  // showtimes); the admin replaces it with the full "supabase" load, the only one it saves.
   source: "film-pages-json",
   loadedFromSupabaseThisSession: false,
   // data_version when the admin data was loaded; sent with saves so stale tabs are refused.
@@ -957,14 +959,14 @@ async function loadData() {
 
   if (state.supabase) {
     try {
-      const fromDb = await loadDataFromSupabase(state.supabase);
+      const fromDb = await loadActiveDataFromSupabase(state.supabase, toIsoDate(new Date()));
       if (fromDb.theatreGroups.length) {
         validateData({ theatreGroups: fromDb.theatreGroups, festivals: fromDb.festivals || [] });
         state.data = { theatreGroups: fromDb.theatreGroups, festivals: fromDb.festivals || [] };
         state.promotedCards = fromDb.promotedCards;
-        state.source = "supabase";
-        state.loadedFromSupabaseThisSession = true;
-        state.dataVersion = fromDb.dataVersion;
+        state.source = "supabase-active";
+        state.loadedFromSupabaseThisSession = false;
+        state.dataVersion = null;
         return;
       }
     } catch (error) {
