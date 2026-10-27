@@ -164,6 +164,7 @@ function findAdminElements() {
     tmdbApiKeyInput: document.getElementById("tmdbApiKeyInput"),
     adminFilmSearch: document.getElementById("adminFilmSearch"),
     adminFilmResults: document.getElementById("adminFilmResults"),
+    adminSearchStatus: document.getElementById("adminSearchStatus"),
     selectedTicketLinkInput: document.getElementById("selectedTicketLinkInput"),
     saveSelectedTicketLink: document.getElementById("saveSelectedTicketLink"),
     openAddPromoModalButton: document.getElementById("openAddPromoModalButton"),
@@ -372,52 +373,32 @@ function bindAdminEvents() {
   elements.adminTheatreSearch.addEventListener("input", () => {
     state.admin.theatreQuery = elements.adminTheatreSearch.value;
     state.admin.theatreHighlight = 0;
+    state.admin.theatreSearching = true;
     renderTheatreOptions();
   });
 
   elements.adminFilmSearch.addEventListener("input", () => {
     state.admin.filmQuery = elements.adminFilmSearch.value;
     state.admin.filmHighlight = 0;
-    renderFilmOptions();
-  });
-
-  elements.adminTheatreSearch.addEventListener("focus", () => {
-    state.admin.theatreSearching = true;
-    renderTheatreOptions();
-  });
-
-  elements.adminFilmSearch.addEventListener("focus", () => {
     state.admin.filmSearching = true;
     renderFilmOptions();
   });
 
-  elements.adminTheatreSearch.addEventListener("blur", () => {
-    setTimeout(() => {
-      state.admin.theatreSearching = false;
-      renderTheatreOptions();
-    }, 120);
-  });
-
-  elements.adminFilmSearch.addEventListener("blur", () => {
-    setTimeout(() => {
-      state.admin.filmSearching = false;
-      renderFilmOptions();
-    }, 120);
-  });
-
-  elements.adminTheatreSearch.addEventListener("keydown", (event) => {
-    handleSearchKeydown("theatre", event);
-  });
-
-  elements.adminFilmSearch.addEventListener("keydown", (event) => {
-    handleSearchKeydown("film", event);
+  ["theatre", "film"].forEach((kind) => {
+    const { input, results } = getSearchParts(kind);
+    input.addEventListener("focus", () => setSearchOpen(kind, true));
+    input.addEventListener("click", () => setSearchOpen(kind, true));
+    input.addEventListener("blur", () => setSearchOpen(kind, false));
+    input.addEventListener("keydown", (event) => handleSearchKeydown(kind, event));
+    // Keeps focus in the input when a result is clicked.
+    results.addEventListener("mousedown", (event) => event.preventDefault());
   });
 
   elements.adminTheatreResults.addEventListener("click", (event) => {
-    const button = event.target.closest("button[data-index]");
-    if (!button) return;
+    const option = event.target.closest("[data-index]");
+    if (!option) return;
     const previouslySelectedFilm = getSelectedFilm();
-    state.admin.theatreIndex = Number(button.dataset.index) || 0;
+    state.admin.theatreIndex = Number(option.dataset.index) || 0;
     state.admin.theatreHighlight = 0;
     state.admin.filmHighlight = 0;
     const theatre = getSelectedTheatre();
@@ -432,16 +413,18 @@ function bindAdminEvents() {
       state.admin.filmQuery = "";
     }
     state.admin.theatreQuery = getAdminTheatreLabelByIndex(state.admin.theatreIndex);
+    state.admin.theatreSearching = false;
     syncAdminEditor();
   });
 
   elements.adminFilmResults.addEventListener("click", (event) => {
-    const button = event.target.closest("button[data-index]");
-    if (!button) return;
-    state.admin.filmIndex = Number(button.dataset.index) || 0;
+    const option = event.target.closest("[data-index]");
+    if (!option) return;
+    state.admin.filmIndex = Number(option.dataset.index) || 0;
     state.admin.filmHighlight = 0;
     const film = getSelectedFilm();
     state.admin.filmQuery = film ? buildFilmGroupKey(film.title, film.year) : "";
+    state.admin.filmSearching = false;
     syncAdminEditor();
   });
 
@@ -1125,8 +1108,10 @@ function renderTheatreOptions() {
   elements.adminTheatreSearch.value = state.admin.theatreQuery;
   elements.adminTheatreSearch.disabled = !theatres.length;
   elements.adminTheatreResults.innerHTML = "";
-  if (!theatres.length) return;
-  if (!state.admin.theatreSearching) return;
+  if (!theatres.length || !state.admin.theatreSearching) {
+    syncSearchCombobox("theatre", 0);
+    return;
+  }
 
   const query = normalizeSearchText(state.admin.theatreQuery);
   const duplicateCountByNameCity = buildAdminDuplicateCountByNameCity(theatres);
@@ -1138,24 +1123,11 @@ function renderTheatreOptions() {
     const label = buildAdminTheatreLabel(theatre, index, duplicateCountByNameCity);
     const searchable = buildAdminTheatreSearchText(theatre, label);
     if (query && !searchable.includes(query)) continue;
-    const highlightIndex = state.admin.theatreHighlight;
-    const li = document.createElement("li");
-    const button = document.createElement("button");
-    button.type = "button";
-    button.dataset.index = String(index);
-    button.textContent = label;
-    if (index === state.admin.theatreIndex) button.classList.add("selected");
-    if (visibleCount === highlightIndex) button.classList.add("active");
-    li.appendChild(button);
-    fragment.appendChild(li);
+    fragment.appendChild(buildSearchOption("theatre", index, label, index === state.admin.theatreIndex));
     visibleCount += 1;
   }
   elements.adminTheatreResults.appendChild(fragment);
-  if (visibleCount > 0) {
-    state.admin.theatreHighlight = Math.min(state.admin.theatreHighlight, visibleCount - 1);
-  } else {
-    state.admin.theatreHighlight = 0;
-  }
+  syncSearchCombobox("theatre", visibleCount);
 }
 
 function renderFilmOptions() {
@@ -1166,34 +1138,21 @@ function renderFilmOptions() {
   elements.adminFilmSearch.disabled = !theatre || !films.length;
   elements.adminFilmResults.innerHTML = "";
   const hasFilm = films.length > 0;
+  let visibleCount = 0;
   if (hasFilm && state.admin.filmSearching) {
     const query = normalizeSearchText(state.admin.filmQuery);
-    let visibleCount = 0;
     const fragment = document.createDocumentFragment();
     for (let index = 0; index < films.length; index += 1) {
       if (visibleCount >= MAX_ADMIN_SEARCH_RESULTS) break;
       const film = films[index];
       const label = buildFilmGroupKey(film.title, film.year);
       if (query && !normalizeSearchText(label).includes(query)) continue;
-      const highlightIndex = state.admin.filmHighlight;
-      const li = document.createElement("li");
-      const button = document.createElement("button");
-      button.type = "button";
-      button.dataset.index = String(index);
-      button.textContent = label;
-      if (index === state.admin.filmIndex) button.classList.add("selected");
-      if (visibleCount === highlightIndex) button.classList.add("active");
-      li.appendChild(button);
-      fragment.appendChild(li);
+      fragment.appendChild(buildSearchOption("film", index, label, index === state.admin.filmIndex));
       visibleCount += 1;
     }
     elements.adminFilmResults.appendChild(fragment);
-    if (visibleCount > 0) {
-      state.admin.filmHighlight = Math.min(state.admin.filmHighlight, visibleCount - 1);
-    } else {
-      state.admin.filmHighlight = 0;
-    }
   }
+  syncSearchCombobox("film", visibleCount);
 
   elements.addFilm.disabled = !theatre;
   elements.editFilmMetadata.disabled = !hasFilm || state.admin.isSaving || state.admin.isRefreshingTmdb;
@@ -2263,57 +2222,112 @@ function requireAdminAuth() {
   return false;
 }
 
-function handleSearchKeydown(kind, event) {
-  const isTheatre = kind === "theatre";
-  const resultsEl = isTheatre ? elements.adminTheatreResults : elements.adminFilmResults;
-  const buttons = Array.from(resultsEl.querySelectorAll("button[data-index]"));
-  if (!buttons.length) return;
+// The theatre and film searches are ARIA comboboxes: focus stays in the input, and
+// aria-activedescendant tells screen readers which result the arrow keys are on.
+function getSearchParts(kind) {
+  return kind === "theatre"
+    ? {
+        input: elements.adminTheatreSearch,
+        results: elements.adminTheatreResults,
+        searchingKey: "theatreSearching",
+        highlightKey: "theatreHighlight",
+        queryKey: "theatreQuery",
+        render: renderTheatreOptions,
+      }
+    : {
+        input: elements.adminFilmSearch,
+        results: elements.adminFilmResults,
+        searchingKey: "filmSearching",
+        highlightKey: "filmHighlight",
+        queryKey: "filmQuery",
+        render: renderFilmOptions,
+      };
+}
 
-  if (event.key === "ArrowDown") {
-    event.preventDefault();
-    if (isTheatre) {
-      state.admin.theatreHighlight = Math.min(state.admin.theatreHighlight + 1, buttons.length - 1);
-      renderTheatreOptions();
-    } else {
-      state.admin.filmHighlight = Math.min(state.admin.filmHighlight + 1, buttons.length - 1);
-      renderFilmOptions();
+function buildSearchOption(kind, index, label, isCurrent) {
+  const li = document.createElement("li");
+  li.id = `admin-${kind}-option-${index}`;
+  li.setAttribute("role", "option");
+  li.setAttribute("aria-selected", "false");
+  li.dataset.index = String(index);
+  li.textContent = label;
+  if (isCurrent) li.classList.add("selected");
+  return li;
+}
+
+function syncSearchCombobox(kind, visibleCount) {
+  const { input, results, searchingKey, highlightKey } = getSearchParts(kind);
+  state.admin[highlightKey] = visibleCount > 0 ? Math.min(state.admin[highlightKey], visibleCount - 1) : 0;
+  const active = visibleCount > 0 ? results.children[state.admin[highlightKey]] : null;
+  if (active) {
+    active.classList.add("active");
+    active.setAttribute("aria-selected", "true");
+    // Scrolls only the results list, not the drawer.
+    if (active.offsetTop < results.scrollTop) {
+      results.scrollTop = active.offsetTop;
+    } else if (active.offsetTop + active.offsetHeight > results.scrollTop + results.clientHeight) {
+      results.scrollTop = active.offsetTop + active.offsetHeight - results.clientHeight;
     }
-    return;
+    input.setAttribute("aria-activedescendant", active.id);
+  } else {
+    input.removeAttribute("aria-activedescendant");
   }
+  input.setAttribute("aria-expanded", String(visibleCount > 0));
 
-  if (event.key === "ArrowUp") {
+  // One status line serves both searches, so a closed search leaves it to the open one.
+  const otherSearching = kind === "theatre" ? state.admin.filmSearching : state.admin.theatreSearching;
+  if (!state.admin[searchingKey] && otherSearching) return;
+  let status = "";
+  if (state.admin[searchingKey]) {
+    if (!visibleCount) status = "No results";
+    else if (visibleCount >= MAX_ADMIN_SEARCH_RESULTS) status = `First ${visibleCount} results`;
+    else status = visibleCount === 1 ? "1 result" : `${visibleCount} results`;
+  }
+  if (elements.adminSearchStatus.textContent !== status) elements.adminSearchStatus.textContent = status;
+}
+
+function setSearchOpen(kind, open) {
+  const parts = getSearchParts(kind);
+  if (state.admin[parts.searchingKey] === open) return;
+  state.admin[parts.searchingKey] = open;
+  parts.render();
+}
+
+function handleSearchKeydown(kind, event) {
+  const parts = getSearchParts(kind);
+  const optionCount = parts.results.children.length;
+
+  if (event.key === "ArrowDown" || event.key === "ArrowUp") {
     event.preventDefault();
-    if (isTheatre) {
-      state.admin.theatreHighlight = Math.max(state.admin.theatreHighlight - 1, 0);
-      renderTheatreOptions();
-    } else {
-      state.admin.filmHighlight = Math.max(state.admin.filmHighlight - 1, 0);
-      renderFilmOptions();
+    if (!state.admin[parts.searchingKey]) {
+      setSearchOpen(kind, true);
+      return;
     }
+    if (!optionCount) return;
+    const step = event.key === "ArrowDown" ? 1 : -1;
+    state.admin[parts.highlightKey] = Math.max(0, Math.min(state.admin[parts.highlightKey] + step, optionCount - 1));
+    parts.render();
     return;
   }
 
   if (event.key === "Enter") {
+    if (!state.admin[parts.searchingKey] || !optionCount) return;
     event.preventDefault();
-    const index = isTheatre ? state.admin.theatreHighlight : state.admin.filmHighlight;
-    const button = buttons[index] || buttons[0];
-    button?.click();
+    parts.results.children[state.admin[parts.highlightKey]]?.click();
     return;
   }
 
   if (event.key === "Escape") {
     event.preventDefault();
-    if (isTheatre) {
-      state.admin.theatreQuery = "";
-      state.admin.theatreHighlight = 0;
-      elements.adminTheatreSearch.value = "";
-      renderTheatreOptions();
-    } else {
-      state.admin.filmQuery = "";
-      state.admin.filmHighlight = 0;
-      elements.adminFilmSearch.value = "";
-      renderFilmOptions();
+    // The first Escape closes the results; a second one clears the search.
+    if (state.admin[parts.searchingKey] && optionCount) {
+      setSearchOpen(kind, false);
+      return;
     }
+    state.admin[parts.queryKey] = "";
+    state.admin[parts.highlightKey] = 0;
+    parts.input.value = "";
+    parts.render();
   }
 }
 

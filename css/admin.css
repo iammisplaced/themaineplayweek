@@ -108,6 +108,8 @@
 }
 
 .admin-search-results {
+  /* Option offsets are measured from the list, for keeping the highlighted one in view. */
+  position: relative;
   list-style: none;
   margin: 0.45rem 0 0;
   padding: 0;
@@ -122,26 +124,23 @@
   display: none;
 }
 
-.admin-search-results button {
-  width: 100%;
-  border: 0;
+.admin-search-results [role="option"] {
   border-bottom: 1px solid var(--border);
-  border-radius: 0;
-  background: transparent;
-  text-align: left;
+  color: var(--control-ink);
   padding: 0.48rem 0.6rem;
+  cursor: pointer;
 }
 
-.admin-search-results li:last-child button {
+.admin-search-results [role="option"]:last-child {
   border-bottom: 0;
 }
 
-.admin-search-results button.selected {
+.admin-search-results [role="option"].selected {
   background: var(--hover-soft);
   font-weight: 600;
 }
 
-.admin-search-results button.active {
+.admin-search-results [role="option"].active {
   outline: 2px solid var(--accent-2);
   outline-offset: -2px;
 }

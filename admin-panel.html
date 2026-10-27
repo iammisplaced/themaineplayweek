@@ -55,11 +55,30 @@
       <section class="admin-card admin-card-wide">
         <h3>Quick Admin</h3>
         <label for="adminTheatreSearch">Theatre</label>
-        <input id="adminTheatreSearch" type="text" placeholder="Search theatre, city, or address..." />
-        <ul id="adminTheatreResults" class="admin-search-results"></ul>
+        <input
+          id="adminTheatreSearch"
+          type="text"
+          placeholder="Search theatre, city, or address..."
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-controls="adminTheatreResults"
+          autocomplete="off"
+        />
+        <ul id="adminTheatreResults" class="admin-search-results" role="listbox" aria-label="Theatres"></ul>
         <label for="adminFilmSearch">Film</label>
-        <input id="adminFilmSearch" type="text" placeholder="Search films..." />
-        <ul id="adminFilmResults" class="admin-search-results"></ul>
+        <input
+          id="adminFilmSearch"
+          type="text"
+          placeholder="Search films..."
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-controls="adminFilmResults"
+          autocomplete="off"
+        />
+        <ul id="adminFilmResults" class="admin-search-results" role="listbox" aria-label="Films"></ul>
+        <p id="adminSearchStatus" class="visually-hidden" role="status"></p>
         <label for="selectedTicketLinkInput">Ticket Link (selected theatre + film)</label>
         <input id="selectedTicketLinkInput" type="url" placeholder="https://tickets.example.com/..." />
         <div class="admin-inline-actions">
