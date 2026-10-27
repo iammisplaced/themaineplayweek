@@ -66,12 +66,20 @@ export async function initAdmin(app) {
     isRefreshingTmdb: false,
     tmdbApiKey: "",
     promoImagesToDelete: [],
+    // Edits since the page loaded and how many of them the last save covered.
+    changeCount: 0,
+    savedChangeCount: 0,
     auth: {
       authenticated: false,
       email: "",
     },
   };
   bindAdminEvents();
+  window.addEventListener("beforeunload", (event) => {
+    if (!hasUnsavedChanges()) return;
+    event.preventDefault();
+    event.returnValue = "";
+  });
   initializeAdminState();
   await refreshAuthState();
   state.supabase?.auth.onAuthStateChange((_event, session) => {
@@ -168,7 +176,6 @@ function findAdminElements() {
     cancelAddPromo: document.getElementById("cancelAddPromo"),
     openAddFestivalModalButton: document.getElementById("openAddFestivalModalButton"),
     festivalSettingsList: document.getElementById("festivalSettingsList"),
-    saveAllFestivals: document.getElementById("saveAllFestivals"),
     addFestivalModal: document.getElementById("addFestivalModal"),
     addFestivalForm: document.getElementById("addFestivalForm"),
     modalFestivalNameInput: document.getElementById("modalFestivalNameInput"),
@@ -209,7 +216,7 @@ function findAdminElements() {
     showingsList: document.getElementById("showingsList"),
     promoSettingsList: document.getElementById("promoSettingsList"),
     saveAllAdmin: document.getElementById("saveAllAdmin"),
-    saveAllPromos: document.getElementById("saveAllPromos"),
+    adminSaveStatus: document.getElementById("adminSaveStatus"),
     downloadCsvTemplate: document.getElementById("downloadCsvTemplate"),
     uploadCsv: document.getElementById("uploadCsv"),
     adminMessage: document.getElementById("adminMessage"),
@@ -289,6 +296,7 @@ function bindAdminEvents() {
       promo.buttonUrl = String(control.value || "").trim();
     }
 
+    markUnsaved();
     renderPromoSettingsEditor();
     render();
     elements.adminMessage.textContent = "Promo settings updated.";
@@ -308,6 +316,7 @@ function bindAdminEvents() {
     // removed only after that save succeeds.
     if (promo?.imagePath) state.admin.promoImagesToDelete.push(promo.imagePath);
     state.promotedCards.splice(promoIndex, 1);
+    markUnsaved();
     renderPromoSettingsEditor();
     render();
     elements.adminMessage.textContent = "Promo removed.";
@@ -351,6 +360,7 @@ function bindAdminEvents() {
         buttonUrl,
       });
 
+      markUnsaved();
       renderPromoSettingsEditor();
       render();
       elements.addPromoModal?.close();
@@ -438,22 +448,12 @@ function bindAdminEvents() {
 
   elements.saveSelectedTicketLink.addEventListener("click", () => {
     if (!requireAdminAuth()) return;
-    const film = getSelectedFilm();
-    if (!film) return;
-    const rawValue = elements.selectedTicketLinkInput.value.trim();
-    const normalizedValue = normalizeOutboundUrl(rawValue);
-    const existingValue = normalizeOutboundUrl(film.ticketLink || "");
-    // Saves that would clear a ticket link are blocked (here and in the database).
-    if (!rawValue && existingValue) {
-      elements.selectedTicketLinkInput.value = film.ticketLink || "";
-      elements.adminMessage.textContent =
-        "Ticket links can't be cleared here, because saves that clear one are blocked. Replace it with a new link instead.";
-      return;
+    if (applyTicketLinkInput()) {
+      elements.adminMessage.textContent = "Ticket link updated for the selected theatre + film.";
     }
-    film.ticketLink = normalizedValue;
-    syncAdminEditor();
-    elements.adminMessage.textContent = "Saved ticket link for selected theatre + film.";
   });
+
+  elements.selectedTicketLinkInput.addEventListener("input", updateSaveBar);
 
   elements.addTheatre.addEventListener("click", () => {
     if (!requireAdminAuth()) return;
@@ -537,6 +537,7 @@ function bindAdminEvents() {
       theatre.longitude = longitude;
     }
     state.data.theatreGroups.push(theatre);
+    markUnsaved();
     state.admin.theatreIndex = state.data.theatreGroups.length - 1;
     state.admin.filmIndex = 0;
     state.admin.theatreQuery = getAdminTheatreLabelByIndex(state.admin.theatreIndex);
@@ -581,6 +582,7 @@ function bindAdminEvents() {
     if (tmdbIdValue) film.tmdbId = Number(tmdbIdValue);
 
     addFilmToAllTheatres(film);
+    markUnsaved();
     const updatedTheatre = getSelectedTheatre();
     state.admin.filmIndex = findFilmIndex(updatedTheatre?.films || [], film);
     state.admin.filmQuery = buildFilmGroupKey(film.title, film.year);
@@ -632,9 +634,10 @@ function bindAdminEvents() {
     film.tmdb = nextMetadata;
     film.metadataSource = "manual";
     syncFilmMetadataAcrossTheatres(film);
+    markUnsaved();
     elements.editFilmMetadataModal.close();
     syncAdminEditor();
-    elements.adminMessage.textContent = "Saved manual film metadata.";
+    elements.adminMessage.textContent = "Film metadata updated.";
   });
 
   elements.deleteFilm.addEventListener("click", () => {
@@ -653,6 +656,7 @@ function bindAdminEvents() {
     );
     if (!confirmed) return;
     removeFilmFromAllTheatres(film);
+    markUnsaved();
     state.admin.filmIndex = Math.max(0, state.admin.filmIndex - 1);
     state.admin.filmQuery = "";
     syncAdminEditor();
@@ -692,6 +696,7 @@ function bindAdminEvents() {
       film.tmdb = buildTmdbRecord(details);
       film.metadataSource = "tmdb";
       syncFilmMetadataAcrossTheatres(film);
+      markUnsaved();
       syncAdminEditor();
       elements.adminMessage.textContent = "TMDb details refreshed.";
     } catch (error) {
@@ -750,6 +755,7 @@ function bindAdminEvents() {
     }
 
     film.showings.sort((a, b) => a.date.localeCompare(b.date));
+    markUnsaved();
     elements.showingDateInput.value = "";
     elements.showingTimesInput.value = "";
     if (elements.showingPremiumTimesInput) {
@@ -776,6 +782,7 @@ function bindAdminEvents() {
     const idx = Number(button.dataset.showingIndex);
     if (Number.isNaN(idx)) return;
     film.showings.splice(idx, 1);
+    markUnsaved();
     syncAdminEditor();
     elements.adminMessage.textContent = "Deleted showing.";
   });
@@ -786,12 +793,16 @@ function bindAdminEvents() {
       elements.adminMessage.textContent = "TMDb refresh in progress. Wait for it to finish before saving.";
       return;
     }
+    // A ticket link typed but not applied is part of the save.
+    if (hasPendingTicketLink() && !applyTicketLinkInput()) return;
     try {
       state.admin.isSaving = true;
       syncAdminEditor();
       validateData(state.data);
       prunePastShowtimes(state.data);
       const saveResult = await persistData();
+      // The save reloads everything from Supabase, so nothing is left unsaved.
+      state.admin.savedChangeCount = state.admin.changeCount;
       if (saveResult.localDraftWarning) {
         elements.adminMessage.textContent = `All changes saved to Supabase. ${saveResult.localDraftWarning}`;
       } else {
@@ -806,8 +817,6 @@ function bindAdminEvents() {
   };
 
   elements.saveAllAdmin.addEventListener("click", handleSaveAllChanges);
-  elements.saveAllPromos?.addEventListener("click", handleSaveAllChanges);
-  elements.saveAllFestivals?.addEventListener("click", handleSaveAllChanges);
 
   elements.festivalSettingsList?.addEventListener("change", (event) => {
     if (!requireAdminAuth()) return;
@@ -842,6 +851,7 @@ function bindAdminEvents() {
       festival.sortOrder = Number.isInteger(parsed) ? parsed : 0;
     }
 
+    markUnsaved();
     renderFestivalSettingsEditor();
     renderShowingFestivalOptions();
     render();
@@ -871,6 +881,7 @@ function bindAdminEvents() {
         });
       });
     }
+    markUnsaved();
     syncAdminEditor();
     render();
     elements.adminMessage.textContent = "Festival removed.";
@@ -945,6 +956,7 @@ function bindAdminEvents() {
       enabled: true,
       sortOrder: nextSortOrder,
     });
+    markUnsaved();
     elements.addFestivalModal?.close();
     syncAdminEditor();
     render();
@@ -1012,6 +1024,7 @@ function bindAdminEvents() {
       const result = importShowtimesCsv(nextData, content);
       validateData(nextData);
       state.data = nextData;
+      markUnsaved();
       initializeAdminState();
       syncAdminEditor();
       render();
@@ -1023,7 +1036,7 @@ function bindAdminEvents() {
           .join("; ");
         message += ` Added films: ${filmList}.`;
       }
-      message += " Click Save All Changes to sync Supabase.";
+      message += " Click Save to sync Supabase.";
       elements.adminMessage.textContent = message;
       elements.uploadCsv.value = "";
     } catch (error) {
@@ -1199,13 +1212,6 @@ function renderFilmOptions() {
     elements.showingFestivalSelect.disabled = !hasFilm;
   }
   elements.addShowing.disabled = !hasFilm;
-  elements.saveAllAdmin.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
-  if (elements.saveAllPromos) {
-    elements.saveAllPromos.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
-  }
-  if (elements.saveAllFestivals) {
-    elements.saveAllFestivals.disabled = state.admin.isSaving || state.admin.isRefreshingTmdb;
-  }
   elements.saveSelectedTicketLink.disabled = !hasFilm || state.admin.isSaving || state.admin.isRefreshingTmdb;
 }
 
@@ -1216,6 +1222,59 @@ function fillSelectedTicketLink() {
   elements.saveSelectedTicketLink.disabled =
     disabled || state.admin.isSaving || state.admin.isRefreshingTmdb;
   elements.selectedTicketLinkInput.value = film?.ticketLink || "";
+  updateSaveBar();
+}
+
+// Copies the ticket link field into the selected film. Returns false if it was refused.
+function applyTicketLinkInput() {
+  const film = getSelectedFilm();
+  if (!film) return false;
+  const rawValue = elements.selectedTicketLinkInput.value.trim();
+  const normalizedValue = normalizeOutboundUrl(rawValue);
+  const existingValue = normalizeOutboundUrl(film.ticketLink || "");
+  // Saves that would clear a ticket link are blocked (here and in the database).
+  if (!rawValue && existingValue) {
+    elements.selectedTicketLinkInput.value = film.ticketLink || "";
+    elements.adminMessage.textContent =
+      "Ticket links can't be cleared here, because saves that clear one are blocked. Replace it with a new link instead.";
+    updateSaveBar();
+    return false;
+  }
+  if (normalizedValue !== existingValue) {
+    film.ticketLink = normalizedValue;
+    markUnsaved();
+  }
+  syncAdminEditor();
+  return true;
+}
+
+function hasPendingTicketLink() {
+  const film = getSelectedFilm();
+  if (!film || !elements.selectedTicketLinkInput) return false;
+  return (
+    normalizeOutboundUrl(elements.selectedTicketLinkInput.value.trim()) !==
+    normalizeOutboundUrl(film.ticketLink || "")
+  );
+}
+
+function hasUnsavedChanges() {
+  return state.admin.changeCount !== state.admin.savedChangeCount || hasPendingTicketLink();
+}
+
+function markUnsaved() {
+  state.admin.changeCount += 1;
+  updateSaveBar();
+}
+
+function updateSaveBar() {
+  const unsaved = hasUnsavedChanges();
+  elements.saveAllAdmin.disabled = !unsaved || state.admin.isSaving || state.admin.isRefreshingTmdb;
+  elements.adminSaveStatus.textContent = state.admin.isSaving
+    ? "Saving..."
+    : unsaved
+      ? "Unsaved changes"
+      : "No unsaved changes";
+  elements.adminSaveStatus.classList.toggle("unsaved", unsaved && !state.admin.isSaving);
 }
 
 function renderShowingFestivalOptions() {
