@@ -36,13 +36,21 @@ let state;
 let render;
 let elements;
 
-// Downloads the markup and styles before changing anything else, so if either fails
-// app.js can simply call this again.
+// Downloads the markup, styles and full data before changing anything else, so if any
+// of them fails app.js can simply call this again. Visitors only have the films with
+// upcoming showtimes, and a save replaces everything, so the admin never opens without
+// the full data.
 export async function initAdmin(app) {
-  const [markup] = await Promise.all([fetchAdminMarkup(), loadAdminStylesheet()]);
-  document.getElementById("adminPanel").insertAdjacentHTML("beforeend", markup);
-
+  if (!app.state.supabase) throw new Error("Supabase is not configured");
+  const [markup, , fullData] = await Promise.all([
+    fetchAdminMarkup(),
+    loadAdminStylesheet(),
+    loadDataFromSupabase(app.state.supabase),
+  ]);
   ({ state, render } = app);
+  applyFullData(fullData);
+  document.getElementById("adminPanel").insertAdjacentHTML("beforeend", markup);
+  render();
   elements = findAdminElements();
   state.admin = {
     section: "movies",
@@ -83,6 +91,17 @@ export function showAdminPanel() {
   syncAdminEditor();
   syncAdminSectionUI();
   updateAdminAuthUI();
+}
+
+// The only place state.source becomes "supabase", which saving and CSV import require.
+function applyFullData(fullData) {
+  validateData({ theatreGroups: fullData.theatreGroups, festivals: fullData.festivals || [] });
+  state.data = { theatreGroups: fullData.theatreGroups, festivals: fullData.festivals || [] };
+  state.promotedCards = fullData.promotedCards;
+  state.source = "supabase";
+  state.loadedFromSupabaseThisSession = true;
+  state.dataVersion = fullData.dataVersion;
+  state.dataLoadError = "";
 }
 
 async function fetchAdminMarkup() {
@@ -1958,13 +1977,7 @@ async function persistData() {
     return { localDraftWarning };
   }
   await saveDataToSupabase();
-  const refreshed = await loadDataFromSupabase(state.supabase);
-  validateData({ theatreGroups: refreshed.theatreGroups, festivals: refreshed.festivals || [] });
-  state.data = { theatreGroups: refreshed.theatreGroups, festivals: refreshed.festivals || [] };
-  state.promotedCards = refreshed.promotedCards;
-  state.source = "supabase";
-  state.loadedFromSupabaseThisSession = true;
-  state.dataVersion = refreshed.dataVersion;
+  applyFullData(await loadDataFromSupabase(state.supabase));
   syncAdminEditor();
   render();
   return { localDraftWarning };
