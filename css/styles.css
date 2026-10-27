@@ -1469,6 +1469,10 @@ a.film-expand-toggle {
   margin-bottom: 0.28rem;
 }
 
+.show-time {
+  white-space: nowrap;
+}
+
 .show-time-noted {
   display: inline-flex;
   align-items: center;

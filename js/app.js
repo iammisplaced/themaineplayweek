@@ -3258,9 +3258,13 @@ function createScheduleRow(date, times, premiumTimes = [], timeNotes = {}) {
       timeEl.textContent = `Premium ${entry.time}`;
     } else if (note) {
       timeEl = document.createElement("span");
+      timeEl.className = "show-time";
       timeEl.textContent = entry.time;
     } else {
-      value.appendChild(document.createTextNode(entry.time));
+      timeEl = document.createElement("span");
+      timeEl.className = "show-time";
+      timeEl.textContent = entry.time;
+      value.appendChild(timeEl);
       return;
     }
     if (note) attachShowtimeNote(timeEl, note);
