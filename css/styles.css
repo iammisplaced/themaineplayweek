@@ -1205,6 +1205,10 @@ a.film-expand-toggle {
   cursor: zoom-in;
 }
 
+.group-film-poster-link .group-film-poster {
+  cursor: pointer;
+}
+
 .group-film-facts {
   grid-column: 1;
   grid-row: 1;

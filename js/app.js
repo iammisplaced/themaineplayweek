@@ -478,11 +478,8 @@ function bindEvents() {
 
     const poster = event.target.closest(".group-film-poster, .show-poster");
     if (!poster || poster.classList.contains("hidden")) return;
-    const posterFilmPageUrl = String(poster.dataset.filmPageUrl || "").trim();
-    if (posterFilmPageUrl) {
-      window.location.assign(posterFilmPageUrl);
-      return;
-    }
+    // All Films' poster is wrapped in a link to the film page; let the browser follow it.
+    if (poster.closest("a")) return;
     const src = poster.getAttribute("src");
     if (!src) return;
     openPosterLightbox(src, poster.getAttribute("alt") || "Poster preview");
@@ -1349,9 +1346,15 @@ function render() {
           ? `Poster for ${group.filmInfo.film}`
           : `No poster available for ${group.filmInfo.film}`;
         if (shouldLinkToFilmPage) {
-          groupFilmPoster.dataset.filmPageUrl = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
-        } else {
-          groupFilmPoster.removeAttribute("data-film-page-url");
+          // Wrapped in a real link so it can be middle-clicked or opened in a new tab.
+          // Kept out of the tab order: "View Film Page" goes to the same place.
+          const posterLink = document.createElement("a");
+          posterLink.className = "group-film-poster-link";
+          posterLink.href = buildFilmPageUrl(group.filmInfo?.film, group.filmInfo?.year);
+          posterLink.tabIndex = -1;
+          posterLink.setAttribute("aria-hidden", "true");
+          groupFilmPoster.replaceWith(posterLink);
+          posterLink.appendChild(groupFilmPoster);
         }
         groupFilmPoster.classList.remove("hidden");
       }
