@@ -265,6 +265,19 @@
   </form>
 </dialog>
 
+<!-- Opened by Import CSV: shows what the file adds before anything changes. -->
+<dialog id="csvImportModal" class="admin-modal admin-modal-wide" aria-labelledby="csvImportTitle">
+  <form method="dialog" class="admin-modal-body">
+    <h3 id="csvImportTitle">Import CSV</h3>
+    <p id="csvImportSummary" class="admin-help"></p>
+    <div id="csvImportPreview" class="csv-import-preview"></div>
+    <div class="admin-inline-actions">
+      <button id="confirmCsvImport" type="button">Apply</button>
+      <button id="cancelCsvImport" class="ghost-btn" type="button" autofocus>Cancel</button>
+    </div>
+  </form>
+</dialog>
+
   <!-- Every edit above changes only this page until Save sends it all to Supabase. -->
   <div class="admin-save-bar">
     <div class="admin-save-row">
