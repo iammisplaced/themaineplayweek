@@ -1897,25 +1897,21 @@ textarea {
     height: 1.2rem;
   }
 
+  /* A drawn chevron: points down while the menu is closed and flips up when it opens. */
   .nav-menu-chevron::before {
-    content: "<";
-    opacity: 1;
-    transition: opacity 140ms linear;
-  }
-
-  .nav-menu-chevron::after {
-    content: "v";
-    position: absolute;
-    opacity: 0;
-    transition: opacity 140ms linear;
+    content: "";
+    width: 0.42rem;
+    height: 0.42rem;
+    margin-top: -0.2rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 140ms ease;
   }
 
   details[open] .nav-menu-chevron::before {
-    opacity: 0;
-  }
-
-  details[open] .nav-menu-chevron::after {
-    opacity: 1;
+    margin-top: 0.2rem;
+    transform: rotate(-135deg);
   }
 
   .nav-menu {
@@ -2409,7 +2405,8 @@ textarea {
     animation: none;
   }
 
-  .brand-logo {
+  .brand-logo,
+  .nav-menu-chevron::before {
     transition: none;
   }
 }
