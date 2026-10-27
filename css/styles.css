@@ -2265,7 +2265,7 @@ textarea {
     right: 0;
     width: auto;
     max-width: 400px;
-    max-height: 20vh;
+    max-height: 55%;
     border-radius: 14px;
     margin: auto;
   }
