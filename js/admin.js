@@ -798,7 +798,7 @@ function bindAdminEvents() {
         elements.adminMessage.textContent = "All changes saved to Supabase.";
       }
     } catch (error) {
-      elements.adminMessage.textContent = `Save failed: ${error.message}. Run latest supabase/schema.sql and try again.`;
+      elements.adminMessage.textContent = `Save failed: ${error.message}`;
     } finally {
       state.admin.isSaving = false;
       syncAdminEditor();
@@ -2007,7 +2007,7 @@ async function saveDataToSupabase() {
   const supabase = state.supabase;
   if (state.source !== "supabase" || !state.loadedFromSupabaseThisSession) {
     throw new Error(
-      "Blocked save: current admin data was not loaded from Supabase. Use Reset from source to reload live data before saving."
+      "Blocked save: current admin data was not loaded from Supabase. Reload the page and try again."
     );
   }
   await verifySupabaseSchema(supabase);
