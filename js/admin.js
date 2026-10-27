@@ -48,6 +48,8 @@ let savedPayload = null;
 // The CSV import waiting in the preview: the data it was made from, the changed copy, and
 // what the preview lists. Null when the preview is closed.
 let pendingCsvImport = null;
+// The showing day open in the inline editor under the Showings list, or null.
+let editingShowing = null;
 
 // Downloads the markup, styles and full data before changing anything else, so if any
 // of them fails app.js can simply call this again. Visitors only have the films with
@@ -770,17 +772,72 @@ function bindAdminEvents() {
   });
 
   elements.showingsList.addEventListener("click", (event) => {
-    if (!requireAdminAuth()) return;
-    const button = event.target.closest("button[data-showing-index]");
-    if (!button) return;
+    const button = event.target.closest("button[data-action]");
+    if (!button || !requireAdminAuth()) return;
     const film = getSelectedFilm();
-    if (!film) return;
-    const idx = Number(button.dataset.showingIndex);
-    if (Number.isNaN(idx)) return;
-    film.showings.splice(idx, 1);
+    const showing = film?.showings?.[Number(button.dataset.showingIndex)];
+    if (!showing) return;
+    const day = formatShowingDate(showing.date);
+    const action = button.dataset.action;
+    if (action === "remove-time") {
+      const key = button.dataset.premium ? "premiumTimes" : "times";
+      showing[key] = (showing[key] || []).filter((time) => String(time).trim() !== button.dataset.time);
+      const dayEmpty = !(showing.times || []).length && !(showing.premiumTimes || []).length;
+      if (dayEmpty) film.showings = film.showings.filter((entry) => entry !== showing);
+      markUnsaved();
+      syncAdminEditor();
+      elements.adminMessage.textContent = dayEmpty
+        ? `Removed ${button.dataset.time}, the last time on ${day}, so the day is gone.`
+        : `Removed ${button.dataset.time} on ${day}.`;
+    } else if (action === "edit-day") {
+      editingShowing = { film, showing };
+      renderShowingsList();
+      elements.showingsList.querySelector(".showing-day-editor input")?.focus();
+    } else if (action === "delete-day") {
+      film.showings = film.showings.filter((entry) => entry !== showing);
+      if (editingShowing?.showing === showing) editingShowing = null;
+      markUnsaved();
+      syncAdminEditor();
+      elements.adminMessage.textContent = `Deleted ${day}.`;
+    } else if (action === "cancel-day") {
+      editingShowing = null;
+      renderShowingsList();
+    }
+  });
+
+  // Done in the inline day editor (or Enter in one of its fields).
+  elements.showingsList.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!requireAdminAuth() || !editingShowing) return;
+    const form = event.target;
+    const { showing } = editingShowing;
+    const times = parseTimesInput(form.elements.times.value);
+    const premiumTimes = parseTimesInput(form.elements.premiumTimes.value);
+    const invalidTime = [...times, ...premiumTimes].find((time) => !to24HourTime(time));
+    if (invalidTime) {
+      elements.adminMessage.textContent = `"${invalidTime}" isn't a valid time. Use h:mm AM/PM, like 7:30 PM.`;
+      return;
+    }
+    if (!times.length && !premiumTimes.length) {
+      elements.adminMessage.textContent = "A day needs at least one time. Use Delete day to remove it.";
+      return;
+    }
+    const festivalId = Number(form.elements.festival.value);
+    showing.times = dedupeSortTimes(times);
+    showing.premiumTimes = dedupeSortTimes(premiumTimes);
+    showing.room = form.elements.room.value.trim();
+    showing.notes = form.elements.notes.value.trim();
+    showing.festivalId = Number.isInteger(festivalId) && festivalId > 0 ? festivalId : null;
+    editingShowing = null;
     markUnsaved();
     syncAdminEditor();
-    elements.adminMessage.textContent = "Deleted showing.";
+    elements.adminMessage.textContent = `Updated ${formatShowingDate(showing.date)}.`;
+  });
+
+  elements.showingsList.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || !event.target.closest(".showing-day-editor")) return;
+    editingShowing = null;
+    renderShowingsList();
   });
 
   const handleSaveAllChanges = async () => {
@@ -1289,7 +1346,13 @@ function updateSaveBar() {
 function renderShowingFestivalOptions() {
   const select = elements.showingFestivalSelect;
   if (!select) return;
-  const previousValue = String(select.value || "");
+  fillFestivalOptions(select, String(select.value || ""));
+}
+
+// Fills a festival select with None plus the enabled festivals, keeping `selectedValue`
+// selected. A day's own festival is listed even when it's disabled, so editing the day
+// doesn't drop it.
+function fillFestivalOptions(select, selectedValue, keepFestivalId = null) {
   select.innerHTML = "";
 
   const noneOption = document.createElement("option");
@@ -1298,7 +1361,7 @@ function renderShowingFestivalOptions() {
   select.appendChild(noneOption);
 
   const festivals = (state.data.festivals || [])
-    .filter((festival) => Boolean(festival?.enabled ?? true))
+    .filter((festival) => Boolean(festival?.enabled ?? true) || Number(festival?.id) === keepFestivalId)
     .sort((a, b) => {
       const orderA = Number.isInteger(Number(a?.sortOrder)) ? Number(a.sortOrder) : 0;
       const orderB = Number.isInteger(Number(b?.sortOrder)) ? Number(b.sortOrder) : 0;
@@ -1315,8 +1378,8 @@ function renderShowingFestivalOptions() {
     select.appendChild(option);
   });
 
-  if (previousValue && Array.from(select.options).some((option) => option.value === previousValue)) {
-    select.value = previousValue;
+  if (selectedValue && Array.from(select.options).some((option) => option.value === selectedValue)) {
+    select.value = selectedValue;
   } else {
     select.value = "";
   }
@@ -1325,6 +1388,9 @@ function renderShowingFestivalOptions() {
 function renderShowingsList() {
   const film = getSelectedFilm();
   elements.showingsList.innerHTML = "";
+  if (editingShowing && (editingShowing.film !== film || !film.showings.includes(editingShowing.showing))) {
+    editingShowing = null;
+  }
   if (!film || !Array.isArray(film.showings) || !film.showings.length) {
     const li = document.createElement("li");
     li.textContent = "No showings yet.";
@@ -1332,38 +1398,137 @@ function renderShowingsList() {
     return;
   }
 
+  const now = new Date();
   film.showings
     .map((showing, index) => ({ showing, index }))
     .sort((a, b) => a.showing.date.localeCompare(b.showing.date))
     .forEach(({ showing, index }) => {
       const li = document.createElement("li");
-      const label = document.createElement("span");
-      const standardTimes = dedupeSortTimes(showing.times || []);
-      const premiumTimes = dedupeSortTimes(showing.premiumTimes || []);
-      const timeLabelParts = [];
-      if (standardTimes.length) {
-        timeLabelParts.push(standardTimes.join(", "));
-      }
-      if (premiumTimes.length) {
-        timeLabelParts.push(`Premium: ${premiumTimes.join(", ")}`);
-      }
+      li.className = "showing-day";
+      const row = document.createElement("div");
+      row.className = "showing-day-row";
+
+      const label = document.createElement("div");
+      label.className = "showing-day-label";
+      const date = document.createElement("strong");
+      date.textContent = formatShowingDate(showing.date);
+      date.title = showing.date;
+      label.appendChild(date);
       const festivalId = Number(showing?.festivalId);
       const festival = Number.isInteger(festivalId)
         ? (state.data.festivals || []).find((entry) => Number(entry?.id) === festivalId)
         : null;
-      const festivalLabel = festival?.name ? ` [Festival: ${festival.name}]` : "";
-      const roomLabel = String(showing?.room || "").trim();
-      const notesLabel = String(showing?.notes || "").trim();
-      label.textContent = `${showing.date}${festivalLabel}${roomLabel ? ` [Room: ${roomLabel}]` : ""}${notesLabel ? ` [Note: ${notesLabel}]` : ""}: ${timeLabelParts.join(" | ")}`;
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "ghost-btn";
-      button.dataset.showingIndex = String(index);
-      button.textContent = "Delete";
-      li.appendChild(label);
-      li.appendChild(button);
+      const details = [
+        festival?.name ? `Festival: ${festival.name}` : "",
+        String(showing?.room || "").trim() ? `Room: ${String(showing.room).trim()}` : "",
+        String(showing?.notes || "").trim() ? `Note: ${String(showing.notes).trim()}` : "",
+      ].filter(Boolean);
+      if (details.length) {
+        const meta = document.createElement("span");
+        meta.className = "showing-day-meta";
+        meta.textContent = details.join(" · ");
+        label.appendChild(meta);
+      }
+
+      const chips = document.createElement("div");
+      chips.className = "showing-day-times";
+      const addChips = (times, premium) => {
+        dedupeSortTimes(times || []).forEach((time) => {
+          const chip = document.createElement("button");
+          chip.type = "button";
+          chip.className = "time-chip";
+          chip.dataset.action = "remove-time";
+          chip.dataset.showingIndex = String(index);
+          chip.dataset.time = time;
+          if (premium) {
+            chip.dataset.premium = "1";
+            chip.classList.add("premium");
+          }
+          const startsAt = getShowDateTime(showing.date, time);
+          const started = startsAt && startsAt < now;
+          if (started) chip.classList.add("started");
+          chip.title = started ? "Already started; dropped on the next save" : `Remove ${time}`;
+          chip.setAttribute("aria-label", `Remove ${premium ? "premium " : ""}${time}`);
+          chip.textContent = premium ? `${time} · Premium` : time;
+          const x = document.createElement("span");
+          x.className = "time-chip-x";
+          x.setAttribute("aria-hidden", "true");
+          x.textContent = "×";
+          chip.appendChild(x);
+          chips.appendChild(chip);
+        });
+      };
+      addChips(showing.times, false);
+      addChips(showing.premiumTimes, true);
+
+      const actions = document.createElement("div");
+      actions.className = "showing-day-actions";
+      [
+        ["edit-day", "Edit"],
+        ["delete-day", "Delete day"],
+      ].forEach(([action, text]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "ghost-btn";
+        button.dataset.action = action;
+        button.dataset.showingIndex = String(index);
+        button.textContent = text;
+        actions.appendChild(button);
+      });
+
+      row.append(label, chips, actions);
+      li.appendChild(row);
+      if (editingShowing?.showing === showing) li.appendChild(buildShowingDayEditor(showing, index));
       elements.showingsList.appendChild(li);
     });
+}
+
+function buildShowingDayEditor(showing, index) {
+  const form = document.createElement("form");
+  form.className = "showing-day-editor";
+  const field = (labelText, name, value, placeholder = "") => {
+    const id = `showingDayEditor-${name}`;
+    const label = document.createElement("label");
+    label.htmlFor = id;
+    label.textContent = labelText;
+    const input = document.createElement("input");
+    input.type = "text";
+    input.id = id;
+    input.name = name;
+    input.value = value;
+    input.placeholder = placeholder;
+    form.append(label, input);
+  };
+  field("Times (comma separated)", "times", dedupeSortTimes(showing.times || []).join(", "), "1:30 PM, 6:50 PM");
+  field("Premium Times (comma separated)", "premiumTimes", dedupeSortTimes(showing.premiumTimes || []).join(", "));
+  field("Room", "room", String(showing.room || ""));
+  field("Note", "notes", String(showing.notes || ""), "7:00 PM: Q&A with director");
+
+  const festivalLabel = document.createElement("label");
+  festivalLabel.htmlFor = "showingDayEditor-festival";
+  festivalLabel.textContent = "Festival";
+  const festivalSelect = document.createElement("select");
+  festivalSelect.id = "showingDayEditor-festival";
+  festivalSelect.name = "festival";
+  const festivalId = Number(showing.festivalId);
+  const keepId = Number.isInteger(festivalId) && festivalId > 0 ? festivalId : null;
+  fillFestivalOptions(festivalSelect, keepId ? String(keepId) : "", keepId);
+  form.append(festivalLabel, festivalSelect);
+
+  const actions = document.createElement("div");
+  actions.className = "admin-inline-actions";
+  const done = document.createElement("button");
+  done.type = "submit";
+  done.textContent = "Done";
+  const cancel = document.createElement("button");
+  cancel.type = "button";
+  cancel.className = "ghost-btn";
+  cancel.dataset.action = "cancel-day";
+  cancel.dataset.showingIndex = String(index);
+  cancel.textContent = "Cancel";
+  actions.append(done, cancel);
+  form.appendChild(actions);
+  return form;
 }
 
 function renderPromoSettingsEditor() {
@@ -1665,7 +1830,7 @@ function renderCsvImportPreview() {
       entries.forEach((day) => {
         const li = document.createElement("li");
         const times = [...day.times, ...day.premiumTimes.map((time) => `${time} (premium)`)];
-        li.textContent = `${day.film.title} · ${formatCsvPreviewDate(day.date)}: ${times.join(", ")}`;
+        li.textContent = `${day.film.title} · ${formatShowingDate(day.date)}: ${times.join(", ")}`;
         if (day.newFilm || day.newDay) {
           const tag = document.createElement("span");
           tag.className = "csv-import-tag";
@@ -1690,7 +1855,7 @@ function renderCsvImportPreview() {
       entries.forEach((entry) => {
         const li = document.createElement("li");
         const label = document.createElement("span");
-        label.textContent = `${entry.film.title} · ${formatCsvPreviewDate(entry.date)}: `;
+        label.textContent = `${entry.film.title} · ${formatShowingDate(entry.date)}: `;
         li.appendChild(label);
         const times = [
           ...entry.times.map((time) => ({ time, premium: false })),
@@ -1757,7 +1922,7 @@ function updateCsvImportApplyLabel() {
   elements.confirmCsvImport.textContent = picked ? `Apply and remove ${pluralize(picked, "time")}` : "Apply";
 }
 
-function formatCsvPreviewDate(dateIso) {
+function formatShowingDate(dateIso) {
   const date = parseIsoDate(dateIso);
   if (!date) return dateIso;
   return date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
