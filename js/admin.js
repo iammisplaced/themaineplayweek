@@ -30,17 +30,16 @@ import {
 const MAX_ADMIN_SEARCH_RESULTS = 120;
 const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
 const ADMIN_MARKUP_URL = new URL("../admin-panel.html", import.meta.url);
+const ADMIN_STYLESHEET_URL = new URL("../css/admin.css", import.meta.url);
 
 let state;
 let render;
 let elements;
 
-// Fetches the markup before changing anything, so if that download fails app.js can
-// simply call this again.
+// Downloads the markup and styles before changing anything else, so if either fails
+// app.js can simply call this again.
 export async function initAdmin(app) {
-  const response = await fetch(ADMIN_MARKUP_URL);
-  if (!response.ok) throw new Error(`admin-panel.html returned ${response.status}`);
-  const markup = await response.text();
+  const [markup] = await Promise.all([fetchAdminMarkup(), loadAdminStylesheet()]);
   document.getElementById("adminPanel").insertAdjacentHTML("beforeend", markup);
 
   ({ state, render } = app);
@@ -84,6 +83,30 @@ export function showAdminPanel() {
   syncAdminEditor();
   syncAdminSectionUI();
   updateAdminAuthUI();
+}
+
+async function fetchAdminMarkup() {
+  const response = await fetch(ADMIN_MARKUP_URL);
+  if (!response.ok) throw new Error(`admin-panel.html returned ${response.status}`);
+  return response.text();
+}
+
+// Added after css/styles.css; a link left from an earlier, failed attempt is reused.
+function loadAdminStylesheet() {
+  const existing = document.getElementById("adminStylesheet");
+  if (existing) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const link = document.createElement("link");
+    link.id = "adminStylesheet";
+    link.rel = "stylesheet";
+    link.href = ADMIN_STYLESHEET_URL.href;
+    link.onload = () => resolve();
+    link.onerror = () => {
+      link.remove();
+      reject(new Error("css/admin.css could not load"));
+    };
+    document.head.appendChild(link);
+  });
 }
 
 function findAdminElements() {
