@@ -717,6 +717,12 @@ function bindAdminEvents() {
       elements.adminMessage.textContent = "Add a date and at least one standard or premium time.";
       return;
     }
+    // The database skips times it can't read, so they would vanish on save.
+    const invalidTime = [...times, ...premiumTimes].find((time) => !to24HourTime(time));
+    if (invalidTime) {
+      elements.adminMessage.textContent = `"${invalidTime}" isn't a valid time. Use h:mm AM/PM, like 7:30 PM.`;
+      return;
+    }
 
     for (let offset = 0; offset < spanDays; offset += 1) {
       const targetDate = addDaysIso(date, offset);
