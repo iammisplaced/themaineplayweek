@@ -29,12 +29,20 @@ import {
 
 const MAX_ADMIN_SEARCH_RESULTS = 120;
 const TMDB_KEY_STORAGE_KEY = "tmdb-api-key-local";
+const ADMIN_MARKUP_URL = new URL("../admin-panel.html", import.meta.url);
 
 let state;
 let render;
 let elements;
 
+// Fetches the markup before changing anything, so if that download fails app.js can
+// simply call this again.
 export async function initAdmin(app) {
+  const response = await fetch(ADMIN_MARKUP_URL);
+  if (!response.ok) throw new Error(`admin-panel.html returned ${response.status}`);
+  const markup = await response.text();
+  document.getElementById("adminPanel").insertAdjacentHTML("beforeend", markup);
+
   ({ state, render } = app);
   elements = findAdminElements();
   state.admin = {

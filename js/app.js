@@ -746,6 +746,7 @@ function bindEvents() {
     }
   });
 
+  const adminIntroText = elements.adminIntroText.textContent;
   elements.adminToggle.addEventListener("click", async () => {
     const open = elements.adminPanel.classList.toggle("open");
     elements.adminToggle.setAttribute("aria-expanded", String(open));
@@ -755,6 +756,7 @@ function bindEvents() {
     const startTime = performance.now();
     try {
       const admin = await loadAdmin();
+      elements.adminIntroText.textContent = adminIntroText;
       admin.showAdminPanel();
     } catch (error) {
       elements.adminIntroText.textContent = `The admin could not load: ${error.message}. Reload the page and try again.`;
@@ -769,18 +771,18 @@ function bindEvents() {
   });
 }
 
-// The admin is downloaded the first time the panel opens. A failed download is not
-// remembered, so the next open tries again; initAdmin itself only ever runs once.
+// The admin's code and markup are downloaded the first time the panel opens. A failed
+// download is not remembered, so the next open tries again.
 let adminModulePromise = null;
 function loadAdmin() {
   adminModulePromise ??= import("./admin.js")
-    .catch((error) => {
-      adminModulePromise = null;
-      throw error;
-    })
     .then(async (admin) => {
       await admin.initAdmin({ state, render });
       return admin;
+    })
+    .catch((error) => {
+      adminModulePromise = null;
+      throw error;
     });
   return adminModulePromise;
 }
