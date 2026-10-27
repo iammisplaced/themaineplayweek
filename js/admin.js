@@ -16,7 +16,6 @@ import {
   addDaysIso,
   buildFilmGroupKey,
   dedupeSortTimes,
-  fetchAllRowsFromSupabase,
   loadDataFromSupabase,
   normalizeFilmTitle,
   normalizeMetadataSource,
@@ -2069,18 +2068,9 @@ async function saveDataToSupabase() {
       "Blocked save: current admin data was not loaded from Supabase. Reload the page and try again."
     );
   }
-  await verifySupabaseSchema(supabase);
+  // replace_showtimes_data makes the safety checks itself: it refuses saves that would
+  // clear a ticket link, delete many rows, or overwrite data that changed since loading.
   const payload = buildReplacePayload(state.data, state.promotedCards);
-  const riskyTicketLinkChanges = await findTicketLinkClearRisks(supabase, payload);
-  if (riskyTicketLinkChanges.count > 0) {
-    const preview = riskyTicketLinkChanges.samples.length
-      ? `\n\nExamples:\n- ${riskyTicketLinkChanges.samples.join("\n- ")}`
-      : "";
-    throw new Error(
-      `Blocked save: this update would clear ${riskyTicketLinkChanges.count} existing ticket link(s) in Supabase.${preview}\n\nExplicit clears are currently disabled for safety.`
-    );
-  }
-
   const fullReplaceRpc = await supabase.rpc("replace_showtimes_data", {
     payload,
     allow_ticket_link_clear: false,
@@ -2089,118 +2079,12 @@ async function saveDataToSupabase() {
   if (fullReplaceRpc.error) throw fullReplaceRpc.error;
 }
 
-async function verifySupabaseSchema(supabase) {
-  const checks = await Promise.all([
-    supabase.from("theatres").select("id").limit(1),
-    supabase.from("films").select("id,metadata_source").limit(1),
-    supabase.from("showtimes").select("id").limit(1),
-    supabase.from("theatre_films").select("theatre_id").limit(1),
-    supabase.from("promos").select("id").limit(1),
-    supabase.from("festivals").select("id").limit(1),
-  ]);
-  const failed = checks.find((result) => result.error);
-  if (failed?.error) {
-    throw new Error(`Supabase schema missing/incompatible (${failed.error.message})`);
-  }
-}
-
 function buildFilmUniqKey(film) {
   return [
     film.title || "",
     Number.isInteger(Number(film.year)) ? Number(film.year) : "",
     Number.isInteger(Number(film.tmdbId)) ? Number(film.tmdbId) : "",
   ].join("::");
-}
-
-async function findTicketLinkClearRisks(supabase, payload) {
-  const [theatres, films, theatreFilms] = await Promise.all([
-    fetchAllRowsFromSupabase("theatres", () =>
-      supabase.from("theatres").select("id,name,city").order("id", { ascending: true })
-    ),
-    fetchAllRowsFromSupabase("films", () =>
-      supabase.from("films").select("id,title,year,tmdb_id").order("id", { ascending: true })
-    ),
-    fetchAllRowsFromSupabase("theatre_films", () =>
-      supabase
-        .from("theatre_films")
-        .select("theatre_id,film_id,ticket_link")
-        .order("theatre_id", { ascending: true })
-        .order("film_id", { ascending: true })
-    ),
-  ]);
-  const theatreById = new Map((theatres || []).map((row) => [String(row.id), row]));
-  const filmById = new Map((films || []).map((row) => [String(row.id), row]));
-
-  const payloadTheatreByKey = new Map((payload?.theatres || []).map((row) => [row.key, row]));
-  const payloadFilmByKey = new Map((payload?.films || []).map((row) => [row.key, row]));
-  const payloadLinkByComposite = new Map();
-
-  (payload?.theatre_films || []).forEach((row) => {
-    const theatre = payloadTheatreByKey.get(row.theatre_key);
-    const film = payloadFilmByKey.get(row.film_key);
-    if (!theatre || !film) return;
-    const composite = buildTheatreFilmCompositeKey(
-      theatre.name,
-      theatre.city,
-      film.title,
-      film.year,
-      film.tmdb_id
-    );
-    payloadLinkByComposite.set(composite, String(row.ticket_link || "").trim());
-  });
-
-  const riskyRows = [];
-  (theatreFilms || []).forEach((row) => {
-    const existingLink = String(row.ticket_link || "").trim();
-    if (!existingLink) return;
-
-    const theatre = theatreById.get(String(row.theatre_id));
-    const film = filmById.get(String(row.film_id));
-    if (!theatre || !film) return;
-
-    const composite = buildTheatreFilmCompositeKey(
-      theatre.name,
-      theatre.city,
-      film.title,
-      film.year,
-      film.tmdb_id
-    );
-    const incoming = payloadLinkByComposite.get(composite);
-    if (!incoming) {
-      riskyRows.push({
-        theatreName: theatre.name,
-        theatreCity: theatre.city,
-        filmTitle: film.title,
-        filmYear: film.year,
-      });
-    }
-  });
-
-  return {
-    count: riskyRows.length,
-    samples: riskyRows.slice(0, 5).map((entry) => {
-      const filmLabel = Number.isInteger(Number(entry.filmYear))
-        ? `${entry.filmTitle} (${Number(entry.filmYear)})`
-        : entry.filmTitle;
-      return `${filmLabel} at ${entry.theatreName} (${entry.theatreCity})`;
-    }),
-  };
-}
-
-function buildTheatreFilmCompositeKey(theatreName, theatreCity, filmTitle, filmYear, filmTmdbId) {
-  return [
-    normalizeSearchText(theatreName),
-    normalizeSearchText(theatreCity),
-    buildFilmIdentityKey(filmTitle, filmYear, filmTmdbId),
-  ].join("::");
-}
-
-function buildFilmIdentityKey(filmTitle, filmYear, filmTmdbId) {
-  const tmdbId = Number(filmTmdbId);
-  if (Number.isInteger(tmdbId) && tmdbId > 0) {
-    return `tmdb:${tmdbId}`;
-  }
-  return `${normalizeFilmTitle(filmTitle)}::${Number.isInteger(Number(filmYear)) ? Number(filmYear) : ""}`;
 }
 
 function buildReplacePayload(data, promotedCards) {
