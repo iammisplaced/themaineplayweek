@@ -65,6 +65,7 @@ export async function initAdmin(app) {
     isSaving: false,
     isRefreshingTmdb: false,
     tmdbApiKey: "",
+    promoImagesToDelete: [],
     auth: {
       authenticated: false,
       email: "",
@@ -293,7 +294,7 @@ function bindAdminEvents() {
     elements.adminMessage.textContent = "Promo settings updated.";
   });
 
-  elements.promoSettingsList?.addEventListener("click", async (event) => {
+  elements.promoSettingsList?.addEventListener("click", (event) => {
     if (!requireAdminAuth()) return;
     const removeButton = event.target.closest("button[data-remove-promo-index]");
     if (!removeButton) return;
@@ -303,13 +304,9 @@ function bindAdminEvents() {
     const label = String(promo?.title || promo?.imageName || "this promo").trim();
     const confirmed = window.confirm(`Delete ${label}?`);
     if (!confirmed) return;
-    if (promo?.imagePath) {
-      try {
-        await deletePromoImageFromStorage(promo.imagePath);
-      } catch {
-        // Non-blocking: allow metadata delete even if storage cleanup fails.
-      }
-    }
+    // The live promo keeps showing this image until the next save, so the file is
+    // removed only after that save succeeds.
+    if (promo?.imagePath) state.admin.promoImagesToDelete.push(promo.imagePath);
     state.promotedCards.splice(promoIndex, 1);
     renderPromoSettingsEditor();
     render();
@@ -1978,6 +1975,7 @@ async function persistData() {
   }
   await saveDataToSupabase();
   applyFullData(await loadDataFromSupabase(state.supabase));
+  await deleteRemovedPromoImages();
   syncAdminEditor();
   render();
   return { localDraftWarning };
@@ -2389,6 +2387,20 @@ async function uploadPromoImageToStorage(file) {
     .upload(path, file, { upsert: false, contentType: file.type || undefined });
   if (result.error) throw result.error;
   return path;
+}
+
+// Runs after a successful save. An image still used by a saved promo is kept.
+async function deleteRemovedPromoImages() {
+  const inUse = new Set((state.promotedCards || []).map((promo) => promo.imagePath));
+  const paths = state.admin.promoImagesToDelete.filter((path) => !inUse.has(path));
+  state.admin.promoImagesToDelete = [];
+  for (const path of paths) {
+    try {
+      await deletePromoImageFromStorage(path);
+    } catch {
+      // Non-blocking: the save already succeeded; the file is only left unused.
+    }
+  }
 }
 
 async function deletePromoImageFromStorage(path) {
