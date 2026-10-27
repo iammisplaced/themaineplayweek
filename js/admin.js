@@ -3,7 +3,6 @@
 // calls the site's `render` after changes that show on the page.
 import {
   getShowDateTime,
-  mergeShowtimeNotes,
   normalizeOutboundUrl,
   parseIsoDate,
   slugifyTextSegment,
@@ -24,6 +23,13 @@ import {
   sortFilms,
   validateData,
 } from "./data.js";
+import {
+  findTimesMissingFromCsv,
+  importShowtimesCsv,
+  removeCsvMissingTimes,
+  summarizeCsvDays,
+  toCsvCell,
+} from "./admin-csv.js";
 
 const MAX_ADMIN_SEARCH_RESULTS = 120;
 // Where earlier versions kept a TMDb key in the browser; removed on open now that the server holds it.
@@ -39,6 +45,9 @@ let elements;
 // What the database holds, as buildReplacePayload gives it, as of the last load or save.
 // A save sends only what differs from it.
 let savedPayload = null;
+// The CSV import waiting in the preview: the data it was made from, the changed copy, and
+// what the preview lists. Null when the preview is closed.
+let pendingCsvImport = null;
 
 // Downloads the markup, styles and full data before changing anything else, so if any
 // of them fails app.js can simply call this again. Visitors only have the films with
@@ -228,6 +237,11 @@ function findAdminElements() {
     adminSaveStatus: document.getElementById("adminSaveStatus"),
     downloadCsvTemplate: document.getElementById("downloadCsvTemplate"),
     uploadCsv: document.getElementById("uploadCsv"),
+    csvImportModal: document.getElementById("csvImportModal"),
+    csvImportSummary: document.getElementById("csvImportSummary"),
+    csvImportPreview: document.getElementById("csvImportPreview"),
+    confirmCsvImport: document.getElementById("confirmCsvImport"),
+    cancelCsvImport: document.getElementById("cancelCsvImport"),
     adminMessage: document.getElementById("adminMessage"),
   };
 }
@@ -999,25 +1013,64 @@ function bindAdminEvents() {
       const nextData = JSON.parse(JSON.stringify(state.data));
       const result = importShowtimesCsv(nextData, content);
       validateData(nextData);
-      state.data = nextData;
-      markUnsaved();
-      initializeAdminState();
-      syncAdminEditor();
-      render();
-      let message =
-        `Imported CSV: ${result.rowsProcessed} rows, ${result.showingDatesUpdated} showing date entries updated, ${result.filmsCreated || 0} films created.`;
-      if (result.createdFilms && result.createdFilms.length > 0) {
-        const filmList = result.createdFilms
-          .map((f) => `"${f.title}" (${f.theatreName}, ${f.theatreCity})`)
-          .join("; ");
-        message += ` Added films: ${filmList}.`;
-      }
-      message += " Click Save to sync Supabase.";
-      elements.adminMessage.textContent = message;
-      elements.uploadCsv.value = "";
+      pendingCsvImport = {
+        baseData: state.data,
+        nextData,
+        result,
+        added: summarizeCsvDays(result.days),
+        missing: findTimesMissingFromCsv(nextData, result),
+      };
+      renderCsvImportPreview();
+      elements.adminMessage.textContent = "";
+      elements.csvImportModal.showModal();
     } catch (error) {
       elements.adminMessage.textContent = `CSV import failed: ${error.message}`;
+    } finally {
+      elements.uploadCsv.value = "";
     }
+  });
+
+  elements.csvImportPreview?.addEventListener("change", () => updateCsvImportApplyLabel());
+  elements.cancelCsvImport?.addEventListener("click", () => elements.csvImportModal.close());
+  // Cancel, Escape or Apply: the preview's copy is dropped either way.
+  elements.csvImportModal?.addEventListener("close", () => {
+    pendingCsvImport = null;
+  });
+  elements.confirmCsvImport?.addEventListener("click", () => {
+    if (!requireAdminAuth() || !pendingCsvImport) return;
+    const { baseData, nextData, result, added } = pendingCsvImport;
+    if (state.data !== baseData) {
+      elements.csvImportModal.close();
+      elements.adminMessage.textContent = "The data changed while the preview was open. Import the CSV again.";
+      return;
+    }
+    const picks = getPickedCsvMissingTimes();
+    try {
+      removeCsvMissingTimes(picks);
+      validateData(nextData);
+    } catch (error) {
+      elements.csvImportModal.close();
+      elements.adminMessage.textContent = `CSV import failed: ${error.message}`;
+      return;
+    }
+    elements.csvImportModal.close();
+    const timesAdded = added.reduce((sum, day) => sum + day.times.length + day.premiumTimes.length, 0);
+    const detailsChanged =
+      result.ticketLinksChanged + result.roomsChanged + result.notesChanged + result.festivalsChanged;
+    if (!timesAdded && !result.filmsCreated && !detailsChanged && !picks.length) {
+      elements.adminMessage.textContent = "Nothing to import: everything in this CSV is already here.";
+      return;
+    }
+    state.data = nextData;
+    markUnsaved();
+    initializeAdminState();
+    syncAdminEditor();
+    render();
+    const parts = [`added ${pluralize(timesAdded, "time")}`];
+    if (result.filmsCreated) parts.push(`${pluralize(result.filmsCreated, "new film")}`);
+    if (detailsChanged) parts.push(`${pluralize(detailsChanged, "detail")} changed`);
+    if (picks.length) parts.push(`removed ${pluralize(picks.length, "time")}`);
+    elements.adminMessage.textContent = `Imported CSV: ${parts.join(", ")}. Click Save to sync Supabase.`;
   });
 }
 
@@ -1569,6 +1622,151 @@ function getSelectedFilm() {
   return theatre.films[state.admin.filmIndex] || null;
 }
 
+function renderCsvImportPreview() {
+  const { result, added, missing } = pendingCsvImport;
+  const preview = elements.csvImportPreview;
+  preview.innerHTML = "";
+
+  const timesAdded = added.reduce((sum, day) => sum + day.times.length + day.premiumTimes.length, 0);
+  const theatreCount = new Set(added.map((day) => day.theatre)).size;
+  const summary = [
+    timesAdded
+      ? `Adds ${pluralize(timesAdded, "time")} on ${pluralize(added.length, "showing day")} at ${pluralize(theatreCount, "theatre")}.`
+      : "No new times: every time in this CSV is already here.",
+  ];
+  if (result.filmsCreated) summary.push(`Creates ${pluralize(result.filmsCreated, "film")}.`);
+  const details = [
+    [result.ticketLinksChanged, "ticket link"],
+    [result.roomsChanged, "room"],
+    [result.notesChanged, "note"],
+    [result.festivalsChanged, "festival"],
+  ]
+    .filter(([count]) => count)
+    .map(([count, label]) => pluralize(count, label));
+  if (details.length) summary.push(`Also changes ${details.join(", ")}.`);
+  elements.csvImportSummary.textContent = summary.join(" ");
+
+  if (result.createdFilms.length) {
+    appendCsvPreviewHeading(preview, `New films (${result.createdFilms.length})`);
+    const list = document.createElement("ul");
+    result.createdFilms.forEach((film) => {
+      const li = document.createElement("li");
+      li.textContent = `${film.title} · ${film.theatreName}, ${film.theatreCity}`;
+      list.appendChild(li);
+    });
+    preview.appendChild(list);
+  }
+
+  if (added.length) {
+    appendCsvPreviewHeading(preview, "Adding");
+    groupByTheatre(added).forEach(({ theatre, entries }) => {
+      const count = entries.reduce((sum, day) => sum + day.times.length + day.premiumTimes.length, 0);
+      const group = appendCsvPreviewGroup(preview, theatre, `+${pluralize(count, "time")}`, false);
+      entries.forEach((day) => {
+        const li = document.createElement("li");
+        const times = [...day.times, ...day.premiumTimes.map((time) => `${time} (premium)`)];
+        li.textContent = `${day.film.title} · ${formatCsvPreviewDate(day.date)}: ${times.join(", ")}`;
+        if (day.newFilm || day.newDay) {
+          const tag = document.createElement("span");
+          tag.className = "csv-import-tag";
+          tag.textContent = day.newFilm ? " · new film" : " · new day";
+          li.appendChild(tag);
+        }
+        group.appendChild(li);
+      });
+    });
+  }
+
+  if (missing.length) {
+    appendCsvPreviewHeading(preview, "On the site but not in this CSV");
+    const help = document.createElement("p");
+    help.className = "admin-help";
+    help.textContent =
+      "These stay unless you tick them. Tick a time to remove it, for a show that moved or was cancelled.";
+    preview.appendChild(help);
+    groupByTheatre(missing.map((entry, index) => ({ ...entry, index }))).forEach(({ theatre, entries }) => {
+      const count = entries.reduce((sum, entry) => sum + entry.times.length + entry.premiumTimes.length, 0);
+      const group = appendCsvPreviewGroup(preview, theatre, pluralize(count, "time"), count <= 12);
+      entries.forEach((entry) => {
+        const li = document.createElement("li");
+        const label = document.createElement("span");
+        label.textContent = `${entry.film.title} · ${formatCsvPreviewDate(entry.date)}: `;
+        li.appendChild(label);
+        const times = [
+          ...entry.times.map((time) => ({ time, premium: false })),
+          ...entry.premiumTimes.map((time) => ({ time, premium: true })),
+        ];
+        times.forEach(({ time, premium }) => {
+          const timeLabel = document.createElement("label");
+          timeLabel.className = "csv-import-time";
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.dataset.missingIndex = String(entry.index);
+          checkbox.dataset.time = time;
+          checkbox.dataset.premium = premium ? "1" : "";
+          timeLabel.append(checkbox, premium ? `${time} (premium)` : time);
+          li.appendChild(timeLabel);
+        });
+        group.appendChild(li);
+      });
+    });
+  }
+
+  updateCsvImportApplyLabel();
+}
+
+function appendCsvPreviewHeading(container, text) {
+  const heading = document.createElement("h4");
+  heading.textContent = text;
+  container.appendChild(heading);
+}
+
+// A collapsible block per theatre; returns its list.
+function appendCsvPreviewGroup(container, theatre, countLabel, open) {
+  const details = document.createElement("details");
+  details.open = open;
+  const summary = document.createElement("summary");
+  summary.textContent = `${theatre.name}, ${theatre.city} · ${countLabel}`;
+  const list = document.createElement("ul");
+  details.append(summary, list);
+  container.appendChild(details);
+  return list;
+}
+
+function groupByTheatre(entries) {
+  const groups = new Map();
+  entries.forEach((entry) => {
+    if (!groups.has(entry.theatre)) groups.set(entry.theatre, { theatre: entry.theatre, entries: [] });
+    groups.get(entry.theatre).entries.push(entry);
+  });
+  return [...groups.values()];
+}
+
+function getPickedCsvMissingTimes() {
+  if (!pendingCsvImport) return [];
+  return [...elements.csvImportPreview.querySelectorAll("input[type=checkbox][data-missing-index]:checked")].map(
+    (checkbox) => {
+      const entry = pendingCsvImport.missing[Number(checkbox.dataset.missingIndex)];
+      return { film: entry.film, date: entry.date, time: checkbox.dataset.time, premium: !!checkbox.dataset.premium };
+    }
+  );
+}
+
+function updateCsvImportApplyLabel() {
+  const picked = getPickedCsvMissingTimes().length;
+  elements.confirmCsvImport.textContent = picked ? `Apply and remove ${pluralize(picked, "time")}` : "Apply";
+}
+
+function formatCsvPreviewDate(dateIso) {
+  const date = parseIsoDate(dateIso);
+  if (!date) return dateIso;
+  return date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+}
+
+function pluralize(count, word) {
+  return `${count} ${word}${count === 1 ? "" : "s"}`;
+}
+
 function clampIndex(value, length) {
   if (!length) return 0;
   const parsed = Number(value);
@@ -1581,292 +1779,6 @@ function parseTimesInput(input) {
     .split(",")
     .map((entry) => entry.trim())
     .filter(Boolean);
-}
-
-function importShowtimesCsv(data, csvContent) {
-  if (!data || !Array.isArray(data.theatreGroups)) {
-    throw new Error("Current data is invalid. Reload before importing CSV.");
-  }
-  const rows = parseCsvRows(csvContent);
-  if (rows.length < 2) {
-    throw new Error("CSV must include a header row and at least one data row.");
-  }
-
-  const normalizedHeaders = rows[0].map(normalizeCsvHeader);
-  const headerIndexByKey = new Map(normalizedHeaders.map((key, index) => [key, index]));
-  const requiredHeaders = ["theatre_name", "theatre_city", "film_title", "show_date"];
-  const missingHeaders = requiredHeaders.filter((key) => !headerIndexByKey.has(key));
-  if (missingHeaders.length) {
-    throw new Error(`Missing required CSV header(s): ${missingHeaders.join(", ")}`);
-  }
-  if (!headerIndexByKey.has("show_times") && !headerIndexByKey.has("premium_show_times")) {
-    throw new Error("Missing required CSV header: include show_times, premium_show_times, or both.");
-  }
-
-  const stats = {
-    rowsProcessed: 0,
-    showingDatesUpdated: 0,
-    filmsCreated: 0,
-    createdFilms: [],
-  };
-
-  for (let rowIndex = 1; rowIndex < rows.length; rowIndex += 1) {
-    const row = rows[rowIndex];
-    if (isCsvRowBlank(row)) continue;
-    const rowNumber = rowIndex + 1;
-
-    const theatreName = readCsvValue(row, headerIndexByKey, "theatre_name");
-    const theatreCity = readCsvValue(row, headerIndexByKey, "theatre_city");
-    const filmTitle = readCsvValue(row, headerIndexByKey, "film_title");
-    const filmYearRaw = readCsvValue(row, headerIndexByKey, "film_year");
-    const filmTmdbIdRaw = readCsvValue(row, headerIndexByKey, "film_tmdb_id");
-    const ticketLinkRaw = readCsvValue(row, headerIndexByKey, "ticket_link");
-    const roomRaw = readCsvValue(row, headerIndexByKey, "room");
-    // Like notes, a blank room keeps the stored one and a lone "-" clears it.
-    const clearRoom = roomRaw === "-";
-    const csvRoom = clearRoom ? "" : roomRaw;
-    const notesRaw = readCsvValue(row, headerIndexByKey, "notes");
-    // Blank keeps the stored note, a lone "-" clears it, and anything else is merged into it.
-    const clearNotes = notesRaw === "-";
-    const csvNotes = clearNotes ? "" : notesRaw;
-    const festivalNameRaw = readCsvValue(row, headerIndexByKey, "festival_name");
-    const showDate = readCsvValue(row, headerIndexByKey, "show_date");
-    const showTimesRaw = readCsvValue(row, headerIndexByKey, "show_times");
-    const premiumShowTimesRaw = readCsvValue(row, headerIndexByKey, "premium_show_times");
-
-    if (!theatreName) throw new Error(`Row ${rowNumber}: theatre_name is required.`);
-    if (!theatreCity) throw new Error(`Row ${rowNumber}: theatre_city is required.`);
-    if (!filmTitle) throw new Error(`Row ${rowNumber}: film_title is required.`);
-    if (!showDate) throw new Error(`Row ${rowNumber}: show_date is required.`);
-    if (!parseIsoDate(showDate)) {
-      throw new Error(`Row ${rowNumber}: show_date must be YYYY-MM-DD.`);
-    }
-
-    const filmYear = parseOptionalCsvInteger(filmYearRaw, "film_year", rowNumber);
-    const filmTmdbId = parseOptionalCsvInteger(filmTmdbIdRaw, "film_tmdb_id", rowNumber);
-    if (filmTmdbId !== null && filmTmdbId <= 0) {
-      throw new Error(`Row ${rowNumber}: film_tmdb_id must be greater than 0.`);
-    }
-
-    const parsedTimes = parseCsvTimesField(showTimesRaw);
-    const parsedPremiumTimes = parseCsvTimesField(premiumShowTimesRaw);
-    if (!parsedTimes.length && !parsedPremiumTimes.length) {
-      throw new Error(`Row ${rowNumber}: include at least one value in show_times or premium_show_times.`);
-    }
-    const invalidTime = parsedTimes.find((time) => !to24HourTime(time));
-    if (invalidTime) {
-      throw new Error(`Row ${rowNumber}: invalid time "${invalidTime}". Use h:mm AM/PM.`);
-    }
-    const invalidPremiumTime = parsedPremiumTimes.find((time) => !to24HourTime(time));
-    if (invalidPremiumTime) {
-      throw new Error(`Row ${rowNumber}: invalid premium time "${invalidPremiumTime}". Use h:mm AM/PM.`);
-    }
-
-    const theatreMatches = data.theatreGroups.filter(
-      (entry) => normalizeSearchText(entry?.name) === normalizeSearchText(theatreName)
-    );
-    if (!theatreMatches.length) {
-      throw new Error(`Row ${rowNumber}: theatre "${theatreName}" was not found. Add it in admin first.`);
-    }
-    const inputCityExact = normalizeSearchText(theatreCity);
-    const inputCityLoose = normalizeCityMatchText(theatreCity);
-    let theatre = theatreMatches.find((entry) => normalizeSearchText(entry?.city) === inputCityExact);
-    if (!theatre) {
-      theatre = theatreMatches.find((entry) => normalizeCityMatchText(entry?.city) === inputCityLoose);
-    }
-    if (!theatre && theatreMatches.length === 1) {
-      theatre = theatreMatches[0];
-    }
-    if (!theatre) {
-      const availableCities = theatreMatches.map((entry) => String(entry?.city || "").trim()).filter(Boolean).join(", ");
-      throw new Error(
-        `Row ${rowNumber}: theatre "${theatreName}" with city "${theatreCity}" was not found.${availableCities ? ` Available cities: ${availableCities}.` : ""}`
-      );
-    }
-
-    if (!Array.isArray(theatre.films)) theatre.films = [];
-    const filmMatches = theatre.films.filter((entry) => {
-      if (normalizeFilmTitle(entry?.title) !== normalizeFilmTitle(filmTitle)) return false;
-      if (filmTmdbId !== null) return Number(entry?.tmdbId) === filmTmdbId;
-      if (filmYear !== null) return Number(entry?.year) === filmYear;
-      return true;
-    });
-    let film = filmMatches[0];
-    if (!filmMatches.length) {
-      film = {
-        title: filmTitle,
-        ticketLink: "",
-        staffFavorite: false,
-        staffFavoriteBy: "",
-        featuredOnPlayweek: false,
-        featuredOnPlayweekUrl: "",
-        rankingOverride: false,
-        metadataSource: filmTmdbId !== null ? "tmdb" : "manual",
-        showings: [],
-      };
-      if (filmYear !== null) film.year = filmYear;
-      if (filmTmdbId !== null) film.tmdbId = filmTmdbId;
-      theatre.films.push(film);
-      sortFilms(theatre.films);
-      stats.filmsCreated += 1;
-      stats.createdFilms.push({ title: filmTitle, theatreName: theatre.name, theatreCity: theatre.city });
-    } else if (filmMatches.length > 1 && filmTmdbId === null && filmYear === null) {
-      throw new Error(
-        `Row ${rowNumber}: multiple "${filmTitle}" entries at "${theatre.name}". Include film_year or film_tmdb_id.`
-      );
-    }
-    let resolvedFestivalId = null;
-    if (festivalNameRaw) {
-      const matchedFestival = (data.festivals || []).find(
-        (festival) => normalizeSearchText(festival?.name) === normalizeSearchText(festivalNameRaw)
-      );
-      if (!matchedFestival) {
-        throw new Error(
-          `Row ${rowNumber}: festival "${festivalNameRaw}" was not found. Add it first in festivals admin.`
-        );
-      }
-      const festivalId = Number(matchedFestival?.id);
-      if (!Number.isInteger(festivalId) || festivalId <= 0) {
-        throw new Error(`Row ${rowNumber}: festival "${festivalNameRaw}" is missing a valid id.`);
-      }
-      resolvedFestivalId = festivalId;
-    }
-    if (ticketLinkRaw) {
-      film.ticketLink = normalizeOutboundUrl(ticketLinkRaw);
-    }
-
-    if (!Array.isArray(film.showings)) film.showings = [];
-    const showing = film.showings.find((entry) => entry.date === showDate);
-    if (showing) {
-      const beforeCount = (Array.isArray(showing.times) ? showing.times.length : 0) +
-        (Array.isArray(showing.premiumTimes) ? showing.premiumTimes.length : 0);
-      showing.times = dedupeSortTimes([...(showing.times || []), ...parsedTimes]);
-      showing.premiumTimes = dedupeSortTimes([...(showing.premiumTimes || []), ...parsedPremiumTimes]);
-      if (clearRoom || csvRoom) showing.room = csvRoom;
-      if (clearNotes) showing.notes = "";
-      else if (csvNotes) showing.notes = mergeShowtimeNotes(showing.notes, csvNotes);
-      if (resolvedFestivalId) {
-        showing.festivalId = resolvedFestivalId;
-      }
-      const afterCount = showing.times.length + showing.premiumTimes.length;
-      if (afterCount !== beforeCount) {
-        stats.showingDatesUpdated += 1;
-      }
-    } else {
-      film.showings.push({
-        date: showDate,
-        room: csvRoom,
-        notes: csvNotes,
-        festivalId: resolvedFestivalId,
-        times: dedupeSortTimes(parsedTimes),
-        premiumTimes: dedupeSortTimes(parsedPremiumTimes),
-      });
-      film.showings.sort((a, b) => a.date.localeCompare(b.date));
-      stats.showingDatesUpdated += 1;
-    }
-
-    stats.rowsProcessed += 1;
-  }
-
-  return stats;
-}
-
-function parseCsvRows(input) {
-  const text = String(input || "").replace(/\r\n?/g, "\n");
-  const rows = [];
-  let row = [];
-  let field = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < text.length; i += 1) {
-    const ch = text[i];
-    if (inQuotes) {
-      if (ch === '"') {
-        if (text[i + 1] === '"') {
-          field += '"';
-          i += 1;
-        } else {
-          inQuotes = false;
-        }
-      } else {
-        field += ch;
-      }
-      continue;
-    }
-
-    if (ch === '"') {
-      inQuotes = true;
-      continue;
-    }
-    if (ch === ",") {
-      row.push(field);
-      field = "";
-      continue;
-    }
-    if (ch === "\n") {
-      row.push(field);
-      rows.push(row);
-      row = [];
-      field = "";
-      continue;
-    }
-    field += ch;
-  }
-
-  if (inQuotes) {
-    throw new Error("CSV has an unclosed quoted field.");
-  }
-
-  if (field.length > 0 || row.length > 0) {
-    row.push(field);
-    rows.push(row);
-  }
-
-  if (rows.length && rows[0].length) {
-    rows[0][0] = String(rows[0][0] || "").replace(/^\uFEFF/, "");
-  }
-
-  return rows;
-}
-
-function toCsvCell(value) {
-  const text = String(value || "");
-  if (!/[",\n]/.test(text)) return text;
-  return `"${text.replace(/"/g, '""')}"`;
-}
-
-function normalizeCsvHeader(value) {
-  return String(value || "")
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "_")
-    .replace(/^_+|_+$/g, "");
-}
-
-function readCsvValue(row, headerIndexByKey, header) {
-  const idx = headerIndexByKey.get(header);
-  if (typeof idx !== "number") return "";
-  return String(row[idx] || "").trim();
-}
-
-function parseOptionalCsvInteger(value, fieldLabel, rowNumber) {
-  const raw = String(value || "").trim();
-  if (!raw) return null;
-  if (!/^-?\d+$/.test(raw)) {
-    throw new Error(`Row ${rowNumber}: ${fieldLabel} must be an integer when provided.`);
-  }
-  return Number(raw);
-}
-
-function parseCsvTimesField(value) {
-  return String(value || "")
-    .split(/[|;,]/)
-    .map((entry) => entry.trim())
-    .filter(Boolean);
-}
-
-function isCsvRowBlank(row) {
-  return !row.some((value) => String(value || "").trim());
 }
 
 function clampSpanDays(value) {
@@ -2492,10 +2404,6 @@ function getFileExtension(fileName) {
   const idx = value.lastIndexOf(".");
   if (idx < 0) return "";
   return value.slice(idx + 1).toLowerCase().replace(/[^a-z0-9]/g, "");
-}
-
-function normalizeCityMatchText(value) {
-  return normalizeSearchText(value).replace(/\b(maine|me)\b/g, "").replace(/,\s*$/g, "").trim();
 }
 
 function parseOptionalCoordinate(value, fieldLabel, min, max) {

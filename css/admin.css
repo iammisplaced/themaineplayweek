@@ -288,3 +288,62 @@
     --save-bar-inset: 0.85rem;
   }
 }
+
+/* The Import CSV preview. */
+.admin-modal-wide {
+  width: min(720px, calc(100vw - 2rem));
+}
+
+.csv-import-preview {
+  max-height: min(60vh, 560px);
+  overflow: auto;
+  margin: 0.5rem 0 0.8rem;
+}
+
+.csv-import-preview h4 {
+  margin: 0.9rem 0 0.2rem;
+  font-size: 0.95rem;
+}
+
+.csv-import-preview details {
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: var(--surface-soft);
+  padding: 0.4rem 0.6rem;
+  margin-top: 0.45rem;
+}
+
+.csv-import-preview summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.csv-import-preview ul {
+  list-style: none;
+  margin: 0.4rem 0 0.1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.admin-panel label.csv-import-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0 0.8rem 0 0;
+  font-weight: 400;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.csv-import-time input {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.csv-import-tag {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
