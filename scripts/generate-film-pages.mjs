@@ -973,7 +973,7 @@ function renderIndexPage(items, siteUrl) {
     <title>Film Pages | ${BRAND_NAME}</title>
     <meta
       name="description"
-      content="Prototype index of SEO-friendly static film pages for The Maine Playweek."
+      content="Every film on The Maine Playweek, each with its own page of showtimes and details."
     />
     <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png" />
@@ -990,7 +990,7 @@ function renderIndexPage(items, siteUrl) {
         <h1>All Films</h1>
         <a href="../index.html">Back to Showtimes</a>
       </div>
-      <p class="film-index-note">Prototype: each card button opens a dedicated film page.</p>
+      <p class="film-index-note">Each card opens the film's own page.</p>
       <section class="results results-masonry" data-view="films" aria-live="polite">${cards}</section>
     </main>
   </body>
