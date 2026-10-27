@@ -523,7 +523,6 @@ h1 {
 .location-control-btn {
   min-width: var(--control-pill-height);
   min-height: var(--control-pill-height);
-  padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -671,8 +670,9 @@ h1 {
   font-weight: 600;
 }
 
+/* :where() keeps these defaults at zero specificity, so any component rule overrides them. */
 .tab,
-button:not(.theme-toggle) {
+:where(button:not(.theme-toggle)) {
   border: 1px solid var(--border);
   background: var(--panel);
   color: var(--ink);
@@ -719,7 +719,14 @@ button:not(.theme-toggle) {
 }
 
 .tab.active,
-button:not(.theme-toggle):not(.ghost-btn):hover {
+.tab:hover,
+:where(button:not(.theme-toggle):not(.ghost-btn):hover) {
+  border-color: var(--accent);
+  background: var(--hover-soft);
+}
+
+/* Film pages style these buttons inline but take their light hover from here. */
+.location-sort-actions button:hover {
   border-color: var(--accent);
   background: var(--hover-soft);
 }
@@ -728,10 +735,6 @@ button:not(.theme-toggle):not(.ghost-btn):hover {
 .tab:focus-visible,
 .tab:focus-visible {
   transform: translateY(-0.5px);
-}
-
-.ghost-btn {
-  background: transparent;
 }
 
 .results {
@@ -1632,6 +1635,8 @@ textarea {
 
 .admin-modal {
   border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--ink);
   border-radius: 14px;
   padding: 0;
   width: min(460px, calc(100vw - 2rem));
@@ -1764,7 +1769,7 @@ textarea {
 }
 
 :root[data-theme="dark"] .tab,
-:root[data-theme="dark"] button:not(.theme-toggle):not(.ghost-btn) {
+:where(:root[data-theme="dark"] button:not(.theme-toggle):not(.ghost-btn)) {
   border-color: #3c504a;
   background: #1a2522;
   color: #deeee9;
@@ -2112,12 +2117,12 @@ textarea {
 }
 
 .festival-toggle {
-  border: none;
-  background: transparent;
+  border-radius: 999px;
+  background: var(--panel);
   color: inherit;
   cursor: pointer;
-  padding: 0.05rem 0.1rem;
-  font-size: 0.75rem;
+  padding: 0.5rem 0.95rem;
+  font-size: inherit;
   font-weight: 400;
   display: inline-flex;
   align-items: center;
@@ -2127,12 +2132,14 @@ textarea {
   position: absolute;
   top: 2.4rem;
   right: 0.9rem;
-  line-height: 1;
+  line-height: normal;
   min-width: auto;
   min-height: auto;
 }
 
 .festival-toggle:hover {
+  border-color: var(--accent);
+  background: var(--hover-soft);
   opacity: 0.6;
 }
 
@@ -2297,7 +2304,6 @@ textarea {
 
 .theatre-sidebar-close {
   display: none;
-  border-radius: 6px;
   transition: background 120ms, color 120ms;
   z-index: 11;
 }
