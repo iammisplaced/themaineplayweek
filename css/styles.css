@@ -385,8 +385,9 @@ h1 {
   gap: 1rem;
 }
 
-/* The backdrop is fixed to the screen (from the top down to the controls' bottom edge) so
-   it spans the full width without making the page scroll sideways. */
+/* The backdrop is fixed to the screen (from the top to a little below the controls) so it
+   spans the full width without making the page scroll sideways. Its lower edge fades out
+   rather than ending in a hard line. */
 .controls::before {
   content: "";
   position: fixed;
@@ -394,11 +395,12 @@ h1 {
   top: 0;
   left: 0;
   right: 0;
-  height: var(--controls-bottom, 0px);
+  height: calc(var(--controls-bottom, 0px) + 1rem);
   background: var(--controls-backdrop);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  box-shadow: 0 6px 16px -10px rgba(29, 31, 31, 0.35);
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 1.75rem), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 1.75rem), transparent);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
