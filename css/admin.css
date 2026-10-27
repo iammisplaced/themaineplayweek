@@ -4,9 +4,9 @@
 
 /* The file input styled as a button, matching the buttons in styles.css. */
 .upload-label {
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--ink);
+  border: 1px solid var(--control-border);
+  background: var(--control-bg);
+  color: var(--control-ink);
   border-radius: 999px;
   padding: 0.5rem 0.95rem;
   font: inherit;
@@ -15,8 +15,8 @@
 }
 
 .upload-label:hover {
-  border-color: var(--accent);
-  background: var(--hover-soft);
+  border-color: var(--control-hover-border);
+  background: var(--control-hover-bg);
 }
 
 .admin-panel label {
@@ -245,10 +245,4 @@
   border: 1px solid var(--success-border);
   border-radius: 8px;
   padding: 0.45rem 0.55rem;
-}
-
-:root[data-theme="dark"] .upload-label {
-  border-color: #3c504a;
-  background: #1a2522;
-  color: #deeee9;
 }

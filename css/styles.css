@@ -31,6 +31,65 @@
   --beta-chip-bg: #fff2cd;
   --beta-chip-border: #d7be8b;
   --beta-chip-ink: #6b471b;
+  /* Buttons, tabs and button-like controls */
+  --control-bg: var(--panel);
+  --control-border: var(--border);
+  --control-ink: var(--ink);
+  --control-hover-bg: var(--hover-soft);
+  --control-hover-border: var(--accent);
+  /* Small pill toggles and links: Expand, View film, a row's film link */
+  --toggle-bg: #f8f2ea;
+  --toggle-border: var(--border);
+  --toggle-ink: var(--accent-2);
+  --toggle-hover-bg: var(--hover-soft-2);
+  --toggle-hover-border: #c8beb1;
+  --feature-link-bg: #fdf1ea;
+  --feature-link-border: var(--accent);
+  --feature-link-ink: #8d3f2b;
+  --feature-link-hover-bg: #fde6dc;
+  --feature-link-hover-border: #b74f34;
+  --tmdb-link-ink: var(--accent-2);
+  --tmdb-link-hover-ink: var(--accent);
+  --film-card-bg: linear-gradient(135deg, #fffef9 0%, #f7f2e5 100%);
+  --film-card-border: #d7c9b6;
+  --film-card-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 0 0 1px rgba(116, 93, 62, 0.1) inset,
+    0 10px 20px rgba(44, 36, 26, 0.11);
+  --film-card-hover-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 0 0 1px rgba(116, 93, 62, 0.1) inset,
+    0 12px 24px rgba(44, 36, 26, 0.16),
+    0 0 16px rgba(197, 72, 40, 0.12);
+  --favorite-stamp-filter: none;
+  --featured-stamp-filter: none;
+  --festival-card-bg: linear-gradient(180deg, rgba(255, 249, 235, 0.98) 0%, rgba(250, 241, 225, 0.98) 100%);
+  --festival-card-border: #cbb692;
+  --festival-card-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.72) inset,
+    0 10px 24px rgba(83, 62, 30, 0.12);
+  /* The date stamp mixes each card's --festival-accent with these bases. */
+  --festival-stamp-border-base: #ffffff;
+  --festival-stamp-border-amount: 48%;
+  --festival-stamp-bg-base: #fff9eb;
+  --festival-stamp-bg-amount: 16%;
+  --festival-stamp-ink-base: #3c2613;
+  --festival-stamp-ink-amount: 78%;
+  --festival-ribbon-ink: #fff9ec;
+  --promo-card-bg: linear-gradient(180deg, #fffcf7 0%, #f3ede3 100%);
+  --promo-card-border: var(--border);
+  --promo-card-shadow: 0 7px 18px rgba(29, 31, 31, 0.06);
+  --promo-title-ink: var(--accent-2);
+  --promo-image-bg: var(--surface-soft);
+  --promo-image-border: var(--border);
+  --promo-cta-bg: var(--surface-alt);
+  --promo-cta-border: var(--accent);
+  --promo-cta-ink: var(--accent);
+  --promo-cta-hover-bg: var(--hover-soft);
+  --sidebar-bg: transparent;
+  --sidebar-shadow: none;
+  --sidebar-link-ink: #fff;
+  --sidebar-link-hover-bg: #a23b20;
 }
 
 :root[data-theme="dark"] {
@@ -62,6 +121,64 @@
   --beta-chip-bg: rgba(128, 92, 36, 0.45);
   --beta-chip-border: rgba(243, 220, 170, 0.6);
   --beta-chip-ink: #ffdfab;
+  --control-bg: #1a2522;
+  --control-border: #3c504a;
+  --control-ink: #deeee9;
+  --toggle-bg: #1a2522;
+  --toggle-border: #3c504a;
+  --toggle-ink: #deeee9;
+  --toggle-hover-bg: #24312d;
+  --toggle-hover-border: #4f665f;
+  --feature-link-bg: #1f2d29;
+  --feature-link-border: rgba(141, 210, 193, 0.4);
+  --feature-link-ink: #cbe9df;
+  --feature-link-hover-bg: #253631;
+  --feature-link-hover-border: rgba(141, 210, 193, 0.4);
+  --tmdb-link-ink: #b8e3d7;
+  --tmdb-link-hover-ink: #8dd2c1;
+  --film-card-bg: linear-gradient(180deg, #1b2522 0%, #171f1d 100%);
+  --film-card-border: rgba(141, 210, 193, 0.36);
+  --film-card-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 0 0 1px rgba(141, 210, 193, 0.12) inset,
+    0 10px 20px rgba(0, 0, 0, 0.35);
+  --film-card-hover-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 0 0 1px rgba(141, 210, 193, 0.12) inset,
+    0 12px 24px rgba(0, 0, 0, 0.45),
+    0 0 16px rgba(255, 143, 111, 0.15);
+  --favorite-stamp-filter: saturate(0.9) brightness(0.92);
+  --featured-stamp-filter: saturate(0.92) brightness(0.9);
+  --festival-card-bg: linear-gradient(180deg, rgba(53, 42, 24, 0.86) 0%, rgba(36, 30, 22, 0.92) 100%);
+  --festival-card-border: rgba(237, 198, 130, 0.34);
+  /* Only dark mode sets this; light mode's top border takes the card's --festival-accent. */
+  --festival-card-top: rgba(237, 198, 130, 0.34);
+  --festival-card-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 10px 24px rgba(0, 0, 0, 0.36);
+  --festival-stamp-border-base: #f2e0c4;
+  --festival-stamp-border-amount: 55%;
+  --festival-stamp-bg-base: #261d12;
+  --festival-stamp-bg-amount: 24%;
+  --festival-stamp-ink-base: #ffe8c7;
+  --festival-stamp-ink-amount: 68%;
+  --festival-ribbon-ink: #141615;
+  --promo-card-bg: linear-gradient(180deg, #1a2422 0%, #141d1b 100%);
+  --promo-card-border: rgba(141, 210, 193, 0.2);
+  --promo-card-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 10px 20px rgba(0, 0, 0, 0.34);
+  --promo-title-ink: #deeee9;
+  --promo-image-bg: #111816;
+  --promo-image-border: rgba(141, 210, 193, 0.24);
+  --promo-cta-bg: #1f2d29;
+  --promo-cta-border: rgba(141, 210, 193, 0.4);
+  --promo-cta-ink: #cbe9df;
+  --promo-cta-hover-bg: #253631;
+  --sidebar-bg: var(--panel);
+  --sidebar-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --sidebar-link-ink: #121816;
+  --sidebar-link-hover-bg: #ff7a5a;
 }
 
 * {
@@ -673,14 +790,21 @@ h1 {
 /* :where() keeps these defaults at zero specificity, so any component rule overrides them. */
 .tab,
 :where(button:not(.theme-toggle)) {
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--ink);
+  border: 1px solid var(--control-border);
+  background: var(--control-bg);
+  color: var(--control-ink);
   border-radius: 999px;
   padding: 0.5rem 0.95rem;
   font: inherit;
   cursor: pointer;
   transition: background 140ms linear, border-color 140ms linear, transform 140ms ease;
+}
+
+/* Ghost buttons keep the plain panel look in both themes. */
+:where(button.ghost-btn) {
+  border-color: var(--border);
+  background: var(--panel);
+  color: var(--ink);
 }
 
 .tab {
@@ -721,14 +845,14 @@ h1 {
 .tab.active,
 .tab:hover,
 :where(button:not(.theme-toggle):not(.ghost-btn):hover) {
-  border-color: var(--accent);
-  background: var(--hover-soft);
+  border-color: var(--control-hover-border);
+  background: var(--control-hover-bg);
 }
 
-/* Film pages style these buttons inline but take their light hover from here. */
+/* Film pages style these buttons inline but take their hover from here. */
 .location-sort-actions button:hover {
-  border-color: var(--accent);
-  background: var(--hover-soft);
+  border-color: var(--control-hover-border);
+  background: var(--control-hover-bg);
 }
 
 .tab:hover,
@@ -788,14 +912,10 @@ h1 {
   --festival-accent: #c54828;
   position: relative;
   padding: 1.15rem 1.2rem;
-  border-color: #cbb692;
-  background:
-    linear-gradient(180deg, rgba(255, 249, 235, 0.98) 0%, rgba(250, 241, 225, 0.98) 100%),
-    var(--panel);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.72) inset,
-    0 10px 24px rgba(83, 62, 30, 0.12);
-  border-top: 4px solid var(--festival-accent);
+  border-color: var(--festival-card-border);
+  background: var(--festival-card-bg), var(--panel);
+  box-shadow: var(--festival-card-shadow);
+  border-top: 4px solid var(--festival-card-top, var(--festival-accent));
 }
 
 .group-card.festival-card .group-title {
@@ -813,9 +933,9 @@ h1 {
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--festival-accent) 48%, #ffffff 52%);
-  background: color-mix(in srgb, var(--festival-accent) 16%, #fff9eb 84%);
-  color: color-mix(in srgb, var(--festival-accent) 78%, #3c2613 22%);
+  border: 1px solid color-mix(in srgb, var(--festival-accent) var(--festival-stamp-border-amount), var(--festival-stamp-border-base));
+  background: color-mix(in srgb, var(--festival-accent) var(--festival-stamp-bg-amount), var(--festival-stamp-bg-base));
+  color: color-mix(in srgb, var(--festival-accent) var(--festival-stamp-ink-amount), var(--festival-stamp-ink-base));
   font-size: 0.66rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -828,25 +948,18 @@ h1 {
   position: relative;
   display: flex;
   flex-direction: column;
-  border: 1px solid #d7c9b6;
+  border: 1px solid var(--film-card-border);
   border-radius: 12px;
   padding: 1.08rem 0.95rem 1.12rem;
   overflow: hidden;
-  background: linear-gradient(135deg, #fffef9 0%, #f7f2e5 100%);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.8) inset,
-    0 0 0 1px rgba(116, 93, 62, 0.1) inset,
-    0 10px 20px rgba(44, 36, 26, 0.11);
+  background: var(--film-card-bg);
+  box-shadow: var(--film-card-shadow);
   transition: transform 140ms ease, box-shadow 140ms ease;
 }
 
 .group-card.film-card:hover {
   transform: scale(1.02);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.8) inset,
-    0 0 0 1px rgba(116, 93, 62, 0.1) inset,
-    0 12px 24px rgba(44, 36, 26, 0.16),
-    0 0 16px rgba(197, 72, 40, 0.12);
+  box-shadow: var(--film-card-hover-shadow);
 }
 
 .group-card.film-card .group-title {
@@ -893,6 +1006,7 @@ h1 {
   z-index: 4;
   opacity: 0.92;
   transform: rotate(8deg);
+  filter: var(--favorite-stamp-filter);
 }
 
 .film-featured-stamp {
@@ -906,6 +1020,7 @@ h1 {
   z-index: 4;
   opacity: 0.95;
   transform: rotate(-7deg);
+  filter: var(--featured-stamp-filter);
 }
 
 .group-card.film-card:not(.film-card-collapsed) .film-favorite-stamp {
@@ -955,10 +1070,10 @@ h1 {
   align-items: center;
   justify-content: center;
   margin: 0 0 0.55rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--toggle-border);
   border-radius: 999px;
-  background: #f8f2ea;
-  color: var(--accent-2);
+  background: var(--toggle-bg);
+  color: var(--toggle-ink);
   font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -973,8 +1088,8 @@ a.film-expand-toggle {
 
 .film-expand-toggle:hover,
 .film-expand-toggle:focus-visible {
-  background: var(--hover-soft-2);
-  border-color: #c8beb1;
+  background: var(--toggle-hover-bg);
+  border-color: var(--toggle-hover-border);
 }
 
 .film-expand-toggle.theatre-card-toggle {
@@ -1008,7 +1123,7 @@ a.film-expand-toggle {
   display: block;
   margin-top: 0.95rem;
   padding-top: 0.1rem;
-  color: var(--accent-2);
+  color: var(--tmdb-link-ink);
   font-size: 0.84rem;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -1016,7 +1131,7 @@ a.film-expand-toggle {
 
 .group-tmdb-link:hover,
 .group-tmdb-link:focus-visible {
-  color: var(--accent);
+  color: var(--tmdb-link-hover-ink);
 }
 
 .group-view-film-link {
@@ -1026,11 +1141,11 @@ a.film-expand-toggle {
   margin-top: 0.5rem;
   margin-right: 0.4rem;
   margin-bottom: 0.16rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--toggle-border);
   border-radius: 999px;
   padding: 0.22rem 0.62rem;
-  background: #f8f2ea;
-  color: var(--accent-2);
+  background: var(--toggle-bg);
+  color: var(--toggle-ink);
   font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -1040,8 +1155,8 @@ a.film-expand-toggle {
 
 .group-view-film-link:hover,
 .group-view-film-link:focus-visible {
-  background: var(--hover-soft-2);
-  border-color: #c8beb1;
+  background: var(--toggle-hover-bg);
+  border-color: var(--toggle-hover-border);
 }
 
 .group-view-film-link + .group-feature-link {
@@ -1055,11 +1170,11 @@ a.film-expand-toggle {
   margin-top: 0.5rem;
   margin-right: 0.4rem;
   margin-bottom: 0.16rem;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--feature-link-border);
   border-radius: 999px;
   padding: 0.28rem 0.72rem;
-  background: #fdf1ea;
-  color: #8d3f2b;
+  background: var(--feature-link-bg);
+  color: var(--feature-link-ink);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -1068,8 +1183,8 @@ a.film-expand-toggle {
 
 .group-feature-link:hover,
 .group-feature-link:focus-visible {
-  background: #fde6dc;
-  border-color: #b74f34;
+  background: var(--feature-link-hover-bg);
+  border-color: var(--feature-link-hover-border);
 }
 
 .group-film-summary {
@@ -1159,7 +1274,9 @@ a.film-expand-toggle {
   align-items: stretch;
   padding: 0.68rem;
   border-radius: 10px;
-  background: linear-gradient(180deg, #fffcf7 0%, #f3ede3 100%);
+  border-color: var(--promo-card-border);
+  background: var(--promo-card-bg);
+  box-shadow: var(--promo-card-shadow);
 }
 
 .promo-card-title {
@@ -1167,15 +1284,16 @@ a.film-expand-toggle {
   font-size: 1.02rem;
   line-height: 1.2;
   text-align: center;
+  color: var(--promo-title-ink);
 }
 
 .promo-card-image {
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--promo-image-border);
   object-fit: cover;
-  background: var(--surface-soft);
+  background: var(--promo-image-bg);
 }
 
 .promo-card-cta {
@@ -1183,11 +1301,11 @@ a.film-expand-toggle {
   align-items: center;
   justify-content: center;
   align-self: center;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--promo-cta-border);
   border-radius: 999px;
   padding: 0.24rem 0.72rem;
-  color: var(--accent);
-  background: var(--surface-alt);
+  color: var(--promo-cta-ink);
+  background: var(--promo-cta-bg);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.78rem;
@@ -1195,7 +1313,7 @@ a.film-expand-toggle {
 
 .promo-card-cta:hover,
 .promo-card-cta:focus-visible {
-  background: var(--hover-soft);
+  background: var(--promo-cta-hover-bg);
 }
 
 @media (max-width: 700px) {
@@ -1344,7 +1462,7 @@ a.film-expand-toggle {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
-  color: #fff9ec;
+  color: var(--festival-ribbon-ink);
   background: var(--festival-accent, var(--accent));
   box-shadow: 0 2px 6px rgba(29, 31, 31, 0.18);
 }
@@ -1445,10 +1563,10 @@ a.film-expand-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border);
+  border: 1px solid var(--toggle-border);
   border-radius: 999px;
-  background: #f8f2ea;
-  color: var(--accent-2);
+  background: var(--toggle-bg);
+  color: var(--toggle-ink);
   font-size: 0.64rem;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -1461,8 +1579,8 @@ a.film-expand-toggle {
 
 .theatre-row-film-link:hover,
 .theatre-row-film-link:focus-visible {
-  background: var(--hover-soft-2);
-  border-color: #c8beb1;
+  background: var(--toggle-hover-bg);
+  border-color: var(--toggle-hover-border);
 }
 
 .show-schedule .film-expand-toggle.theatre-row-toggle {
@@ -1712,39 +1830,6 @@ textarea {
   color: var(--ink);
 }
 
-:root[data-theme="dark"] .group-card.film-card {
-  background: linear-gradient(180deg, #1b2522 0%, #171f1d 100%);
-  border-color: rgba(141, 210, 193, 0.36);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.05) inset,
-    0 0 0 1px rgba(141, 210, 193, 0.12) inset,
-    0 10px 20px rgba(0, 0, 0, 0.35);
-}
-
-:root[data-theme="dark"] .group-card.film-card:hover {
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.05) inset,
-    0 0 0 1px rgba(141, 210, 193, 0.12) inset,
-    0 12px 24px rgba(0, 0, 0, 0.45),
-    0 0 16px rgba(255, 143, 111, 0.15);
-}
-
-:root[data-theme="dark"] .group-card.festival-card {
-  border-color: rgba(237, 198, 130, 0.34);
-  background:
-    linear-gradient(180deg, rgba(53, 42, 24, 0.86) 0%, rgba(36, 30, 22, 0.92) 100%),
-    var(--panel);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 10px 24px rgba(0, 0, 0, 0.36);
-}
-
-:root[data-theme="dark"] .festival-date-stamp {
-  border-color: color-mix(in srgb, var(--festival-accent) 55%, #f2e0c4 45%);
-  background: color-mix(in srgb, var(--festival-accent) 24%, #261d12 76%);
-  color: color-mix(in srgb, var(--festival-accent) 68%, #ffe8c7 32%);
-}
-
 @media (max-width: 700px) {
   .group-card.festival-card .group-title {
     margin-right: 0;
@@ -1758,113 +1843,6 @@ textarea {
     letter-spacing: 0.05em;
     padding: 0.24rem 0.46rem;
   }
-}
-
-:root[data-theme="dark"] .festival-entry-ribbon {
-  color: #141615;
-}
-
-:root[data-theme="dark"] .film-favorite-stamp {
-  filter: saturate(0.9) brightness(0.92);
-}
-
-:root[data-theme="dark"] .tab,
-:where(:root[data-theme="dark"] button:not(.theme-toggle):not(.ghost-btn)) {
-  border-color: #3c504a;
-  background: #1a2522;
-  color: #deeee9;
-}
-
-:root[data-theme="dark"] .film-featured-stamp {
-  filter: saturate(0.92) brightness(0.9);
-}
-
-:root[data-theme="dark"] .film-expand-toggle {
-  border-color: #3c504a;
-  color: #deeee9;
-  background: #1a2522;
-}
-
-:root[data-theme="dark"] .film-expand-toggle:hover,
-:root[data-theme="dark"] .film-expand-toggle:focus-visible {
-  border-color: #4f665f;
-  background: #24312d;
-}
-
-:root[data-theme="dark"] .film-expand-toggle.theatre-card-toggle {
-  background: #1a2522;
-}
-
-:root[data-theme="dark"] .theatre-row-film-link {
-  border-color: #3c504a;
-  background: #1a2522;
-  color: #deeee9;
-}
-
-:root[data-theme="dark"] .theatre-row-film-link:hover,
-:root[data-theme="dark"] .theatre-row-film-link:focus-visible {
-  border-color: #4f665f;
-  background: #24312d;
-}
-
-:root[data-theme="dark"] .group-feature-link {
-  border-color: rgba(141, 210, 193, 0.4);
-  color: #cbe9df;
-  background: #1f2d29;
-}
-
-:root[data-theme="dark"] .group-tmdb-link {
-  color: #b8e3d7;
-}
-
-:root[data-theme="dark"] .group-view-film-link {
-  border-color: #3c504a;
-  background: #1a2522;
-  color: #deeee9;
-}
-
-:root[data-theme="dark"] .group-view-film-link:hover,
-:root[data-theme="dark"] .group-view-film-link:focus-visible {
-  border-color: #4f665f;
-  background: #24312d;
-}
-
-:root[data-theme="dark"] .group-tmdb-link:hover,
-:root[data-theme="dark"] .group-tmdb-link:focus-visible {
-  color: #8dd2c1;
-}
-
-:root[data-theme="dark"] .group-feature-link:hover,
-:root[data-theme="dark"] .group-feature-link:focus-visible {
-  background: #253631;
-}
-
-:root[data-theme="dark"] .group-card.promo-card {
-  background: linear-gradient(180deg, #1a2422 0%, #141d1b 100%);
-  border: 1px solid rgba(141, 210, 193, 0.2);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04) inset,
-    0 10px 20px rgba(0, 0, 0, 0.34);
-}
-
-:root[data-theme="dark"] .promo-card-title {
-  color: #deeee9;
-}
-
-:root[data-theme="dark"] .promo-card-image {
-  border-color: rgba(141, 210, 193, 0.24);
-  background: #111816;
-}
-
-:root[data-theme="dark"] .promo-card-cta {
-  border-color: rgba(141, 210, 193, 0.4);
-  color: #cbe9df;
-  background: #1f2d29;
-}
-
-:root[data-theme="dark"] .promo-card-cta:hover,
-:root[data-theme="dark"] .promo-card-cta:focus-visible {
-  background: #253631;
 }
 
 @media (max-width: 640px) {
@@ -2118,8 +2096,8 @@ textarea {
 
 .festival-toggle {
   border-radius: 999px;
-  background: var(--panel);
-  color: inherit;
+  background: var(--control-bg);
+  color: var(--control-ink);
   cursor: pointer;
   padding: 0.5rem 0.95rem;
   font-size: inherit;
@@ -2138,8 +2116,8 @@ textarea {
 }
 
 .festival-toggle:hover {
-  border-color: var(--accent);
-  background: var(--hover-soft);
+  border-color: var(--control-hover-border);
+  background: var(--control-hover-bg);
   opacity: 0.6;
 }
 
@@ -2217,9 +2195,9 @@ textarea {
 }
 
 .theatre-map-toggle {
-  border: 1px solid var(--border);
-  background: var(--panel);
-  color: var(--ink);
+  border: 1px solid var(--control-border);
+  background: var(--control-bg);
+  color: var(--control-ink);
   border-radius: 999px;
   padding: 0.5rem 0.95rem;
   font: inherit;
@@ -2229,8 +2207,8 @@ textarea {
 
 .theatre-map-toggle:hover,
 .theatre-map-toggle:focus-visible {
-  border-color: var(--accent);
-  background: var(--hover-soft);
+  border-color: var(--control-hover-border);
+  background: var(--control-hover-bg);
   transform: translateY(-0.5px);
 }
 
@@ -2238,7 +2216,7 @@ textarea {
   width: min(1024px, 100%);
   margin: 0 auto 1rem;
   height: 600px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--control-border);
   border-radius: var(--radius);
   overflow: hidden;
   display: flex;
@@ -2266,6 +2244,8 @@ textarea {
   overflow-y: auto;
   scrollbar-width: none;
   z-index: 10;
+  background: var(--sidebar-bg);
+  box-shadow: var(--sidebar-shadow);
 }
 
 .theatre-sidebar.hidden {
@@ -2380,7 +2360,7 @@ textarea {
   margin-top: 0.4rem;
   padding: 0.5rem 0.9rem;
   background: var(--accent);
-  color: #fff;
+  color: var(--sidebar-link-ink);
   border: none;
   border-radius: 6px;
   text-decoration: none;
@@ -2391,40 +2371,7 @@ textarea {
 
 .theatre-sidebar-link:hover,
 .theatre-sidebar-link:focus-visible {
-  background: #a23b20;
-}
-
-/* Dark mode map styles */
-:root[data-theme="dark"] .theatre-map-toggle {
-  border-color: #3c504a;
-  background: #1a2522;
-  color: #deeee9;
-}
-
-:root[data-theme="dark"] .theatre-map-toggle:hover,
-:root[data-theme="dark"] .theatre-map-toggle:focus-visible {
-  border-color: #4f665f;
-  background: #24312d;
-}
-
-:root[data-theme="dark"] .map-view-container {
-  border-color: #3c504a;
-}
-
-:root[data-theme="dark"] .theatre-sidebar {
-  background: var(--panel);
-  border-color: #3c504a;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-}
-
-:root[data-theme="dark"] .theatre-sidebar-link {
-  background: #ff8f6f;
-  color: #121816;
-}
-
-:root[data-theme="dark"] .theatre-sidebar-link:hover,
-:root[data-theme="dark"] .theatre-sidebar-link:focus-visible {
-  background: #ff7a5a;
+  background: var(--sidebar-link-hover-bg);
 }
 
 @media (max-width: 640px) {
