@@ -11,6 +11,8 @@ import {
   getShowtimeNote,
   isPlainObject,
   normalizeSortTitle,
+  compareTimes,
+  to24HourTime,
 } from "../js/shared.js";
 
 const cwd = process.cwd();
@@ -661,7 +663,7 @@ function renderFilmPage(film, slug, siteUrl) {
         <img id="filmPageWordmark" class="film-page-wordmark" src="${escapeHtml(wordmarksLight[0] || "")}" alt="${BRAND_NAME}" />
         <img id="filmPageLogo" class="film-page-logo" src="${escapeHtml(logoDarkSrc)}" alt="" aria-hidden="true" />
       </div>
-      <a class="film-page-return" href="${escapeHtml(mainAppUrl)}">Go back...</a>
+      <a class="film-page-return" href="${escapeHtml(mainAppUrl)}">&larr; All showtimes</a>
       <article class="group-card film-card film-page-card film-info-box${film.staffFavorite ? " film-card-staff-favorite" : ""}${
         film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
       }">
@@ -712,7 +714,12 @@ function renderFilmPage(film, slug, siteUrl) {
       </section>
     </main>
     <script type="module">
-      import { LOCATION_PREFERENCE_STORAGE_KEY, geocodeUsZip, initShowtimeNoteTooltips } from "../../js/shared.js";
+      import {
+        LOCATION_PREFERENCE_STORAGE_KEY,
+        geocodeUsZip,
+        haversineMiles,
+        initShowtimeNoteTooltips,
+      } from "../../js/shared.js";
 
       initShowtimeNoteTooltips();
 
@@ -801,17 +808,6 @@ function renderFilmPage(film, slug, siteUrl) {
           try {
             localStorage.setItem(LOCATION_PREFERENCE_STORAGE_KEY, JSON.stringify(payload));
           } catch {}
-        }
-
-        function haversineMiles(lat1, lng1, lat2, lng2) {
-          const toRad = (d) => (d * Math.PI) / 180;
-          const R = 3958.8;
-          const dLat = toRad(lat2 - lat1);
-          const dLng = toRad(lng2 - lng1);
-          const a =
-            Math.sin(dLat / 2) ** 2 +
-            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
-          return 2 * R * Math.asin(Math.sqrt(a));
         }
 
         function getMasonryColumnCount() {
@@ -1252,63 +1248,15 @@ function buildShowtimesByTheatre(film) {
 }
 
 function dedupeTimes(times) {
-  return Array.from(new Set((times || []).filter(Boolean))).sort(compareShowTimes);
+  return Array.from(new Set((times || []).filter(Boolean))).sort(compareTimes);
 }
 
-function compareShowTimes(a, b) {
-  return toSortableMinutes(a) - toSortableMinutes(b);
-}
-
-function toSortableMinutes(value) {
-  const input = String(value || "").trim();
-
-  // Try 24-hour format first (e.g., "18:30", "6:30")
-  const match24 = /^(\d{1,2}):([0-5]\d)$/.exec(input);
-  if (match24) {
-    const hour = Number(match24[1]);
-    const minute = Number(match24[2]);
-    if (hour >= 0 && hour <= 23) {
-      return hour * 60 + minute;
-    }
-  }
-
-  // Try 12-hour format with optional space before AM/PM (case-insensitive)
-  const match12 = /^(\d{1,2}):([0-5]\d)\s?(AM|PM)$/i.exec(input);
-  if (!match12) return Number.MAX_SAFE_INTEGER;
-
-  let hour = Number(match12[1]) % 12;
-  const minute = Number(match12[2]);
-  const period = match12[3].toUpperCase();
-
-  if (period === "PM") hour += 12;
-  return hour * 60 + minute;
-}
-
+// Minutes after midnight, or null when the time can't be parsed.
 function parseTimeToMinutes(value) {
-  const input = String(value || "").trim();
-
-  // Try 24-hour format first (e.g., "18:30", "6:30")
-  const match24 = /^(\d{1,2}):([0-5]\d)$/.exec(input);
-  if (match24) {
-    const hour = Number(match24[1]);
-    const minute = Number(match24[2]);
-    if (hour >= 0 && hour <= 23 && Number.isFinite(minute)) {
-      return hour * 60 + minute;
-    }
-  }
-
-  // Try 12-hour format with optional space before AM/PM (case-insensitive)
-  const match12 = /^(\d{1,2}):([0-5]\d)\s?(AM|PM)$/i.exec(input);
-  if (!match12) return null;
-
-  let hour = Number(match12[1]) % 12;
-  const minute = Number(match12[2]);
-  const period = match12[3].toUpperCase();
-
-  if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null;
-
-  if (period === "PM") hour += 12;
-  return hour * 60 + minute;
+  const hhmm = to24HourTime(value);
+  if (!hhmm) return null;
+  const [hours, minutes] = hhmm.split(":").map(Number);
+  return hours * 60 + minutes;
 }
 
 function formatIsoDateLabel(isoDate) {
