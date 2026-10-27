@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.118.0";
 import { renderMapMarkers, showMapToggle, hideMapToggle } from "./map-view.js";
 import {
   SUPABASE_URL,
@@ -64,7 +64,6 @@ const PROMOTED_CARDS = Object.freeze([
 ]);
 const THEATRE_COLLAPSED_FILM_COUNT = 5;
 const FILM_LAYOUT_ANIMATION_MS = 320;
-const SUBSTACK_ARCHIVE_URL = "https://themaineplayweek.substack.com/api/v1/archive?sort=new";
 const THEATRE_GEO_CACHE_KEY = "theatre-geocode-cache-v1";
 const THEATRE_GEO_CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 90;
 const DEFAULT_DAYS_VIEW_RADIUS_MILES = 50;
@@ -310,99 +309,12 @@ function setLatestPostFallback() {
   syncLatestPostVisibility();
 }
 
+// data/latest-post.json is refreshed daily by a GitHub Action
+// (scripts/fetch-latest-post.mjs), since Substack can't be read from the browser.
 async function fetchLatestSubstackPost() {
-  const candidates = [
-    // Try RSS2JSON service (converts RSS to JSON, better CORS support)
-    {
-      url: `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://themaineplayweek.substack.com/feed")}`,
-      parser: parseRss2JsonPost,
-      name: "RSS2JSON",
-    },
-    // Fallback to Substack JSON API with codetabs proxy
-    {
-      url: `https://api.codetabs.com/v1/proxy/?quest=${encodeURIComponent(SUBSTACK_ARCHIVE_URL)}`,
-      parser: parseSubstackJsonPost,
-      name: "Substack JSON (codetabs)",
-    },
-    // Try Substack JSON with allorigins proxy
-    {
-      url: `https://api.allorigins.win/raw?url=${encodeURIComponent(SUBSTACK_ARCHIVE_URL)}`,
-      parser: parseSubstackJsonPost,
-      name: "Substack JSON (allorigins)",
-    },
-  ];
-
-  let lastError = null;
-  for (const candidate of candidates) {
-    try {
-      const response = await fetchWithTimeout(candidate.url, 10000);
-      if (!response.ok) throw new Error(`Request failed (${response.status})`);
-      const text = await response.text();
-      const post = candidate.parser(text);
-      if (post) {
-        return post;
-      }
-    } catch (error) {
-      lastError = error;
-    }
-  }
-
-  throw lastError || new Error("Unable to fetch latest Substack post");
-}
-
-function parseRss2JsonPost(jsonText) {
-  try {
-    const data = JSON.parse(jsonText);
-
-    if (!data.items || !Array.isArray(data.items) || data.items.length === 0) return null;
-
-    const item = data.items[0];
-
-    const parsedPost = {
-      title: item.title || "",
-      canonical_url: item.link || "",
-      description: stripHtmlTags(item.description || ""),
-      cover_image: item.enclosure?.link || extractImageFromContent(item.content || item.description || ""),
-      post_date: item.pubDate || "",
-      author: item.author || "",
-    };
-
-
-    return parsedPost;
-  } catch (error) {
-    return null;
-  }
-}
-
-function extractImageFromContent(content) {
-  if (!content) return "";
-  const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/);
-  return imgMatch ? imgMatch[1] : "";
-}
-
-function parseSubstackJsonPost(jsonText) {
-  try {
-    const posts = JSON.parse(jsonText);
-    if (!Array.isArray(posts) || !posts.length) return null;
-    return posts[0];
-  } catch (error) {
-    return null;
-  }
-}
-
-function stripHtmlTags(html) {
-  if (!html) return "";
-  return html.replace(/<[^>]*>/g, "").trim();
-}
-
-async function fetchWithTimeout(url, timeoutMs) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    return await fetch(url, { signal: controller.signal });
-  } finally {
-    clearTimeout(timeoutId);
-  }
+  const response = await fetch("./data/latest-post.json", { cache: "no-cache" });
+  if (!response.ok) throw new Error(`Request failed (${response.status})`);
+  return response.json();
 }
 
 function buildSubtitle(descriptionHtml) {

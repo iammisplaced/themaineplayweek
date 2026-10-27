@@ -1,0 +1,38 @@
+name: Latest Substack Post
+
+on:
+  schedule:
+    - cron: "0 16 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-latest-post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Fetch the newest post
+        run: node scripts/fetch-latest-post.mjs
+
+      - name: Commit and push changes
+        run: |
+          if git diff --quiet -- data/latest-post.json; then
+            echo "No new post."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/latest-post.json
+          git commit -m "Update latest Substack post"
+          git pull --rebase
+          git push

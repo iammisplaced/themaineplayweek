@@ -2,7 +2,7 @@
 // and shows one big card per film playing today. Swipe right (interested) or left (not
 // interested), scroll down for details and showtimes, and get your list at the end. The list
 // only lasts for the visit.
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.118.0";
 import {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,

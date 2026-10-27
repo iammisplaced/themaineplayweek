@@ -3,6 +3,14 @@
  * Manages the interactive map for displaying nearby theatres
  */
 
+// Leaflet is only downloaded when the map first opens. The hashes are cdnjs's published
+// SRI values, so the browser refuses the files if they ever change.
+const LEAFLET_CSS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+const LEAFLET_CSS_INTEGRITY = 'sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==';
+const LEAFLET_JS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+const LEAFLET_JS_INTEGRITY = 'sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==';
+let leafletPromise = null;
+
 let mapInstance = null;
 let markers = [];
 let currentTheatreId = null;
@@ -79,8 +87,59 @@ function initMapElements() {
   }
 }
 
+// A failed download is not remembered, so the next "Show Map" tries again.
+function loadLeaflet() {
+  leafletPromise ??= Promise.all([
+    loadLeafletFile('link', LEAFLET_CSS_URL, LEAFLET_CSS_INTEGRITY),
+    loadLeafletFile('script', LEAFLET_JS_URL, LEAFLET_JS_INTEGRITY),
+  ]).catch((error) => {
+    leafletPromise = null;
+    throw error;
+  });
+  return leafletPromise;
+}
+
+function loadLeafletFile(tagName, url, integrity) {
+  return new Promise((resolve, reject) => {
+    const el = document.createElement(tagName);
+    if (tagName === 'link') {
+      el.rel = 'stylesheet';
+      el.href = url;
+    } else {
+      el.src = url;
+    }
+    el.integrity = integrity;
+    el.crossOrigin = 'anonymous';
+    el.onload = () => resolve();
+    el.onerror = () => {
+      el.remove();
+      reject(new Error(`Could not load ${url}`));
+    };
+    document.head.appendChild(el);
+  });
+}
+
 // Toggle between map and list view
-function toggleMapView() {
+async function toggleMapView() {
+  const isOpeningMap = mapElements.mapContainer.classList.contains('hidden');
+  if (isOpeningMap && !mapInstance) {
+    mapElements.toggleBtn.disabled = true;
+    mapElements.toggleBtn.textContent = 'Loading map...';
+    try {
+      await loadLeaflet();
+    } catch {
+      mapElements.toggleBtn.textContent = "Map couldn't load. Try again";
+      return;
+    } finally {
+      mapElements.toggleBtn.disabled = false;
+    }
+    // The visitor may have left the Theatres view while Leaflet downloaded.
+    if (mapElements.toggleWrap.classList.contains('hidden')) {
+      mapElements.toggleBtn.textContent = 'Show Map';
+      return;
+    }
+  }
+
   const isMapActive = mapElements.mapContainer.classList.toggle('hidden');
   const resultsSection = document.getElementById('results');
 
