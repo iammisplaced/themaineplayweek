@@ -10,11 +10,15 @@ import {
   escapeHtml,
   getShowDateTime,
   normalizeOutboundUrl,
+  requestFilmPagesRebuild,
   stripDiacritics,
 } from "./shared.js";
 
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_CLIENT_OPTIONS);
+// The film pages show the staff-favorite and featured stamps, so those saves rebuild them;
+// a burst of toggles asks once.
+const rebuildFilmPagesSoon = debounce(() => void requestFilmPagesRebuild(supabase), 5000);
 markStagingPage();
 const QUERY_TIMEOUT_MS = 30000;
 const QUERY_PAGE_SIZE = 1000;
@@ -611,6 +615,7 @@ async function saveStaffFavorite(row) {
       film.staffFavorite = staffFavorite;
       film.staffFavoriteBy = staffFavoriteBy;
     }
+    rebuildFilmPagesSoon();
     setStatus(
       staffFavorite
         ? `Saved staff favorite for film ${filmId}${staffFavoriteBy ? ` (${staffFavoriteBy})` : " (General)"}.`
@@ -668,6 +673,7 @@ async function saveFeaturedOnPlayweek(row) {
       film.featuredOnPlayweek = featuredOnPlayweek;
       film.featuredOnPlayweekUrl = featuredOnPlayweekUrl;
     }
+    rebuildFilmPagesSoon();
     setStatus(
       featuredOnPlayweek
         ? `Saved featured-on-playweek for film ${filmId}.`
