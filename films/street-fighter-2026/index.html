@@ -20,16 +20,87 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
     <link rel="icon" href="../../assets/icons/favicon.ico" />
     <link rel="manifest" href="../../site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/styles.css" />
     <link rel="stylesheet" href="../../css/film-pages.css" />
+    <script>
+      // Set before the page draws, so dark mode doesn't flash light first. The "js" class lets
+      // the CSS fold away the film details on phones only when the "More" button can open them.
+      (() => {
+        let theme = "";
+        try {
+          theme = localStorage.getItem("tmp-theme") || "";
+        } catch {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.classList.add("js");
+      })();
+    </script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Street Fighter 2026","description":"In 1993, estranged Street Fighters Ryu and Ken Masters are thrown back into combat when the mysterious Chun-Li recruits them for the next World Warrior Tournament: a brutal clash of fists, fate, and fury. But behind this battle royale lies a deadly conspiracy that forces them to face off against each other and the demons of their past. And if they don't, it's GAME OVER!","image":"https://image.tmdb.org/t/p/w342/ccxdepKqORLwccbzvO4eAGkN0IC.jpg","datePublished":"2026-10-13","duration":"PT120M","contentRating":"PG-13","director":[{"@type":"Person","name":"Kitao Sakurai"}],"actor":[{"@type":"Person","name":"Andrew Koji"},{"@type":"Person","name":"Noah Centineo"},{"@type":"Person","name":"Callina Liang"}],"genre":["Action","Fantasy"],"url":"https://showtimes.themaineplayweek.com/films/street-fighter-2026/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
       <div class="film-page-brandbar">
-        <img id="filmPageWordmark" class="film-page-wordmark" src="../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png" alt="The Maine Playweek" />
+        <a href="../.." aria-label="The Maine Playweek showtimes">
+          <img id="filmPageWordmark" class="film-page-wordmark" src="../../assets/brand/Act%20III%20-%20Dark%20-%20One%20Line.png" alt="" />
+        </a>
         <img id="filmPageLogo" class="film-page-logo" src="../../assets/brand/TMP%20logo%20dark.png" alt="" aria-hidden="true" />
       </div>
+      <script>
+        // Right after the images, so they switch to the theme's (and a random wordmark) before
+        // they're drawn.
+        (() => {
+          const LIGHT_THEME = "light";
+          const DARK_THEME = "dark";
+          const THEME_STORAGE_KEY = "tmp-theme";
+          const logo = document.getElementById("filmPageLogo");
+          const wordmark = document.getElementById("filmPageWordmark");
+          const logoDarkSrc = "../../assets/brand/TMP%20logo%20dark.png";
+          const logoLightSrc = "../../assets/brand/TMP%20logo%20light.png";
+          const wordmarks = {
+            light: ["../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Light%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Light%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Light%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Light%20-%20One%20Line.png"],
+            dark: ["../../assets/brand/Act%20III%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Dark%20-%20One%20Line.png"],
+          };
+
+          function getTheme() {
+            try {
+              const stored = localStorage.getItem(THEME_STORAGE_KEY);
+              if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
+            } catch {}
+            return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
+          }
+
+          function pickRandom(list) {
+            if (!Array.isArray(list) || !list.length) return "";
+            return list[Math.floor(Math.random() * list.length)] || "";
+          }
+
+          function applyTheme(theme) {
+            const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
+            document.documentElement.setAttribute("data-theme", nextTheme);
+            if (logo) {
+              logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
+            }
+            if (wordmark) {
+              const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+              const chosen = pickRandom(wordmarks[wordmarkTheme]);
+              if (chosen) wordmark.src = chosen;
+            }
+          }
+
+          applyTheme(getTheme());
+          const media = window.matchMedia("(prefers-color-scheme: dark)");
+          media.addEventListener?.("change", () => applyTheme(getTheme()));
+          window.addEventListener("storage", (event) => {
+            if (event.key !== THEME_STORAGE_KEY) return;
+            applyTheme(getTheme());
+          });
+        })();
+      </script>
       <a class="film-page-return" href="../..">&larr; All showtimes</a>
       <article class="group-card film-card film-page-card film-info-box">
         <h1 class="group-title group-title-film"><cite class="film-page-title">Street Fighter</cite></h1>
@@ -41,10 +112,11 @@
           </div>
           
           <div class="group-film-details">
-            <div class="group-film-facts film-page-facts">
+            <div id="filmPageFacts" class="group-film-facts film-page-facts">
               <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">In 1993, estranged Street Fighters Ryu and Ken Masters are thrown back into combat when the mysterious Chun-Li recruits them for the next World Warrior Tournament: a brutal clash of fists, fate, and fury. But behind this battle royale lies a deadly conspiracy that forces them to face off against each other and the demons of their past. And if they don&#39;t, it&#39;s GAME OVER!</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Kitao Sakurai</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Action, Fantasy</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Andrew Koji, Noah Centineo, Callina Liang</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">October 13, 2026</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/1153576" target="_blank" rel="noopener noreferrer">View on TMDb</a>
+            <button class="film-page-more" type="button" aria-expanded="false" aria-controls="filmPageFacts">More about the film</button>
           </div>
         </div>
       </article>
@@ -95,32 +167,36 @@
             data-theatre-lng="-70.4242145"
           >
             
-            <div class="show-main show-main-theatre">
-              Apple Cinemas<span class="show-main-city">, Saco</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Apple Cinemas
+                <span class="show-main-city">Saco<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.applecinemas.com/Street-Fighter/611fe9edf74bab2423301ee0/6aac867cc627d135fc3c2a49" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Apple Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   
                   <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="18:15" tabindex="0" data-note="IMAX">Premium 6:15 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: IMAX)</span></span><span class="show-time-chip show-time-chip-premium show-time-noted" data-time="21:00" tabindex="0" data-note="IMAX">Premium 9:00 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: IMAX)</span></span>
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="16:20">4:20 PM</span><span class="show-time-chip" data-time="21:00">9:00 PM</span>
                   <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="12:00" tabindex="0" data-note="IMAX">Premium 12:00 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: IMAX)</span></span><span class="show-time-chip show-time-chip-premium show-time-noted" data-time="18:15" tabindex="0" data-note="IMAX">Premium 6:15 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: IMAX)</span></span>
                 </div>
               </article><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:35">12:35 PM</span><span class="show-time-chip" data-time="15:20">3:20 PM</span><span class="show-time-chip" data-time="18:10">6:10 PM</span><span class="show-time-chip" data-time="21:10">9:10 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:35">12:35 PM</span><span class="show-time-chip" data-time="15:20">3:20 PM</span><span class="show-time-chip" data-time="18:10">6:10 PM</span><span class="show-time-chip" data-time="21:10">9:10 PM</span>
@@ -131,28 +207,28 @@
             <summary class="show-more-days-toggle">Show 4 more days</summary>
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:35">12:35 PM</span><span class="show-time-chip" data-time="15:20">3:20 PM</span><span class="show-time-chip" data-time="18:10">6:10 PM</span><span class="show-time-chip" data-time="21:10">9:10 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-02">
-                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                <h3 class="show-schedule-day">Mon, Nov 2</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:35">12:35 PM</span><span class="show-time-chip" data-time="15:20">3:20 PM</span><span class="show-time-chip" data-time="18:10">6:10 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-03">
-                <h3 class="show-schedule-day">Tue, Nov 3, 2026</h3>
+                <h3 class="show-schedule-day">Tue, Nov 3</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:35">12:35 PM</span><span class="show-time-chip" data-time="15:20">3:20 PM</span><span class="show-time-chip" data-time="18:10">6:10 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-04">
-                <h3 class="show-schedule-day">Wed, Nov 4, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Nov 4</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:35">12:35 PM</span><span class="show-time-chip" data-time="15:20">3:20 PM</span><span class="show-time-chip" data-time="18:10">6:10 PM</span>
@@ -163,7 +239,6 @@
           </details>
           </div>
         </div>
-        <a class="show-link" href="https://www.applecinemas.com/Street-Fighter/611fe9edf74bab2423301ee0/6aac867cc627d135fc3c2a49" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -171,32 +246,36 @@
             data-theatre-lng="-70.3465631"
           >
             
-            <div class="show-main show-main-theatre">
-              Apple Cinemas<span class="show-main-city">, Westbrook</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Apple Cinemas
+                <span class="show-main-city">Westbrook<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.applecinemas.com/Street-Fighter/611fe9edf74bab2423301ee0/6aac867cc627d135fc3c2a49" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Apple Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   
                   <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="18:50" tabindex="0" data-note="ACX · ACX">Premium 6:50 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ACX · ACX)</span></span>
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:30">12:30 PM</span><span class="show-time-chip" data-time="15:15">3:15 PM</span><span class="show-time-chip" data-time="18:00">6:00 PM</span><span class="show-time-chip" data-time="20:45">8:45 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:20">1:20 PM</span><span class="show-time-chip" data-time="16:10">4:10 PM</span><span class="show-time-chip" data-time="19:20">7:20 PM</span><span class="show-time-chip" data-time="22:10">10:10 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:20">1:20 PM</span><span class="show-time-chip" data-time="16:10">4:10 PM</span><span class="show-time-chip" data-time="19:20">7:20 PM</span><span class="show-time-chip" data-time="22:10">10:10 PM</span>
@@ -207,21 +286,21 @@
             <summary class="show-more-days-toggle">Show 3 more days</summary>
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:20">1:20 PM</span><span class="show-time-chip" data-time="16:10">4:10 PM</span><span class="show-time-chip" data-time="19:20">7:20 PM</span><span class="show-time-chip" data-time="22:10">10:10 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-02">
-                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                <h3 class="show-schedule-day">Mon, Nov 2</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:20">1:20 PM</span><span class="show-time-chip" data-time="16:10">4:10 PM</span><span class="show-time-chip" data-time="19:20">7:20 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-03">
-                <h3 class="show-schedule-day">Tue, Nov 3, 2026</h3>
+                <h3 class="show-schedule-day">Tue, Nov 3</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:20">1:20 PM</span><span class="show-time-chip" data-time="16:10">4:10 PM</span><span class="show-time-chip" data-time="19:20">7:20 PM</span>
@@ -232,7 +311,6 @@
           </details>
           </div>
         </div>
-        <a class="show-link" href="https://www.applecinemas.com/Street-Fighter/611fe9edf74bab2423301ee0/6aac867cc627d135fc3c2a49" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -240,32 +318,36 @@
             data-theatre-lng="-68.7524346"
           >
             
-            <div class="show-main show-main-theatre">
-              Bangor Mall Cinemas<span class="show-main-city">, Bangor</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Bangor Mall Cinemas
+                <span class="show-main-city">Bangor<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27175?date=2026-10-15" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Bangor Mall Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:30">12:30 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span><span class="show-time-chip" data-time="21:30">9:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:30">12:30 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span><span class="show-time-chip" data-time="21:30">9:30 PM</span>
@@ -276,35 +358,35 @@
             <summary class="show-more-days-toggle">Show 5 more days</summary>
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:30">12:30 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-02">
-                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                <h3 class="show-schedule-day">Mon, Nov 2</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:30">12:30 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-03">
-                <h3 class="show-schedule-day">Tue, Nov 3, 2026</h3>
+                <h3 class="show-schedule-day">Tue, Nov 3</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:30">12:30 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-04">
-                <h3 class="show-schedule-day">Wed, Nov 4, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Nov 4</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:30">12:30 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Nov 5</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:30">12:30 PM</span>
@@ -315,7 +397,6 @@
           </details>
           </div>
         </div>
-        <a class="show-link" href="https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27175?date=2026-10-15" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -323,18 +404,22 @@
             data-theatre-lng="-68.6911612"
           >
             
-            <div class="show-main show-main-theatre">
-              Black Bear Cinemas<span class="show-main-city">, Orono</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Black Bear Cinemas
+                <span class="show-main-city">Orono<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.blackbearcinemas.com/movie/street-fighter" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Black Bear Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:40">6:40 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:40">1:40 PM</span><span class="show-time-chip" data-time="16:10">4:10 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
@@ -344,7 +429,6 @@
             
           </div>
         </div>
-        <a class="show-link" href="https://www.blackbearcinemas.com/movie/street-fighter" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -352,18 +436,22 @@
             data-theatre-lng="-69.0075715"
           >
             
-            <div class="show-main show-main-theatre">
-              Colonial Theatre<span class="show-main-city">, Belfast</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Colonial Theatre
+                <span class="show-main-city">Belfast<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.colonialtheatre.com/movies/street-fighter-2026" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Colonial Theatre">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:45">6:45 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="16:00">4:00 PM</span>
@@ -373,7 +461,6 @@
             
           </div>
         </div>
-        <a class="show-link" href="https://www.colonialtheatre.com/movies/street-fighter-2026" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -381,32 +468,36 @@
             data-theatre-lng="-70.3244985"
           >
             
-            <div class="show-main show-main-theatre">
-              Entertainment Luxury Cinemas<span class="show-main-city">, South Portland</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Entertainment Luxury Cinemas
+                <span class="show-main-city">South Portland<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27370" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Entertainment Luxury Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="17:15">5:15 PM</span><span class="show-time-chip" data-time="20:15">8:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="11:15">11:15 AM</span><span class="show-time-chip" data-time="14:15">2:15 PM</span><span class="show-time-chip" data-time="17:15">5:15 PM</span><span class="show-time-chip" data-time="20:15">8:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="10:30">10:30 AM</span><span class="show-time-chip" data-time="13:15">1:15 PM</span><span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span><span class="show-time-chip" data-time="21:30">9:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="10:30">10:30 AM</span><span class="show-time-chip" data-time="13:15">1:15 PM</span><span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span><span class="show-time-chip" data-time="21:30">9:30 PM</span>
@@ -417,35 +508,35 @@
             <summary class="show-more-days-toggle">Show 5 more days</summary>
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="11:15">11:15 AM</span><span class="show-time-chip" data-time="14:15">2:15 PM</span><span class="show-time-chip" data-time="17:15">5:15 PM</span><span class="show-time-chip" data-time="20:15">8:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-02">
-                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                <h3 class="show-schedule-day">Mon, Nov 2</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="11:15">11:15 AM</span><span class="show-time-chip" data-time="14:15">2:15 PM</span><span class="show-time-chip" data-time="17:15">5:15 PM</span><span class="show-time-chip" data-time="20:15">8:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-03">
-                <h3 class="show-schedule-day">Tue, Nov 3, 2026</h3>
+                <h3 class="show-schedule-day">Tue, Nov 3</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="11:15">11:15 AM</span><span class="show-time-chip" data-time="14:15">2:15 PM</span><span class="show-time-chip" data-time="17:15">5:15 PM</span><span class="show-time-chip" data-time="20:15">8:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-04">
-                <h3 class="show-schedule-day">Wed, Nov 4, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Nov 4</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="11:15">11:15 AM</span><span class="show-time-chip" data-time="14:15">2:15 PM</span><span class="show-time-chip" data-time="17:15">5:15 PM</span><span class="show-time-chip" data-time="20:15">8:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Nov 5</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="11:15">11:15 AM</span><span class="show-time-chip" data-time="14:15">2:15 PM</span><span class="show-time-chip" data-time="17:15">5:15 PM</span><span class="show-time-chip" data-time="20:15">8:15 PM</span>
@@ -456,7 +547,6 @@
           </details>
           </div>
         </div>
-        <a class="show-link" href="https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27370" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -464,32 +554,36 @@
             data-theatre-lng="-70.2260427"
           >
             
-            <div class="show-main show-main-theatre">
-              Flagship Cinemas<span class="show-main-city">, Auburn</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Auburn<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/auburn/movie/street-fighter" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="10:05">10:05 AM</span><span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
@@ -500,28 +594,28 @@
             <summary class="show-more-days-toggle">Show 4 more days</summary>
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="10:05">10:05 AM</span><span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-02">
-                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                <h3 class="show-schedule-day">Mon, Nov 2</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-03">
-                <h3 class="show-schedule-day">Tue, Nov 3, 2026</h3>
+                <h3 class="show-schedule-day">Tue, Nov 3</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-04">
-                <h3 class="show-schedule-day">Wed, Nov 4, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Nov 4</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
@@ -532,7 +626,6 @@
           </details>
           </div>
         </div>
-        <a class="show-link" href="https://flagshipcinemas.com/auburn/movie/street-fighter" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -540,18 +633,22 @@
             data-theatre-lng="-70.2352727"
           >
             
-            <div class="show-main show-main-theatre">
-              Flagship Cinemas<span class="show-main-city">, Falmouth</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Falmouth<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/falmouth/movie/street-fighter" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:40">6:40 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span>
@@ -561,7 +658,6 @@
             
           </div>
         </div>
-        <a class="show-link" href="https://flagshipcinemas.com/falmouth/movie/street-fighter" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -569,18 +665,22 @@
             data-theatre-lng="-69.1374609"
           >
             
-            <div class="show-main show-main-theatre">
-              Flagship Cinemas<span class="show-main-city">, Thomaston</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Thomaston<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/thomaston/movie/street-fighter" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:05">7:05 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span>
@@ -590,7 +690,6 @@
             
           </div>
         </div>
-        <a class="show-link" href="https://flagshipcinemas.com/thomaston/movie/street-fighter" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -598,18 +697,22 @@
             data-theatre-lng="-69.6614214"
           >
             
-            <div class="show-main show-main-theatre">
-              Flagship Cinemas<span class="show-main-city">, Waterville</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Waterville<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/waterville/movie/street-fighter" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:40">6:40 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span>
@@ -619,7 +722,6 @@
             
           </div>
         </div>
-        <a class="show-link" href="https://flagshipcinemas.com/waterville/movie/street-fighter" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -627,18 +729,22 @@
             data-theatre-lng="-70.583234"
           >
             
-            <div class="show-main show-main-theatre">
-              Flagship Cinemas<span class="show-main-city">, Wells</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Wells<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/wells/movie/street-fighter" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:45">6:45 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span>
@@ -648,7 +754,6 @@
             
           </div>
         </div>
-        <a class="show-link" href="https://flagshipcinemas.com/wells/movie/street-fighter" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -656,18 +761,22 @@
             data-theatre-lng="-68.5984425"
           >
             
-            <div class="show-main show-main-theatre">
-              Fort Kent Cinema<span class="show-main-city">, Fort Kent</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Fort Kent Cinema
+                <span class="show-main-city">Fort Kent<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.fortkentcinema.com/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Fort Kent Cinema">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip show-time-noted" data-time="19:30" tabindex="0" data-note="Open Captions">7:30 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: Open Captions)</span></span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:30">7:30 PM</span>
@@ -677,7 +786,6 @@
             
           </div>
         </div>
-        <a class="show-link" href="https://www.fortkentcinema.com/" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -685,32 +793,36 @@
             data-theatre-lng="-70.7082496"
           >
             
-            <div class="show-main show-main-theatre">
-              Magic Lantern Theater<span class="show-main-city">, Bridgton</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Magic Lantern Theater
+                <span class="show-main-city">Bridgton<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://internet-ticketing.com/websales/sales/MAGBRI/start?film=35" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Magic Lantern Theater">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:00">1:00 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:00">1:00 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span>
@@ -720,7 +832,6 @@
             
           </div>
         </div>
-        <a class="show-link" href="https://internet-ticketing.com/websales/sales/MAGBRI/start?film=35" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -728,32 +839,36 @@
             data-theatre-lng="-70.6740573"
           >
             
-            <div class="show-main show-main-theatre">
-              Regal Cinemas<span class="show-main-city">, Augusta</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Regal Cinemas
+                <span class="show-main-city">Augusta<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.regmovies.com/movies/street-fighter-ho00020435" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Regal Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:35">7:35 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:10">1:10 PM</span><span class="show-time-chip" data-time="16:20">4:20 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:10">12:10 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:30">7:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:10">12:10 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:30">7:30 PM</span>
@@ -764,28 +879,28 @@
             <summary class="show-more-days-toggle">Show 4 more days</summary>
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:10">12:10 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:30">7:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-02">
-                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                <h3 class="show-schedule-day">Mon, Nov 2</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:10">12:10 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:30">7:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-03">
-                <h3 class="show-schedule-day">Tue, Nov 3, 2026</h3>
+                <h3 class="show-schedule-day">Tue, Nov 3</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:10">12:10 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:30">7:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-04">
-                <h3 class="show-schedule-day">Wed, Nov 4, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Nov 4</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="12:10">12:10 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:30">7:30 PM</span>
@@ -796,7 +911,6 @@
           </details>
           </div>
         </div>
-        <a class="show-link" href="https://www.regmovies.com/movies/street-fighter-ho00020435" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -804,32 +918,36 @@
             data-theatre-lng="-70.7506676"
           >
             
-            <div class="show-main show-main-theatre">
-              Smitty&#39;s Entertainment<span class="show-main-city">, Sanford</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Smitty&#39;s Entertainment
+                <span class="show-main-city">Sanford<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.smittyscinema.com/movie/Sanford/STREET-FIGHTER" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Smitty&#39;s Entertainment">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:15">7:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:15">7:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="15:00">3:00 PM</span><span class="show-time-chip" data-time="19:45">7:45 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="11:45">11:45 AM</span><span class="show-time-chip" data-time="15:00">3:00 PM</span><span class="show-time-chip" data-time="19:30">7:30 PM</span>
@@ -840,28 +958,28 @@
             <summary class="show-more-days-toggle">Show 4 more days</summary>
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="11:45">11:45 AM</span><span class="show-time-chip" data-time="15:00">3:00 PM</span><span class="show-time-chip" data-time="19:15">7:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-02">
-                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                <h3 class="show-schedule-day">Mon, Nov 2</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-03">
-                <h3 class="show-schedule-day">Tue, Nov 3, 2026</h3>
+                <h3 class="show-schedule-day">Tue, Nov 3</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:15">7:15 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-04">
-                <h3 class="show-schedule-day">Wed, Nov 4, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Nov 4</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
@@ -872,7 +990,6 @@
           </details>
           </div>
         </div>
-        <a class="show-link" href="https://www.smittyscinema.com/movie/Sanford/STREET-FIGHTER" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -880,32 +997,36 @@
             data-theatre-lng="-69.9812435"
           >
             
-            <div class="show-main show-main-theatre">
-              Smitty&#39;s Entertainment<span class="show-main-city">, Topsham</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Smitty&#39;s Entertainment
+                <span class="show-main-city">Topsham<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.smittyscinema.com/movie/Topsham/STREET-FIGHTER" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Smitty&#39;s Entertainment">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-28">
-                <h3 class="show-schedule-day">Wed, Oct 28, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Oct 28</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:50">6:50 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Oct 29</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:50">6:50 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:20">7:20 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:20">7:20 PM</span>
@@ -916,28 +1037,28 @@
             <summary class="show-more-days-toggle">Show 4 more days</summary>
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:10">7:10 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-02">
-                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                <h3 class="show-schedule-day">Mon, Nov 2</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-03">
-                <h3 class="show-schedule-day">Tue, Nov 3, 2026</h3>
+                <h3 class="show-schedule-day">Tue, Nov 3</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-04">
-                <h3 class="show-schedule-day">Wed, Nov 4, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Nov 4</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
@@ -948,7 +1069,6 @@
           </details>
           </div>
         </div>
-        <a class="show-link" href="https://www.smittyscinema.com/movie/Topsham/STREET-FIGHTER" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article><article class="show-item">
         <div class="show-row">
           <div
@@ -956,32 +1076,36 @@
             data-theatre-lng="-67.2808756"
           >
             
-            <div class="show-main show-main-theatre">
-              State Cinemas<span class="show-main-city">, Calais</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                State Cinemas
+                <span class="show-main-city">Calais<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="statecinemascalais.com" target="_blank" rel="noopener noreferrer" aria-label="Tickets at State Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:30">1:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-04">
-                <h3 class="show-schedule-day">Wed, Nov 4, 2026</h3>
+                <h3 class="show-schedule-day">Wed, Nov 4</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
@@ -992,7 +1116,7 @@
             <summary class="show-more-days-toggle">Show 1 more day</summary>
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5, 2026</h3>
+                <h3 class="show-schedule-day">Thu, Nov 5</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
@@ -1003,7 +1127,6 @@
           </details>
           </div>
         </div>
-        <a class="show-link" href="statecinemascalais.com" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article></div>
       </section>
       <section class="site-meta" aria-label="Site information">
@@ -1021,53 +1144,14 @@
 
       initShowtimeNoteTooltips();
 
+      const moreButton = document.querySelector(".film-page-more");
+      moreButton?.addEventListener("click", () => {
+        const expanded = moreButton.closest(".film-page-card").classList.toggle("is-expanded");
+        moreButton.setAttribute("aria-expanded", String(expanded));
+        moreButton.textContent = expanded ? "Less" : "More about the film";
+      });
+
       (() => {
-        const LIGHT_THEME = "light";
-        const DARK_THEME = "dark";
-        const THEME_STORAGE_KEY = "tmp-theme";
-        const logo = document.getElementById("filmPageLogo");
-        const wordmark = document.getElementById("filmPageWordmark");
-        const logoDarkSrc = "../../assets/brand/TMP%20logo%20dark.png";
-        const logoLightSrc = "../../assets/brand/TMP%20logo%20light.png";
-        const wordmarks = {
-          light: ["../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Light%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Light%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Light%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Light%20-%20One%20Line.png"],
-          dark: ["../../assets/brand/Act%20III%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Dark%20-%20One%20Line.png"],
-        };
-
-        function getTheme() {
-          try {
-            const stored = localStorage.getItem(THEME_STORAGE_KEY);
-            if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
-          } catch {}
-          return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
-        }
-
-        function pickRandom(list) {
-          if (!Array.isArray(list) || !list.length) return "";
-          return list[Math.floor(Math.random() * list.length)] || "";
-        }
-
-        function applyTheme(theme) {
-          const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
-          document.documentElement.setAttribute("data-theme", nextTheme);
-          if (logo) {
-            logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
-          }
-          if (wordmark) {
-            const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-            const chosen = pickRandom(wordmarks[wordmarkTheme]);
-            if (chosen) wordmark.src = chosen;
-          }
-        }
-
-        applyTheme(getTheme());
-        const media = window.matchMedia("(prefers-color-scheme: dark)");
-        media.addEventListener?.("change", () => applyTheme(getTheme()));
-        window.addEventListener("storage", (event) => {
-          if (event.key !== THEME_STORAGE_KEY) return;
-          applyTheme(getTheme());
-        });
-
         // Film pages used to keep their own location; it's still read for visitors who set one there.
         const LEGACY_LOCATION_STORAGE_KEY = "tmp-film-pages-location-v1";
         const STORAGE_KEYS = [LOCATION_PREFERENCE_STORAGE_KEY, LEGACY_LOCATION_STORAGE_KEY];
@@ -1077,6 +1161,20 @@
         // The theatres in their current order. The masonry columns hold them column by column,
         // so the list itself can't be read back for the order.
         let orderedItems = theatreItems;
+        // Long lists show the first few theatres (the nearest, with a location) and a button for
+        // the rest. A list only one longer than that shows in full.
+        const THEATRE_LIMIT = 5;
+        let showAllTheatres = false;
+        const moreTheatresButton = document.createElement("button");
+        moreTheatresButton.type = "button";
+        moreTheatresButton.className = "ghost-btn show-more-theatres";
+        moreTheatresButton.hidden = true;
+        list.after(moreTheatresButton);
+        moreTheatresButton.addEventListener("click", () => {
+          showAllTheatres = !showAllTheatres;
+          applyShowtimesLayout(orderedItems);
+          if (!showAllTheatres) moreTheatresButton.scrollIntoView({ block: "nearest" });
+        });
         const locationSorted = document.getElementById("filmLocationSorted");
         const locationPrompt = document.getElementById("filmLocationPrompt");
         const locationChip = document.getElementById("filmLocationChip");
@@ -1233,13 +1331,19 @@
 
         function applyShowtimesLayout(items) {
           orderedItems = items;
-          const columns = getMasonryColumnCount();
+          const limited = items.length > THEATRE_LIMIT + 1;
+          const visibleItems = limited && !showAllTheatres ? items.slice(0, THEATRE_LIMIT) : items;
+          moreTheatresButton.hidden = !limited;
+          moreTheatresButton.textContent = showAllTheatres
+            ? "Show fewer theatres"
+            : "Show " + (items.length - THEATRE_LIMIT) + " more theatres";
+          const columns = Math.min(getMasonryColumnCount(), visibleItems.length);
           list.innerHTML = "";
 
           if (columns <= 1) {
             list.classList.remove("show-list-masonry");
             list.style.removeProperty("--show-columns");
-            orderedItems.forEach((item) => list.appendChild(item));
+            visibleItems.forEach((item) => list.appendChild(item));
             return;
           }
 
@@ -1252,10 +1356,14 @@
             fragment.appendChild(col);
             return col;
           });
-          orderedItems.forEach((item, index) => {
+          visibleItems.forEach((item, index) => {
             columnEls[index % columns].appendChild(item);
           });
           list.appendChild(fragment);
+        }
+
+        function formatMiles(miles) {
+          return (miles < 10 ? miles.toFixed(1) : String(Math.round(miles))) + " mi";
         }
 
         function sortByDistance(lat, lng) {
@@ -1266,6 +1374,11 @@
             let distance = Number.POSITIVE_INFINITY;
             if (Number.isFinite(itemLat) && Number.isFinite(itemLng)) {
               distance = haversineMiles(lat, lng, itemLat, itemLng);
+            }
+            const distanceEl = item.querySelector(".show-distance");
+            if (distanceEl) {
+              const hasCity = Boolean(distanceEl.previousSibling?.textContent.trim());
+              distanceEl.textContent = Number.isFinite(distance) ? (hasCity ? " · " : "") + formatMiles(distance) : "";
             }
             return { item, distance };
           });
@@ -1338,11 +1451,27 @@
           return { date: values.year + "-" + values.month + "-" + values.day, time: values.hour + ":" + values.minute };
         }
 
+        function getNextIsoDate(isoDate) {
+          const [year, month, day] = isoDate.split("-").map(Number);
+          return new Date(Date.UTC(year, month - 1, day + 1)).toISOString().slice(0, 10);
+        }
+
+        // Today's and tomorrow's day cards say so; the rest keep the built date ("Fri, Oct 30").
+        function labelNearDays(today) {
+          const tomorrow = getNextIsoDate(today);
+          document.querySelectorAll(".show-day-card[data-date] .show-schedule-day").forEach((heading) => {
+            heading.dataset.label ??= heading.textContent;
+            const date = heading.closest(".show-day-card").dataset.date;
+            heading.textContent = date === today ? "Today" : date === tomorrow ? "Tomorrow" : heading.dataset.label;
+          });
+        }
+
         // Pages are rebuilt about once a day, so times that have started are hidden here. Days
         // move up from "Show N more days" to keep four showing; a theatre with nothing left goes.
         // Returns true when a theatre was removed.
         function hidePastShowtimes() {
           const now = getEasternNow();
+          labelNearDays(now.date);
           const before = theatreItems.length;
           theatreItems = theatreItems.filter((item) => {
             item.querySelectorAll(".show-day-card[data-date]").forEach((card) => {
@@ -1375,6 +1504,7 @@
           });
           if (!theatreItems.length) {
             document.querySelector(".film-location")?.remove();
+            moreTheatresButton.remove();
             const empty = document.createElement("p");
             empty.className = "film-page-empty";
             empty.textContent = "No more showtimes are listed for this film. ";

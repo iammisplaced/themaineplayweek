@@ -20,16 +20,87 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
     <link rel="icon" href="../../assets/icons/favicon.ico" />
     <link rel="manifest" href="../../site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/styles.css" />
     <link rel="stylesheet" href="../../css/film-pages.css" />
+    <script>
+      // Set before the page draws, so dark mode doesn't flash light first. The "js" class lets
+      // the CSS fold away the film details on phones only when the "More" button can open them.
+      (() => {
+        let theme = "";
+        try {
+          theme = localStorage.getItem("tmp-theme") || "";
+        } catch {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.classList.add("js");
+      })();
+    </script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Kabaddi 5: After the Final Match 2026","description":"As Kaji steps into a new chapter of his life, familiar faces return while new characters enter his world, each bringing their own motives, desires, and complications. With new dreams and new responsibilities, Kaji finds himself facing challenges he never expected.","image":"https://image.tmdb.org/t/p/w342/sCHvc2GA4rr8ocjvmjBlTEGBmZG.jpg","datePublished":"2026-10-22","duration":"PT145M","contentRating":"NR","director":[{"@type":"Person","name":"Ram Babu Gurung"}],"actor":[{"@type":"Person","name":"Dayahang Rai"},{"@type":"Person","name":"Bipin Karki"},{"@type":"Person","name":"Bijay Baral"}],"genre":["Drama","Comedy"],"url":"https://showtimes.themaineplayweek.com/films/kabaddi-5-after-the-final-match-2026/"}</script>
   </head>
   <body>
     <main class="film-page-shell">
       <div class="film-page-brandbar">
-        <img id="filmPageWordmark" class="film-page-wordmark" src="../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png" alt="The Maine Playweek" />
+        <a href="../.." aria-label="The Maine Playweek showtimes">
+          <img id="filmPageWordmark" class="film-page-wordmark" src="../../assets/brand/Act%20III%20-%20Dark%20-%20One%20Line.png" alt="" />
+        </a>
         <img id="filmPageLogo" class="film-page-logo" src="../../assets/brand/TMP%20logo%20dark.png" alt="" aria-hidden="true" />
       </div>
+      <script>
+        // Right after the images, so they switch to the theme's (and a random wordmark) before
+        // they're drawn.
+        (() => {
+          const LIGHT_THEME = "light";
+          const DARK_THEME = "dark";
+          const THEME_STORAGE_KEY = "tmp-theme";
+          const logo = document.getElementById("filmPageLogo");
+          const wordmark = document.getElementById("filmPageWordmark");
+          const logoDarkSrc = "../../assets/brand/TMP%20logo%20dark.png";
+          const logoLightSrc = "../../assets/brand/TMP%20logo%20light.png";
+          const wordmarks = {
+            light: ["../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Light%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Light%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Light%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Light%20-%20One%20Line.png"],
+            dark: ["../../assets/brand/Act%20III%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Dark%20-%20One%20Line.png"],
+          };
+
+          function getTheme() {
+            try {
+              const stored = localStorage.getItem(THEME_STORAGE_KEY);
+              if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
+            } catch {}
+            return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
+          }
+
+          function pickRandom(list) {
+            if (!Array.isArray(list) || !list.length) return "";
+            return list[Math.floor(Math.random() * list.length)] || "";
+          }
+
+          function applyTheme(theme) {
+            const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
+            document.documentElement.setAttribute("data-theme", nextTheme);
+            if (logo) {
+              logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
+            }
+            if (wordmark) {
+              const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+              const chosen = pickRandom(wordmarks[wordmarkTheme]);
+              if (chosen) wordmark.src = chosen;
+            }
+          }
+
+          applyTheme(getTheme());
+          const media = window.matchMedia("(prefers-color-scheme: dark)");
+          media.addEventListener?.("change", () => applyTheme(getTheme()));
+          window.addEventListener("storage", (event) => {
+            if (event.key !== THEME_STORAGE_KEY) return;
+            applyTheme(getTheme());
+          });
+        })();
+      </script>
       <a class="film-page-return" href="../..">&larr; All showtimes</a>
       <article class="group-card film-card film-page-card film-info-box">
         <h1 class="group-title group-title-film"><cite class="film-page-title">Kabaddi 5: After the Final Match</cite></h1>
@@ -41,10 +112,11 @@
           </div>
           
           <div class="group-film-details">
-            <div class="group-film-facts film-page-facts">
+            <div id="filmPageFacts" class="group-film-facts film-page-facts">
               <div class="film-fact"><span class="film-fact-label">Synopsis</span><span class="film-fact-value">As Kaji steps into a new chapter of his life, familiar faces return while new characters enter his world, each bringing their own motives, desires, and complications. With new dreams and new responsibilities, Kaji finds himself facing challenges he never expected.</span></div><div class="film-fact"><span class="film-fact-label">Director</span><span class="film-fact-value">Ram Babu Gurung</span></div><div class="film-fact"><span class="film-fact-label">Genres</span><span class="film-fact-value">Drama, Comedy</span></div><div class="film-fact"><span class="film-fact-label">Stars</span><span class="film-fact-value">Dayahang Rai, Bipin Karki, Bijay Baral</span></div><div class="film-fact"><span class="film-fact-label">Language</span><span class="film-fact-value">Nepali</span></div><div class="film-fact"><span class="film-fact-label">Release Date</span><span class="film-fact-value">October 22, 2026</span></div>
             </div>
             <a class="group-tmdb-link" href="https://www.themoviedb.org/movie/1773496" target="_blank" rel="noopener noreferrer">View on TMDb</a>
+            <button class="film-page-more" type="button" aria-expanded="false" aria-controls="filmPageFacts">More about the film</button>
           </div>
         </div>
       </article>
@@ -59,32 +131,36 @@
             data-theatre-lng="-70.3465631"
           >
             
-            <div class="show-main show-main-theatre">
-              Apple Cinemas<span class="show-main-city">, Westbrook</span>
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Apple Cinemas
+                <span class="show-main-city">Westbrook<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.applecinemas.com/home/611fe9edf74bab2423301ee0" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Apple Cinemas">Tickets</a>
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-30">
-                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                <h3 class="show-schedule-day">Fri, Oct 30</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:20">6:20 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
-                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:20">6:20 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-01">
-                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                <h3 class="show-schedule-day">Sun, Nov 1</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:20">6:20 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-02">
-                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                <h3 class="show-schedule-day">Mon, Nov 2</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="17:50">5:50 PM</span>
@@ -95,7 +171,7 @@
             <summary class="show-more-days-toggle">Show 1 more day</summary>
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-11-03">
-                <h3 class="show-schedule-day">Tue, Nov 3, 2026</h3>
+                <h3 class="show-schedule-day">Tue, Nov 3</h3>
                 
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="17:50">5:50 PM</span>
@@ -106,7 +182,6 @@
           </details>
           </div>
         </div>
-        <a class="show-link" href="https://www.applecinemas.com/home/611fe9edf74bab2423301ee0" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article></div>
       </section>
       <section class="site-meta" aria-label="Site information">
@@ -124,53 +199,14 @@
 
       initShowtimeNoteTooltips();
 
+      const moreButton = document.querySelector(".film-page-more");
+      moreButton?.addEventListener("click", () => {
+        const expanded = moreButton.closest(".film-page-card").classList.toggle("is-expanded");
+        moreButton.setAttribute("aria-expanded", String(expanded));
+        moreButton.textContent = expanded ? "Less" : "More about the film";
+      });
+
       (() => {
-        const LIGHT_THEME = "light";
-        const DARK_THEME = "dark";
-        const THEME_STORAGE_KEY = "tmp-theme";
-        const logo = document.getElementById("filmPageLogo");
-        const wordmark = document.getElementById("filmPageWordmark");
-        const logoDarkSrc = "../../assets/brand/TMP%20logo%20dark.png";
-        const logoLightSrc = "../../assets/brand/TMP%20logo%20light.png";
-        const wordmarks = {
-          light: ["../../assets/brand/Act%20III%20-%20Light%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Light%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Light%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Light%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Light%20-%20One%20Line.png"],
-          dark: ["../../assets/brand/Act%20III%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Deering%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Empire%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Fine%20Arts%20-%20Dark%20-%20One%20Line.png","../../assets/brand/Strand%20-%20Dark%20-%20One%20Line.png"],
-        };
-
-        function getTheme() {
-          try {
-            const stored = localStorage.getItem(THEME_STORAGE_KEY);
-            if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
-          } catch {}
-          return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
-        }
-
-        function pickRandom(list) {
-          if (!Array.isArray(list) || !list.length) return "";
-          return list[Math.floor(Math.random() * list.length)] || "";
-        }
-
-        function applyTheme(theme) {
-          const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
-          document.documentElement.setAttribute("data-theme", nextTheme);
-          if (logo) {
-            logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
-          }
-          if (wordmark) {
-            const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-            const chosen = pickRandom(wordmarks[wordmarkTheme]);
-            if (chosen) wordmark.src = chosen;
-          }
-        }
-
-        applyTheme(getTheme());
-        const media = window.matchMedia("(prefers-color-scheme: dark)");
-        media.addEventListener?.("change", () => applyTheme(getTheme()));
-        window.addEventListener("storage", (event) => {
-          if (event.key !== THEME_STORAGE_KEY) return;
-          applyTheme(getTheme());
-        });
-
         // Film pages used to keep their own location; it's still read for visitors who set one there.
         const LEGACY_LOCATION_STORAGE_KEY = "tmp-film-pages-location-v1";
         const STORAGE_KEYS = [LOCATION_PREFERENCE_STORAGE_KEY, LEGACY_LOCATION_STORAGE_KEY];
@@ -180,6 +216,20 @@
         // The theatres in their current order. The masonry columns hold them column by column,
         // so the list itself can't be read back for the order.
         let orderedItems = theatreItems;
+        // Long lists show the first few theatres (the nearest, with a location) and a button for
+        // the rest. A list only one longer than that shows in full.
+        const THEATRE_LIMIT = 5;
+        let showAllTheatres = false;
+        const moreTheatresButton = document.createElement("button");
+        moreTheatresButton.type = "button";
+        moreTheatresButton.className = "ghost-btn show-more-theatres";
+        moreTheatresButton.hidden = true;
+        list.after(moreTheatresButton);
+        moreTheatresButton.addEventListener("click", () => {
+          showAllTheatres = !showAllTheatres;
+          applyShowtimesLayout(orderedItems);
+          if (!showAllTheatres) moreTheatresButton.scrollIntoView({ block: "nearest" });
+        });
         const locationSorted = document.getElementById("filmLocationSorted");
         const locationPrompt = document.getElementById("filmLocationPrompt");
         const locationChip = document.getElementById("filmLocationChip");
@@ -336,13 +386,19 @@
 
         function applyShowtimesLayout(items) {
           orderedItems = items;
-          const columns = getMasonryColumnCount();
+          const limited = items.length > THEATRE_LIMIT + 1;
+          const visibleItems = limited && !showAllTheatres ? items.slice(0, THEATRE_LIMIT) : items;
+          moreTheatresButton.hidden = !limited;
+          moreTheatresButton.textContent = showAllTheatres
+            ? "Show fewer theatres"
+            : "Show " + (items.length - THEATRE_LIMIT) + " more theatres";
+          const columns = Math.min(getMasonryColumnCount(), visibleItems.length);
           list.innerHTML = "";
 
           if (columns <= 1) {
             list.classList.remove("show-list-masonry");
             list.style.removeProperty("--show-columns");
-            orderedItems.forEach((item) => list.appendChild(item));
+            visibleItems.forEach((item) => list.appendChild(item));
             return;
           }
 
@@ -355,10 +411,14 @@
             fragment.appendChild(col);
             return col;
           });
-          orderedItems.forEach((item, index) => {
+          visibleItems.forEach((item, index) => {
             columnEls[index % columns].appendChild(item);
           });
           list.appendChild(fragment);
+        }
+
+        function formatMiles(miles) {
+          return (miles < 10 ? miles.toFixed(1) : String(Math.round(miles))) + " mi";
         }
 
         function sortByDistance(lat, lng) {
@@ -369,6 +429,11 @@
             let distance = Number.POSITIVE_INFINITY;
             if (Number.isFinite(itemLat) && Number.isFinite(itemLng)) {
               distance = haversineMiles(lat, lng, itemLat, itemLng);
+            }
+            const distanceEl = item.querySelector(".show-distance");
+            if (distanceEl) {
+              const hasCity = Boolean(distanceEl.previousSibling?.textContent.trim());
+              distanceEl.textContent = Number.isFinite(distance) ? (hasCity ? " · " : "") + formatMiles(distance) : "";
             }
             return { item, distance };
           });
@@ -441,11 +506,27 @@
           return { date: values.year + "-" + values.month + "-" + values.day, time: values.hour + ":" + values.minute };
         }
 
+        function getNextIsoDate(isoDate) {
+          const [year, month, day] = isoDate.split("-").map(Number);
+          return new Date(Date.UTC(year, month - 1, day + 1)).toISOString().slice(0, 10);
+        }
+
+        // Today's and tomorrow's day cards say so; the rest keep the built date ("Fri, Oct 30").
+        function labelNearDays(today) {
+          const tomorrow = getNextIsoDate(today);
+          document.querySelectorAll(".show-day-card[data-date] .show-schedule-day").forEach((heading) => {
+            heading.dataset.label ??= heading.textContent;
+            const date = heading.closest(".show-day-card").dataset.date;
+            heading.textContent = date === today ? "Today" : date === tomorrow ? "Tomorrow" : heading.dataset.label;
+          });
+        }
+
         // Pages are rebuilt about once a day, so times that have started are hidden here. Days
         // move up from "Show N more days" to keep four showing; a theatre with nothing left goes.
         // Returns true when a theatre was removed.
         function hidePastShowtimes() {
           const now = getEasternNow();
+          labelNearDays(now.date);
           const before = theatreItems.length;
           theatreItems = theatreItems.filter((item) => {
             item.querySelectorAll(".show-day-card[data-date]").forEach((card) => {
@@ -478,6 +559,7 @@
           });
           if (!theatreItems.length) {
             document.querySelector(".film-location")?.remove();
+            moreTheatresButton.remove();
             const empty = document.createElement("p");
             empty.className = "film-page-empty";
             empty.textContent = "No more showtimes are listed for this film. ";
