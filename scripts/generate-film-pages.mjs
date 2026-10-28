@@ -689,16 +689,87 @@ function renderFilmPage(film, slug, siteUrl) {
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
     <link rel="icon" href="../../assets/icons/favicon.ico" />
     <link rel="manifest" href="../../site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/styles.css" />
     <link rel="stylesheet" href="../../css/film-pages.css" />
+    <script>
+      // Set before the page draws, so dark mode doesn't flash light first. The "js" class lets
+      // the CSS fold away the film details on phones only when the "More" button can open them.
+      (() => {
+        let theme = "";
+        try {
+          theme = localStorage.getItem("tmp-theme") || "";
+        } catch {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.classList.add("js");
+      })();
+    </script>
     <script type="application/ld+json">${jsonForScript(pruneUndefined(ldJson))}</script>
   </head>
   <body>
     <main class="film-page-shell">
       <div class="film-page-brandbar">
-        <img id="filmPageWordmark" class="film-page-wordmark" src="${escapeHtml(wordmarksLight[0] || "")}" alt="${BRAND_NAME}" />
+        <a href="${escapeHtml(mainAppUrl)}" aria-label="${BRAND_NAME} showtimes">
+          <img id="filmPageWordmark" class="film-page-wordmark" src="${escapeHtml(wordmarksDark[0] || "")}" alt="" />
+        </a>
         <img id="filmPageLogo" class="film-page-logo" src="${escapeHtml(logoDarkSrc)}" alt="" aria-hidden="true" />
       </div>
+      <script>
+        // Right after the images, so they switch to the theme's (and a random wordmark) before
+        // they're drawn.
+        (() => {
+          const LIGHT_THEME = "light";
+          const DARK_THEME = "dark";
+          const THEME_STORAGE_KEY = "tmp-theme";
+          const logo = document.getElementById("filmPageLogo");
+          const wordmark = document.getElementById("filmPageWordmark");
+          const logoDarkSrc = ${jsonForScript(logoDarkSrc)};
+          const logoLightSrc = ${jsonForScript(logoLightSrc)};
+          const wordmarks = {
+            light: ${jsonForScript(wordmarksLight)},
+            dark: ${jsonForScript(wordmarksDark)},
+          };
+
+          function getTheme() {
+            try {
+              const stored = localStorage.getItem(THEME_STORAGE_KEY);
+              if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
+            } catch {}
+            return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
+          }
+
+          function pickRandom(list) {
+            if (!Array.isArray(list) || !list.length) return "";
+            return list[Math.floor(Math.random() * list.length)] || "";
+          }
+
+          function applyTheme(theme) {
+            const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
+            document.documentElement.setAttribute("data-theme", nextTheme);
+            if (logo) {
+              logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
+            }
+            if (wordmark) {
+              const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+              const chosen = pickRandom(wordmarks[wordmarkTheme]);
+              if (chosen) wordmark.src = chosen;
+            }
+          }
+
+          applyTheme(getTheme());
+          const media = window.matchMedia("(prefers-color-scheme: dark)");
+          media.addEventListener?.("change", () => applyTheme(getTheme()));
+          window.addEventListener("storage", (event) => {
+            if (event.key !== THEME_STORAGE_KEY) return;
+            applyTheme(getTheme());
+          });
+        })();
+      </script>
       <a class="film-page-return" href="${escapeHtml(mainAppUrl)}">&larr; All showtimes</a>
       <article class="group-card film-card film-page-card film-info-box${film.staffFavorite ? " film-card-staff-favorite" : ""}${
         film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
@@ -749,52 +820,6 @@ function renderFilmPage(film, slug, siteUrl) {
       initShowtimeNoteTooltips();
 
       (() => {
-        const LIGHT_THEME = "light";
-        const DARK_THEME = "dark";
-        const THEME_STORAGE_KEY = "tmp-theme";
-        const logo = document.getElementById("filmPageLogo");
-        const wordmark = document.getElementById("filmPageWordmark");
-        const logoDarkSrc = ${jsonForScript(logoDarkSrc)};
-        const logoLightSrc = ${jsonForScript(logoLightSrc)};
-        const wordmarks = {
-          light: ${jsonForScript(wordmarksLight)},
-          dark: ${jsonForScript(wordmarksDark)},
-        };
-
-        function getTheme() {
-          try {
-            const stored = localStorage.getItem(THEME_STORAGE_KEY);
-            if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
-          } catch {}
-          return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
-        }
-
-        function pickRandom(list) {
-          if (!Array.isArray(list) || !list.length) return "";
-          return list[Math.floor(Math.random() * list.length)] || "";
-        }
-
-        function applyTheme(theme) {
-          const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
-          document.documentElement.setAttribute("data-theme", nextTheme);
-          if (logo) {
-            logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
-          }
-          if (wordmark) {
-            const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-            const chosen = pickRandom(wordmarks[wordmarkTheme]);
-            if (chosen) wordmark.src = chosen;
-          }
-        }
-
-        applyTheme(getTheme());
-        const media = window.matchMedia("(prefers-color-scheme: dark)");
-        media.addEventListener?.("change", () => applyTheme(getTheme()));
-        window.addEventListener("storage", (event) => {
-          if (event.key !== THEME_STORAGE_KEY) return;
-          applyTheme(getTheme());
-        });
-
         // Film pages used to keep their own location; it's still read for visitors who set one there.
         const LEGACY_LOCATION_STORAGE_KEY = "tmp-film-pages-location-v1";
         const STORAGE_KEYS = [LOCATION_PREFERENCE_STORAGE_KEY, LEGACY_LOCATION_STORAGE_KEY];
