@@ -5,6 +5,7 @@ import {
   getShowDateTime,
   normalizeOutboundUrl,
   parseIsoDate,
+  requestFilmPagesRebuild,
   slugifyTextSegment,
   to24HourTime,
   toFiniteNumber,
@@ -860,6 +861,7 @@ function bindAdminEvents() {
       validateData(state.data);
       const saveResult = await persistData();
       elements.adminMessage.textContent = saveResult.saved ? "All changes saved to Supabase." : "No changes to save.";
+      if (saveResult.saved) void rebuildFilmPagesAfterSave();
     } catch (error) {
       elements.adminMessage.textContent = `Save failed: ${error.message}`;
     } finally {
@@ -1146,6 +1148,17 @@ async function refreshAuthState() {
   const { data } = await state.supabase.auth.getSession();
   state.admin.auth.authenticated = Boolean(data.session?.user);
   state.admin.auth.email = data.session?.user?.email || "";
+}
+
+// The film pages are static, so a save asks for them to be rebuilt. The outcome is added to
+// the save message unless something else has replaced it meanwhile.
+async function rebuildFilmPagesAfterSave() {
+  const message = elements.adminMessage.textContent;
+  const result = await requestFilmPagesRebuild(state.supabase);
+  if (result === "skipped" || elements.adminMessage.textContent !== message) return;
+  elements.adminMessage.textContent = `${message} ${
+    result === "started" ? "Film pages will update in a few minutes." : "Film pages will update at the next daily rebuild."
+  }`;
 }
 
 function syncAdminEditor() {

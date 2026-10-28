@@ -123,6 +123,27 @@ export function toFiniteNumber(value) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+// ---- Film pages ----
+
+// Asks api/rebuild-film-pages.js to rebuild the static film pages after an admin save to the
+// live data, so they update in a few minutes instead of at the next daily run. Returns
+// "started", "skipped" (staging data, which the film pages don't use) or "failed".
+export async function requestFilmPagesRebuild(supabase) {
+  if (SUPABASE_DB_SCHEMA !== "public") return "skipped";
+  try {
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+    if (!token) return "failed";
+    const response = await fetch("/api/rebuild-film-pages", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.ok ? "started" : "failed";
+  } catch {
+    return "failed";
+  }
+}
+
 // ---- Location ----
 
 // Shared by the main app and the film pages so a location set on one is used by the other.

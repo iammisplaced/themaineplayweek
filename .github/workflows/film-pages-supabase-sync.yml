@@ -8,6 +8,12 @@ on:
 permissions:
   contents: write
 
+# Admin saves start runs too (api/rebuild-film-pages.js). One run at a time, and at most one
+# waiting: a newer request replaces the waiting one, so a burst of saves rebuilds once or twice.
+concurrency:
+  group: film-pages-sync
+  cancel-in-progress: false
+
 jobs:
   sync-film-pages:
     runs-on: ubuntu-latest
@@ -45,4 +51,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add films data/film-pages-source.live.json
           git commit -m "Update generated film pages from Supabase"
+          # main may have moved while the pages were built.
+          git pull --rebase origin main
           git push
