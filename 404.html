@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page not found | The Maine Playweek</title>
+    <meta name="robots" content="noindex" />
+    <!-- Vercel serves this page for any missing path, so every link here starts at the root. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png" />
+    <link rel="icon" href="/assets/icons/favicon.ico" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script>
+      // Set before the page draws, so dark mode doesn't flash light first.
+      (() => {
+        let theme = "";
+        try {
+          theme = localStorage.getItem("tmp-theme") || "";
+        } catch {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <style>
+      .not-found {
+        width: min(560px, 100%);
+        margin: 0 auto;
+        padding-top: 2rem;
+      }
+      .not-found-logo {
+        display: block;
+        width: 72px;
+        height: 72px;
+        margin-bottom: 1.25rem;
+      }
+      .not-found h1 {
+        margin: 0 0 0.6rem;
+        color: var(--accent-2);
+        font-size: 1.6rem;
+      }
+      .not-found p {
+        margin: 0 0 1rem;
+        line-height: 1.5;
+      }
+      .not-found-link {
+        color: var(--accent-2);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="not-found">
+      <a href="/" aria-label="The Maine Playweek showtimes">
+        <img id="notFoundLogo" class="not-found-logo" src="/assets/brand/TMP%20logo%20dark.png" alt="" />
+      </a>
+      <h1 id="notFoundTitle">We couldn't find that page</h1>
+      <p id="notFoundCopy">The link may be old, or the page may have moved.</p>
+      <p><a class="not-found-link" href="/">&larr; See what's playing in Maine</a></p>
+    </main>
+    <script>
+      if (document.documentElement.getAttribute("data-theme") === "dark") {
+        document.getElementById("notFoundLogo").src = "/assets/brand/TMP%20logo%20light.png";
+      }
+      // Film pages only exist while a film has showtimes coming up.
+      if (/^\/films\/[^/]+/.test(location.pathname)) {
+        document.getElementById("notFoundTitle").textContent = "This film isn't showing anymore";
+        document.getElementById("notFoundCopy").textContent =
+          "Its run in Maine theatres has ended, or it hasn't been scheduled yet.";
+      }
+    </script>
+  </body>
+</html>
