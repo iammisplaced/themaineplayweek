@@ -644,14 +644,17 @@ function renderFilmPage(film, slug, siteUrl) {
             ${group.festivalNames.length
               ? `<span class="film-page-festival-ribbon">${escapeHtml(group.festivalNames.join(" · "))}</span>`
               : ""}
-            <div class="show-main show-main-theatre">
-              ${escapeHtml(group.theatre)}${group.city ? `<span class="show-main-city">, ${escapeHtml(group.city)}</span>` : ""}
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                ${escapeHtml(group.theatre)}
+                <span class="show-main-city">${group.city ? escapeHtml(group.city) : ""}<span class="show-distance"></span></span>
+              </div>
+              ${group.ticketLink ? `<a class="show-link" href="${escapeHtml(group.ticketLink)}" target="_blank" rel="noopener noreferrer" aria-label="Tickets at ${escapeHtml(group.theatre)}">Tickets</a>` : ""}
             </div>
             <div class="show-schedule">${scheduleMarkup}</div>
             ${hiddenScheduleMarkup}
           </div>
         </div>
-        ${group.ticketLink ? `<a class="show-link" href="${escapeHtml(group.ticketLink)}" target="_blank" rel="noopener noreferrer">Tickets</a>` : ""}
       </article>`;
     })
     .join("");
@@ -841,6 +844,20 @@ function renderFilmPage(film, slug, siteUrl) {
         // The theatres in their current order. The masonry columns hold them column by column,
         // so the list itself can't be read back for the order.
         let orderedItems = theatreItems;
+        // Long lists show the first few theatres (the nearest, with a location) and a button for
+        // the rest. A list only one longer than that shows in full.
+        const THEATRE_LIMIT = 5;
+        let showAllTheatres = false;
+        const moreTheatresButton = document.createElement("button");
+        moreTheatresButton.type = "button";
+        moreTheatresButton.className = "ghost-btn show-more-theatres";
+        moreTheatresButton.hidden = true;
+        list.after(moreTheatresButton);
+        moreTheatresButton.addEventListener("click", () => {
+          showAllTheatres = !showAllTheatres;
+          applyShowtimesLayout(orderedItems);
+          if (!showAllTheatres) moreTheatresButton.scrollIntoView({ block: "nearest" });
+        });
         const locationSorted = document.getElementById("filmLocationSorted");
         const locationPrompt = document.getElementById("filmLocationPrompt");
         const locationChip = document.getElementById("filmLocationChip");
@@ -997,13 +1014,19 @@ function renderFilmPage(film, slug, siteUrl) {
 
         function applyShowtimesLayout(items) {
           orderedItems = items;
-          const columns = getMasonryColumnCount();
+          const limited = items.length > THEATRE_LIMIT + 1;
+          const visibleItems = limited && !showAllTheatres ? items.slice(0, THEATRE_LIMIT) : items;
+          moreTheatresButton.hidden = !limited;
+          moreTheatresButton.textContent = showAllTheatres
+            ? "Show fewer theatres"
+            : "Show " + (items.length - THEATRE_LIMIT) + " more theatres";
+          const columns = Math.min(getMasonryColumnCount(), visibleItems.length);
           list.innerHTML = "";
 
           if (columns <= 1) {
             list.classList.remove("show-list-masonry");
             list.style.removeProperty("--show-columns");
-            orderedItems.forEach((item) => list.appendChild(item));
+            visibleItems.forEach((item) => list.appendChild(item));
             return;
           }
 
@@ -1016,10 +1039,14 @@ function renderFilmPage(film, slug, siteUrl) {
             fragment.appendChild(col);
             return col;
           });
-          orderedItems.forEach((item, index) => {
+          visibleItems.forEach((item, index) => {
             columnEls[index % columns].appendChild(item);
           });
           list.appendChild(fragment);
+        }
+
+        function formatMiles(miles) {
+          return (miles < 10 ? miles.toFixed(1) : String(Math.round(miles))) + " mi";
         }
 
         function sortByDistance(lat, lng) {
@@ -1030,6 +1057,11 @@ function renderFilmPage(film, slug, siteUrl) {
             let distance = Number.POSITIVE_INFINITY;
             if (Number.isFinite(itemLat) && Number.isFinite(itemLng)) {
               distance = haversineMiles(lat, lng, itemLat, itemLng);
+            }
+            const distanceEl = item.querySelector(".show-distance");
+            if (distanceEl) {
+              const hasCity = Boolean(distanceEl.previousSibling?.textContent.trim());
+              distanceEl.textContent = Number.isFinite(distance) ? (hasCity ? " · " : "") + formatMiles(distance) : "";
             }
             return { item, distance };
           });
@@ -1102,11 +1134,27 @@ function renderFilmPage(film, slug, siteUrl) {
           return { date: values.year + "-" + values.month + "-" + values.day, time: values.hour + ":" + values.minute };
         }
 
+        function getNextIsoDate(isoDate) {
+          const [year, month, day] = isoDate.split("-").map(Number);
+          return new Date(Date.UTC(year, month - 1, day + 1)).toISOString().slice(0, 10);
+        }
+
+        // Today's and tomorrow's day cards say so; the rest keep the built date ("Fri, Oct 30").
+        function labelNearDays(today) {
+          const tomorrow = getNextIsoDate(today);
+          document.querySelectorAll(".show-day-card[data-date] .show-schedule-day").forEach((heading) => {
+            heading.dataset.label ??= heading.textContent;
+            const date = heading.closest(".show-day-card").dataset.date;
+            heading.textContent = date === today ? "Today" : date === tomorrow ? "Tomorrow" : heading.dataset.label;
+          });
+        }
+
         // Pages are rebuilt about once a day, so times that have started are hidden here. Days
         // move up from "Show N more days" to keep four showing; a theatre with nothing left goes.
         // Returns true when a theatre was removed.
         function hidePastShowtimes() {
           const now = getEasternNow();
+          labelNearDays(now.date);
           const before = theatreItems.length;
           theatreItems = theatreItems.filter((item) => {
             item.querySelectorAll(".show-day-card[data-date]").forEach((card) => {
@@ -1139,6 +1187,7 @@ function renderFilmPage(film, slug, siteUrl) {
           });
           if (!theatreItems.length) {
             document.querySelector(".film-location")?.remove();
+            moreTheatresButton.remove();
             const empty = document.createElement("p");
             empty.className = "film-page-empty";
             empty.textContent = "No more showtimes are listed for this film. ";
@@ -1519,7 +1568,6 @@ function formatIsoDateLabel(isoDate) {
     weekday: "short",
     month: "short",
     day: "numeric",
-    year: "numeric",
     timeZone: "UTC",
   });
 }

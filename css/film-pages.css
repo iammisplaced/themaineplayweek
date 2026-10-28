@@ -139,8 +139,25 @@
   flex-direction: column;
   gap: 0.7rem;
 }
-.film-showtimes-box .show-main {
+/* The theatre's name (and distance), with its Tickets link on the right. */
+.film-showtimes-box .show-theatre-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
   margin-bottom: 0.5rem;
+}
+.film-showtimes-box .show-theatre-head .show-link {
+  flex-shrink: 0;
+  margin-top: -0.1rem;
+}
+.film-showtimes-box .show-more-theatres {
+  display: block;
+  margin: 0.8rem auto 0;
+  font-weight: 700;
+}
+.film-showtimes-box .show-more-theatres[hidden] {
+  display: none;
 }
 .film-showtimes-box .film-page-festival-ribbon {
   width: fit-content;
@@ -163,8 +180,11 @@
   font-weight: 700;
   line-height: 1.25;
 }
+/* The town and distance sit on their own line under the theatre's name. */
 .film-showtimes-box .show-main-city {
+  display: block;
   color: var(--muted);
+  font-size: 0.9rem;
   font-weight: 600;
 }
 .film-showtimes-box .show-schedule {
