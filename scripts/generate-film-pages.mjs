@@ -531,7 +531,7 @@ function getCurrentEasternDateTimeParts() {
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hourCycle: "h23",
   });
   const parts = formatter.formatToParts(new Date());
   const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
@@ -605,7 +605,7 @@ function renderFilmPage(film, slug, siteUrl) {
         rows
           .map(
             (row) =>
-              `<article class="show-day-card">
+              `<article class="show-day-card" data-date="${escapeHtml(row.date)}">
                 <h3 class="show-schedule-day">${escapeHtml(formatIsoDateLabel(row.date))}</h3>
                 ${row.room ? `<div class="show-room-label">Room: ${escapeHtml(row.room)}</div>` : ""}
                 <div class="show-times-grid">
@@ -799,8 +799,11 @@ function renderFilmPage(film, slug, siteUrl) {
         const LEGACY_LOCATION_STORAGE_KEY = "tmp-film-pages-location-v1";
         const STORAGE_KEYS = [LOCATION_PREFERENCE_STORAGE_KEY, LEGACY_LOCATION_STORAGE_KEY];
         const list = document.querySelector(".film-showtimes-box .show-list");
-        const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
+        let theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
         if (!theatreItems.length || !list) return;
+        // The theatres in their current order. The masonry columns hold them column by column,
+        // so the list itself can't be read back for the order.
+        let orderedItems = theatreItems;
         const locationSorted = document.getElementById("filmLocationSorted");
         const locationPrompt = document.getElementById("filmLocationPrompt");
         const locationChip = document.getElementById("filmLocationChip");
@@ -956,7 +959,7 @@ function renderFilmPage(film, slug, siteUrl) {
         }
 
         function applyShowtimesLayout(items) {
-          const orderedItems = Array.isArray(items) ? items : theatreItems;
+          orderedItems = items;
           const columns = getMasonryColumnCount();
           list.innerHTML = "";
 
@@ -1042,10 +1045,77 @@ function renderFilmPage(film, slug, siteUrl) {
 
         // A location set in another tab (on the main app or another film page) is used here too.
         window.addEventListener("storage", (event) => {
-          if (event.key !== LOCATION_PREFERENCE_STORAGE_KEY) return;
+          if (event.key !== LOCATION_PREFERENCE_STORAGE_KEY || !theatreItems.length) return;
           const location = readSavedLocation();
           if (location) useLocation(location);
         });
+
+        // The date ("YYYY-MM-DD") and time ("HH:MM") in Maine.
+        function getEasternNow() {
+          const parts = new Intl.DateTimeFormat("en-US", {
+            timeZone: "America/New_York",
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hourCycle: "h23",
+          }).formatToParts(new Date());
+          const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+          return { date: values.year + "-" + values.month + "-" + values.day, time: values.hour + ":" + values.minute };
+        }
+
+        // Pages are rebuilt about once a day, so times that have started are hidden here. Days
+        // move up from "Show N more days" to keep four showing; a theatre with nothing left goes.
+        // Returns true when a theatre was removed.
+        function hidePastShowtimes() {
+          const now = getEasternNow();
+          const before = theatreItems.length;
+          theatreItems = theatreItems.filter((item) => {
+            item.querySelectorAll(".show-day-card[data-date]").forEach((card) => {
+              const date = card.dataset.date;
+              if (date > now.date) return;
+              if (date === now.date) {
+                card.querySelectorAll(".show-time-chip[data-time]").forEach((chip) => {
+                  if (chip.dataset.time < now.time) chip.remove();
+                });
+              }
+              if (date < now.date || !card.querySelector(".show-time-chip")) card.remove();
+            });
+            const schedule = item.querySelector(".show-schedule:not(.show-schedule-extra)");
+            const more = item.querySelector(".show-more-days");
+            const extra = more?.querySelector(".show-schedule-extra");
+            while (schedule && extra?.firstElementChild && schedule.children.length < 4) {
+              schedule.appendChild(extra.firstElementChild);
+            }
+            if (more) {
+              const count = extra?.children.length || 0;
+              const toggle = more.querySelector(".show-more-days-toggle");
+              if (!count) more.remove();
+              else if (toggle) toggle.textContent = "Show " + count + " more day" + (count === 1 ? "" : "s");
+            }
+            if (schedule && !schedule.children.length) {
+              item.remove();
+              return false;
+            }
+            return true;
+          });
+          if (!theatreItems.length) {
+            document.querySelector(".film-location")?.remove();
+            const empty = document.createElement("p");
+            empty.className = "film-page-empty";
+            empty.textContent = "No more showtimes are listed for this film. ";
+            const back = document.createElement("a");
+            back.href = ${jsonForScript(mainAppUrl)};
+            back.textContent = "See what else is playing";
+            empty.appendChild(back);
+            list.replaceWith(empty);
+          }
+          return theatreItems.length !== before;
+        }
+
+        hidePastShowtimes();
+        if (!theatreItems.length) return;
 
         const saved = readSavedLocation();
         if (saved) {
@@ -1055,13 +1125,18 @@ function renderFilmPage(film, slug, siteUrl) {
           applyShowtimesLayout(theatreItems);
         }
 
+        // A tab left open (or a phone woken up) catches up when it's looked at again.
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState !== "visible" || !theatreItems.length) return;
+          if (hidePastShowtimes() && theatreItems.length) {
+            applyShowtimesLayout(orderedItems.filter((item) => theatreItems.includes(item)));
+          }
+        });
+
         let resizeTimer = null;
         window.addEventListener("resize", () => {
           if (resizeTimer) clearTimeout(resizeTimer);
-          resizeTimer = setTimeout(() => {
-            const currentItems = Array.from(list.querySelectorAll(".show-item"));
-            applyShowtimesLayout(currentItems);
-          }, 90);
+          resizeTimer = setTimeout(() => applyShowtimesLayout(orderedItems), 90);
         });
       })();
     </script>
@@ -1277,8 +1352,11 @@ function renderTimeChip(time, isPremium, timeNotes = {}) {
   const label = isPremium ? `Premium ${escapeHtml(time)}` : escapeHtml(time);
   const className = isPremium ? "show-time-chip show-time-chip-premium" : "show-time-chip";
   const note = String(timeNotes?.[buildTimeNoteKey(time, isPremium)] || "").trim();
-  if (!note) return `<span class="${className}">${label}</span>`;
-  return `<span class="${className} show-time-noted" tabindex="0" data-note="${escapeHtml(note)}">${label}<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ${escapeHtml(note)})</span></span>`;
+  // The page hides times that have started (see hidePastShowtimes); unreadable times stay.
+  const hhmm = to24HourTime(time);
+  const timeAttr = hhmm ? ` data-time="${hhmm}"` : "";
+  if (!note) return `<span class="${className}"${timeAttr}>${label}</span>`;
+  return `<span class="${className} show-time-noted"${timeAttr} tabindex="0" data-note="${escapeHtml(note)}">${label}<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ${escapeHtml(note)})</span></span>`;
 }
 
 function buildShowtimesByTheatre(film) {
