@@ -102,11 +102,11 @@
             <button id="dayNextButton" class="day-picker-nav" type="button" aria-label="Next date"><span class="day-picker-nav-label">Next</span><span class="day-picker-nav-chevron" aria-hidden="true">›</span></button>
           </div>
         </div>
-        <div id="locationChooserTriggerWrap" class="location-chooser-trigger-wrap hidden">
-          <button id="openLocationChooser" class="location-control-btn" type="button" aria-label="Set location">
-            <img id="locationControlIcon" src="assets/icons/location.png" alt="" aria-hidden="true" />
-          </button>
-        </div>
+        <button id="locationChip" class="location-chip hidden" type="button" popovertarget="locationPopover">
+          <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+          <span id="locationChipLabel" class="location-chip-label">Set location</span>
+          <span id="locationChipRadius" class="location-chip-radius hidden"></span>
+        </button>
         <a class="quiz-ticket quiz-ticket--compact" href="quiz/">
           <span class="quiz-ticket-title">Find your film</span>
         </a>
@@ -170,39 +170,41 @@
         <p id="adminIntroText">Sign in with Supabase magic link to edit live data.</p>
       </section>
 
-      <dialog id="locationChooserModal" class="admin-modal location-chooser-modal">
-        <div class="admin-modal-body location-chooser-modal-body">
-          <div class="location-chooser-header">
-            <h3 class="location-chooser-title">Find showtimes near you</h3>
-            <button id="closeLocationChooser" class="location-chooser-close" type="button" aria-label="Close">&#x2715;</button>
-          </div>
-          <div class="location-chooser-actions">
-            <button id="useDeviceLocation" type="button">Use My Location</button>
-            <form id="zipLocationForm" class="location-chooser-zip-form">
-              <label class="visually-hidden" for="zipLocationInput">ZIP code</label>
-              <input
-                id="zipLocationInput"
-                type="text"
-                inputmode="numeric"
-                autocomplete="postal-code"
-                placeholder="ZIP code"
-                pattern="[0-9]{5}(-[0-9]{4})?"
-              />
-              <button id="useZipLocation" class="ghost-btn" type="submit">Go</button>
-            </form>
-          </div>
-          <p id="locationChooserMessage" class="location-chooser-message"></p>
-          <div class="location-chooser-radius-row">
-            <span class="location-chooser-radius-label">Search radius</span>
-            <div id="radiusButtonGroup" class="radius-button-group" role="group" aria-label="Search radius">
-              <button type="button" class="radius-option" data-value="10" aria-pressed="false">10 mi</button>
-              <button type="button" class="radius-option" data-value="25" aria-pressed="false">25 mi</button>
-              <button type="button" class="radius-option is-selected" data-value="50" aria-pressed="true">50 mi</button>
-            </div>
+      <div id="locationPopover" class="location-popover" popover role="dialog" aria-labelledby="locationPopoverTitle">
+        <h2 id="locationPopoverTitle" class="location-popover-title">Your location</h2>
+        <div id="locationPopoverPicker"></div>
+        <div id="locationRadiusRow" class="location-radius-row">
+          <span class="location-radius-label">Search radius</span>
+          <div id="radiusButtonGroup" class="radius-button-group" role="group" aria-label="Search radius">
+            <button type="button" class="radius-option" data-value="10" aria-pressed="false">10 mi</button>
+            <button type="button" class="radius-option" data-value="25" aria-pressed="false">25 mi</button>
+            <button type="button" class="radius-option is-selected" data-value="50" aria-pressed="true">50 mi</button>
           </div>
         </div>
-      </dialog>
+      </div>
     </main>
+
+    <!-- The location choices, used in the location pop-over and in Near You before a location is set. -->
+    <template id="locationPickerTemplate">
+      <div class="location-picker">
+        <button class="location-device-btn" type="button" data-action="use-device-location">
+          <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+          Use my location
+        </button>
+        <form class="location-zip-form" novalidate>
+          <input
+            name="zip"
+            type="text"
+            inputmode="numeric"
+            autocomplete="postal-code"
+            placeholder="or enter a ZIP code"
+            aria-label="ZIP code"
+          />
+          <button class="ghost-btn" type="submit">Go</button>
+        </form>
+        <p class="location-picker-message" role="status" aria-live="polite"></p>
+      </div>
+    </template>
 
     <template id="groupTemplate">
       <article class="group-card">

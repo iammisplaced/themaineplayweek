@@ -126,11 +126,12 @@ export function toFiniteNumber(value) {
 // ---- Location ----
 
 // Shared by the main app and the film pages so a location set on one is used by the other.
-// Shape: { mode: "zip" | "geolocation", zip, lat, lng }.
+// Shape: { mode: "zip" | "geolocation", zip, lat, lng, place }, where place is the ZIP's town
+// (when known).
 export const LOCATION_PREFERENCE_STORAGE_KEY = "tmp-location-preference-v1";
 
-// Looks up a US ZIP code (ZIP+4 is accepted) and returns { lat, lng }, or null when it
-// can't be found.
+// Looks up a US ZIP code (ZIP+4 is accepted) and returns { lat, lng, place }, where place is
+// the town's name, or null when it can't be found.
 export async function geocodeUsZip(zip) {
   const zip5 = /^(\d{5})(?:-\d{4})?$/.exec(String(zip || "").trim())?.[1];
   if (!zip5) return null;
@@ -140,7 +141,8 @@ export async function geocodeUsZip(zip) {
     const place = (await response.json())?.places?.[0];
     const lat = Number(place?.latitude);
     const lng = Number(place?.longitude);
-    return Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : null;
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+    return { lat, lng, place: String(place?.["place name"] || "").trim() };
   } catch {
     return null;
   }
