@@ -221,9 +221,7 @@
   display: none;
 }
 .film-showtimes-box .show-more-days-toggle:hover,
-.film-showtimes-box .show-more-days-toggle:focus-visible,
-.location-sort-actions button:hover,
-.location-sort-actions button:focus-visible {
+.film-showtimes-box .show-more-days-toggle:focus-visible {
   background: var(--toggle-hover-bg);
   border-color: var(--toggle-hover-border);
 }
@@ -254,61 +252,41 @@
   width: 100%;
   margin: 0;
 }
-.location-sort-controls {
+/* Where distances are measured from: one line with the location chip, or a prompt. */
+.film-location {
   margin: 0 0 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface-alt);
-  padding: 0.66rem 0.7rem;
 }
-.location-sort-title {
-  margin: 0 0 0.2rem;
-  color: var(--accent-2);
-  font-size: 0.84rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.location-sort-copy {
+.film-location-sorted {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0;
   color: var(--muted);
   font-size: 0.9rem;
 }
-.location-sort-actions {
-  margin-top: 0.56rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.45rem;
+.film-location-sorted[hidden],
+.film-location-prompt[hidden] {
+  display: none;
 }
-.location-sort-actions button,
-.location-sort-actions input {
-  min-height: 2rem;
-}
-.location-sort-actions input {
-  width: 7.2rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0 0.5rem;
-  background: var(--panel);
+.film-location-chip {
+  min-height: 2.5rem;
+  padding: 0.3rem 0.85rem 0.3rem 0.7rem;
+  box-shadow: none;
   color: var(--ink);
 }
-.location-sort-actions button {
-  border: 1px solid var(--toggle-border);
-  border-radius: 999px;
-  background: var(--toggle-bg);
-  color: var(--toggle-ink);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  padding: 0.2rem 0.62rem;
-  cursor: pointer;
+.film-location-prompt {
+  max-width: 380px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-alt);
+  padding: 0.85rem;
 }
-.location-sort-status {
-  margin: 0.5rem 0 0;
-  font-size: 0.84rem;
-  color: var(--muted);
+.film-location-prompt-copy {
+  margin: 0 0 0.65rem;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 600;
 }
 @media (min-width: 860px) {
   .film-page-card .group-film-summary {
