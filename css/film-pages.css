@@ -288,6 +288,36 @@
   font-size: 0.92rem;
   font-weight: 600;
 }
+/* "More about the film" only shows on phones, where the card folds down to a few lines of
+   synopsis. The "js" class (set in the page's <head>) means the button can open it again. */
+.film-page-more {
+  display: none;
+}
+@media (max-width: 640px) {
+  html.js .film-page-more {
+    display: inline-block;
+    margin-top: 0.35rem;
+    padding: 0.55rem 0;
+    border: 0;
+    background: none;
+    color: var(--accent-2);
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  html.js .film-page-card:not(.is-expanded) .film-fact:not(:first-child),
+  html.js .film-page-card:not(.is-expanded) .group-tmdb-link {
+    display: none;
+  }
+  html.js .film-page-card:not(.is-expanded) .film-fact:first-child .film-fact-value {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    overflow: hidden;
+  }
+}
 @media (min-width: 860px) {
   .film-page-card .group-film-summary {
     grid-template-columns: minmax(0, 1fr) 124px;

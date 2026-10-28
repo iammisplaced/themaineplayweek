@@ -595,6 +595,10 @@ function renderFilmPage(film, slug, siteUrl) {
     resolveRelativeAssetPath(`/assets/brand/${filename}`, 2)
   );
   const stampMarkup = buildFilmStampMarkup(film, 2);
+  // On phones the card folds down to a few lines of synopsis, with a button for the rest.
+  const hasMoreDetails =
+    film.description.length > 180 ||
+    Boolean(film.director || film.genres.length || film.stars.length || film.releaseDate || tmdbMovieUrl);
   const theatreGroups = buildShowtimesByTheatre(film);
   const theatreRowsMarkup = theatreGroups
     .map((group) => {
@@ -787,10 +791,11 @@ function renderFilmPage(film, slug, siteUrl) {
           </div>
           ${stampMarkup}
           <div class="group-film-details">
-            <div class="group-film-facts film-page-facts">
+            <div id="filmPageFacts" class="group-film-facts film-page-facts">
               ${buildFilmFactsMarkup(film)}
             </div>
             ${tmdbMovieUrl ? `<a class="group-tmdb-link" href="${escapeHtml(tmdbMovieUrl)}" target="_blank" rel="noopener noreferrer">View on TMDb</a>` : ""}
+            ${hasMoreDetails ? `<button class="film-page-more" type="button" aria-expanded="false" aria-controls="filmPageFacts">More about the film</button>` : ""}
           </div>
         </div>
       </article>
@@ -818,6 +823,13 @@ function renderFilmPage(film, slug, siteUrl) {
       } from "../../js/shared.js";
 
       initShowtimeNoteTooltips();
+
+      const moreButton = document.querySelector(".film-page-more");
+      moreButton?.addEventListener("click", () => {
+        const expanded = moreButton.closest(".film-page-card").classList.toggle("is-expanded");
+        moreButton.setAttribute("aria-expanded", String(expanded));
+        moreButton.textContent = expanded ? "Less" : "More about the film";
+      });
 
       (() => {
         // Film pages used to keep their own location; it's still read for visitors who set one there.
