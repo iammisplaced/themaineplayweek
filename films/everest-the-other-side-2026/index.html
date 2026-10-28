@@ -51,19 +51,113 @@
 
       <section class="group-card film-showtimes-box">
         <h2 class="film-showtimes-heading">Showtimes by Theatre</h2>
-        <section class="location-sort-controls" aria-label="Location sorting">
-          <h3 class="location-sort-title">Near You</h3>
-          <p id="locationSortCopy" class="location-sort-copy">Sort theatres by distance using your saved location, current location, or ZIP code.</p>
-          <div class="location-sort-actions">
-            <button id="locationSortUseDevice" type="button">Use My Location</button>
-            <form id="locationSortZipForm">
-              <input id="locationSortZipInput" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="ZIP code" aria-label="ZIP code" />
-              <button type="submit">Use ZIP</button>
+        <div class="film-location">
+          <p id="filmLocationSorted" class="film-location-sorted" hidden>
+            Nearest first from
+            <button id="filmLocationChip" class="location-chip film-location-chip" type="button" popovertarget="filmLocationPopover" aria-expanded="false">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              <span id="filmLocationChipLabel" class="location-chip-label"></span>
+            </button>
+          </p>
+          <div id="filmLocationPrompt" class="film-location-prompt">
+            <p class="film-location-prompt-copy">Where are you watching from? We'll put the nearest theatres first.</p>
+            <div class="location-picker">
+            <button class="location-device-btn" type="button" data-action="use-device-location">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              Use my location
+            </button>
+            <form class="location-zip-form" novalidate>
+              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
+              <button class="ghost-btn" type="submit">Go</button>
             </form>
+            <p class="location-picker-message" role="status" aria-live="polite"></p>
           </div>
-          <p id="locationSortStatus" class="location-sort-status" aria-live="polite"></p>
-        </section>
+          </div>
+        </div>
+        <div id="filmLocationPopover" class="location-popover" popover role="dialog" aria-labelledby="filmLocationPopoverTitle">
+          <h2 id="filmLocationPopoverTitle" class="location-popover-title">Your location</h2>
+          <div class="location-picker">
+            <button class="location-device-btn" type="button" data-action="use-device-location">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              Use my location
+            </button>
+            <form class="location-zip-form" novalidate>
+              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
+              <button class="ghost-btn" type="submit">Go</button>
+            </form>
+            <p class="location-picker-message" role="status" aria-live="polite"></p>
+          </div>
+        </div>
         <div class="show-list"><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.5498745"
+            data-theatre-lng="-69.62965"
+          >
+            
+            <div class="show-main show-main-theatre">
+              Maine Film Center<span class="show-main-city">, Waterville</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">7:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">7:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">7:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">7:00 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 3 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card">
+                <h3 class="show-schedule-day">Tue, Nov 3, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip show-time-noted" tabindex="0" data-note="4:40 PM, 7:00 PM: Open Captions">2:20 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: 4:40 PM, 7:00 PM: Open Captions)</span></span><span class="show-time-chip show-time-noted" tabindex="0" data-note="4:40 PM, 7:00 PM: Open Captions">4:40 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: 4:40 PM, 7:00 PM: Open Captions)</span></span><span class="show-time-chip show-time-noted" tabindex="0" data-note="4:40 PM, 7:00 PM: Open Captions">7:00 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: 4:40 PM, 7:00 PM: Open Captions)</span></span>
+                  
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Wed, Nov 4, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip show-time-noted" tabindex="0" data-note="Open Captions">2:20 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: Open Captions)</span></span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">7:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Thu, Nov 5, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip">2:20 PM</span><span class="show-time-chip">4:40 PM</span><span class="show-time-chip">7:00 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+        <a class="show-link" href="https://www.watervillecreates.org/shows/everest-the-other-side/" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.6575821"
@@ -132,6 +226,49 @@
           </div>
         </div>
         <a class="show-link" href="https://www.patriotcinemas.com/movie/everest-the-other-side" target="_blank" rel="noopener noreferrer">Tickets</a>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.4110853"
+            data-theatre-lng="-70.7922593"
+          >
+            
+            <div class="show-main show-main-theatre">
+              The Gem Theater<span class="show-main-city">, Bethel</span>
+            </div>
+            <div class="show-schedule"><article class="show-day-card">
+                <h3 class="show-schedule-day">Fri, Oct 30, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip">2:00 PM</span><span class="show-time-chip">4:25 PM</span><span class="show-time-chip">6:55 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sat, Oct 31, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip">2:00 PM</span><span class="show-time-chip">4:25 PM</span><span class="show-time-chip">6:55 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Sun, Nov 1, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip">2:00 PM</span><span class="show-time-chip">4:25 PM</span><span class="show-time-chip">6:55 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card">
+                <h3 class="show-schedule-day">Mon, Nov 2, 2026</h3>
+                
+                <div class="show-times-grid">
+                  <span class="show-time-chip show-time-noted" tabindex="0" data-note="Open Captions">2:45 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: Open Captions)</span></span><span class="show-time-chip show-time-noted" tabindex="0" data-note="Pizza-Beer-Movie">6:00 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: Pizza-Beer-Movie)</span></span>
+                  
+                </div>
+              </article></div>
+            
+          </div>
+        </div>
+        <a class="show-link" href="https://thegemtheater.com/movies/everest-the-other-side/" target="_blank" rel="noopener noreferrer">Tickets</a>
       </article></div>
       </section>
       <section class="site-meta" aria-label="Site information">
@@ -199,19 +336,16 @@
         // Film pages used to keep their own location; it's still read for visitors who set one there.
         const LEGACY_LOCATION_STORAGE_KEY = "tmp-film-pages-location-v1";
         const STORAGE_KEYS = [LOCATION_PREFERENCE_STORAGE_KEY, LEGACY_LOCATION_STORAGE_KEY];
-        const useDeviceButton = document.getElementById("locationSortUseDevice");
-        const zipForm = document.getElementById("locationSortZipForm");
-        const zipInput = document.getElementById("locationSortZipInput");
-        const status = document.getElementById("locationSortStatus");
         const list = document.querySelector(".film-showtimes-box .show-list");
         const theatreItems = Array.from(document.querySelectorAll(".film-showtimes-box .show-item"));
         if (!theatreItems.length || !list) return;
+        const locationSorted = document.getElementById("filmLocationSorted");
+        const locationPrompt = document.getElementById("filmLocationPrompt");
+        const locationChip = document.getElementById("filmLocationChip");
+        const locationChipLabel = document.getElementById("filmLocationChipLabel");
+        const locationPopover = document.getElementById("filmLocationPopover");
 
-        function setStatus(message) {
-          if (!status) return;
-          status.textContent = message || "";
-        }
-
+        // Returns { mode, zip, lat, lng, place }, the main app's shape, or null.
         function readSavedLocation() {
           for (const key of STORAGE_KEYS) {
             try {
@@ -221,7 +355,10 @@
               const lat = Number(parsed?.lat);
               const lng = Number(parsed?.lng);
               if (Number.isFinite(lat) && Number.isFinite(lng)) {
-                return { lat, lng, mode: parsed?.mode || "" };
+                const mode = parsed?.mode === "zip" ? "zip" : "geolocation";
+                const zip = mode === "zip" ? String(parsed?.zip || "").trim() : "";
+                const place = mode === "zip" ? String(parsed?.place || "").trim() : "";
+                return { mode, zip, lat, lng, place };
               }
             } catch {}
           }
@@ -229,11 +366,122 @@
         }
 
         // Saved in the main app's format so the Near You and Theatres views use it too.
-        function saveLocation(lat, lng, mode, zip) {
-          const payload = { mode, zip: zip || "", lat, lng };
+        function saveLocation(location) {
           try {
-            localStorage.setItem(LOCATION_PREFERENCE_STORAGE_KEY, JSON.stringify(payload));
+            localStorage.setItem(LOCATION_PREFERENCE_STORAGE_KEY, JSON.stringify(location));
           } catch {}
+        }
+
+        // The ZIP's town (or the ZIP), or "My location", as on the main app's chip.
+        function getLocationLabel(location) {
+          if (location.mode === "zip") return location.place || location.zip || "your ZIP code";
+          return "My location";
+        }
+
+        function showLocationChip(location) {
+          if (!locationSorted || !locationPrompt || !locationChip || !locationChipLabel) return;
+          const label = getLocationLabel(location);
+          locationChipLabel.textContent = label;
+          locationChip.setAttribute("aria-label", "Location: " + label + ". Change location");
+          locationSorted.hidden = false;
+          locationPrompt.hidden = true;
+        }
+
+        function useLocation(location) {
+          if (locationPopover?.matches(":popover-open")) locationPopover.hidePopover();
+          sortByDistance(location.lat, location.lng);
+          showLocationChip(location);
+        }
+
+        // ZIPs saved before towns were kept have no town, so it's looked up once (the main app
+        // does the same).
+        async function fillInLocationPlace(location) {
+          if (location.mode !== "zip" || !location.zip || location.place) return;
+          const result = await geocodeUsZip(location.zip);
+          if (!result?.place || readSavedLocation()?.zip !== location.zip) return;
+          const updated = { ...location, place: result.place };
+          saveLocation(updated);
+          showLocationChip(updated);
+        }
+
+        function setLocationPickerMessage(picker, message) {
+          const el = picker?.querySelector(".location-picker-message");
+          if (el) el.textContent = String(message || "");
+        }
+
+        function useDeviceLocation(picker) {
+          if (!navigator.geolocation) {
+            setLocationPickerMessage(picker, "Location isn't supported on this device. Try a ZIP code instead.");
+            return;
+          }
+          const button = picker.querySelector('[data-action="use-device-location"]');
+          button.disabled = true;
+          setLocationPickerMessage(picker, "Finding you...");
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              button.disabled = false;
+              setLocationPickerMessage(picker, "");
+              const location = {
+                mode: "geolocation",
+                zip: "",
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                place: "",
+              };
+              saveLocation(location);
+              useLocation(location);
+            },
+            (error) => {
+              button.disabled = false;
+              setLocationPickerMessage(
+                picker,
+                error?.code === 1
+                  ? "Location access is blocked for this site. Try a ZIP code instead."
+                  : "Couldn't get your location. Try a ZIP code instead."
+              );
+            },
+            { enableHighAccuracy: false, timeout: 7000, maximumAge: 5 * 60 * 1000 }
+          );
+        }
+
+        async function useZipLocation(picker) {
+          const form = picker.querySelector(".location-zip-form");
+          const submitButton = form.querySelector('button[type="submit"]');
+          const zip = String(form.elements.zip.value || "").replace(/\s+/g, "");
+          if (!/^\d{5}(?:-\d{4})?$/.test(zip)) {
+            setLocationPickerMessage(picker, "Enter a 5-digit ZIP code, like 04101.");
+            return;
+          }
+          submitButton.disabled = true;
+          setLocationPickerMessage(picker, "Looking up that ZIP code...");
+          try {
+            const result = await geocodeUsZip(zip);
+            if (!result) {
+              setLocationPickerMessage(picker, "Couldn't find that ZIP code. Try another?");
+              return;
+            }
+            form.reset();
+            setLocationPickerMessage(picker, "");
+            const location = { mode: "zip", zip, lat: result.lat, lng: result.lng, place: result.place || "" };
+            saveLocation(location);
+            useLocation(location);
+          } finally {
+            submitButton.disabled = false;
+          }
+        }
+
+        // Below the chip, lined up with its left edge and kept on screen. Before the pop-over
+        // opens it has no size yet, so its CSS width is assumed (full width on phones).
+        function positionLocationPopover() {
+          if (!locationChip || !locationPopover) return;
+          const rect = locationChip.getBoundingClientRect();
+          const gutter = 16;
+          const viewportWidth = document.documentElement.clientWidth;
+          const isPhone = window.matchMedia("(max-width: 640px)").matches;
+          const width = locationPopover.offsetWidth || Math.min(isPhone ? viewportWidth : 320, viewportWidth - 2 * gutter);
+          const left = Math.max(gutter, Math.min(rect.left, viewportWidth - gutter - width));
+          locationPopover.style.top = Math.round(rect.bottom + 8) + "px";
+          locationPopover.style.left = Math.round(left) + "px";
         }
 
         function getMasonryColumnCount() {
@@ -272,7 +520,7 @@
           list.appendChild(fragment);
         }
 
-        function sortByDistance(lat, lng, sourceLabel) {
+        function sortByDistance(lat, lng) {
           const scored = theatreItems.map((item) => {
             const holder = item.querySelector("[data-theatre-lat]");
             const itemLat = Number(holder?.dataset?.theatreLat);
@@ -294,57 +542,55 @@
             return aLabel.localeCompare(bLabel);
           });
           applyShowtimesLayout(scored.map(({ item }) => item));
-          setStatus("Sorted by distance using " + sourceLabel + ".");
         }
 
-        async function geocodeZip(zip) {
-          const cleaned = String(zip || "").trim();
-          if (!/^\d{5}$/.test(cleaned)) {
-            throw new Error("Enter a valid 5-digit ZIP code.");
-          }
-          const coords = await geocodeUsZip(cleaned);
-          if (!coords) throw new Error("Could not find that ZIP code.");
-          return { ...coords, zip: cleaned };
-        }
-
-        useDeviceButton?.addEventListener("click", () => {
-          if (!navigator.geolocation) {
-            setStatus("Location is not supported in this browser.");
-            return;
-          }
-          setStatus("Getting your location...");
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const lat = Number(position.coords.latitude);
-              const lng = Number(position.coords.longitude);
-              saveLocation(lat, lng, "geolocation", "");
-              sortByDistance(lat, lng, "device location");
-            },
-            () => {
-              setStatus("Could not get your location. You can enter ZIP instead.");
-            },
-            { enableHighAccuracy: true, timeout: 12000 }
-          );
+        // The pickers (in the prompt and the pop-over) are handled together.
+        document.addEventListener("click", (event) => {
+          const button = event.target.closest('[data-action="use-device-location"]');
+          if (button) useDeviceLocation(button.closest(".location-picker"));
         });
 
-        zipForm?.addEventListener("submit", async (event) => {
+        document.addEventListener("submit", (event) => {
+          const form = event.target.closest(".location-zip-form");
+          if (!form) return;
           event.preventDefault();
-          try {
-            setStatus("Looking up ZIP...");
-            const geo = await geocodeZip(zipInput?.value || "");
-            saveLocation(geo.lat, geo.lng, "zip", geo.zip);
-            sortByDistance(geo.lat, geo.lng, "ZIP " + geo.zip);
-          } catch (error) {
-            setStatus(error instanceof Error ? error.message : "Could not use that ZIP code.");
+          void useZipLocation(form.closest(".location-picker"));
+        });
+
+        // The pop-over is placed before it shows, again once it has a size, and follows the
+        // chip if the page scrolls.
+        locationPopover?.addEventListener("beforetoggle", (event) => {
+          if (event.newState === "open") positionLocationPopover();
+        });
+
+        locationPopover?.addEventListener("toggle", (event) => {
+          const isOpen = event.newState === "open";
+          locationChip?.classList.toggle("is-open", isOpen);
+          locationChip?.setAttribute("aria-expanded", String(isOpen));
+          if (isOpen) {
+            positionLocationPopover();
+            window.addEventListener("scroll", positionLocationPopover, { passive: true });
+            window.addEventListener("resize", positionLocationPopover);
+          } else {
+            window.removeEventListener("scroll", positionLocationPopover);
+            window.removeEventListener("resize", positionLocationPopover);
+            setLocationPickerMessage(locationPopover, "");
           }
+        });
+
+        // A location set in another tab (on the main app or another film page) is used here too.
+        window.addEventListener("storage", (event) => {
+          if (event.key !== LOCATION_PREFERENCE_STORAGE_KEY) return;
+          const location = readSavedLocation();
+          if (location) useLocation(location);
         });
 
         const saved = readSavedLocation();
         if (saved) {
-          sortByDistance(saved.lat, saved.lng, saved.mode === "zip" ? "your saved ZIP" : "your saved location");
+          useLocation(saved);
+          void fillInLocationPlace(saved);
         } else {
           applyShowtimesLayout(theatreItems);
-          setStatus("Choose your location to sort theatres by distance.");
         }
 
         let resizeTimer = null;
