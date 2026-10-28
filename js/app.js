@@ -81,8 +81,6 @@ const NARROW_SEARCH_MEDIA = window.matchMedia("(max-width: 640px)");
 const LOGO_SPIN_ANIMATION_MS = 420;
 const LIGHT_THEME = "light";
 const DARK_THEME = "dark";
-const LOCATION_ICON_DARK_MODE_SRC = "assets/icons/location-light.png";
-const LOCATION_ICON_LIGHT_MODE_SRC = "assets/icons/location.png";
 // Each stacked wordmark has a one-line version, which phones show (see the <picture> in
 // index.html). The one-line paths are URL-encoded because they go in a srcset.
 const WORDMARK_VARIANTS = Object.freeze([
@@ -151,6 +149,7 @@ const state = {
     zip: "",
     lat: null,
     lng: null,
+    place: "",
   },
   publicSearch: {
     films: "",
@@ -169,7 +168,6 @@ const elements = {
   appLoader: document.getElementById("appLoader"),
   controls: document.querySelector(".controls"),
   themeColorMeta: document.querySelector('meta[name="theme-color"]'),
-  themeToggle: document.getElementById("themeToggle"),
   brandLogo: document.getElementById("brandLogo"),
   brandWordmark: document.getElementById("brandWordmark"),
   brandWordmarkOneLine: document.getElementById("brandWordmarkOneLine"),
@@ -186,16 +184,13 @@ const elements = {
   radiusOptions: Array.from(document.querySelectorAll(".radius-option")),
   dayPrevButton: document.getElementById("dayPrevButton"),
   dayNextButton: document.getElementById("dayNextButton"),
-  locationChooserModal: document.getElementById("locationChooserModal"),
-  locationChooserTriggerWrap: document.getElementById("locationChooserTriggerWrap"),
-  openLocationChooser: document.getElementById("openLocationChooser"),
-  locationControlIcon: document.getElementById("locationControlIcon"),
-  closeLocationChooser: document.getElementById("closeLocationChooser"),
-  useDeviceLocation: document.getElementById("useDeviceLocation"),
-  zipLocationForm: document.getElementById("zipLocationForm"),
-  zipLocationInput: document.getElementById("zipLocationInput"),
-  useZipLocation: document.getElementById("useZipLocation"),
-  locationChooserMessage: document.getElementById("locationChooserMessage"),
+  locationChip: document.getElementById("locationChip"),
+  locationChipLabel: document.getElementById("locationChipLabel"),
+  locationChipRadius: document.getElementById("locationChipRadius"),
+  locationPopover: document.getElementById("locationPopover"),
+  locationPopoverPicker: document.getElementById("locationPopoverPicker"),
+  locationRadiusRow: document.getElementById("locationRadiusRow"),
+  locationPickerTemplate: document.getElementById("locationPickerTemplate"),
   theatreSortStatus: document.getElementById("theatreSortStatus"),
   latestPost: document.getElementById("latestPost"),
   latestPostLink: document.getElementById("latestPostLink"),
@@ -207,7 +202,8 @@ const elements = {
   posterLightbox: document.getElementById("posterLightbox"),
   posterLightboxImage: document.getElementById("posterLightboxImage"),
   posterLightboxClose: document.getElementById("posterLightboxClose"),
-  tabs: Array.from(document.querySelectorAll(".tab")),
+  tabs: Array.from(document.querySelectorAll(".tab, .tabbar-item")),
+  themeToggles: Array.from(document.querySelectorAll("[data-theme-toggle]")),
   groupTemplate: document.getElementById("groupTemplate"),
   showItemTemplate: document.getElementById("showItemTemplate"),
   adminToggle: document.getElementById("adminToggle"),
@@ -267,15 +263,17 @@ async function init() {
   initializeBrandWordmarkVariant();
   initializeTheme();
   loadLocationPreference();
+  void fillInLocationPlace();
   initializeViewPreference();
   loadDaysViewRadius();
   initializeSupabase();
+  elements.locationPopoverPicker?.append(buildLocationPicker());
   bindEvents();
   initShowtimeNoteTooltips();
   void loadLatestSubstackPost();
   await loadData();
   syncPublicSearchUI();
-  refreshLocationChooser();
+  refreshLocationChip();
   if ((state.view === "theatres" || state.view === "days") && hasConfiguredLocationPreference()) {
     void ensureTheatreDistanceSort();
   }
@@ -378,11 +376,13 @@ function syncControlsStuck() {
 }
 
 function bindEvents() {
-  elements.themeToggle?.addEventListener("click", () => {
-    animateThemeToggle();
-    const nextTheme = state.theme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-    applyTheme(nextTheme);
-    saveThemeChoice(nextTheme);
+  elements.themeToggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      animateThemeToggle();
+      const nextTheme = state.theme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+      applyTheme(nextTheme);
+      saveThemeChoice(nextTheme);
+    });
   });
 
   window.addEventListener("scroll", syncControlsStuck, { passive: true });
@@ -602,100 +602,41 @@ function bindEvents() {
     state.daysViewRadiusMiles = requestedRadius;
     persistDaysViewRadius();
     syncRadiusButtons();
+    refreshLocationChip();
     render();
   });
 
-  elements.openLocationChooser?.addEventListener("click", () => {
-    openLocationChooserModal();
+  // The pop-over is placed before it shows, and follows the chip if the page scrolls.
+  elements.locationPopover?.addEventListener("beforetoggle", (event) => {
+    if (event.newState === "open") positionLocationPopover();
   });
 
-  elements.theatreSortStatus?.addEventListener("click", (event) => {
-    const trigger = event.target.closest('[data-action="change-location"]');
-    if (!trigger) return;
+  elements.locationPopover?.addEventListener("toggle", (event) => {
+    const isOpen = event.newState === "open";
+    elements.locationChip?.classList.toggle("is-open", isOpen);
+    elements.locationChip?.setAttribute("aria-expanded", String(isOpen));
+    if (isOpen) {
+      window.addEventListener("scroll", positionLocationPopover, { passive: true });
+      window.addEventListener("resize", positionLocationPopover);
+    } else {
+      window.removeEventListener("scroll", positionLocationPopover);
+      window.removeEventListener("resize", positionLocationPopover);
+      setLocationPickerMessage(elements.locationPopover, "");
+    }
+  });
+
+  // Location pickers live in the pop-over and in Near You's prompt, so their events are
+  // handled here for both.
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest('[data-action="use-device-location"]');
+    if (button) void useDeviceLocation(button.closest(".location-picker"));
+  });
+
+  document.addEventListener("submit", (event) => {
+    const form = event.target.closest(".location-zip-form");
+    if (!form) return;
     event.preventDefault();
-    openLocationChooserModal();
-  });
-
-  elements.closeLocationChooser?.addEventListener("click", () => {
-    closeLocationChooserModal();
-    if (state.view === "days" && !hasConfiguredLocationPreference()) {
-      setView("films", { persist: true });
-    }
-  });
-
-  elements.locationChooserModal?.addEventListener("cancel", () => {
-    setLocationChooserMessage("");
-    if (state.view === "days" && !hasConfiguredLocationPreference()) {
-      setView("films", { persist: true });
-    }
-  });
-
-  elements.useDeviceLocation?.addEventListener("click", async () => {
-    if (!("geolocation" in navigator)) {
-      setLocationChooserMessage("Location is not supported on this device. Use ZIP instead.");
-      return;
-    }
-    elements.useDeviceLocation.disabled = true;
-    setLocationChooserMessage("Checking browser location permissions...");
-    try {
-      const position = await getCurrentPosition({
-        enableHighAccuracy: false,
-        timeout: 7000,
-        maximumAge: 5 * 60 * 1000,
-      });
-      state.locationPreference = {
-        mode: "geolocation",
-        zip: "",
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-      persistLocationPreference();
-      closeLocationChooserModal();
-      refreshLocationChooser();
-      state.theatreDistanceByKey.clear();
-      state.theatreDistanceStatus = "idle";
-      state.theatreDistanceError = "";
-      void ensureTheatreDistanceSort();
-      render();
-    } catch {
-      setLocationChooserMessage("Could not access your location. You can use ZIP instead.");
-    } finally {
-      elements.useDeviceLocation.disabled = false;
-    }
-  });
-
-  elements.zipLocationForm?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const zip = normalizeZipCode(elements.zipLocationInput?.value || "");
-    if (!isValidZipCode(zip)) {
-      setLocationChooserMessage("Enter a valid US ZIP code (e.g., 04101).");
-      return;
-    }
-    elements.useZipLocation.disabled = true;
-    setLocationChooserMessage("Looking up ZIP code location...");
-    try {
-      const coords = await geocodeZipCode(zip);
-      if (!coords) {
-        setLocationChooserMessage("Could not find that ZIP code. Try another ZIP.");
-        return;
-      }
-      state.locationPreference = {
-        mode: "zip",
-        zip,
-        lat: coords.lat,
-        lng: coords.lng,
-      };
-      persistLocationPreference();
-      closeLocationChooserModal();
-      refreshLocationChooser();
-      state.theatreDistanceByKey.clear();
-      state.theatreDistanceStatus = "idle";
-      state.theatreDistanceError = "";
-      void ensureTheatreDistanceSort();
-      render();
-    } finally {
-      elements.useZipLocation.disabled = false;
-    }
+    void useZipLocation(form.closest(".location-picker"));
   });
 
   const adminIntroText = elements.adminIntroText.textContent;
@@ -793,7 +734,7 @@ function initializeViewPreference() {
     // First visit, but a location was already saved (e.g. on a film page).
     state.view = "days";
   }
-  // Near You needs a location; without one, open All Films rather than a pop-up.
+  // Near You needs a location; without one, open All Films rather than the location prompt.
   if (state.view === "days" && !hasConfiguredLocationPreference()) {
     state.view = "films";
   }
@@ -823,10 +764,7 @@ function setView(view, options = {}) {
     localStorage.setItem(VIEW_STORAGE_KEY, view);
   }
   syncPublicSearchUI();
-  refreshLocationChooser();
-  if (state.view === "days" && !hasConfiguredLocationPreference()) {
-    openLocationChooserModal();
-  }
+  refreshLocationChip();
   if ((state.view === "theatres" || state.view === "days") && hasConfiguredLocationPreference()) {
     void ensureTheatreDistanceSort();
   }
@@ -861,17 +799,11 @@ function applyTheme(theme) {
     }
   }
 
-  if (elements.themeToggle) {
-    const isDark = normalizedTheme === DARK_THEME;
-    const nextThemeLabel = isDark ? "light" : "dark";
-    elements.themeToggle.setAttribute("aria-label", `Switch to ${nextThemeLabel} mode`);
-    elements.themeToggle.setAttribute("title", `Switch to ${nextThemeLabel} mode`);
-  }
-
-  if (elements.locationControlIcon) {
-    elements.locationControlIcon.src =
-      normalizedTheme === DARK_THEME ? LOCATION_ICON_DARK_MODE_SRC : LOCATION_ICON_LIGHT_MODE_SRC;
-  }
+  const nextThemeLabel = normalizedTheme === DARK_THEME ? "light" : "dark";
+  elements.themeToggles.forEach((toggle) => {
+    toggle.setAttribute("aria-label", `Switch to ${nextThemeLabel} mode`);
+    toggle.setAttribute("title", `Switch to ${nextThemeLabel} mode`);
+  });
 
   if (elements.themeColorMeta) {
     elements.themeColorMeta.setAttribute("content", THEME_COLOR_MAP[normalizedTheme] || THEME_COLOR_MAP[LIGHT_THEME]);
@@ -1097,6 +1029,12 @@ function render() {
   elements.results.classList.add("results-masonry");
   elements.results.dataset.view = state.view;
   elements.results.innerHTML = "";
+  syncLatestPostVisibility();
+
+  if (state.view === "days" && needsLocationPrompt()) {
+    elements.results.append(buildLocationPrompt());
+    return;
+  }
 
   if (!entries.length) {
     elements.results.innerHTML = `<p class="no-results-message">${getNoResultsMessage()}</p>`;
@@ -1156,10 +1094,6 @@ function getNoResultsMessage() {
   if (state.view === "theatres") return "No theatres found...";
   if (state.view === "festivals") return "No festivals found...";
   if (state.theatreDistanceStatus === "loading") return "Finding nearby showtimes...";
-  if (state.theatreDistanceError === "location-not-configured") {
-    return "Set your location or ZIP code to view nearby showtimes.";
-  }
-  if (state.theatreDistanceStatus !== "ready") return "Nearby showtimes require location access.";
   return `No showtimes within ${getDaysViewRadiusMiles()} miles for this day...`;
 }
 
@@ -2226,13 +2160,15 @@ function syncPublicSearchUI() {
     elements.publicSearchWrap.classList.add("hidden");
     elements.publicSearchInput.value = "";
   }
-  refreshLocationChooser();
+  refreshLocationChip();
   updateTheatreSortStatus();
 }
 
+// The Substack banner shows in Near You, except while it's asking for a location, so the
+// prompt is the first thing there.
 function syncLatestPostVisibility() {
   if (!elements.latestPost) return;
-  elements.latestPost.classList.toggle("hidden", state.view !== "days");
+  elements.latestPost.classList.toggle("hidden", state.view !== "days" || needsLocationPrompt());
 }
 
 function getPublicSearchQueryForView(view) {
@@ -2304,9 +2240,10 @@ function loadLocationPreference() {
       zip: mode === "zip" ? zip : "",
       lat: mode === "zip" && Number.isFinite(lat) ? lat : null,
       lng: mode === "zip" && Number.isFinite(lng) ? lng : null,
+      place: mode === "zip" ? String(parsed?.place || "").trim() : "",
     };
   } catch {
-    state.locationPreference = { mode: "unset", zip: "", lat: null, lng: null };
+    state.locationPreference = { mode: "unset", zip: "", lat: null, lng: null, place: "" };
   }
 }
 
@@ -2318,44 +2255,168 @@ function hasConfiguredLocationPreference() {
   return state.locationPreference.mode === "zip" || state.locationPreference.mode === "geolocation";
 }
 
-function openLocationChooserModal() {
-  if (!elements.locationChooserModal) return;
-  if (!elements.locationChooserMessage?.textContent) {
-    setLocationChooserMessage("Use your location or ZIP code to sort nearby showtimes.");
-  }
-  if (typeof elements.locationChooserModal.showModal === "function") {
-    if (!elements.locationChooserModal.open) {
-      elements.locationChooserModal.showModal();
-    }
-    return;
-  }
-  elements.locationChooserModal.setAttribute("open", "open");
+// ZIPs saved before towns were kept (or saved on a film page) have no town, so it's looked
+// up once.
+async function fillInLocationPlace() {
+  const { mode, zip, place } = state.locationPreference;
+  if (mode !== "zip" || !zip || place) return;
+  const result = await geocodeUsZip(zip);
+  if (!result?.place || state.locationPreference.zip !== zip) return;
+  state.locationPreference = { ...state.locationPreference, place: result.place };
+  persistLocationPreference();
+  refreshLocationChip();
 }
 
-function closeLocationChooserModal() {
-  if (!elements.locationChooserModal) return;
-  setLocationChooserMessage("");
-  if (typeof elements.locationChooserModal.close === "function") {
-    if (elements.locationChooserModal.open) {
-      elements.locationChooserModal.close();
-    }
-    return;
-  }
-  elements.locationChooserModal.removeAttribute("open");
+// Saves a new location and re-sorts everything by distance from it.
+function setLocationPreference(preference) {
+  state.locationPreference = preference;
+  persistLocationPreference();
+  if (elements.locationPopover?.matches(":popover-open")) elements.locationPopover.hidePopover();
+  state.theatreDistanceByKey.clear();
+  state.theatreDistanceStatus = "idle";
+  state.theatreDistanceError = "";
+  refreshLocationChip();
+  void ensureTheatreDistanceSort();
+  render();
 }
 
-function refreshLocationChooser() {
-  if (!elements.locationChooserTriggerWrap) return;
+async function useDeviceLocation(picker) {
+  if (!("geolocation" in navigator)) {
+    setLocationPickerMessage(picker, "Location isn't supported on this device. Try a ZIP code instead.");
+    return;
+  }
+  const button = picker.querySelector('[data-action="use-device-location"]');
+  button.disabled = true;
+  setLocationPickerMessage(picker, "Finding you...");
+  try {
+    const position = await getCurrentPosition({
+      enableHighAccuracy: false,
+      timeout: 7000,
+      maximumAge: 5 * 60 * 1000,
+    });
+    setLocationPreference({
+      mode: "geolocation",
+      zip: "",
+      lat: position.coords.latitude,
+      lng: position.coords.longitude,
+      place: "",
+    });
+  } catch {
+    setLocationPickerMessage(picker, "Couldn't get your location. Try a ZIP code instead.");
+  } finally {
+    button.disabled = false;
+  }
+}
+
+async function useZipLocation(picker) {
+  const form = picker.querySelector(".location-zip-form");
+  const submitButton = form.querySelector('button[type="submit"]');
+  const zip = normalizeZipCode(form.elements.zip.value);
+  if (!isValidZipCode(zip)) {
+    setLocationPickerMessage(picker, "Enter a 5-digit ZIP code, like 04101.");
+    return;
+  }
+  submitButton.disabled = true;
+  setLocationPickerMessage(picker, "Looking up that ZIP code...");
+  try {
+    const result = await geocodeZipCode(zip);
+    if (!result) {
+      setLocationPickerMessage(picker, "Couldn't find that ZIP code. Try another?");
+      return;
+    }
+    form.reset();
+    setLocationPreference({ mode: "zip", zip, lat: result.lat, lng: result.lng, place: result.place || "" });
+  } finally {
+    submitButton.disabled = false;
+  }
+}
+
+function buildLocationPicker() {
+  return elements.locationPickerTemplate.content.firstElementChild.cloneNode(true);
+}
+
+function setLocationPickerMessage(container, message) {
+  const el = container?.querySelector(".location-picker-message");
+  if (el) el.textContent = String(message || "");
+}
+
+// What the chip says: the ZIP's town (or the ZIP), "My location", or nothing yet.
+function getLocationLabel() {
+  const { mode, zip, place } = state.locationPreference;
+  if (mode === "zip") return place || zip;
+  if (mode === "geolocation") return "My location";
+  return "";
+}
+
+// The chip shows in Near You and Theatres. In Near You it also shows the search radius,
+// which only applies there.
+function refreshLocationChip() {
+  const chip = elements.locationChip;
+  if (!chip) return;
   const shouldShow = state.view === "theatres" || state.view === "days";
-  elements.locationChooserTriggerWrap.classList.toggle("hidden", !shouldShow);
-  if (shouldShow && !elements.locationChooserMessage?.textContent) {
-    setLocationChooserMessage("Use your location or ZIP code to sort nearby showtimes.");
+  chip.classList.toggle("hidden", !shouldShow);
+  if (!shouldShow && elements.locationPopover?.matches(":popover-open")) {
+    elements.locationPopover.hidePopover();
   }
+
+  const label = getLocationLabel();
+  const radius = getDaysViewRadiusMiles();
+  const showRadius = state.view === "days" && Boolean(label);
+  elements.locationChipLabel.textContent = label || "Set location";
+  elements.locationChipRadius.textContent = `${radius} mi`;
+  elements.locationChipRadius.classList.toggle("hidden", !showRadius);
+  elements.locationRadiusRow?.classList.toggle("hidden", state.view !== "days");
+  chip.setAttribute(
+    "aria-label",
+    label ? `Location: ${label}${showRadius ? `, within ${radius} miles` : ""}. Change location` : "Set your location"
+  );
 }
 
-function setLocationChooserMessage(message) {
-  if (!elements.locationChooserMessage) return;
-  elements.locationChooserMessage.textContent = String(message || "");
+// Below the chip, lined up with its right edge (the chip sits toward the right of the toolbar).
+function positionLocationPopover() {
+  const chip = elements.locationChip;
+  const popover = elements.locationPopover;
+  if (!chip || !popover) return;
+  const rect = chip.getBoundingClientRect();
+  const gutter = 16;
+  popover.style.top = `${Math.round(rect.bottom + 8)}px`;
+  popover.style.right = `${Math.round(Math.max(gutter, document.documentElement.clientWidth - rect.right))}px`;
+}
+
+// Near You shows the location choices in place of results until it has a location to use.
+function needsLocationPrompt() {
+  return !hasConfiguredLocationPreference() || state.theatreDistanceStatus === "unavailable";
+}
+
+function buildLocationPrompt() {
+  const prompt = document.createElement("section");
+  prompt.className = "location-prompt";
+  const title = document.createElement("h2");
+  title.className = "location-prompt-title";
+  title.textContent = "Where are you watching from?";
+  const copy = document.createElement("p");
+  copy.className = "location-prompt-copy";
+  copy.textContent = "Near You lists what's playing at theatres close by, one day at a time.";
+  const picker = buildLocationPicker();
+  setLocationPickerMessage(picker, getLocationErrorMessage());
+  prompt.append(title, copy, picker);
+  return prompt;
+}
+
+function getLocationErrorMessage() {
+  if (state.theatreDistanceStatus !== "unavailable") return "";
+  switch (state.theatreDistanceError) {
+    case "location-not-configured":
+      return "";
+    case "location-permission-denied":
+      return "Location access is blocked for this site. Try a ZIP code instead.";
+    case "geolocation-not-supported":
+      return "Location isn't supported on this device. Try a ZIP code instead.";
+    case "zip-location-invalid":
+      return "Couldn't place your saved ZIP code. Try entering it again.";
+    default:
+      return "Couldn't get your location. Try again, or use a ZIP code.";
+  }
 }
 
 function normalizeZipCode(value) {
@@ -2387,7 +2448,7 @@ async function ensureTheatreDistanceSort() {
   if (!hasConfiguredLocationPreference()) {
     state.theatreDistanceStatus = "unavailable";
     state.theatreDistanceError = "location-not-configured";
-    refreshLocationChooser();
+    refreshLocationChip();
     updateTheatreSortStatus();
     if (state.view === "theatres" || state.view === "days") render();
     return;
@@ -2403,7 +2464,7 @@ async function ensureTheatreDistanceSort() {
       if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
         state.theatreDistanceStatus = "unavailable";
         state.theatreDistanceError = "zip-location-invalid";
-        refreshLocationChooser();
+        refreshLocationChip();
         updateTheatreSortStatus();
         if (state.view === "theatres" || state.view === "days") render();
         return;
@@ -2413,7 +2474,7 @@ async function ensureTheatreDistanceSort() {
       if (!("geolocation" in navigator)) {
         state.theatreDistanceStatus = "unavailable";
         state.theatreDistanceError = "geolocation-not-supported";
-        refreshLocationChooser();
+        refreshLocationChip();
         updateTheatreSortStatus();
         if (state.view === "theatres" || state.view === "days") render();
         return;
@@ -2477,7 +2538,7 @@ async function ensureTheatreDistanceSort() {
     }
   }
 
-  refreshLocationChooser();
+  refreshLocationChip();
   updateTheatreSortStatus();
   if (state.view === "theatres" || state.view === "days") render();
 }
@@ -2630,51 +2691,34 @@ function updateTheatreSortStatus() {
     return;
   }
   if (state.theatreDistanceStatus === "ready") {
+    // Sorted by distance: the location chip already says from where.
     if (distanceCount > 0) {
-      if (state.locationPreference.mode === "zip" && state.locationPreference.zip) {
-        setTheatreSortStatus(
-          `Sorted by distance from ZIP ${state.locationPreference.zip} (${distanceCount} theatres).`,
-          { includeChangeLocation: true }
-        );
-      } else {
-        setTheatreSortStatus(
-          `Sorted by distance from your current location (${distanceCount} theatres).`,
-          { includeChangeLocation: true }
-        );
-      }
+      el.classList.add("hidden");
+      el.textContent = "";
     } else {
-      setTheatreSortStatus("Could not calculate theatre distances. Showing theatres A-Z.", { includeChangeLocation: true });
+      setTheatreSortStatus("Could not calculate theatre distances. Showing theatres A-Z.");
     }
     return;
   }
   if (state.theatreDistanceStatus === "unavailable") {
     if (state.theatreDistanceError === "location-not-configured") {
-      setTheatreSortStatus("Set your location or ZIP code to sort theatres by distance.", { includeChangeLocation: true });
+      setTheatreSortStatus("Set your location or ZIP code to sort theatres by distance.");
       return;
     }
     if (state.theatreDistanceError === "zip-location-invalid") {
-      setTheatreSortStatus("Could not find that ZIP code. Try another ZIP or use current location.", { includeChangeLocation: true });
+      setTheatreSortStatus("Could not find that ZIP code. Try another ZIP or use current location.");
       return;
     }
-    setTheatreSortStatus("Location unavailable. Showing theatres A-Z.", { includeChangeLocation: true });
+    setTheatreSortStatus("Location unavailable. Showing theatres A-Z.");
     return;
   }
-  setTheatreSortStatus("Showing theatres A-Z. Set location to sort by distance.", { includeChangeLocation: true });
+  setTheatreSortStatus("Showing theatres A-Z. Set location to sort by distance.");
 }
 
-function setTheatreSortStatus(message, options = {}) {
+function setTheatreSortStatus(message) {
   const el = elements.theatreSortStatus;
   if (!el) return;
-  const { includeChangeLocation = false } = options;
   el.textContent = String(message || "");
-  if (!includeChangeLocation) return;
-  const changeLocationButton = document.createElement("a");
-  changeLocationButton.href = "#";
-  changeLocationButton.className = "theatre-sort-change-link";
-  changeLocationButton.dataset.action = "change-location";
-  changeLocationButton.textContent = "Change location";
-  el.appendChild(document.createTextNode(" "));
-  el.appendChild(changeLocationButton);
 }
 
 function getFilmGroupSortBreakdown(group) {
