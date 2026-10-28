@@ -595,6 +595,10 @@ function renderFilmPage(film, slug, siteUrl) {
     resolveRelativeAssetPath(`/assets/brand/${filename}`, 2)
   );
   const stampMarkup = buildFilmStampMarkup(film, 2);
+  // On phones the card folds down to a few lines of synopsis, with a button for the rest.
+  const hasMoreDetails =
+    film.description.length > 180 ||
+    Boolean(film.director || film.genres.length || film.stars.length || film.releaseDate || tmdbMovieUrl);
   const theatreGroups = buildShowtimesByTheatre(film);
   const theatreRowsMarkup = theatreGroups
     .map((group) => {
@@ -640,14 +644,17 @@ function renderFilmPage(film, slug, siteUrl) {
             ${group.festivalNames.length
               ? `<span class="film-page-festival-ribbon">${escapeHtml(group.festivalNames.join(" · "))}</span>`
               : ""}
-            <div class="show-main show-main-theatre">
-              ${escapeHtml(group.theatre)}${group.city ? `<span class="show-main-city">, ${escapeHtml(group.city)}</span>` : ""}
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                ${escapeHtml(group.theatre)}
+                <span class="show-main-city">${group.city ? escapeHtml(group.city) : ""}<span class="show-distance"></span></span>
+              </div>
+              ${group.ticketLink ? `<a class="show-link" href="${escapeHtml(group.ticketLink)}" target="_blank" rel="noopener noreferrer" aria-label="Tickets at ${escapeHtml(group.theatre)}">Tickets</a>` : ""}
             </div>
             <div class="show-schedule">${scheduleMarkup}</div>
             ${hiddenScheduleMarkup}
           </div>
         </div>
-        ${group.ticketLink ? `<a class="show-link" href="${escapeHtml(group.ticketLink)}" target="_blank" rel="noopener noreferrer">Tickets</a>` : ""}
       </article>`;
     })
     .join("");
@@ -689,16 +696,87 @@ function renderFilmPage(film, slug, siteUrl) {
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
     <link rel="icon" href="../../assets/icons/favicon.ico" />
     <link rel="manifest" href="../../site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/styles.css" />
     <link rel="stylesheet" href="../../css/film-pages.css" />
+    <script>
+      // Set before the page draws, so dark mode doesn't flash light first. The "js" class lets
+      // the CSS fold away the film details on phones only when the "More" button can open them.
+      (() => {
+        let theme = "";
+        try {
+          theme = localStorage.getItem("tmp-theme") || "";
+        } catch {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.classList.add("js");
+      })();
+    </script>
     <script type="application/ld+json">${jsonForScript(pruneUndefined(ldJson))}</script>
   </head>
   <body>
     <main class="film-page-shell">
       <div class="film-page-brandbar">
-        <img id="filmPageWordmark" class="film-page-wordmark" src="${escapeHtml(wordmarksLight[0] || "")}" alt="${BRAND_NAME}" />
+        <a href="${escapeHtml(mainAppUrl)}" aria-label="${BRAND_NAME} showtimes">
+          <img id="filmPageWordmark" class="film-page-wordmark" src="${escapeHtml(wordmarksDark[0] || "")}" alt="" />
+        </a>
         <img id="filmPageLogo" class="film-page-logo" src="${escapeHtml(logoDarkSrc)}" alt="" aria-hidden="true" />
       </div>
+      <script>
+        // Right after the images, so they switch to the theme's (and a random wordmark) before
+        // they're drawn.
+        (() => {
+          const LIGHT_THEME = "light";
+          const DARK_THEME = "dark";
+          const THEME_STORAGE_KEY = "tmp-theme";
+          const logo = document.getElementById("filmPageLogo");
+          const wordmark = document.getElementById("filmPageWordmark");
+          const logoDarkSrc = ${jsonForScript(logoDarkSrc)};
+          const logoLightSrc = ${jsonForScript(logoLightSrc)};
+          const wordmarks = {
+            light: ${jsonForScript(wordmarksLight)},
+            dark: ${jsonForScript(wordmarksDark)},
+          };
+
+          function getTheme() {
+            try {
+              const stored = localStorage.getItem(THEME_STORAGE_KEY);
+              if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
+            } catch {}
+            return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
+          }
+
+          function pickRandom(list) {
+            if (!Array.isArray(list) || !list.length) return "";
+            return list[Math.floor(Math.random() * list.length)] || "";
+          }
+
+          function applyTheme(theme) {
+            const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
+            document.documentElement.setAttribute("data-theme", nextTheme);
+            if (logo) {
+              logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
+            }
+            if (wordmark) {
+              const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+              const chosen = pickRandom(wordmarks[wordmarkTheme]);
+              if (chosen) wordmark.src = chosen;
+            }
+          }
+
+          applyTheme(getTheme());
+          const media = window.matchMedia("(prefers-color-scheme: dark)");
+          media.addEventListener?.("change", () => applyTheme(getTheme()));
+          window.addEventListener("storage", (event) => {
+            if (event.key !== THEME_STORAGE_KEY) return;
+            applyTheme(getTheme());
+          });
+        })();
+      </script>
       <a class="film-page-return" href="${escapeHtml(mainAppUrl)}">&larr; All showtimes</a>
       <article class="group-card film-card film-page-card film-info-box${film.staffFavorite ? " film-card-staff-favorite" : ""}${
         film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
@@ -716,10 +794,11 @@ function renderFilmPage(film, slug, siteUrl) {
           </div>
           ${stampMarkup}
           <div class="group-film-details">
-            <div class="group-film-facts film-page-facts">
+            <div id="filmPageFacts" class="group-film-facts film-page-facts">
               ${buildFilmFactsMarkup(film)}
             </div>
             ${tmdbMovieUrl ? `<a class="group-tmdb-link" href="${escapeHtml(tmdbMovieUrl)}" target="_blank" rel="noopener noreferrer">View on TMDb</a>` : ""}
+            ${hasMoreDetails ? `<button class="film-page-more" type="button" aria-expanded="false" aria-controls="filmPageFacts">More about the film</button>` : ""}
           </div>
         </div>
       </article>
@@ -748,53 +827,14 @@ function renderFilmPage(film, slug, siteUrl) {
 
       initShowtimeNoteTooltips();
 
+      const moreButton = document.querySelector(".film-page-more");
+      moreButton?.addEventListener("click", () => {
+        const expanded = moreButton.closest(".film-page-card").classList.toggle("is-expanded");
+        moreButton.setAttribute("aria-expanded", String(expanded));
+        moreButton.textContent = expanded ? "Less" : "More about the film";
+      });
+
       (() => {
-        const LIGHT_THEME = "light";
-        const DARK_THEME = "dark";
-        const THEME_STORAGE_KEY = "tmp-theme";
-        const logo = document.getElementById("filmPageLogo");
-        const wordmark = document.getElementById("filmPageWordmark");
-        const logoDarkSrc = ${jsonForScript(logoDarkSrc)};
-        const logoLightSrc = ${jsonForScript(logoLightSrc)};
-        const wordmarks = {
-          light: ${jsonForScript(wordmarksLight)},
-          dark: ${jsonForScript(wordmarksDark)},
-        };
-
-        function getTheme() {
-          try {
-            const stored = localStorage.getItem(THEME_STORAGE_KEY);
-            if (stored === LIGHT_THEME || stored === DARK_THEME) return stored;
-          } catch {}
-          return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK_THEME : LIGHT_THEME;
-        }
-
-        function pickRandom(list) {
-          if (!Array.isArray(list) || !list.length) return "";
-          return list[Math.floor(Math.random() * list.length)] || "";
-        }
-
-        function applyTheme(theme) {
-          const nextTheme = theme === DARK_THEME ? DARK_THEME : LIGHT_THEME;
-          document.documentElement.setAttribute("data-theme", nextTheme);
-          if (logo) {
-            logo.src = nextTheme === DARK_THEME ? logoLightSrc : logoDarkSrc;
-          }
-          if (wordmark) {
-            const wordmarkTheme = nextTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
-            const chosen = pickRandom(wordmarks[wordmarkTheme]);
-            if (chosen) wordmark.src = chosen;
-          }
-        }
-
-        applyTheme(getTheme());
-        const media = window.matchMedia("(prefers-color-scheme: dark)");
-        media.addEventListener?.("change", () => applyTheme(getTheme()));
-        window.addEventListener("storage", (event) => {
-          if (event.key !== THEME_STORAGE_KEY) return;
-          applyTheme(getTheme());
-        });
-
         // Film pages used to keep their own location; it's still read for visitors who set one there.
         const LEGACY_LOCATION_STORAGE_KEY = "tmp-film-pages-location-v1";
         const STORAGE_KEYS = [LOCATION_PREFERENCE_STORAGE_KEY, LEGACY_LOCATION_STORAGE_KEY];
@@ -804,6 +844,20 @@ function renderFilmPage(film, slug, siteUrl) {
         // The theatres in their current order. The masonry columns hold them column by column,
         // so the list itself can't be read back for the order.
         let orderedItems = theatreItems;
+        // Long lists show the first few theatres (the nearest, with a location) and a button for
+        // the rest. A list only one longer than that shows in full.
+        const THEATRE_LIMIT = 5;
+        let showAllTheatres = false;
+        const moreTheatresButton = document.createElement("button");
+        moreTheatresButton.type = "button";
+        moreTheatresButton.className = "ghost-btn show-more-theatres";
+        moreTheatresButton.hidden = true;
+        list.after(moreTheatresButton);
+        moreTheatresButton.addEventListener("click", () => {
+          showAllTheatres = !showAllTheatres;
+          applyShowtimesLayout(orderedItems);
+          if (!showAllTheatres) moreTheatresButton.scrollIntoView({ block: "nearest" });
+        });
         const locationSorted = document.getElementById("filmLocationSorted");
         const locationPrompt = document.getElementById("filmLocationPrompt");
         const locationChip = document.getElementById("filmLocationChip");
@@ -960,13 +1014,19 @@ function renderFilmPage(film, slug, siteUrl) {
 
         function applyShowtimesLayout(items) {
           orderedItems = items;
-          const columns = getMasonryColumnCount();
+          const limited = items.length > THEATRE_LIMIT + 1;
+          const visibleItems = limited && !showAllTheatres ? items.slice(0, THEATRE_LIMIT) : items;
+          moreTheatresButton.hidden = !limited;
+          moreTheatresButton.textContent = showAllTheatres
+            ? "Show fewer theatres"
+            : "Show " + (items.length - THEATRE_LIMIT) + " more theatres";
+          const columns = Math.min(getMasonryColumnCount(), visibleItems.length);
           list.innerHTML = "";
 
           if (columns <= 1) {
             list.classList.remove("show-list-masonry");
             list.style.removeProperty("--show-columns");
-            orderedItems.forEach((item) => list.appendChild(item));
+            visibleItems.forEach((item) => list.appendChild(item));
             return;
           }
 
@@ -979,10 +1039,14 @@ function renderFilmPage(film, slug, siteUrl) {
             fragment.appendChild(col);
             return col;
           });
-          orderedItems.forEach((item, index) => {
+          visibleItems.forEach((item, index) => {
             columnEls[index % columns].appendChild(item);
           });
           list.appendChild(fragment);
+        }
+
+        function formatMiles(miles) {
+          return (miles < 10 ? miles.toFixed(1) : String(Math.round(miles))) + " mi";
         }
 
         function sortByDistance(lat, lng) {
@@ -993,6 +1057,11 @@ function renderFilmPage(film, slug, siteUrl) {
             let distance = Number.POSITIVE_INFINITY;
             if (Number.isFinite(itemLat) && Number.isFinite(itemLng)) {
               distance = haversineMiles(lat, lng, itemLat, itemLng);
+            }
+            const distanceEl = item.querySelector(".show-distance");
+            if (distanceEl) {
+              const hasCity = Boolean(distanceEl.previousSibling?.textContent.trim());
+              distanceEl.textContent = Number.isFinite(distance) ? (hasCity ? " · " : "") + formatMiles(distance) : "";
             }
             return { item, distance };
           });
@@ -1065,11 +1134,27 @@ function renderFilmPage(film, slug, siteUrl) {
           return { date: values.year + "-" + values.month + "-" + values.day, time: values.hour + ":" + values.minute };
         }
 
+        function getNextIsoDate(isoDate) {
+          const [year, month, day] = isoDate.split("-").map(Number);
+          return new Date(Date.UTC(year, month - 1, day + 1)).toISOString().slice(0, 10);
+        }
+
+        // Today's and tomorrow's day cards say so; the rest keep the built date ("Fri, Oct 30").
+        function labelNearDays(today) {
+          const tomorrow = getNextIsoDate(today);
+          document.querySelectorAll(".show-day-card[data-date] .show-schedule-day").forEach((heading) => {
+            heading.dataset.label ??= heading.textContent;
+            const date = heading.closest(".show-day-card").dataset.date;
+            heading.textContent = date === today ? "Today" : date === tomorrow ? "Tomorrow" : heading.dataset.label;
+          });
+        }
+
         // Pages are rebuilt about once a day, so times that have started are hidden here. Days
         // move up from "Show N more days" to keep four showing; a theatre with nothing left goes.
         // Returns true when a theatre was removed.
         function hidePastShowtimes() {
           const now = getEasternNow();
+          labelNearDays(now.date);
           const before = theatreItems.length;
           theatreItems = theatreItems.filter((item) => {
             item.querySelectorAll(".show-day-card[data-date]").forEach((card) => {
@@ -1102,6 +1187,7 @@ function renderFilmPage(film, slug, siteUrl) {
           });
           if (!theatreItems.length) {
             document.querySelector(".film-location")?.remove();
+            moreTheatresButton.remove();
             const empty = document.createElement("p");
             empty.className = "film-page-empty";
             empty.textContent = "No more showtimes are listed for this film. ";
@@ -1482,7 +1568,6 @@ function formatIsoDateLabel(isoDate) {
     weekday: "short",
     month: "short",
     day: "numeric",
-    year: "numeric",
     timeZone: "UTC",
   });
 }
