@@ -4,7 +4,6 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import {
   SHOWTIME_COLUMNS,
-  groupShowtimesIntoShowings,
   buildFilmSlug,
   slugifyTextSegment,
   escapeHtml,
@@ -13,6 +12,7 @@ import {
   isPlainObject,
   normalizeSortTitle,
   compareTimes,
+  from24HourTime,
   to24HourTime,
 } from "../js/shared.js";
 
@@ -223,7 +223,9 @@ async function loadFilmSourceFromSupabase() {
   ]);
   const films = activeFilms.map(({ showtimes, theatre_films, ...film }) => film);
   const theatreFilms = activeFilms.flatMap((film) => film.theatre_films || []);
-  const showings = groupShowtimesIntoShowings(activeFilms.flatMap((film) => film.showtimes || []));
+  // One row per time, each with its own room, festival and note (the shared
+  // groupShowtimesIntoShowings would keep just one room and festival per day).
+  const showtimes = activeFilms.flatMap((film) => film.showtimes || []);
   const festivalNameById = new Map(
     festivals
       .map((row) => [Number(row.id), String(row.name || "").trim()])
@@ -280,7 +282,7 @@ async function loadFilmSourceFromSupabase() {
     });
   });
 
-  showings.forEach((row) => {
+  showtimes.forEach((row) => {
     const film = filmById.get(String(row.film_id));
     const theatre = theatreById.get(String(row.theatre_id));
     if (!film || !theatre) return;
@@ -289,31 +291,22 @@ async function loadFilmSourceFromSupabase() {
       film.theatres.push(theatreLabel);
     }
     const date = String(row.show_date || "").trim();
-    const pairKey = `${row.theatre_id}::${row.film_id}`;
-    const timesByPremium = [
-      [Array.isArray(row.times) ? row.times : [], false],
-      [Array.isArray(row.premium_times) ? row.premium_times : [], true],
-    ];
-    for (const [times, isPremium] of timesByPremium) {
-      for (const time of times) {
-        const timeValue = String(time || "").trim();
-        if (!date || !timeValue) continue;
-        film.showings.push({
-          date,
-          time: timeValue,
-          isPremium,
-          festivalName: festivalNameById.get(Number(row.festival_id)) || "",
-          room: String(row.room || "").trim(),
-          notes: String(row.notes || "").trim(),
-          theatre: theatre.name || theatreLabel || "Theatre TBA",
-          city: theatre.city || "",
-          theatreWebsite: theatre.website || "",
-          ticketLink: ticketLinkByPair.get(pairKey) || theatre.website || "",
-          latitude: Number.isFinite(Number(theatre.latitude)) ? Number(theatre.latitude) : undefined,
-          longitude: Number.isFinite(Number(theatre.longitude)) ? Number(theatre.longitude) : undefined,
-        });
-      }
-    }
+    const time = from24HourTime(row.start_time);
+    if (!date || !time) return;
+    film.showings.push({
+      date,
+      time,
+      isPremium: Boolean(row.is_premium),
+      festivalName: festivalNameById.get(Number(row.festival_id)) || "",
+      room: String(row.room || "").trim(),
+      notes: String(row.note || "").trim(),
+      theatre: theatre.name || theatreLabel || "Theatre TBA",
+      city: theatre.city || "",
+      theatreWebsite: theatre.website || "",
+      ticketLink: ticketLinkByPair.get(`${row.theatre_id}::${row.film_id}`) || theatre.website || "",
+      latitude: Number.isFinite(Number(theatre.latitude)) ? Number(theatre.latitude) : undefined,
+      longitude: Number.isFinite(Number(theatre.longitude)) ? Number(theatre.longitude) : undefined,
+    });
   });
 
   const sourceFilms = Array.from(filmById.values()).filter((film) => film.title);
@@ -626,17 +619,24 @@ function renderFilmPage(film, slug, siteUrl) {
       const visibleSchedule = group.schedule.slice(0, 4);
       const hiddenSchedule = group.schedule.slice(4);
 
+      const renderRoomTimes = (slot) =>
+        `${slot.room ? `<div class="show-room-label">Room: ${escapeHtml(slot.room)}</div>\n                ` : ""}<div class="show-times-grid">
+                  ${slot.times.map((time) => renderTimeChip(time, false, slot.timeNotes)).join("")}
+                  ${slot.premiumTimes.map((time) => renderTimeChip(time, true, slot.timeNotes)).join("")}
+                </div>`;
+
+      // A day with times in more than one room lists each room's times under its own label.
       const renderDayCards = (rows) =>
         rows
           .map(
             (row) =>
               `<article class="show-day-card" data-date="${escapeHtml(row.date)}">
-                <h3 class="show-schedule-day">${escapeHtml(formatIsoDateLabel(row.date))}</h3>
-                ${row.room ? `<div class="show-room-label">Room: ${escapeHtml(row.room)}</div>` : ""}
-                <div class="show-times-grid">
-                  ${row.times.map((time) => renderTimeChip(time, false, row.timeNotes)).join("")}
-                  ${row.premiumTimes.map((time) => renderTimeChip(time, true, row.timeNotes)).join("")}
-                </div>
+                <h3 class="show-schedule-day">${escapeHtml(formatIsoDateLabel(row.date))}</h3>${row.festivalNames.length
+                  ? `\n                <span class="film-page-festival-ribbon show-day-festival">${escapeHtml(row.festivalNames.join(" · "))}</span>`
+                  : ""}
+                ${row.rooms.length === 1
+                  ? renderRoomTimes(row.rooms[0])
+                  : row.rooms.map((slot) => `<div class="show-room-group">${renderRoomTimes(slot)}</div>`).join("")}
               </article>`
           )
           .join("");
@@ -1194,6 +1194,9 @@ function renderFilmPage(film, slug, siteUrl) {
                 card.querySelectorAll(".show-time-chip[data-time]").forEach((chip) => {
                   if (chip.dataset.time < now.time) chip.remove();
                 });
+                card.querySelectorAll(".show-room-group").forEach((group) => {
+                  if (!group.querySelector(".show-time-chip")) group.remove();
+                });
               }
               if (date < now.date || !card.querySelector(".show-time-chip")) card.remove();
             });
@@ -1425,17 +1428,12 @@ function buildShowtimesByTheatre(film) {
         theatre,
         city,
         ticketLink: String(showing.ticketLink || showing.theatreWebsite || "").trim(),
-        festivalNamesSet: new Set(),
         latitude: Number.isFinite(Number(showing.latitude)) ? Number(showing.latitude) : undefined,
         longitude: Number.isFinite(Number(showing.longitude)) ? Number(showing.longitude) : undefined,
         byDate: new Map(),
       });
     }
     const entry = byTheatre.get(key);
-    const festivalName = String(showing.festivalName || "").trim();
-    if (festivalName) {
-      entry.festivalNamesSet.add(festivalName);
-    }
     if (!entry.ticketLink && (showing.ticketLink || showing.theatreWebsite)) {
       entry.ticketLink = String(showing.ticketLink || showing.theatreWebsite).trim();
     }
@@ -1447,12 +1445,18 @@ function buildShowtimesByTheatre(film) {
     }
     const byDate = entry.byDate;
     if (!byDate.has(showing.date)) {
-      byDate.set(showing.date, { room: String(showing.room || "").trim(), times: [], premiumTimes: [], timeNotes: {} });
+      byDate.set(showing.date, { festivalNames: new Set(), byRoom: new Map() });
     }
-    const slot = byDate.get(showing.date);
-    if (!slot.room) {
-      slot.room = String(showing.room || "").trim();
+    const day = byDate.get(showing.date);
+    const festivalName = String(showing.festivalName || "").trim();
+    if (festivalName) {
+      day.festivalNames.add(festivalName);
     }
+    const room = String(showing.room || "").trim();
+    if (!day.byRoom.has(room)) {
+      day.byRoom.set(room, { room, times: [], premiumTimes: [], timeNotes: {} });
+    }
+    const slot = day.byRoom.get(room);
     if (showing.isPremium) {
       slot.premiumTimes.push(showing.time);
     } else {
@@ -1473,21 +1477,32 @@ function buildShowtimesByTheatre(film) {
   const grouped = Array.from(byTheatre.values()).map((entry) => {
     const schedule = Array.from(entry.byDate.entries())
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([date, value]) => ({
+      .map(([date, day]) => ({
         date,
-        room: String(value?.room || "").trim(),
-        times: dedupeTimes(value?.times || []),
-        premiumTimes: dedupeTimes(value?.premiumTimes || []),
-        timeNotes: value?.timeNotes || {},
+        festivalNames: Array.from(day.festivalNames).sort((a, b) => a.localeCompare(b)),
+        // Times with no room first, then the rooms in name order ("Screen 2" before "Screen 10").
+        rooms: Array.from(day.byRoom.values())
+          .sort((a, b) => a.room.localeCompare(b.room, undefined, { numeric: true }))
+          .map((slot) => ({
+            room: slot.room,
+            times: dedupeTimes(slot.times),
+            premiumTimes: dedupeTimes(slot.premiumTimes),
+            timeNotes: slot.timeNotes,
+          })),
       }));
+    // When every day has the same festival, one ribbon over the theatre says it; otherwise each
+    // festival day gets its own.
+    const firstDayFestivals = schedule[0]?.festivalNames.join(" · ") || "";
+    const allDaysSameFestival =
+      Boolean(firstDayFestivals) && schedule.every((day) => day.festivalNames.join(" · ") === firstDayFestivals);
     return {
       theatre: entry.theatre,
       city: entry.city,
       ticketLink: entry.ticketLink,
-      festivalNames: Array.from(entry.festivalNamesSet.values()).sort((a, b) => a.localeCompare(b)),
+      festivalNames: allDaysSameFestival ? schedule[0].festivalNames : [],
       latitude: entry.latitude,
       longitude: entry.longitude,
-      schedule,
+      schedule: schedule.map((day) => (allDaysSameFestival ? { ...day, festivalNames: [] } : day)),
     };
   });
 
