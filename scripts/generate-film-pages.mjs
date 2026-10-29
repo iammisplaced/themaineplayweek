@@ -34,6 +34,9 @@ const supabaseAnonKey = String(
   supabaseAnonKeyArg || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || ""
 ).trim();
 const writeSourcePath = writeSourceArg ? path.resolve(cwd, writeSourceArg) : "";
+// The sitemap needs absolute URLs, so it's only written when --site-url is given. It sits at
+// the site root, next to the films folder.
+const sitemapPath = path.join(path.dirname(outputDir), "sitemap.xml");
 
 const DEFAULT_NO_POSTER = "/assets/images/noposter.webp";
 const BRAND_NAME = "The Maine Playweek";
@@ -72,20 +75,31 @@ async function main() {
     throw new Error(`No films with upcoming showtimes found in ${sourceLabel}`);
   }
 
+  // Read the last build before it's removed, so the sitemap's lastmod only moves for pages
+  // whose HTML changed.
+  const previousLastmods = siteUrl ? await readPreviousLastmods() : new Map();
+
   await fs.rm(outputDir, { recursive: true, force: true });
   await fs.mkdir(outputDir, { recursive: true });
 
-  const pageItems = [];
+  const today = getCurrentEasternDateTimeParts().date;
+  const sitemapEntries = [];
   for (const film of films) {
     const slug = film.slug || buildFilmSlug(film.title, film.year);
     const fileDir = path.join(outputDir, slug);
-    const pagePath = path.join(fileDir, "index.html");
+    const html = renderFilmPage(film, slug, siteUrl);
     await fs.mkdir(fileDir, { recursive: true });
-    await fs.writeFile(pagePath, renderFilmPage(film, slug, siteUrl), "utf8");
-    pageItems.push({ film, slug });
+    await fs.writeFile(path.join(fileDir, "index.html"), html, "utf8");
+    const previous = previousLastmods.get(slug);
+    sitemapEntries.push({ slug, lastmod: previous?.html === html ? previous.lastmod : today });
   }
 
   await removeFinderDuplicateDirs(outputDir);
+
+  if (siteUrl) {
+    await fs.writeFile(sitemapPath, renderSitemap(sitemapEntries, siteUrl), "utf8");
+    console.log(`Wrote ${path.relative(cwd, sitemapPath)}`);
+  }
 
   if (writeSourcePath) {
     await fs.mkdir(path.dirname(writeSourcePath), { recursive: true });
@@ -93,7 +107,37 @@ async function main() {
     console.log(`Wrote source snapshot to ${path.relative(cwd, writeSourcePath)}`);
   }
 
-  console.log(`Generated ${pageItems.length} film pages at ${path.relative(cwd, outputDir)}`);
+  console.log(`Generated ${sitemapEntries.length} film pages at ${path.relative(cwd, outputDir)}`);
+}
+
+// Maps each slug in the current sitemap to its lastmod and the page HTML now on disk.
+async function readPreviousLastmods() {
+  const previous = new Map();
+  const sitemap = await fs.readFile(sitemapPath, "utf8").catch(() => "");
+  const entryPattern = /<loc>[^<]*\/films\/([^/<]+)\/<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g;
+  for (const [, slug, lastmod] of sitemap.matchAll(entryPattern)) {
+    const html = await fs.readFile(path.join(outputDir, slug, "index.html"), "utf8").catch(() => null);
+    if (html !== null) previous.set(slug, { lastmod, html });
+  }
+  return previous;
+}
+
+// The main page, the quiz and every film page. Only the main page links to the film pages
+// (from JS), so this is how search engines find them.
+function renderSitemap(entries, siteUrl) {
+  const urls = [
+    `  <url><loc>${escapeHtml(`${siteUrl}/`)}</loc></url>`,
+    `  <url><loc>${escapeHtml(`${siteUrl}/quiz/`)}</loc></url>`,
+    ...entries.map(
+      ({ slug, lastmod }) =>
+        `  <url>\n    <loc>${escapeHtml(`${siteUrl}/films/${slug}/`)}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`
+    ),
+  ];
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join("\n")}
+</urlset>
+`;
 }
 
 async function removeFinderDuplicateDirs(rootDir) {
