@@ -34,6 +34,9 @@ const supabaseAnonKey = String(
   supabaseAnonKeyArg || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY || ""
 ).trim();
 const writeSourcePath = writeSourceArg ? path.resolve(cwd, writeSourceArg) : "";
+// The sitemap needs absolute URLs, so it's only written when --site-url is given. It sits at
+// the site root, next to the films folder.
+const sitemapPath = path.join(path.dirname(outputDir), "sitemap.xml");
 
 const DEFAULT_NO_POSTER = "/assets/images/noposter.webp";
 const BRAND_NAME = "The Maine Playweek";
@@ -72,21 +75,31 @@ async function main() {
     throw new Error(`No films with upcoming showtimes found in ${sourceLabel}`);
   }
 
+  // Read the last build before it's removed, so the sitemap's lastmod only moves for pages
+  // whose HTML changed.
+  const previousLastmods = siteUrl ? await readPreviousLastmods() : new Map();
+
   await fs.rm(outputDir, { recursive: true, force: true });
   await fs.mkdir(outputDir, { recursive: true });
 
-  const pageItems = [];
+  const today = getCurrentEasternDateTimeParts().date;
+  const sitemapEntries = [];
   for (const film of films) {
     const slug = film.slug || buildFilmSlug(film.title, film.year);
     const fileDir = path.join(outputDir, slug);
-    const pagePath = path.join(fileDir, "index.html");
+    const html = renderFilmPage(film, slug, siteUrl);
     await fs.mkdir(fileDir, { recursive: true });
-    await fs.writeFile(pagePath, renderFilmPage(film, slug, siteUrl), "utf8");
-    pageItems.push({ film, slug });
+    await fs.writeFile(path.join(fileDir, "index.html"), html, "utf8");
+    const previous = previousLastmods.get(slug);
+    sitemapEntries.push({ slug, lastmod: previous?.html === html ? previous.lastmod : today });
   }
 
-  await fs.writeFile(path.join(outputDir, "index.html"), renderIndexPage(pageItems, siteUrl), "utf8");
   await removeFinderDuplicateDirs(outputDir);
+
+  if (siteUrl) {
+    await fs.writeFile(sitemapPath, renderSitemap(sitemapEntries, siteUrl), "utf8");
+    console.log(`Wrote ${path.relative(cwd, sitemapPath)}`);
+  }
 
   if (writeSourcePath) {
     await fs.mkdir(path.dirname(writeSourcePath), { recursive: true });
@@ -94,7 +107,37 @@ async function main() {
     console.log(`Wrote source snapshot to ${path.relative(cwd, writeSourcePath)}`);
   }
 
-  console.log(`Generated ${pageItems.length} film pages at ${path.relative(cwd, outputDir)}`);
+  console.log(`Generated ${sitemapEntries.length} film pages at ${path.relative(cwd, outputDir)}`);
+}
+
+// Maps each slug in the current sitemap to its lastmod and the page HTML now on disk.
+async function readPreviousLastmods() {
+  const previous = new Map();
+  const sitemap = await fs.readFile(sitemapPath, "utf8").catch(() => "");
+  const entryPattern = /<loc>[^<]*\/films\/([^/<]+)\/<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g;
+  for (const [, slug, lastmod] of sitemap.matchAll(entryPattern)) {
+    const html = await fs.readFile(path.join(outputDir, slug, "index.html"), "utf8").catch(() => null);
+    if (html !== null) previous.set(slug, { lastmod, html });
+  }
+  return previous;
+}
+
+// The main page, the quiz and every film page. Only the main page links to the film pages
+// (from JS), so this is how search engines find them.
+function renderSitemap(entries, siteUrl) {
+  const urls = [
+    `  <url><loc>${escapeHtml(`${siteUrl}/`)}</loc></url>`,
+    `  <url><loc>${escapeHtml(`${siteUrl}/quiz/`)}</loc></url>`,
+    ...entries.map(
+      ({ slug, lastmod }) =>
+        `  <url>\n    <loc>${escapeHtml(`${siteUrl}/films/${slug}/`)}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`
+    ),
+  ];
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join("\n")}
+</urlset>
+`;
 }
 
 async function removeFinderDuplicateDirs(rootDir) {
@@ -584,6 +627,11 @@ function renderFilmPage(film, slug, siteUrl) {
     `${film.title} showtimes, theatres, and details from ${BRAND_NAME}.`;
   const canonicalPath = `/films/${slug}/`;
   const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath.replace(/^\//, "");
+  // Link previews show the image large, so they get a bigger TMDb size than the page's poster.
+  const shareImageUrl = absoluteOrPassThrough(
+    (film.posterUrl || DEFAULT_NO_POSTER).replace(/(image\.tmdb\.org\/t\/p\/)w\d+\//, "$1w780/"),
+    siteUrl
+  );
   const posterUrl = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 2);
   const mainAppUrl = "../..";
   const tmdbMovieUrl = buildTmdbMovieUrl(film.tmdbId);
@@ -686,11 +734,11 @@ function renderFilmPage(film, slug, siteUrl) {
     <meta property="og:title" content="${escapeHtml(filmTitle)} | ${BRAND_NAME}" />
     <meta property="og:description" content="${escapeHtml(description)}" />
     <meta property="og:url" content="${escapeHtml(canonicalUrl)}" />
-    <meta property="og:image" content="${escapeHtml(absoluteOrPassThrough(film.posterUrl || DEFAULT_NO_POSTER, siteUrl))}" />
+    <meta property="og:image" content="${escapeHtml(shareImageUrl)}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${escapeHtml(filmTitle)} | ${BRAND_NAME}" />
     <meta name="twitter:description" content="${escapeHtml(description)}" />
-    <meta name="twitter:image" content="${escapeHtml(absoluteOrPassThrough(film.posterUrl || DEFAULT_NO_POSTER, siteUrl))}" />
+    <meta name="twitter:image" content="${escapeHtml(shareImageUrl)}" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
@@ -701,6 +749,15 @@ function renderFilmPage(film, slug, siteUrl) {
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/styles.css" />
     <link rel="stylesheet" href="../../css/film-pages.css" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QBSZ931Z30"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-QBSZ931Z30');
+    </script>
     <script>
       // Set before the page draws, so dark mode doesn't flash light first. The "js" class lets
       // the CSS fold away the film details on phones only when the "More" button can open them.
@@ -785,7 +842,7 @@ function renderFilmPage(film, slug, siteUrl) {
         ${buildFilmMetaLineMarkup(film)}
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
-            <img class="group-film-poster" src="${escapeHtml(posterUrl)}" alt="Poster for ${escapeHtml(filmDisplayTitle)}" loading="lazy" />
+            <img class="group-film-poster" src="${escapeHtml(posterUrl)}" alt="Poster for ${escapeHtml(filmDisplayTitle)}" fetchpriority="high" />
             ${
               featuredArticleUrl
                 ? `<a class="group-feature-link film-page-feature-link" href="${escapeHtml(featuredArticleUrl)}" target="_blank" rel="noopener noreferrer">Read feature</a>`
@@ -1226,68 +1283,6 @@ function renderFilmPage(film, slug, siteUrl) {
         });
       })();
     </script>
-  </body>
-</html>`;
-}
-
-function renderIndexPage(items, siteUrl) {
-  const canonicalPath = "/films/";
-  const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath.replace(/^\//, "");
-  const cards = items
-    .map(({ film, slug }) => {
-      const title = film.title;
-      const description =
-        film.description || `${film.title} showtimes and details from ${BRAND_NAME}.`;
-      const poster = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 1);
-      const stampMarkup = buildFilmStampMarkup(film, 1);
-      return `<article class="group-card film-card film-card-collapsed${film.staffFavorite ? " film-card-staff-favorite" : ""}${
-        film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
-      }">
-  <h2 class="group-title group-title-film">${escapeHtml(title)}</h2>
-  <a class="film-expand-toggle film-page-link" href="./${slug}/" aria-label="View page for ${escapeHtml(title)}">View Film Page</a>
-  <div class="group-film-summary">
-    <a class="film-page-link film-page-poster-link" href="./${slug}/" aria-label="Open page for ${escapeHtml(title)}">
-      <img class="group-film-poster" src="${escapeHtml(poster)}" alt="Poster for ${escapeHtml(title)}" loading="lazy" />
-    </a>
-    ${stampMarkup}
-    <div class="group-film-details">
-      <p class="group-film-facts hidden">${escapeHtml(description)}</p>
-      <a class="group-feature-link hidden" href="./${slug}/">View Film Page</a>
-    </div>
-  </div>
-  <ul class="show-list"></ul>
-</article>`;
-    })
-    .join("\n");
-
-  return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Film Pages | ${BRAND_NAME}</title>
-    <meta
-      name="description"
-      content="Every film on The Maine Playweek, each with its own page of showtimes and details."
-    />
-    <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png" />
-    <link rel="icon" href="../assets/icons/favicon.ico" />
-    <link rel="manifest" href="../site.webmanifest" />
-    <link rel="stylesheet" href="../css/styles.css" />
-    <link rel="stylesheet" href="../css/film-pages.css" />
-  </head>
-  <body>
-    <main class="film-index-shell">
-      <div class="film-index-header">
-        <h1>All Films</h1>
-        <a href="../index.html">Back to Showtimes</a>
-      </div>
-      <p class="film-index-note">Each card opens the film's own page.</p>
-      <section class="results results-masonry" data-view="films" aria-live="polite">${cards}</section>
-    </main>
   </body>
 </html>`;
 }

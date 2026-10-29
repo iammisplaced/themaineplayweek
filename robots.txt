@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin-panel.html
+Disallow: /admin-films.html
+Disallow: /api/
+
+Sitemap: https://showtimes.themaineplayweek.com/sitemap.xml

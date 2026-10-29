@@ -2396,8 +2396,7 @@ textarea {
   .show-link,
   .group-tmdb-link,
   .promo-card-cta,
-  .film-page-return,
-  .film-index-header a {
+  .film-page-return {
     position: relative;
   }
 
@@ -2407,8 +2406,7 @@ textarea {
   .show-link::after,
   .group-tmdb-link::after,
   .promo-card-cta::after,
-  .film-page-return::after,
-  .film-index-header a::after {
+  .film-page-return::after {
     content: "";
     position: absolute;
     top: 50%;

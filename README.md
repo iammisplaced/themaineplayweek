@@ -33,6 +33,7 @@ It's a plain static site (HTML, CSS and JavaScript, with no build step) that rea
 | `js/admin-csv.js`, `js/admin-changes.js`, `test/` | The admin's showtimes CSV import, what a save sends and how the Save bar describes it, and their tests (`npm test`) |
 | `admin-films.html`, `css/admin-films.css`, `js/admin-films.js` | Admin film catalog page (staff favourites, featured films, ranking overrides) |
 | `films/` | Static film pages, **generated; don't edit by hand** |
+| `sitemap.xml` | Generated with the film pages; `robots.txt` points to it |
 | `data/film-pages-source.live.json` | Snapshot of the Supabase data used for the last film-page build (generated); also the site's offline fallback |
 | `data/film-pages-source.json` | Sample input for building film pages without Supabase |
 | `supabase/schema.sql` | Database tables, security policies and save functions |
@@ -119,7 +120,7 @@ Apple Cinemas,Saco,Digger,2026-03-13,1:00 PM,3:00 PM|6:00 PM,,3:00 PM: IMAX; 6:0
 
 ## Static film pages
 
-`scripts/generate-film-pages.mjs` builds one page per film (`films/<slug>/index.html`) and an index page (`films/index.html`). The daily Action does this from Supabase. To build them yourself:
+`scripts/generate-film-pages.mjs` builds one page per film (`films/<slug>/index.html`) and, when given `--site-url`, a `sitemap.xml` at the site root listing the main page, the quiz and every film page (a film's `lastmod` only changes when its page does). The daily Action does this from Supabase. To build them yourself:
 
 ```bash
 npm run film-pages:build   # from data/film-pages-source.json
@@ -135,7 +136,7 @@ Usually you don't need to run this: commit your other changes and let the Action
 | Workflow | When | What it does | Secrets it needs |
 | --- | --- | --- | --- |
 | `tmdb-supabase-refresh.yml` | Daily at 09:25 UTC, or run by hand | Updates every film's TMDb details in Supabase | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `TMDB_API_KEY` |
-| `film-pages-supabase-sync.yml` | Daily at 09:40 UTC, or run by hand | Rebuilds `films/` and commits it to `main` if anything changed | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SITE_URL` |
+| `film-pages-supabase-sync.yml` | Daily at 09:40 UTC, or run by hand | Rebuilds `films/` and `sitemap.xml` and commits them to `main` if anything changed | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SITE_URL` |
 
 Set the secrets under the repository's **Settings → Secrets and variables → Actions**. To run one now, open the **Actions** tab, pick the workflow, and click **Run workflow**.
 
