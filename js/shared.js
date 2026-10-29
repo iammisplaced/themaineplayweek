@@ -127,20 +127,23 @@ export function toFiniteNumber(value) {
 
 // Asks api/rebuild-film-pages.js to rebuild the static film pages after an admin save to the
 // live data, so they update in a few minutes instead of at the next daily run. Returns
-// "started", "skipped" (staging data, which the film pages don't use) or "failed".
+// { status, error }: status is "started", "skipped" (staging data, which the film pages don't
+// use) or "failed", and error says why it failed.
 export async function requestFilmPagesRebuild(supabase) {
-  if (SUPABASE_DB_SCHEMA !== "public") return "skipped";
+  if (SUPABASE_DB_SCHEMA !== "public") return { status: "skipped" };
   try {
     const { data } = await supabase.auth.getSession();
     const token = data.session?.access_token;
-    if (!token) return "failed";
+    if (!token) return { status: "failed", error: "not signed in" };
     const response = await fetch("/api/rebuild-film-pages", {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     });
-    return response.ok ? "started" : "failed";
-  } catch {
-    return "failed";
+    if (response.ok) return { status: "started" };
+    const body = await response.json().catch(() => ({}));
+    return { status: "failed", error: body.error || `HTTP ${response.status}` };
+  } catch (error) {
+    return { status: "failed", error: error.message };
   }
 }
 

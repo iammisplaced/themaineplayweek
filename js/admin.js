@@ -1154,10 +1154,12 @@ async function refreshAuthState() {
 // the save message unless something else has replaced it meanwhile.
 async function rebuildFilmPagesAfterSave() {
   const message = elements.adminMessage.textContent;
-  const result = await requestFilmPagesRebuild(state.supabase);
-  if (result === "skipped" || elements.adminMessage.textContent !== message) return;
+  const { status, error } = await requestFilmPagesRebuild(state.supabase);
+  if (status === "skipped" || elements.adminMessage.textContent !== message) return;
   elements.adminMessage.textContent = `${message} ${
-    result === "started" ? "Film pages will update in a few minutes." : "Film pages will update at the next daily rebuild."
+    status === "started"
+      ? "Film pages will update in a few minutes."
+      : `Couldn't start a film page rebuild (${error}), so they'll update at the next daily rebuild.`
   }`;
 }
 
