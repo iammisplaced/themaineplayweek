@@ -744,6 +744,15 @@ function renderFilmPage(film, slug, siteUrl) {
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../../css/styles.css" />
     <link rel="stylesheet" href="../../css/film-pages.css" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QBSZ931Z30"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-QBSZ931Z30');
+    </script>
     <script>
       // Set before the page draws, so dark mode doesn't flash light first. The "js" class lets
       // the CSS fold away the film details on phones only when the "More" button can open them.
