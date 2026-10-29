@@ -85,7 +85,6 @@ async function main() {
     pageItems.push({ film, slug });
   }
 
-  await fs.writeFile(path.join(outputDir, "index.html"), renderIndexPage(pageItems, siteUrl), "utf8");
   await removeFinderDuplicateDirs(outputDir);
 
   if (writeSourcePath) {
@@ -1226,68 +1225,6 @@ function renderFilmPage(film, slug, siteUrl) {
         });
       })();
     </script>
-  </body>
-</html>`;
-}
-
-function renderIndexPage(items, siteUrl) {
-  const canonicalPath = "/films/";
-  const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath.replace(/^\//, "");
-  const cards = items
-    .map(({ film, slug }) => {
-      const title = film.title;
-      const description =
-        film.description || `${film.title} showtimes and details from ${BRAND_NAME}.`;
-      const poster = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 1);
-      const stampMarkup = buildFilmStampMarkup(film, 1);
-      return `<article class="group-card film-card film-card-collapsed${film.staffFavorite ? " film-card-staff-favorite" : ""}${
-        film.featuredOnPlayweek ? " film-card-featured-playweek" : ""
-      }">
-  <h2 class="group-title group-title-film">${escapeHtml(title)}</h2>
-  <a class="film-expand-toggle film-page-link" href="./${slug}/" aria-label="View page for ${escapeHtml(title)}">View Film Page</a>
-  <div class="group-film-summary">
-    <a class="film-page-link film-page-poster-link" href="./${slug}/" aria-label="Open page for ${escapeHtml(title)}">
-      <img class="group-film-poster" src="${escapeHtml(poster)}" alt="Poster for ${escapeHtml(title)}" loading="lazy" />
-    </a>
-    ${stampMarkup}
-    <div class="group-film-details">
-      <p class="group-film-facts hidden">${escapeHtml(description)}</p>
-      <a class="group-feature-link hidden" href="./${slug}/">View Film Page</a>
-    </div>
-  </div>
-  <ul class="show-list"></ul>
-</article>`;
-    })
-    .join("\n");
-
-  return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Film Pages | ${BRAND_NAME}</title>
-    <meta
-      name="description"
-      content="Every film on The Maine Playweek, each with its own page of showtimes and details."
-    />
-    <link rel="canonical" href="${escapeHtml(canonicalUrl)}" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/icons/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16x16.png" />
-    <link rel="icon" href="../assets/icons/favicon.ico" />
-    <link rel="manifest" href="../site.webmanifest" />
-    <link rel="stylesheet" href="../css/styles.css" />
-    <link rel="stylesheet" href="../css/film-pages.css" />
-  </head>
-  <body>
-    <main class="film-index-shell">
-      <div class="film-index-header">
-        <h1>All Films</h1>
-        <a href="../index.html">Back to Showtimes</a>
-      </div>
-      <p class="film-index-note">Each card opens the film's own page.</p>
-      <section class="results results-masonry" data-view="films" aria-live="polite">${cards}</section>
-    </main>
   </body>
 </html>`;
 }

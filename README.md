@@ -119,7 +119,7 @@ Apple Cinemas,Saco,Digger,2026-03-13,1:00 PM,3:00 PM|6:00 PM,,3:00 PM: IMAX; 6:0
 
 ## Static film pages
 
-`scripts/generate-film-pages.mjs` builds one page per film (`films/<slug>/index.html`) and an index page (`films/index.html`). The daily Action does this from Supabase. To build them yourself:
+`scripts/generate-film-pages.mjs` builds one page per film (`films/<slug>/index.html`). The daily Action does this from Supabase. To build them yourself:
 
 ```bash
 npm run film-pages:build   # from data/film-pages-source.json
