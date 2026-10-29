@@ -6,6 +6,7 @@ import {
   SHOWTIME_COLUMNS,
   groupShowtimesIntoShowings,
   buildFilmSlug,
+  slugifyTextSegment,
   escapeHtml,
   getFilmSortBreakdown,
   getShowtimeNote,
@@ -83,9 +84,10 @@ async function main() {
   await fs.mkdir(outputDir, { recursive: true });
 
   const today = getCurrentEasternDateTimeParts().date;
+  const slugByFilm = assignFilmSlugs(films);
   const sitemapEntries = [];
   for (const film of films) {
-    const slug = film.slug || buildFilmSlug(film.title, film.year);
+    const slug = slugByFilm.get(film);
     const fileDir = path.join(outputDir, slug);
     const html = renderFilmPage(film, slug, siteUrl);
     await fs.mkdir(fileDir, { recursive: true });
@@ -108,6 +110,36 @@ async function main() {
   }
 
   console.log(`Generated ${sitemapEntries.length} film pages at ${path.relative(cwd, outputDir)}`);
+}
+
+// Two films can share a slug (same title and year, or titles that differ only in punctuation).
+// The film with the lowest database id keeps the plain slug, which is the one the main site links
+// to; each other one gets its TMDb id (or database id) added, so no page overwrites another.
+function assignFilmSlugs(films) {
+  const filmsBySlug = new Map();
+  for (const film of films) {
+    const slug = film.slug || buildFilmSlug(film.title, film.year);
+    filmsBySlug.set(slug, [...(filmsBySlug.get(slug) || []), film]);
+  }
+
+  const slugByFilm = new Map();
+  for (const [slug, sameSlugFilms] of filmsBySlug) {
+    const [first, ...others] = sameSlugFilms
+      .map((film, index) => ({ film, index }))
+      .sort((a, b) => (Number(a.film.id) || Infinity) - (Number(b.film.id) || Infinity) || a.index - b.index)
+      .map(({ film }) => film);
+    slugByFilm.set(first, slug);
+    others.forEach((film, index) => {
+      const suffix = film.tmdbId || film.id || index + 2;
+      const uniqueSlug = `${slug}-${slugifyTextSegment(String(suffix))}`;
+      slugByFilm.set(film, uniqueSlug);
+      // ::warning:: shows up on the GitHub Actions run summary.
+      console.warn(
+        `::warning::"${film.title}" has the same page slug as "${first.title}"; its page is /films/${uniqueSlug}/, but the main site links to /films/${slug}/`
+      );
+    });
+  }
+  return slugByFilm;
 }
 
 // Maps each slug in the current sitemap to its lastmod and the page HTML now on disk.
@@ -162,7 +194,8 @@ async function loadFilmSourceFromSupabase() {
   }
 
   const restBase = `${supabaseUrl.replace(/\/+$/, "")}/rest/v1`;
-  const [theatres, films, theatreFilms, showtimes, festivals] = await Promise.all([
+  const today = getCurrentEasternDateTimeParts().date;
+  const [theatres, activeFilms, festivals] = await Promise.all([
     fetchAllFromSupabase(
       restBase,
       supabaseAnonKey,
@@ -170,26 +203,15 @@ async function loadFilmSourceFromSupabase() {
       "id,name,city,address,website,latitude,longitude",
       "id.asc"
     ),
+    // Like the visitor loader (loadActiveDataFromSupabase in js/data.js): only the films with a
+    // showtime from today on, each with those showtimes and its ticket links.
     fetchAllFromSupabase(
       restBase,
       supabaseAnonKey,
       "films",
-      "id,title,year,tmdb_id,synopsis,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json",
-      "id.asc"
-    ),
-    fetchAllFromSupabase(
-      restBase,
-      supabaseAnonKey,
-      "theatre_films",
-      "theatre_id,film_id,ticket_link",
-      "theatre_id.asc,film_id.asc"
-    ),
-    fetchAllFromSupabase(
-      restBase,
-      supabaseAnonKey,
-      "showtimes",
-      SHOWTIME_COLUMNS,
-      "theatre_id.asc,film_id.asc,show_date.asc,start_time.asc"
+      `id,title,year,tmdb_id,synopsis,staff_favorite,staff_favorite_by,featured_on_playweek,featured_on_playweek_url,metadata_source,tmdb_json,showtimes!inner(${SHOWTIME_COLUMNS}),theatre_films(theatre_id,film_id,ticket_link)`,
+      "id.asc",
+      { "showtimes.show_date": `gte.${today}`, "showtimes.order": "theatre_id.asc,show_date.asc,start_time.asc" }
     ),
     fetchAllFromSupabase(
       restBase,
@@ -199,7 +221,9 @@ async function loadFilmSourceFromSupabase() {
       "id.asc"
     ),
   ]);
-  const showings = groupShowtimesIntoShowings(showtimes);
+  const films = activeFilms.map(({ showtimes, theatre_films, ...film }) => film);
+  const theatreFilms = activeFilms.flatMap((film) => film.theatre_films || []);
+  const showings = groupShowtimesIntoShowings(activeFilms.flatMap((film) => film.showtimes || []));
   const festivalNameById = new Map(
     festivals
       .map((row) => [Number(row.id), String(row.name || "").trim()])
@@ -228,6 +252,7 @@ async function loadFilmSourceFromSupabase() {
   films.forEach((row) => {
     const tmdb = isPlainObject(row.tmdb_json) ? row.tmdb_json : {};
     filmById.set(String(row.id), {
+      id: row.id,
       title: String(row.title || "").trim(),
       year: toNumber(row.year),
       tmdbId: row.tmdb_id ? String(row.tmdb_id) : "",
@@ -264,53 +289,38 @@ async function loadFilmSourceFromSupabase() {
       film.theatres.push(theatreLabel);
     }
     const date = String(row.show_date || "").trim();
-    const standardTimes = Array.isArray(row.times) ? row.times : [];
-    const premiumTimes = Array.isArray(row.premium_times) ? row.premium_times : [];
-    standardTimes.forEach((time) => {
-      const timeValue = String(time || "").trim();
-      if (!date || !timeValue) return;
-      const pairKey = `${row.theatre_id}::${row.film_id}`;
-      film.showings.push({
-        date,
-        time: timeValue,
-        isPremium: false,
-        festivalName: festivalNameById.get(Number(row.festival_id)) || "",
-        room: String(row.room || "").trim(),
-        notes: String(row.notes || "").trim(),
-        theatre: theatre.name || theatreLabel || "Theatre TBA",
-        city: theatre.city || "",
-        theatreWebsite: theatre.website || "",
-        ticketLink: ticketLinkByPair.get(pairKey) || theatre.website || "",
-        latitude: Number.isFinite(Number(theatre.latitude)) ? Number(theatre.latitude) : undefined,
-        longitude: Number.isFinite(Number(theatre.longitude)) ? Number(theatre.longitude) : undefined,
-      });
-    });
-    premiumTimes.forEach((time) => {
-      const timeValue = String(time || "").trim();
-      if (!date || !timeValue) return;
-      const pairKey = `${row.theatre_id}::${row.film_id}`;
-      film.showings.push({
-        date,
-        time: timeValue,
-        isPremium: true,
-        festivalName: festivalNameById.get(Number(row.festival_id)) || "",
-        room: String(row.room || "").trim(),
-        notes: String(row.notes || "").trim(),
-        theatre: theatre.name || theatreLabel || "Theatre TBA",
-        city: theatre.city || "",
-        theatreWebsite: theatre.website || "",
-        ticketLink: ticketLinkByPair.get(pairKey) || theatre.website || "",
-        latitude: Number.isFinite(Number(theatre.latitude)) ? Number(theatre.latitude) : undefined,
-        longitude: Number.isFinite(Number(theatre.longitude)) ? Number(theatre.longitude) : undefined,
-      });
-    });
+    const pairKey = `${row.theatre_id}::${row.film_id}`;
+    const timesByPremium = [
+      [Array.isArray(row.times) ? row.times : [], false],
+      [Array.isArray(row.premium_times) ? row.premium_times : [], true],
+    ];
+    for (const [times, isPremium] of timesByPremium) {
+      for (const time of times) {
+        const timeValue = String(time || "").trim();
+        if (!date || !timeValue) continue;
+        film.showings.push({
+          date,
+          time: timeValue,
+          isPremium,
+          festivalName: festivalNameById.get(Number(row.festival_id)) || "",
+          room: String(row.room || "").trim(),
+          notes: String(row.notes || "").trim(),
+          theatre: theatre.name || theatreLabel || "Theatre TBA",
+          city: theatre.city || "",
+          theatreWebsite: theatre.website || "",
+          ticketLink: ticketLinkByPair.get(pairKey) || theatre.website || "",
+          latitude: Number.isFinite(Number(theatre.latitude)) ? Number(theatre.latitude) : undefined,
+          longitude: Number.isFinite(Number(theatre.longitude)) ? Number(theatre.longitude) : undefined,
+        });
+      }
+    }
   });
 
   const sourceFilms = Array.from(filmById.values()).filter((film) => film.title);
   return { films: sourceFilms };
 }
 
-async function fetchAllFromSupabase(restBase, apiKey, table, select, orderBy = "", pageSize = 1000) {
+async function fetchAllFromSupabase(restBase, apiKey, table, select, orderBy = "", filters = {}, pageSize = 1000) {
   const rows = [];
   let from = 0;
   while (true) {
@@ -318,6 +328,9 @@ async function fetchAllFromSupabase(restBase, apiKey, table, select, orderBy = "
     let url = `${restBase}/${encodeURIComponent(table)}?select=${encodeURIComponent(select)}`;
     if (orderBy) {
       url += `&order=${encodeURIComponent(orderBy)}`;
+    }
+    for (const [key, value] of Object.entries(filters)) {
+      url += `&${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
     }
     const response = await fetch(url, {
       headers: {
@@ -405,45 +418,31 @@ function normalizeFilms(source) {
         }
         for (const showing of rawFilm?.showings || []) {
           const date = stringOrEmpty(showing?.date);
-          for (const time of showing?.times || []) {
-            const t = stringOrEmpty(time);
-            if (!date || !t) continue;
-            film.showings.push({
-              date,
-              time,
-              isPremium: false,
-              festivalName:
-                festivalNameById.get(Number(showing?.festivalId)) ||
-                stringOrEmpty(showing?.festivalName),
-              room: stringOrEmpty(showing?.room),
-              notes: stringOrEmpty(showing?.notes),
-              theatre: theatreName,
-              city: theatreCity,
-              theatreWebsite: stringOrEmpty(theatre?.website),
-              ticketLink: stringOrEmpty(rawFilm?.ticketLink),
-              latitude: toNumber(theatre?.latitude),
-              longitude: toNumber(theatre?.longitude),
-            });
-          }
-          for (const time of showing?.premiumTimes || []) {
-            const t = stringOrEmpty(time);
-            if (!date || !t) continue;
-            film.showings.push({
-              date,
-              time: t,
-              isPremium: true,
-              festivalName:
-                festivalNameById.get(Number(showing?.festivalId)) ||
-                stringOrEmpty(showing?.festivalName),
-              room: stringOrEmpty(showing?.room),
-              notes: stringOrEmpty(showing?.notes),
-              theatre: theatreName,
-              city: theatreCity,
-              theatreWebsite: stringOrEmpty(theatre?.website),
-              ticketLink: stringOrEmpty(rawFilm?.ticketLink),
-              latitude: toNumber(theatre?.latitude),
-              longitude: toNumber(theatre?.longitude),
-            });
+          const timesByPremium = [
+            [showing?.times || [], false],
+            [showing?.premiumTimes || [], true],
+          ];
+          for (const [times, isPremium] of timesByPremium) {
+            for (const time of times) {
+              const t = stringOrEmpty(time);
+              if (!date || !t) continue;
+              film.showings.push({
+                date,
+                time: t,
+                isPremium,
+                festivalName:
+                  festivalNameById.get(Number(showing?.festivalId)) ||
+                  stringOrEmpty(showing?.festivalName),
+                room: stringOrEmpty(showing?.room),
+                notes: stringOrEmpty(showing?.notes),
+                theatre: theatreName,
+                city: theatreCity,
+                theatreWebsite: stringOrEmpty(theatre?.website),
+                ticketLink: stringOrEmpty(rawFilm?.ticketLink),
+                latitude: toNumber(theatre?.latitude),
+                longitude: toNumber(theatre?.longitude),
+              });
+            }
           }
         }
       }
@@ -459,6 +458,7 @@ function normalizeFlatFilm(film, festivalNameById = new Map()) {
   const title = stringOrEmpty(film?.title);
   if (!title) return null;
   return {
+    id: film?.id ?? null,
     title,
     year: toNumber(film?.year),
     tmdbId: stringOrEmpty(film?.tmdbId || film?.tmdb_id),
@@ -530,40 +530,13 @@ function normalizeFlatFilm(film, festivalNameById = new Map()) {
 }
 
 function hasUpcomingShowtimes(film) {
-  const showings = Array.isArray(film?.showings) ? film.showings : [];
-  if (!showings.length) return false;
-
   const nowEt = getCurrentEasternDateTimeParts();
-  for (const showing of showings) {
-    const date = String(showing?.date || "").trim();
-    const time = String(showing?.time || "").trim();
-    if (!date) continue;
-    if (date > nowEt.date) return true;
-    if (date < nowEt.date) continue;
-    const minutes = parseTimeToMinutes(time);
-    // Only consider a showing upcoming if we can parse the time and it's >= now
-    if (minutes !== null && minutes >= nowEt.minutes) return true;
-  }
-  return false;
+  return (film?.showings || []).some((showing) => isUpcomingShowing(showing, nowEt));
 }
 
 function prunePastShowings(film) {
-  const showings = Array.isArray(film?.showings) ? film.showings : [];
-  if (!showings.length) return film;
-
   const nowEt = getCurrentEasternDateTimeParts();
-  const futureShowings = showings.filter((showing) => {
-    const date = String(showing?.date || "").trim();
-    const time = String(showing?.time || "").trim();
-    if (!date) return false;
-    if (date > nowEt.date) return true;
-    if (date < nowEt.date) return false;
-    const minutes = parseTimeToMinutes(time);
-    // Include showing only if time is parseable and >= now
-    return minutes !== null && minutes >= nowEt.minutes;
-  });
-
-  return { ...film, showings: futureShowings };
+  return { ...film, showings: (film?.showings || []).filter((showing) => isUpcomingShowing(showing, nowEt)) };
 }
 
 function getCurrentEasternDateTimeParts() {
@@ -1634,16 +1607,14 @@ function countUpcomingTheatreCoverage(film) {
   return keys.size;
 }
 
-function isUpcomingShowing(showing) {
+// A showing today only counts if its time can be read and hasn't passed.
+function isUpcomingShowing(showing, nowEt = getCurrentEasternDateTimeParts()) {
   const date = String(showing?.date || "").trim();
-  const time = String(showing?.time || "").trim();
   if (!date) return false;
-  const nowEt = getCurrentEasternDateTimeParts();
   if (date > nowEt.date) return true;
   if (date < nowEt.date) return false;
-  const minutes = parseTimeToMinutes(time);
-  if (minutes === null) return true;
-  return minutes >= nowEt.minutes;
+  const minutes = parseTimeToMinutes(String(showing?.time || "").trim());
+  return minutes !== null && minutes >= nowEt.minutes;
 }
 
 function pruneUndefined(obj) {
