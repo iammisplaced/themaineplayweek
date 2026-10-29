@@ -185,14 +185,12 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-11-04">
                 <h3 class="show-schedule-day">Wed, Nov 4</h3>
-                
                 <div class="show-times-grid">
                   
                   <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="15:00" tabindex="0" data-note="ScreenX">Premium 3:00 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ScreenX)</span></span><span class="show-time-chip show-time-chip-premium show-time-noted" data-time="18:55" tabindex="0" data-note="ScreenX">Premium 6:55 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ScreenX)</span></span>
                 </div>
               </article><article class="show-day-card" data-date="2026-11-05">
                 <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip show-time-noted" data-time="14:10" tabindex="0" data-note="English">2:10 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: English)</span></span><span class="show-time-chip" data-time="17:35">5:35 PM</span>
                   <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="21:30" tabindex="0" data-note="ScreenX">Premium 9:30 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ScreenX)</span></span>
@@ -217,14 +215,12 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-11-04">
                 <h3 class="show-schedule-day">Wed, Nov 4</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="15:00">3:00 PM</span>
                   <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="19:20" tabindex="0" data-note="3D">Premium 7:20 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: 3D)</span></span>
                 </div>
               </article><article class="show-day-card" data-date="2026-11-05">
                 <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="13:30">1:30 PM</span>
                   <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="18:30" tabindex="0" data-note="3D">Premium 6:30 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: 3D)</span></span>
@@ -586,6 +582,9 @@
               if (date === now.date) {
                 card.querySelectorAll(".show-time-chip[data-time]").forEach((chip) => {
                   if (chip.dataset.time < now.time) chip.remove();
+                });
+                card.querySelectorAll(".show-room-group").forEach((group) => {
+                  if (!group.querySelector(".show-time-chip")) group.remove();
                 });
               }
               if (date < now.date || !card.querySelector(".show-time-chip")) card.remove();

@@ -185,7 +185,6 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-29">
                 <h3 class="show-schedule-day">Thu, Oct 29</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="18:05">6:05 PM</span>
                   
@@ -210,21 +209,18 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-30">
                 <h3 class="show-schedule-day">Fri, Oct 30</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="17:00">5:00 PM</span><span class="show-time-chip" data-time="20:00">8:00 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
                 <h3 class="show-schedule-day">Sat, Oct 31</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="17:00">5:00 PM</span><span class="show-time-chip" data-time="20:00">8:00 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-01">
                 <h3 class="show-schedule-day">Sun, Nov 1</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="14:00">2:00 PM</span><span class="show-time-chip" data-time="17:00">5:00 PM</span>
                   
@@ -586,6 +582,9 @@
               if (date === now.date) {
                 card.querySelectorAll(".show-time-chip[data-time]").forEach((chip) => {
                   if (chip.dataset.time < now.time) chip.remove();
+                });
+                card.querySelectorAll(".show-room-group").forEach((group) => {
+                  if (!group.querySelector(".show-time-chip")) group.remove();
                 });
               }
               if (date < now.date || !card.querySelector(".show-time-chip")) card.remove();

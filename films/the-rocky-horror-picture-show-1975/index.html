@@ -185,21 +185,18 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-30">
                 <h3 class="show-schedule-day">Fri, Oct 30</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="21:30">9:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
                 <h3 class="show-schedule-day">Sat, Oct 31</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="21:30">9:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-04">
                 <h3 class="show-schedule-day">Wed, Nov 4</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
@@ -224,14 +221,12 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-30">
                 <h3 class="show-schedule-day">Fri, Oct 30</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip show-time-noted" data-time="22:00" tabindex="0" data-note="Live Shadowcast">10:00 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: Live Shadowcast)</span></span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-10-31">
                 <h3 class="show-schedule-day">Sat, Oct 31</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip show-time-noted" data-time="22:00" tabindex="0" data-note="Live Shadowcast">10:00 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: Live Shadowcast)</span></span>
                   
@@ -256,7 +251,6 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-31">
                 <h3 class="show-schedule-day">Sat, Oct 31</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="16:15">4:15 PM</span><span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
@@ -281,7 +275,6 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-30">
                 <h3 class="show-schedule-day">Fri, Oct 30</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="20:00">8:00 PM</span>
                   
@@ -306,7 +299,6 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-10-30">
                 <h3 class="show-schedule-day">Fri, Oct 30</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:30">7:30 PM</span>
                   
@@ -668,6 +660,9 @@
               if (date === now.date) {
                 card.querySelectorAll(".show-time-chip[data-time]").forEach((chip) => {
                   if (chip.dataset.time < now.time) chip.remove();
+                });
+                card.querySelectorAll(".show-room-group").forEach((group) => {
+                  if (!group.querySelector(".show-time-chip")) group.remove();
                 });
               }
               if (date < now.date || !card.querySelector(".show-time-chip")) card.remove();

@@ -185,14 +185,12 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-11-01">
                 <h3 class="show-schedule-day">Sun, Nov 1</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-05">
                 <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
@@ -217,14 +215,12 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-11-01">
                 <h3 class="show-schedule-day">Sun, Nov 1</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-05">
                 <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
@@ -249,7 +245,6 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-11-01">
                 <h3 class="show-schedule-day">Sun, Nov 1</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
@@ -274,14 +269,12 @@
             </div>
             <div class="show-schedule"><article class="show-day-card" data-date="2026-11-01">
                 <h3 class="show-schedule-day">Sun, Nov 1</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="19:30">7:30 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-05">
                 <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:30">7:30 PM</span>
                   
@@ -643,6 +636,9 @@
               if (date === now.date) {
                 card.querySelectorAll(".show-time-chip[data-time]").forEach((chip) => {
                   if (chip.dataset.time < now.time) chip.remove();
+                });
+                card.querySelectorAll(".show-room-group").forEach((group) => {
+                  if (!group.querySelector(".show-time-chip")) group.remove();
                 });
               }
               if (date < now.date || !card.querySelector(".show-time-chip")) card.remove();
