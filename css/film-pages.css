@@ -218,6 +218,14 @@
   font-size: 0.78rem;
   font-weight: 600;
 }
+.film-showtimes-box .show-room-group + .show-room-group {
+  margin-top: 0.5rem;
+}
+/* A festival day among regular days carries its own ribbon, under the date. */
+.film-showtimes-box .show-day-festival {
+  display: flex;
+  box-shadow: none;
+}
 .film-showtimes-box .show-more-days {
   margin-top: 0.5rem;
 }
