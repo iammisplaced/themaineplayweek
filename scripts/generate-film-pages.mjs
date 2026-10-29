@@ -627,6 +627,11 @@ function renderFilmPage(film, slug, siteUrl) {
     `${film.title} showtimes, theatres, and details from ${BRAND_NAME}.`;
   const canonicalPath = `/films/${slug}/`;
   const canonicalUrl = siteUrl ? `${siteUrl}${canonicalPath}` : canonicalPath.replace(/^\//, "");
+  // Link previews show the image large, so they get a bigger TMDb size than the page's poster.
+  const shareImageUrl = absoluteOrPassThrough(
+    (film.posterUrl || DEFAULT_NO_POSTER).replace(/(image\.tmdb\.org\/t\/p\/)w\d+\//, "$1w780/"),
+    siteUrl
+  );
   const posterUrl = resolveRelativeAssetPath(film.posterUrl || DEFAULT_NO_POSTER, 2);
   const mainAppUrl = "../..";
   const tmdbMovieUrl = buildTmdbMovieUrl(film.tmdbId);
@@ -729,11 +734,11 @@ function renderFilmPage(film, slug, siteUrl) {
     <meta property="og:title" content="${escapeHtml(filmTitle)} | ${BRAND_NAME}" />
     <meta property="og:description" content="${escapeHtml(description)}" />
     <meta property="og:url" content="${escapeHtml(canonicalUrl)}" />
-    <meta property="og:image" content="${escapeHtml(absoluteOrPassThrough(film.posterUrl || DEFAULT_NO_POSTER, siteUrl))}" />
+    <meta property="og:image" content="${escapeHtml(shareImageUrl)}" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${escapeHtml(filmTitle)} | ${BRAND_NAME}" />
     <meta name="twitter:description" content="${escapeHtml(description)}" />
-    <meta name="twitter:image" content="${escapeHtml(absoluteOrPassThrough(film.posterUrl || DEFAULT_NO_POSTER, siteUrl))}" />
+    <meta name="twitter:image" content="${escapeHtml(shareImageUrl)}" />
     <link rel="apple-touch-icon" sizes="180x180" href="../../assets/icons/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="../../assets/icons/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
@@ -837,7 +842,7 @@ function renderFilmPage(film, slug, siteUrl) {
         ${buildFilmMetaLineMarkup(film)}
         <div class="group-film-summary">
           <div class="film-page-poster-rail">
-            <img class="group-film-poster" src="${escapeHtml(posterUrl)}" alt="Poster for ${escapeHtml(filmDisplayTitle)}" loading="lazy" />
+            <img class="group-film-poster" src="${escapeHtml(posterUrl)}" alt="Poster for ${escapeHtml(filmDisplayTitle)}" fetchpriority="high" />
             ${
               featuredArticleUrl
                 ? `<a class="group-feature-link film-page-feature-link" href="${escapeHtml(featuredArticleUrl)}" target="_blank" rel="noopener noreferrer">Read feature</a>`
