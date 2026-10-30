@@ -132,116 +132,8 @@
 
       <section class="group-card film-showtimes-box">
         <h2 class="film-showtimes-heading">Showtimes by Theatre</h2>
-        <div class="film-location">
-          <p id="filmLocationSorted" class="film-location-sorted" hidden>
-            Nearest first from
-            <button id="filmLocationChip" class="location-chip film-location-chip" type="button" popovertarget="filmLocationPopover" aria-expanded="false">
-              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
-              <span id="filmLocationChipLabel" class="location-chip-label"></span>
-            </button>
-          </p>
-          <div id="filmLocationPrompt" class="film-location-prompt">
-            <p class="film-location-prompt-copy">Where are you watching from? We'll put the nearest theatres first.</p>
-            <div class="location-picker">
-            <button class="location-device-btn" type="button" data-action="use-device-location">
-              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
-              Use my location
-            </button>
-            <form class="location-zip-form" novalidate>
-              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
-              <button class="ghost-btn" type="submit">Go</button>
-            </form>
-            <p class="location-picker-message" role="status" aria-live="polite"></p>
-          </div>
-          </div>
-        </div>
-        <div id="filmLocationPopover" class="location-popover" popover role="dialog" aria-labelledby="filmLocationPopoverTitle">
-          <h2 id="filmLocationPopoverTitle" class="location-popover-title">Your location</h2>
-          <div class="location-picker">
-            <button class="location-device-btn" type="button" data-action="use-device-location">
-              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
-              Use my location
-            </button>
-            <form class="location-zip-form" novalidate>
-              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
-              <button class="ghost-btn" type="submit">Go</button>
-            </form>
-            <p class="location-picker-message" role="status" aria-live="polite"></p>
-          </div>
-        </div>
+        
         <div class="show-list"><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="43.6505461"
-            data-theatre-lng="-70.3465631"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Apple Cinemas
-                <span class="show-main-city">Westbrook<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://www.applecinemas.com/-Ozzy---Black-Sabbath--Back-to-the-Beginning-/611fe9edf74bab2423301ee0/6ab3b53ca24047c27f633c20" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Apple Cinemas">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
-                  
-                </div>
-              </article></div>
-            
-          </div>
-        </div>
-      </article><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="43.6575821"
-            data-theatre-lng="-70.2558618"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Nickelodeon Cinemas
-                <span class="show-main-city">Portland<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://www.patriotcinemas.com/movie/ozzy-and-black-sabbath-back-to-the-beginning" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Nickelodeon Cinemas">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
-                  
-                </div>
-              </article></div>
-            
-          </div>
-        </div>
-      </article><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="43.8561096191406"
-            data-theatre-lng="-70.1030502319336"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Patriot Cinemas at Freeport Village
-                <span class="show-main-city">Freeport<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://www.patriotcinemas.com/movie/ozzy-and-black-sabbath-back-to-the-beginning" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Patriot Cinemas at Freeport Village">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
-                  
-                </div>
-              </article></div>
-            
-          </div>
-        </div>
-      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="46.1259988"
@@ -255,13 +147,7 @@
               </div>
               <a class="show-link" href="https://templehoulton.com/amy_movie/ozzy-black-sabbath-back-to-the-beginning/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Temple Theatre">Tickets</a>
             </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-10-29">
-                <h3 class="show-schedule-day">Thu, Oct 29</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="19:00">7:00 PM</span>
-                  
-                </div>
-              </article><article class="show-day-card" data-date="2026-10-31">
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-10-31">
                 <h3 class="show-schedule-day">Sat, Oct 31</h3>
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
