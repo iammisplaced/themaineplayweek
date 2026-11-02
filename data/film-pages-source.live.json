@@ -22947,11 +22947,18 @@
       "year": 2026,
       "tmdbId": "",
       "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
+      "posterUrl": "https://m.media-amazon.com/images/M/MV5BMTFjZWNkZjgtZjE2OC00ZGM3LThjZWUtZGVlZTUxMzM5YzVjXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+      "director": "Katie Burrell",
+      "genres": [
+        "Sports",
+        "Documentary"
+      ],
+      "stars": [
+        "Katie Burrell",
+        "Jess Kimrura",
+        "Sam Kuch"
+      ],
+      "releaseDate": "2026-10-27",
       "runtime": 0,
       "certification": "",
       "originalLanguage": "",
