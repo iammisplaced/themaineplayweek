@@ -22398,55 +22398,6 @@
           "longitude": -69.0075715
         }
       ]
-    },
-    {
-      "id": 580252,
-      "title": "Walkabout",
-      "year": 1971,
-      "tmdbId": "36040",
-      "description": "",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/24vooYt5StgtgcQObVr1GHuM5gy.jpg",
-      "director": "Nicolas Roeg",
-      "genres": [
-        "Adventure",
-        "Drama"
-      ],
-      "stars": [
-        "Jenny Agutter",
-        "Luc Roeg",
-        "David Gulpilil"
-      ],
-      "releaseDate": "1971-07-01",
-      "runtime": 0,
-      "certification": "",
-      "originalLanguage": "",
-      "originalLanguageName": "",
-      "popularity": 2.688,
-      "voteAverage": 7.3,
-      "voteCount": 480,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "theatres": [
-        "PMA Films, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-11-14",
-          "time": "12:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-a-few-small-odysseys-walkabout-1971/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        }
-      ]
     }
   ]
 }
