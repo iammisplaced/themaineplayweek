@@ -111,6 +111,7 @@
         "Alamo Theatre, Bucksport",
         "Entertainment Luxury Cinemas, South Portland",
         "Harbor Theater, Boothbay Harbor",
+        "Lincoln Theater, Damariscotta",
         "Strand Theatre, Rockland",
         "The Gem Theater, Bethel",
         "Patriot Cinemas at Freeport Village, Freeport"
@@ -311,6 +312,104 @@
           "ticketLink": "boothbaycinema.org",
           "latitude": 43.8613565,
           "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-13",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/a-talent-for-murder-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-14",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/a-talent-for-murder-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-14",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/a-talent-for-murder-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-15",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/a-talent-for-murder-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-18",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Open Captions",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/a-talent-for-murder-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-18",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/a-talent-for-murder-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-19",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/a-talent-for-murder-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
         },
         {
           "date": "2026-11-03",
@@ -555,6 +654,94 @@
           "ticketLink": "https://www.colonialtheatre.com/movies/barbara-forever-2026",
           "latitude": 44.4267641,
           "longitude": -69.0075715
+        }
+      ]
+    },
+    {
+      "id": 579248,
+      "title": "Boatbuilders",
+      "year": 2026,
+      "tmdbId": "1736475",
+      "description": "Over the course of 16 months, at the head of a remote harbor in Maine, the workers of the Brooklin Boat Yard meticulously build a 56-foot wooden sailboat. As the seasons change and the vessel takes shape, director Luke Lorentzen immerses the viewer in a close-knit community rooted in time-honored craft, shared joys, and mutual respect.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/upElgJ2QVnWtez0bF3mBd1tayuc.jpg",
+      "director": "Luke Lorentzen",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [],
+      "releaseDate": "2026-09-07",
+      "runtime": 105,
+      "certification": "",
+      "originalLanguage": "en",
+      "originalLanguageName": "",
+      "popularity": 2.0525,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": true,
+      "featuredOnPlayweekUrl": "https://themaineplayweek.substack.com/p/an-inch-away-at-arms-length",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-07",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "CIFF Encore",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-x-points-north-boatbuilders/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
+      "id": 579258,
+      "title": "Bucks Harbor",
+      "year": 2026,
+      "tmdbId": "1599770",
+      "description": "Boys in Downeast Maine are shaped by the brutal winters, their harvesting of the ocean’s bounty and the rigid codes of their fathers. Bucks Harbor explores growing up in a community where a man’s worth is often defined by the strength of his back.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/5XYh1GjxJMrs9MvjEp9ueUxsfDu.jpg",
+      "director": "Pete Muller",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [],
+      "releaseDate": "2026-02-14",
+      "runtime": 98,
+      "certification": "",
+      "originalLanguage": "en",
+      "originalLanguageName": "English",
+      "popularity": 1.7052,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": true,
+      "featuredOnPlayweekUrl": "https://themaineplayweek.substack.com/p/listening-in-at-bucks-harbor",
+      "theatres": [
+        "SPACE Gallery, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-12-18",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "SPACE Gallery",
+          "city": "Portland",
+          "theatreWebsite": "space538.org",
+          "ticketLink": "https://space538.org/event/bucks-harbor-2026/",
+          "latitude": 43.655603,
+          "longitude": -70.2613361
         }
       ]
     },
@@ -3465,6 +3652,7 @@
       "featuredOnPlayweekUrl": "",
       "theatres": [
         "Colonial Theatre, Belfast",
+        "Eveningstar Cinema, Brunswick",
         "PMA Films, Portland",
         "Apple Cinemas, Westbrook"
       ],
@@ -3524,6 +3712,90 @@
           "ticketLink": "https://www.colonialtheatre.com/movies/fjord-2026/showtimes/2026-10-30?location=colonial-theatre",
           "latitude": 44.4267641,
           "longitude": -69.0075715
+        },
+        {
+          "date": "2026-11-06",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Eveningstar Cinema",
+          "city": "Brunswick",
+          "theatreWebsite": "eveningstarcinema.com",
+          "ticketLink": "https://www.eveningstarcinema.com/movies/188280-fjord/",
+          "latitude": 43.9148381,
+          "longitude": -69.9636894
+        },
+        {
+          "date": "2026-11-06",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Eveningstar Cinema",
+          "city": "Brunswick",
+          "theatreWebsite": "eveningstarcinema.com",
+          "ticketLink": "https://www.eveningstarcinema.com/movies/188280-fjord/",
+          "latitude": 43.9148381,
+          "longitude": -69.9636894
+        },
+        {
+          "date": "2026-11-06",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Eveningstar Cinema",
+          "city": "Brunswick",
+          "theatreWebsite": "eveningstarcinema.com",
+          "ticketLink": "https://www.eveningstarcinema.com/movies/188280-fjord/",
+          "latitude": 43.9148381,
+          "longitude": -69.9636894
+        },
+        {
+          "date": "2026-11-07",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Eveningstar Cinema",
+          "city": "Brunswick",
+          "theatreWebsite": "eveningstarcinema.com",
+          "ticketLink": "https://www.eveningstarcinema.com/movies/188280-fjord/",
+          "latitude": 43.9148381,
+          "longitude": -69.9636894
+        },
+        {
+          "date": "2026-11-07",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Eveningstar Cinema",
+          "city": "Brunswick",
+          "theatreWebsite": "eveningstarcinema.com",
+          "ticketLink": "https://www.eveningstarcinema.com/movies/188280-fjord/",
+          "latitude": 43.9148381,
+          "longitude": -69.9636894
+        },
+        {
+          "date": "2026-11-08",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Eveningstar Cinema",
+          "city": "Brunswick",
+          "theatreWebsite": "eveningstarcinema.com",
+          "ticketLink": "https://www.eveningstarcinema.com/movies/188280-fjord/",
+          "latitude": 43.9148381,
+          "longitude": -69.9636894
         },
         {
           "date": "2026-11-05",
@@ -3731,6 +4003,53 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Sanford/FORGOTTEN-ISLAND",
           "latitude": 43.4143151,
           "longitude": -70.7506676
+        }
+      ]
+    },
+    {
+      "id": 579415,
+      "title": "Georgia O'Keefe: The Brightness of Light",
+      "year": 2024,
+      "tmdbId": "1365258",
+      "description": "A documentary exploring the life and art of the most important woman artist of the 20th century, Georgia O'Keeffe, who became famous for her paintings of flowers and emerged as an iconic role model for women.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/wZPTWxo3MRqlJAYpRkz21DrxwQs.jpg",
+      "director": "Paul Wagner",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [
+        "Claire Danes",
+        "Hugh Dancy"
+      ],
+      "releaseDate": "2024-11-03",
+      "runtime": 118,
+      "certification": "",
+      "originalLanguage": "en",
+      "originalLanguageName": "English",
+      "popularity": 0.9132,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "Waldo Theatre, Waldoboro"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-15",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Waldo Theatre",
+          "city": "Waldoboro",
+          "theatreWebsite": "thewaldotheatre.org",
+          "ticketLink": "https://www.onthestage.tickets/the-waldo-theatre/widget?widgetStyle=tile&forwardEventId=6abfe547653add760f5c4162&forwardProductionId=6abd40b044487bdaf050e951&newTab=true&campaign=dhY4oFt#/select-tickets",
+          "latitude": 44.0959558,
+          "longitude": -69.3751422
         }
       ]
     },
@@ -4787,6 +5106,55 @@
       ]
     },
     {
+      "id": 579459,
+      "title": "Hen",
+      "year": 2026,
+      "tmdbId": "1382513",
+      "description": "Escaping from a chicken farm, a hen finds refuge in the courtyard of a crumbling restaurant. There, she discovers love, confronts the pecking order, and fights to protect her eggs from a greedy owner. Her droll yet touching quest for motherhood mirrors the messy compromises and silent struggles of human lives.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/q1HgK2pyhKfWCALvJTN9Gq9gBu4.jpg",
+      "director": "György Pálfi",
+      "genres": [
+        "Adventure",
+        "Drama"
+      ],
+      "stars": [
+        "Yannis Kokiasmenos",
+        "Maria Diakopanagiotou",
+        "Argyris Pandazaras"
+      ],
+      "releaseDate": "2026-02-20",
+      "runtime": 96,
+      "certification": "",
+      "originalLanguage": "el",
+      "originalLanguageName": "Greek",
+      "popularity": 3.9965,
+      "voteAverage": 6.9,
+      "voteCount": 42,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "SPACE Gallery, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-23",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "SPACE Gallery",
+          "city": "Portland",
+          "theatreWebsite": "space538.org",
+          "ticketLink": "https://space538.org/event/hen/",
+          "latitude": 43.655603,
+          "longitude": -70.2613361
+        }
+      ]
+    },
+    {
       "id": 579480,
       "title": "How To Clean A House In 10 Easy Steps",
       "year": 2026,
@@ -4985,10 +5353,81 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "theatres": [
+        "Harbor Theater, Boothbay Harbor",
         "State Cinemas, Calais",
         "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
+        {
+          "date": "2026-11-13",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/klaraandthesun/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-14",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/klaraandthesun/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-15",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/klaraandthesun/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-18",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Open Captions",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/klaraandthesun/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-19",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/klaraandthesun/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
         {
           "date": "2026-11-04",
           "time": "7:00 PM",
@@ -5139,9 +5578,38 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "theatres": [
+        "Lincoln Theater, Damariscotta",
         "PMA Films, Portland"
       ],
       "showings": [
+        {
+          "date": "2026-11-20",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/naza-nr",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-22",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/naza-nr",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
         {
           "date": "2026-11-04",
           "time": "4:00 PM",
@@ -5237,6 +5705,82 @@
           "city": "Portland",
           "theatreWebsite": "portlandmuseum.org",
           "ticketLink": "https://www.portlandmuseum.org/event/pma-films-naza/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
+      "id": 579687,
+      "title": "Once Upon a Time in Harlem",
+      "year": 2026,
+      "tmdbId": "1596300",
+      "description": "A decade after his death, genre-defying filmmaker William Greaves has one last trick up his sleeve with what he considered the most important event he captured on film: a 1972 party he engineered with the living luminaries of the Harlem Renaissance.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/9eukk5gby8NZCwraiC7mloZmasP.jpg",
+      "director": "William Greaves",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [
+        "Aaron Douglas",
+        "Richard Bruce Nugent",
+        "Ernest Crichlow"
+      ],
+      "releaseDate": "2026-10-16",
+      "runtime": 100,
+      "certification": "PG-13",
+      "originalLanguage": "en",
+      "originalLanguageName": "English",
+      "popularity": 2.8958,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-27",
+          "time": "6:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-once-upon-a-time-in-harlem/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-28",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-once-upon-a-time-in-harlem/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-29",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-once-upon-a-time-in-harlem/",
           "latitude": 43.6544005,
           "longitude": -70.2633108
         }
@@ -6474,6 +7018,50 @@
           "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/26538",
           "latitude": 44.8277689,
           "longitude": -68.7524346
+        }
+      ]
+    },
+    {
+      "id": 579776,
+      "title": "Revolutionaries Never Die",
+      "year": 2026,
+      "tmdbId": "1729657",
+      "description": "Seeking to decode a final, unanswered invitation, a filmmaker explores why the renowned Lebanese director Jocelyne Saab reached out for a collaboration just two months before her passing.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/3wO2HtijYiZRHQ0JQ6YZHVKtVud.jpg",
+      "director": "Mohanad Yaqubi",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [],
+      "releaseDate": "2026-08-09",
+      "runtime": 81,
+      "certification": "",
+      "originalLanguage": "fr",
+      "originalLanguageName": "French",
+      "popularity": 0.9243,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-07",
+          "time": "3:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "CIFF Encore",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-x-points-north-revolutionaries-never-die/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
         }
       ]
     },
@@ -8002,6 +8590,55 @@
       ]
     },
     {
+      "id": 579863,
+      "title": "Steel Magnolias",
+      "year": 1989,
+      "tmdbId": "10860",
+      "description": "A young beautician, newly arrived in a small Louisiana town, finds work at the local salon, where a small group of women share a close bond of friendship and welcome her into the fold.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/7ExUSN9s9gX9bhVM17zDLEizano.jpg",
+      "director": "Herbert Ross",
+      "genres": [
+        "Drama",
+        "Comedy"
+      ],
+      "stars": [
+        "Sally Field",
+        "Dolly Parton",
+        "Shirley MacLaine"
+      ],
+      "releaseDate": "1989-11-15",
+      "runtime": 117,
+      "certification": "PG",
+      "originalLanguage": "en",
+      "originalLanguageName": "English",
+      "popularity": 5.7343,
+      "voteAverage": 7.2,
+      "voteCount": 780,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-14",
+          "time": "3:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Makers at the Movies",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-makers-at-the-movies-steel-magnolias-1989/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
       "id": 579870,
       "title": "Street Fighter",
       "year": 2026,
@@ -8984,6 +9621,55 @@
       ]
     },
     {
+      "id": 579909,
+      "title": "The Big Lebowski",
+      "year": 1998,
+      "tmdbId": "115",
+      "description": "Jeffrey 'The Dude' Lebowski, a Los Angeles slacker who only wants to bowl and drink White Russians, is mistaken for another Jeffrey Lebowski, a wheelchair-bound millionaire, and finds himself dragged into a strange series of events involving nihilists, adult film producers, ferrets, errant toes, and large sums of money.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/3bv6WAp6BSxxYvB5ozKFUYuRA8C.jpg",
+      "director": "Joel Coen",
+      "genres": [
+        "Comedy",
+        "Crime"
+      ],
+      "stars": [
+        "Jeff Bridges",
+        "John Goodman",
+        "Julianne Moore"
+      ],
+      "releaseDate": "1998-03-06",
+      "runtime": 117,
+      "certification": "R",
+      "originalLanguage": "en",
+      "originalLanguageName": "English",
+      "popularity": 13.8437,
+      "voteAverage": 7.855,
+      "voteCount": 12753,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "Live at Madrid's, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-21",
+          "time": "6:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Dudesgiving",
+          "theatre": "Live at Madrid's",
+          "city": "Portland",
+          "theatreWebsite": "https://www.liveatmadrids.com/",
+          "ticketLink": "https://www.tixr.com/groups/liveatmadrids/events/dudesgiving-thanksgiving-lebowski-fest-213007",
+          "latitude": 43.6611966,
+          "longitude": -70.2467973
+        }
+      ]
+    },
+    {
       "id": 579940,
       "title": "The Devil Wears Prada 2",
       "year": 2026,
@@ -9183,6 +9869,125 @@
       ]
     },
     {
+      "id": 579970,
+      "title": "The History of Concrete",
+      "year": 2026,
+      "tmdbId": "1596296",
+      "description": "After attending a workshop on how to write and sell a Hallmark movie, filmmaker John Wilson tries to use the same formula to sell a documentary about concrete.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/2GWR1g1VdUNnNpLh6XfAQ6LVfyd.jpg",
+      "director": "John Wilson",
+      "genres": [
+        "Documentary",
+        "Comedy"
+      ],
+      "stars": [
+        "John Wilson",
+        "Michael Imperioli",
+        "Jack Macco"
+      ],
+      "releaseDate": "2026-09-18",
+      "runtime": 101,
+      "certification": "NR",
+      "originalLanguage": "en",
+      "originalLanguageName": "English",
+      "popularity": 4.495,
+      "voteAverage": 7,
+      "voteCount": 10,
+      "staffFavorite": true,
+      "staffFavoriteBy": "Charlie",
+      "featuredOnPlayweek": true,
+      "featuredOnPlayweekUrl": "https://themaineplayweek.substack.com/p/a-foundational-work",
+      "theatres": [
+        "Lincoln Theater, Damariscotta"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-06",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/the-history-of-concrete-nr",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-07",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/the-history-of-concrete-nr",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-07",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/the-history-of-concrete-nr",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-11",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/the-history-of-concrete-nr",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-11",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/the-history-of-concrete-nr",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-12",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/the-history-of-concrete-nr",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        }
+      ]
+    },
+    {
       "id": 579981,
       "title": "The Hustler",
       "year": 1961,
@@ -9256,6 +10061,55 @@
           "ticketLink": "https://www.zeffy.com/en-US/ticketing/the-hustler",
           "latitude": 43.6425626,
           "longitude": -70.2775744
+        }
+      ]
+    },
+    {
+      "id": 579982,
+      "title": "The Illusion of an Everlasting Summer",
+      "year": 2026,
+      "tmdbId": "1729643",
+      "description": "Filmed over 25 years, acclaimed photographer Alessandra Sanguinetti traces the lives of two inseparable cousins in the Argentine farmlands, beginning as a childhood game of fantasy and evolving into a profound collaborative study of time, memory, and womanhood.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/pSTyPDEnDB6OQFDShkKFZzNY5Ve.jpg",
+      "director": "Alessandra Sanguinetti",
+      "genres": [
+        "Drama",
+        "Documentary"
+      ],
+      "stars": [
+        "Guillermina Aranciaga",
+        "Belinda Stutz",
+        "Juana Falconet"
+      ],
+      "releaseDate": "2026-08-08",
+      "runtime": 94,
+      "certification": "",
+      "originalLanguage": "es",
+      "originalLanguageName": "Spanish",
+      "popularity": 2.5324,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-06",
+          "time": "6:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "CIFF Encore",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-x-points-north-the-illusion-of-an-everlasting-summer/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
         }
       ]
     },
@@ -9387,6 +10241,55 @@
       ]
     },
     {
+      "id": 579993,
+      "title": "The Last Waltz",
+      "year": 1978,
+      "tmdbId": "13963",
+      "description": "Martin Scorsese's documentary intertwines footage from The Band's incredible farewell tour with probing backstage interviews and featured performances by Bob Dylan, Joni Mitchell, Van Morrison, Eric Clapton, and other rock legends.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/2K7CFH0AIHnGrA4yQjPCoIB5CmQ.jpg",
+      "director": "Martin Scorsese",
+      "genres": [
+        "Documentary",
+        "Music"
+      ],
+      "stars": [
+        "Robbie Robertson",
+        "Rick Danko",
+        "Levon Helm"
+      ],
+      "releaseDate": "1978-04-26",
+      "runtime": 117,
+      "certification": "PG",
+      "originalLanguage": "en",
+      "originalLanguageName": "English",
+      "popularity": 2.5857,
+      "voteAverage": 7.7,
+      "voteCount": 327,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "Waldo Theatre, Waldoboro"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-27",
+          "time": "6:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Waldo Theatre",
+          "city": "Waldoboro",
+          "theatreWebsite": "thewaldotheatre.org",
+          "ticketLink": "https://www.onthestage.tickets/the-waldo-theatre/widget?widgetStyle=tile&forwardEventId=6abfe55e2557c02072e5674c&forwardProductionId=6abd41e844487bdaf0511966&newTab=true&campaign=dhY4oFt#/select-tickets",
+          "latitude": 44.0959558,
+          "longitude": -69.3751422
+        }
+      ]
+    },
+    {
       "id": 579999,
       "title": "The Lord of the Rings: The Fellowship of the Ring",
       "year": 2001,
@@ -9465,9 +10368,24 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "theatres": [
+        "Eveningstar Cinema, Brunswick",
         "Grand Theatre, Ellsworth"
       ],
       "showings": [
+        {
+          "date": "2026-11-04",
+          "time": "1:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Eveningstar Cinema",
+          "city": "Brunswick",
+          "theatreWebsite": "eveningstarcinema.com",
+          "ticketLink": "https://www.eveningstarcinema.com/movies/1000048083-the-metropolitan-opera-macbeth-encore-2026/",
+          "latitude": 43.9148381,
+          "longitude": -69.9636894
+        },
         {
           "date": "2026-11-07",
           "time": "12:00 PM",
@@ -9847,6 +10765,52 @@
           "city": "Damariscotta",
           "theatreWebsite": "lincolntheatre.org",
           "ticketLink": "https://www.lincolntheater.org/films-events/the-weight-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        }
+      ]
+    },
+    {
+      "id": 580098,
+      "title": "The Work in Progress",
+      "year": 2026,
+      "tmdbId": "1748754",
+      "description": "Follows Americans engaging in face-to-face conversations about cultural, political, economic, and generational divisions across seven states.",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/mQul1qyf1GvKD2L2Fil8BbhCAVC.jpg",
+      "director": "Ian Cheney",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [
+        "Robert Reich"
+      ],
+      "releaseDate": "2026-09-04",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "en",
+      "originalLanguageName": "",
+      "popularity": 1.1302,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "Lincoln Theater, Damariscotta"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-19",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Q&A with director Ian Cheney",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/the-work-in-progress",
           "latitude": 44.032829284668,
           "longitude": -69.5312042236328
         }
@@ -11351,6 +12315,7 @@
       "theatres": [
         "Alamo Theatre, Bucksport",
         "Black Bear Cinemas, Orono",
+        "Harbor Theater, Boothbay Harbor",
         "Nickelodeon Cinemas, Portland",
         "Flagship Cinemas, Falmouth",
         "Flagship Cinemas, Auburn",
@@ -11544,6 +12509,76 @@
           "ticketLink": "blackbearcinemas.com",
           "latitude": 44.9059551,
           "longitude": -68.6911612
+        },
+        {
+          "date": "2026-11-06",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/wicker/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-07",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/wicker/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-08",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/wicker/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-11",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Open Captions",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/wicker/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-12",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/wicker/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
         },
         {
           "date": "2026-11-02",
@@ -14966,9 +16001,11 @@
         "Alamo Theatre, Bucksport",
         "Black Bear Cinemas, Orono",
         "Entertainment Luxury Cinemas, South Portland",
+        "Lincoln Theater, Damariscotta",
         "Maine Film Center, Waterville",
         "Narrow Gauge Cinema, Farmington",
         "Nickelodeon Cinemas, Portland",
+        "PMA Films, Portland",
         "Strand Theatre, Rockland",
         "The Gem Theater, Bethel",
         "Flagship Cinemas, Falmouth",
@@ -15336,6 +16373,90 @@
           "longitude": -70.3244985
         },
         {
+          "date": "2026-11-27",
+          "time": "6:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/you-can-see-everything-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-28",
+          "time": "6:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/you-can-see-everything-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-11-29",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/you-can-see-everything-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-12-02",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Open Captions",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/you-can-see-everything-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-12-02",
+          "time": "6:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/you-can-see-everything-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-12-03",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/you-can-see-everything-r",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
           "date": "2026-11-02",
           "time": "3:30 PM",
           "isPremium": false,
@@ -15656,6 +16777,20 @@
           "ticketLink": "https://www.patriotcinemas.com/movie/you-can-see-everything",
           "latitude": 43.6575821,
           "longitude": -70.2558618
+        },
+        {
+          "date": "2026-11-27",
+          "time": "2:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-you-can-see-everything/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
         },
         {
           "date": "2026-11-06",
@@ -20568,6 +21703,7 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "theatres": [
+        "Harbor Theater, Boothbay Harbor",
         "Flagship Cinemas, Falmouth",
         "Flagship Cinemas, Auburn",
         "Flagship Cinemas, Thomaston",
@@ -20581,6 +21717,76 @@
         "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
+        {
+          "date": "2026-11-20",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/thecatinthehat/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-21",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/thecatinthehat/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-22",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/thecatinthehat/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-25",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Open Captions",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/thecatinthehat/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-26",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/thecatinthehat/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
         {
           "date": "2026-11-05",
           "time": "2:05 PM",
@@ -22403,6 +23609,959 @@
           "ticketLink": "https://www.portlandmuseum.org/event/pma-films-a-few-small-odysseys-walkabout-1971/",
           "latitude": 43.6544005,
           "longitude": -70.2633108
+        }
+      ]
+    },
+    {
+      "id": 580253,
+      "title": "Possible Love",
+      "year": 2026,
+      "tmdbId": "1483525",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/dLz9yHeLw4x4sD0WTSNi7HuK2ke.jpg",
+      "director": "Lee Chang-dong",
+      "genres": [
+        "Drama"
+      ],
+      "stars": [
+        "Jeon Do-yeon",
+        "Sul Kyung-gu",
+        "Zo In-sung"
+      ],
+      "releaseDate": "2026-09-23",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 10.8045,
+      "voteAverage": 7.9,
+      "voteCount": 12,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-06",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-possible-love/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-08",
+          "time": "3:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-possible-love/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-12",
+          "time": "3:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-possible-love/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
+      "id": 580254,
+      "title": "Fatherland",
+      "year": 2026,
+      "tmdbId": "1437696",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/oNejN1l69nBF8LdQwy5FkAQZT44.jpg",
+      "director": "Paweł Pawlikowski",
+      "genres": [
+        "Drama",
+        "History"
+      ],
+      "stars": [
+        "Sandra Hüller",
+        "Hanns Zischler",
+        "August Diehl"
+      ],
+      "releaseDate": "2026-06-19",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 19.8967,
+      "voteAverage": 7.3,
+      "voteCount": 62,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-20",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-fatherland/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-20",
+          "time": "6:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-fatherland/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-21",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-fatherland/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-22",
+          "time": "3:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-fatherland/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-25",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-fatherland/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-25",
+          "time": "3:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-fatherland/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-27",
+          "time": "12:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-fatherland/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-28",
+          "time": "2:15 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-fatherland/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-29",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-fatherland/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-29",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-fatherland/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
+      "id": 580255,
+      "title": "My Undesirable Friends: Part II - Exile",
+      "year": 2026,
+      "tmdbId": "1594307",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/zt2bViOzNGvq4C8al6ub7x87433.jpg",
+      "director": "Julia Loktev",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [
+        "Anna Nemzer",
+        "Valeria Ratnikova",
+        "Ksenia Mironova"
+      ],
+      "releaseDate": "2026-10-09",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 2.1431,
+      "voteAverage": 8,
+      "voteCount": 1,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-21",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Chapters 1-3",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-my-undesirable-friends-part-ii-exile-chapters-1-3/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        },
+        {
+          "date": "2026-11-22",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Chapters 4-5",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-my-undesirable-friends-part-ii-exile-chapters-1-3/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
+      "id": 580256,
+      "title": "O Brother, Where Art Thou?",
+      "year": 2000,
+      "tmdbId": "134",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/2YztYilviFCYcEtDAnrOstUWGie.jpg",
+      "director": "Joel Coen",
+      "genres": [
+        "Adventure",
+        "Comedy",
+        "Crime"
+      ],
+      "stars": [
+        "George Clooney",
+        "John Turturro",
+        "Tim Blake Nelson"
+      ],
+      "releaseDate": "2000-08-30",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 9.0296,
+      "voteAverage": 7.329,
+      "voteCount": 4824,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "PMA Films, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-28",
+          "time": "4:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "PMA Films",
+          "city": "Portland",
+          "theatreWebsite": "portlandmuseum.org",
+          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-a-few-small-odysseys-o-brother-where-art-thou-2000/",
+          "latitude": 43.6544005,
+          "longitude": -70.2633108
+        }
+      ]
+    },
+    {
+      "id": 580257,
+      "title": "Fugs Film!",
+      "year": 2025,
+      "tmdbId": "1567804",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/e8QsF8FR3cni0Ra0B2DQHlif4pI.jpg",
+      "director": "Chuck Smith",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [],
+      "releaseDate": "2025-11-20",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 1.9266,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "SPACE Gallery, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-16",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Q&A with director Chuck Smith",
+          "theatre": "SPACE Gallery",
+          "city": "Portland",
+          "theatreWebsite": "space538.org",
+          "ticketLink": "https://space538.org/event/fugs-film/",
+          "latitude": 43.655603,
+          "longitude": -70.2613361
+        }
+      ]
+    },
+    {
+      "id": 580258,
+      "title": "Powwow People",
+      "year": 2025,
+      "tmdbId": "1249271",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/mSg1slgGPe3xTBntfAWxpvTEOrT.jpg",
+      "director": "Sky Hopinka",
+      "genres": [
+        "Documentary"
+      ],
+      "stars": [],
+      "releaseDate": "2025-09-09",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 3.0428,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "SPACE Gallery, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-30",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "SPACE Gallery",
+          "city": "Portland",
+          "theatreWebsite": "space538.org",
+          "ticketLink": "https://space538.org/event/powwow-people/",
+          "latitude": 43.655603,
+          "longitude": -70.2613361
+        }
+      ]
+    },
+    {
+      "id": 580259,
+      "title": "What Will I Become?",
+      "year": 2026,
+      "tmdbId": "1557013",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/3AH3Ipi9yIoIGGwrmIg6IZIetet.jpg",
+      "director": "Lexie Bean",
+      "genres": [
+        "Documentary",
+        "Animation",
+        "Drama",
+        "Music"
+      ],
+      "stars": [
+        "Lexie Bean",
+        "Logan Rozos",
+        "Blake Brockington"
+      ],
+      "releaseDate": "2026-02-17",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 2.2477,
+      "voteAverage": 10,
+      "voteCount": 1,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "SPACE Gallery, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-21",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Free with RSVP",
+          "theatre": "SPACE Gallery",
+          "city": "Portland",
+          "theatreWebsite": "space538.org",
+          "ticketLink": "https://space538.org/event/what-will-i-become/",
+          "latitude": 43.655603,
+          "longitude": -70.2613361
+        }
+      ]
+    },
+    {
+      "id": 580260,
+      "title": "Actually, It Is Rocket Science",
+      "year": 2026,
+      "tmdbId": "1795979",
+      "description": "",
+      "posterUrl": "",
+      "director": "",
+      "genres": [],
+      "stars": [],
+      "releaseDate": "",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 0.4879,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "Live at Madrid's, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-17",
+          "time": "6:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Live at Madrid's",
+          "city": "Portland",
+          "theatreWebsite": "https://www.liveatmadrids.com/",
+          "ticketLink": "https://statetheatreportland.com/events/teton-gravity-research/",
+          "latitude": 43.6611966,
+          "longitude": -70.2467973
+        }
+      ]
+    },
+    {
+      "id": 580261,
+      "title": "These People",
+      "year": 2026,
+      "tmdbId": "1776667",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/wljuL5ocaeMoycYsWrQYZDhYhpG.jpg",
+      "director": "Cory McAbee",
+      "genres": [
+        "History"
+      ],
+      "stars": [
+        "Cory McAbee"
+      ],
+      "releaseDate": "2026-09-24",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 1.5912,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "The Apohadion Theater, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-22",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Q&A with director Cory McAbee",
+          "theatre": "The Apohadion Theater",
+          "city": "Portland",
+          "theatreWebsite": "https://apohadiontheater.org/",
+          "ticketLink": "https://apohadiontheater.org/",
+          "latitude": 43.6607322,
+          "longitude": -70.2648727
+        }
+      ]
+    },
+    {
+      "id": 580262,
+      "title": "Top Hat",
+      "year": 1935,
+      "tmdbId": "3080",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/qoPBiN6PBs2NsP7BNOJGCnmwruG.jpg",
+      "director": "Mark Sandrich",
+      "genres": [
+        "Music",
+        "Comedy",
+        "Romance"
+      ],
+      "stars": [
+        "Fred Astaire",
+        "Ginger Rogers",
+        "Edward Everett Horton"
+      ],
+      "releaseDate": "1935-08-29",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 2.8872,
+      "voteAverage": 7.24,
+      "voteCount": 354,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "Waldo Theatre, Waldoboro"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-12",
+          "time": "6:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Waldo Theatre",
+          "city": "Waldoboro",
+          "theatreWebsite": "thewaldotheatre.org",
+          "ticketLink": "https://www.onthestage.tickets/the-waldo-theatre/widget?widgetStyle=tile&forwardEventId=6ace7bc81b3bec2df20a1bca&forwardProductionId=6ace36dd86a0211f2256e385&newTab=true&campaign=dhY4oFt#/select-tickets",
+          "latitude": 44.0959558,
+          "longitude": -69.3751422
+        }
+      ]
+    },
+    {
+      "id": 580263,
+      "title": "Ebenezer",
+      "year": 2026,
+      "tmdbId": "1567605",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/6H2N59jJW1hZEzn2ZdrMvJw5vNI.jpg",
+      "director": "Ti West",
+      "genres": [
+        "Fantasy",
+        "Comedy"
+      ],
+      "stars": [
+        "Johnny Depp",
+        "Rupert Grint",
+        "Daisy Ridley"
+      ],
+      "releaseDate": "2026-11-11",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 20.3507,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "Harbor Theater, Boothbay Harbor"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-27",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/ebenezer/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-28",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/ebenezer/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-29",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/ebenezer/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-12-02",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Open Captions",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/ebenezer/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-12-03",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "https://boothbaycinema.org/ebenezer/",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        }
+      ]
+    },
+    {
+      "id": 580264,
+      "title": "Gremlins",
+      "year": 1984,
+      "tmdbId": "927",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/6m0F7fsXjQvUbCZrPWcJNrjvIui.jpg",
+      "director": "Joe Dante",
+      "genres": [
+        "Fantasy",
+        "Horror",
+        "Comedy"
+      ],
+      "stars": [
+        "Zach Galligan",
+        "Phoebe Cates",
+        "Hoyt Axton"
+      ],
+      "releaseDate": "1984-06-08",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 17.4067,
+      "voteAverage": 7.147,
+      "voteCount": 7244,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "Lincoln Theater, Damariscotta"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-08",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Free Screening",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/gremlins-(1984%3B-pg)",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        }
+      ]
+    },
+    {
+      "id": 580266,
+      "title": "Going My Way",
+      "year": 1944,
+      "tmdbId": "17661",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/838yNJnOk6iZj5YK1MoKiN2n1hw.jpg",
+      "director": "Leo McCarey",
+      "genres": [
+        "Drama",
+        "Comedy",
+        "Music"
+      ],
+      "stars": [
+        "Bing Crosby",
+        "Barry Fitzgerald",
+        "Frank McHugh"
+      ],
+      "releaseDate": "1944-01-01",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 2.5268,
+      "voteAverage": 6.7,
+      "voteCount": 206,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "Lincoln Theater, Damariscotta"
+      ],
+      "showings": [
+        {
+          "date": "2026-12-03",
+          "time": "7:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/going-my-way-(1944)",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        },
+        {
+          "date": "2026-12-04",
+          "time": "1:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/going-my-way-(1944)",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        }
+      ]
+    },
+    {
+      "id": 580267,
+      "title": "The Muppet Christmas Carol",
+      "year": 1992,
+      "tmdbId": "10437",
+      "description": "",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/ssrV29QSVVJuemBHho0Qx7pFYak.jpg",
+      "director": "Brian Henson",
+      "genres": [
+        "Music",
+        "Comedy",
+        "Family",
+        "Fantasy",
+        "Drama"
+      ],
+      "stars": [
+        "Michael Caine",
+        "Dave Goelz",
+        "Steve Whitmire"
+      ],
+      "releaseDate": "1992-12-11",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 5.7741,
+      "voteAverage": 7.5,
+      "voteCount": 1229,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "Lincoln Theater, Damariscotta"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-28",
+          "time": "12:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "Free screening",
+          "theatre": "Lincoln Theater",
+          "city": "Damariscotta",
+          "theatreWebsite": "lincolntheatre.org",
+          "ticketLink": "https://www.lincolntheater.org/films-events/free-meet-santa-the-muppet-christmas-carol",
+          "latitude": 44.032829284668,
+          "longitude": -69.5312042236328
+        }
+      ]
+    },
+    {
+      "id": 580268,
+      "title": "Warren Miller's Days Off",
+      "year": 2026,
+      "tmdbId": "",
+      "description": "",
+      "posterUrl": "",
+      "director": "",
+      "genres": [],
+      "stars": [],
+      "releaseDate": "",
+      "runtime": 0,
+      "certification": "",
+      "originalLanguage": "",
+      "originalLanguageName": "",
+      "popularity": 0,
+      "voteAverage": 0,
+      "voteCount": 0,
+      "staffFavorite": false,
+      "staffFavoriteBy": "",
+      "featuredOnPlayweek": false,
+      "featuredOnPlayweekUrl": "",
+      "theatres": [
+        "State Theatre, Portland"
+      ],
+      "showings": [
+        {
+          "date": "2026-11-21",
+          "time": "6:30 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "State Theatre",
+          "city": "Portland",
+          "theatreWebsite": "statetheatreportland.com",
+          "ticketLink": "https://statetheatreportland.com/events/warren-miller/",
+          "latitude": 43.6539661,
+          "longitude": -70.2636208
         }
       ]
     }
