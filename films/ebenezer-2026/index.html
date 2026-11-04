@@ -132,7 +132,43 @@
 
       <section class="group-card film-showtimes-box">
         <h2 class="film-showtimes-heading">Showtimes by Theatre</h2>
-        
+        <div class="film-location">
+          <p id="filmLocationSorted" class="film-location-sorted" hidden>
+            Nearest first from
+            <button id="filmLocationChip" class="location-chip film-location-chip" type="button" popovertarget="filmLocationPopover" aria-expanded="false">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              <span id="filmLocationChipLabel" class="location-chip-label"></span>
+            </button>
+          </p>
+          <div id="filmLocationPrompt" class="film-location-prompt">
+            <p class="film-location-prompt-copy">Where are you watching from? We'll put the nearest theatres first.</p>
+            <div class="location-picker">
+            <button class="location-device-btn" type="button" data-action="use-device-location">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              Use my location
+            </button>
+            <form class="location-zip-form" novalidate>
+              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
+              <button class="ghost-btn" type="submit">Go</button>
+            </form>
+            <p class="location-picker-message" role="status" aria-live="polite"></p>
+          </div>
+          </div>
+        </div>
+        <div id="filmLocationPopover" class="location-popover" popover role="dialog" aria-labelledby="filmLocationPopoverTitle">
+          <h2 id="filmLocationPopoverTitle" class="location-popover-title">Your location</h2>
+          <div class="location-picker">
+            <button class="location-device-btn" type="button" data-action="use-device-location">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              Use my location
+            </button>
+            <form class="location-zip-form" novalidate>
+              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
+              <button class="ghost-btn" type="submit">Go</button>
+            </form>
+            <p class="location-picker-message" role="status" aria-live="polite"></p>
+          </div>
+        </div>
         <div class="show-list"><article class="show-item">
         <div class="show-row">
           <div
@@ -177,6 +213,83 @@
             <div class="show-schedule show-schedule-extra">
               <article class="show-day-card" data-date="2026-12-03">
                 <h3 class="show-schedule-day">Thu, Dec 3</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.0541236"
+            data-theatre-lng="-70.7082496"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Magic Lantern Theater
+                <span class="show-main-city">Bridgton<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://internet-ticketing.com/websales/sales/MAGBRI/start?film=40" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Magic Lantern Theater">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  
+                </div>
+              </article></div>
+            
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="46.1259988"
+            data-theatre-lng="-67.8403909"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Temple Theatre
+                <span class="show-main-city">Houlton<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://templehoulton.com/amy_movie/ebenezer/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Temple Theatre">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="13:00">1:00 PM</span><span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="13:00">1:00 PM</span><span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-18">
+                <h3 class="show-schedule-day">Wed, Nov 18</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 1 more day</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-19">
+                <h3 class="show-schedule-day">Thu, Nov 19</h3>
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
                   
