@@ -148,6 +148,28 @@ export async function fetchJsonInPage(page, url) {
   throw new Error(`${url}: request kept failing`);
 }
 
+/**
+ * Adds AM/PM to a film's times for a day, for sites that list them as "7:15". The times are
+ * in order. Noon through 8:59 are PM. 9:00 through 11:59 are AM before one of those and PM
+ * after one. A time that leaves unclear, or that can't be read, comes back null.
+ */
+export function addMeridiems(times) {
+  const hours = times.map(time => {
+    const match = String(time).match(/^(\d{1,2}):[0-5]\d$/);
+    const hour = match ? Number(match[1]) : 0;
+    return hour >= 1 && hour <= 12 ? hour : null;
+  });
+  const isAfternoon = hour => hour === 12 || (hour >= 1 && hour <= 8);
+  return times.map((time, index) => {
+    const hour = hours[index];
+    if (hour === null) return null;
+    if (isAfternoon(hour)) return `${time} PM`;
+    if (hours.slice(index + 1).some(isAfternoon)) return `${time} AM`;
+    if (hours.slice(0, index).some(isAfternoon)) return `${time} PM`;
+    return null;
+  });
+}
+
 function escapeCsvCell(cell) {
   const str = String(cell || '');
   return /[",\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str;

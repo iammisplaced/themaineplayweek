@@ -1,4 +1,4 @@
-// Runs every scraper (Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus, Mobile Moviegoing) for all of its theatres and
+// Runs every scraper (Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus, Mobile Moviegoing, Spotlight) for all of its theatres and
 // combines the results into a single CSV, scraped-all-showtimes.csv, in the project folder.
 //
 // Usage: npm run scrape [-- --end=YYYY-MM-DD | -- --days=N]
@@ -20,6 +20,7 @@ const SCRAPERS = [
   { name: 'Apple Cinemas', file: 'scrape-apple-cinema.mjs' },
   { name: 'CinemaPlus (Bangor, South Portland)', file: 'scrape-cinemaplus.mjs' },
   { name: 'Mobile Moviegoing (Orono, Freeport, Portland)', file: 'scrape-mobile-moviegoing.mjs' },
+  { name: 'Spotlight Cinemas (Skowhegan)', file: 'scrape-spotlight.mjs' },
 ];
 
 function runScraper(file, args, outputDir) {

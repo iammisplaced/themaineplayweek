@@ -15,6 +15,7 @@
     "scrape:apple": "node scripts/scrape-apple-cinema.mjs",
     "scrape:cinemaplus": "node scripts/scrape-cinemaplus.mjs",
     "scrape:mobile-moviegoing": "node scripts/scrape-mobile-moviegoing.mjs",
+    "scrape:spotlight": "node scripts/scrape-spotlight.mjs",
     "test": "node --test test/"
   },
   "dependencies": {
