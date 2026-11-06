@@ -132,68 +132,8 @@
 
       <section class="group-card film-showtimes-box">
         <h2 class="film-showtimes-heading">Showtimes by Theatre</h2>
-        <div class="film-location">
-          <p id="filmLocationSorted" class="film-location-sorted" hidden>
-            Nearest first from
-            <button id="filmLocationChip" class="location-chip film-location-chip" type="button" popovertarget="filmLocationPopover" aria-expanded="false">
-              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
-              <span id="filmLocationChipLabel" class="location-chip-label"></span>
-            </button>
-          </p>
-          <div id="filmLocationPrompt" class="film-location-prompt">
-            <p class="film-location-prompt-copy">Where are you watching from? We'll put the nearest theatres first.</p>
-            <div class="location-picker">
-            <button class="location-device-btn" type="button" data-action="use-device-location">
-              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
-              Use my location
-            </button>
-            <form class="location-zip-form" novalidate>
-              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
-              <button class="ghost-btn" type="submit">Go</button>
-            </form>
-            <p class="location-picker-message" role="status" aria-live="polite"></p>
-          </div>
-          </div>
-        </div>
-        <div id="filmLocationPopover" class="location-popover" popover role="dialog" aria-labelledby="filmLocationPopoverTitle">
-          <h2 id="filmLocationPopoverTitle" class="location-popover-title">Your location</h2>
-          <div class="location-picker">
-            <button class="location-device-btn" type="button" data-action="use-device-location">
-              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
-              Use my location
-            </button>
-            <form class="location-zip-form" novalidate>
-              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
-              <button class="ghost-btn" type="submit">Go</button>
-            </form>
-            <p class="location-picker-message" role="status" aria-live="polite"></p>
-          </div>
-        </div>
+        
         <div class="show-list"><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="44.8277689"
-            data-theatre-lng="-68.7524346"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Bangor Mall Cinemas
-                <span class="show-main-city">Bangor<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27691?date=2026-10-29" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Bangor Mall Cinemas">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="13:00">1:00 PM</span><span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="18:30">6:30 PM</span>
-                  
-                </div>
-              </article></div>
-            
-          </div>
-        </div>
-      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.9059551"
@@ -207,13 +147,7 @@
               </div>
               <a class="show-link" href="https://www.blackbearcinemas.com/movie/christmas-at-the-kringles" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Black Bear Cinemas">Tickets</a>
             </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="13:30">1:30 PM</span><span class="show-time-chip" data-time="15:50">3:50 PM</span><span class="show-time-chip" data-time="18:00">6:00 PM</span>
-                  
-                </div>
-              </article><article class="show-day-card" data-date="2026-11-06">
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-06">
                 <h3 class="show-schedule-day">Fri, Nov 6</h3>
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="21:30">9:30 PM</span>
@@ -231,17 +165,17 @@
                   <span class="show-time-chip" data-time="16:00">4:00 PM</span>
                   
                 </div>
-              </article></div>
-            <details class="show-more-days">
-            <summary class="show-more-days-toggle">Show 3 more days</summary>
-            <div class="show-schedule show-schedule-extra">
-              <article class="show-day-card" data-date="2026-11-09">
+              </article><article class="show-day-card" data-date="2026-11-09">
                 <h3 class="show-schedule-day">Mon, Nov 9</h3>
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="16:00">4:00 PM</span>
                   
                 </div>
-              </article><article class="show-day-card" data-date="2026-11-10">
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 2 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-10">
                 <h3 class="show-schedule-day">Tue, Nov 10</h3>
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="16:00">4:00 PM</span>
@@ -256,150 +190,6 @@
               </article>
             </div>
           </details>
-          </div>
-        </div>
-      </article><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="43.6312987"
-            data-theatre-lng="-70.3244985"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Entertainment Luxury Cinemas
-                <span class="show-main-city">South Portland<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://www.entertainmentcinemas.com/the-shops-at-clarks-pond" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Entertainment Luxury Cinemas">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="13:15">1:15 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span><span class="show-time-chip" data-time="18:15">6:15 PM</span><span class="show-time-chip" data-time="20:45">8:45 PM</span>
-                  
-                </div>
-              </article></div>
-            
-          </div>
-        </div>
-      </article><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="44.5428402"
-            data-theatre-lng="-69.6614214"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Flagship Cinemas
-                <span class="show-main-city">Waterville<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://flagshipcinemas.com/waterville/movie/christmas-at-the-kringles/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="13:00">1:00 PM</span>
-                  
-                </div>
-              </article></div>
-            
-          </div>
-        </div>
-      </article><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="43.3004064"
-            data-theatre-lng="-70.583234"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Flagship Cinemas
-                <span class="show-main-city">Wells<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://flagshipcinemas.com/wells/movie/christmas-at-the-kringles/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="12:45">12:45 PM</span>
-                  
-                </div>
-              </article></div>
-            
-          </div>
-        </div>
-      </article><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="43.1490064"
-            data-theatre-lng="-70.6740573"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Regal Cinemas
-                <span class="show-main-city">Augusta<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://www.regmovies.com/movies/christmas-at-the-kringles-ho00023039?date=10-29-2026" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Regal Cinemas">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="16:10">4:10 PM</span><span class="show-time-chip" data-time="19:20">7:20 PM</span>
-                  
-                </div>
-              </article></div>
-            
-          </div>
-        </div>
-      </article><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="43.4143151"
-            data-theatre-lng="-70.7506676"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Smitty&#39;s Entertainment
-                <span class="show-main-city">Sanford<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://www.smittyscinema.com/movie/CHRISTMAS-AT-THE-KRINGLES" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Smitty&#39;s Entertainment">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="19:30">7:30 PM</span>
-                  
-                </div>
-              </article></div>
-            
-          </div>
-        </div>
-      </article><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="43.9381304"
-            data-theatre-lng="-69.9812435"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Smitty&#39;s Entertainment
-                <span class="show-main-city">Topsham<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://www.smittyscinema.com/movie/CHRISTMAS-AT-THE-KRINGLES" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Smitty&#39;s Entertainment">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-05">
-                <h3 class="show-schedule-day">Thu, Nov 5</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="19:10">7:10 PM</span>
-                  
-                </div>
-              </article></div>
-            
           </div>
         </div>
       </article></div>
