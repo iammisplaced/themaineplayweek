@@ -176,23 +176,25 @@ function escapeCsvCell(cell) {
 }
 
 /**
- * Builds an import CSV. Each showing is `{ title, date, time, premium?, year?, tmdbId? }`,
+ * Builds an import CSV. Each showing is `{ title, date, time, premium?, note?, year?, tmdbId? }`,
  * or uses `times: [...]` in place of `time`. `premium` is the format's name ("3D", "IMAX"),
- * or empty for a standard showing. Rows are merged per film + date, premium showings go to
- * premium_show_times with a note naming the format ("7:00 PM: IMAX"), and duplicate times
- * are dropped.
+ * or empty for a standard showing. `note` is extra text for those times ("Open Captions").
+ * Rows are merged per film + date, premium showings go to premium_show_times, each time's
+ * format and note go in notes with the time as a prefix ("7:00 PM: IMAX; 7:00 PM: Open
+ * Captions"), and duplicate times are dropped.
  */
 export function formatShowtimesCsv(showings, theatreName, theatreCity) {
   const grouped = new Map();
   showings.forEach(showing => {
     const key = `${showing.title}|${showing.date}`;
     if (!grouped.has(key)) {
-      grouped.set(key, { title: showing.title, date: showing.date, times: new Set(), premiumTimes: new Map() });
+      grouped.set(key, { title: showing.title, date: showing.date, times: new Set(), premiumTimes: new Map(), timeNotes: [] });
     }
     const entry = grouped.get(key);
     entry.year ||= showing.year;
     entry.tmdbId ||= showing.tmdbId;
     (showing.times || [showing.time]).filter(Boolean).forEach(time => {
+      if (showing.note) entry.timeNotes.push(`${time}: ${showing.note}`);
       if (!showing.premium) {
         entry.times.add(time);
         return;
@@ -204,7 +206,10 @@ export function formatShowtimesCsv(showings, theatreName, theatreCity) {
 
   const rows = [CSV_HEADERS];
   grouped.forEach(showing => {
-    const notes = [...showing.premiumTimes].map(([time, formats]) => `${time}: ${[...formats].join(' · ')}`);
+    const notes = [
+      ...[...showing.premiumTimes].map(([time, formats]) => `${time}: ${[...formats].join(' · ')}`),
+      ...new Set(showing.timeNotes),
+    ];
     rows.push([
       theatreName,
       theatreCity,

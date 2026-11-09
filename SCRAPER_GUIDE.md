@@ -53,7 +53,7 @@ Every scraper writes the same columns as the admin CSV template (see README):
 - `show_date` - `YYYY-MM-DD`
 - `show_times` - pipe-separated, one row per film per date, duplicates removed (e.g. `12:30 PM|3:20 PM|6:00 PM`)
 - `premium_show_times` - premium-format showings: 3D, FPX and 4K Laser at Flagship; 3D, IMAX, RPX, 4DX and ScreenX at Regal; 3D, IMAX, ACX and ScreenX at Apple; 3D and IMAX at CinemaPlus, Mobile Moviegoing and Spotlight. Smitty's and the Maine Film Center don't mark formats.
-- `notes` - names the format of each premium time (`7:00 PM: IMAX; 9:30 PM: 3D`), shown when a visitor hovers or taps the time. Importing adds these to any note already saved for that date instead of replacing it.
+- `notes` - names the format of each premium time (`7:00 PM: IMAX; 9:30 PM: 3D`), and marks open-captioned times at the Maine Film Center (`1:55 PM: Open Captions`), shown when a visitor hovers or taps the time. Importing adds these to any note already saved for that date instead of replacing it.
 - `film_year` - Flagship and Regal (re-releases get the re-release year), and Apple and the Maine Film Center when the title ends in a year like `(2026)`
 - `film_tmdb_id` - Flagship only
 - everything else is left blank for you to fill in
@@ -106,7 +106,7 @@ Titles are used as listed and `film_year` and `film_tmdb_id` are left blank, sin
 
 **Maine Film Center** (no browser). Waterville Creates sells tickets through Spektrix, which has a public JSON API at `boxoffice.watervillecreates.org/watervillecreates/api/v3`. The scraper:
 1. Downloads `/events`, every event the box office has sold (about 25 seconds, it's large), and keeps the ones whose organization is `Maine Film Center` and whose dates overlap the range. Waterville Opera House shows and Ticonic Gallery classes use the same box office and are left out.
-2. Downloads each kept event's `/events/{id}/instances` and takes the start times, which are local time. Cancelled showings and ones marked hidden on the site are skipped (the box office keeps hidden noon placeholders for films that aren't on sale yet).
+2. Downloads each kept event's `/events/{id}/instances` and takes the start times, which are local time. Cancelled showings and ones marked hidden on the site are skipped (the box office keeps hidden noon placeholders for films that aren't on sale yet). A showing marked open captioned gets an `Open Captions` note for its time.
 
 Titles are the box office's event names, which are cleaner than the website's (`The Pervert's Guide to Ideology`, not `Cinema in Conversation: The Pervert's Guide to Ideology`). A trailing year (`Miracle on 34th Street (1947)`) becomes `film_year`, and curly apostrophes become straight ones. Met Opera and National Theatre Live screenings come through like films.
 

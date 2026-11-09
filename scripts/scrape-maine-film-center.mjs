@@ -3,7 +3,8 @@
 // Waterville Creates sells tickets through Spektrix, whose public API lists every event and
 // its showings as plain JSON, so no browser is needed. The same box office sells Opera House
 // shows and gallery classes; only events whose organization is "Maine Film Center" are kept.
-// Times in the API are the theatre's local time.
+// Times in the API are the theatre's local time. Open-captioned showings get an "Open Captions"
+// note.
 //
 // Usage: node scripts/scrape-maine-film-center.mjs [--city=Waterville|all] [--end=YYYY-MM-DD | --days=7]
 
@@ -76,7 +77,8 @@ async function scrapeCity(city, { fromIso, toIso }) {
       if (instance.cancelled || instance.attribute_HideOnSite) continue;
       const start = parseStart(instance.start);
       if (!start || start.date < fromIso || start.date > toIso) continue;
-      showings.push({ title, year, date: start.date, time: start.time });
+      const note = instance.attribute_OpenCaptionedScreening ? 'Open Captions' : '';
+      showings.push({ title, year, date: start.date, time: start.time, note });
     }
   }
 
