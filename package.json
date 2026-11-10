@@ -17,6 +17,7 @@
     "scrape:mobile-moviegoing": "node scripts/scrape-mobile-moviegoing.mjs",
     "scrape:spotlight": "node scripts/scrape-spotlight.mjs",
     "scrape:maine-film-center": "node scripts/scrape-maine-film-center.mjs",
+    "scrape:colonial": "node scripts/scrape-colonial.mjs",
     "test": "node --test test/"
   },
   "dependencies": {

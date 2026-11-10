@@ -86,7 +86,7 @@ What you can do in the panel:
 
 ## Getting showtimes in
 
-The scrapers do most of the work. `npm run scrape` scrapes every Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus, Mobile Moviegoing and Spotlight theatre and writes one file, `scraped-all-showtimes.csv`. Import that file in the admin panel, check the preview and click **Apply**, then click **Save**. `SCRAPER_GUIDE.md` covers options, how each scraper works, and troubleshooting.
+The scrapers do most of the work. `npm run scrape` scrapes every Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus, Mobile Moviegoing, Spotlight, Maine Film Center and Colonial theatre and writes one file, `scraped-all-showtimes.csv`. Import that file in the admin panel, check the preview and click **Apply**, then click **Save**. `SCRAPER_GUIDE.md` covers options, how each scraper works, and troubleshooting.
 
 ### CSV import format
 
