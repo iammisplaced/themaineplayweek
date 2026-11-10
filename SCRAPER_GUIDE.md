@@ -10,7 +10,7 @@ Run `npm install` once, then:
 npm run scrape
 ```
 
-It asks for an end date (leave it blank for the next 7 days), then scrapes every Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus, Mobile Moviegoing, Spotlight and Maine Film Center theatre and saves everything to **one file, `scraped-all-showtimes.csv`**, in the project folder. Import that single file in the admin panel. You can skip the question:
+It asks for an end date (leave it blank for the next 7 days), then scrapes every Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus, Mobile Moviegoing, Spotlight, Maine Film Center and Colonial theatre and saves everything to **one file, `scraped-all-showtimes.csv`**, in the project folder. Import that single file in the admin panel. You can skip the question:
 
 ```bash
 npm run scrape -- --end=2026-11-30   # through Nov 30, inclusive
@@ -29,6 +29,7 @@ npm run scrape -- --days=14          # today plus the next 13 days
 | Mobile Moviegoing sites | `npm run scrape:mobile-moviegoing` | Orono (Black Bear Cinemas), Freeport (Patriot Cinemas at Freeport Village), Portland (Nickelodeon Cinemas) | `scraped-{city}-mobile-moviegoing-showtimes.csv` |
 | Spotlight Cinemas | `npm run scrape:spotlight` | Skowhegan | `scraped-{city}-spotlight-showtimes.csv` |
 | Maine Film Center | `npm run scrape:maine-film-center` | Waterville | `scraped-{city}-maine-film-center-showtimes.csv` |
+| Colonial Theatre | `npm run scrape:colonial` | Belfast | `scraped-{city}-colonial-showtimes.csv` |
 
 These write one CSV per theatre instead of the combined file. They all work the same way. Run with no options and they ask for a city (or `all`) and an end date, or pass options to skip the questions:
 
@@ -48,11 +49,11 @@ npm run scrape:regal -- --city=all --days=3
 ## Output
 
 Every scraper writes the same columns as the admin CSV template (see README):
-- `theatre_name` - `Flagship Cinemas`, `Smitty's Entertainment`, `Regal Cinemas` or `Apple Cinemas`, or the theatre's own name for CinemaPlus, Mobile Moviegoing, Spotlight and Maine Film Center sites (`Bangor Mall Cinemas`, `Black Bear Cinemas`, ...); `theatre_city` tells theatres apart
+- `theatre_name` - `Flagship Cinemas`, `Smitty's Entertainment`, `Regal Cinemas` or `Apple Cinemas`, or the theatre's own name for CinemaPlus, Mobile Moviegoing, Spotlight, Maine Film Center and Colonial sites (`Bangor Mall Cinemas`, `Black Bear Cinemas`, ...); `theatre_city` tells theatres apart
 - `film_title` - movie title as listed by the theatre (Apple titles have extra spaces and a trailing `(2026)` removed; Bangor's titles are all caps on the site and are converted to title case; Mobile Moviegoing titles have extra spaces removed)
 - `show_date` - `YYYY-MM-DD`
 - `show_times` - pipe-separated, one row per film per date, duplicates removed (e.g. `12:30 PM|3:20 PM|6:00 PM`)
-- `premium_show_times` - premium-format showings: 3D, FPX and 4K Laser at Flagship; 3D, IMAX, RPX, 4DX and ScreenX at Regal; 3D, IMAX, ACX and ScreenX at Apple; 3D and IMAX at CinemaPlus, Mobile Moviegoing and Spotlight. Smitty's and the Maine Film Center don't mark formats.
+- `premium_show_times` - premium-format showings: 3D, FPX and 4K Laser at Flagship; 3D, IMAX, RPX, 4DX and ScreenX at Regal; 3D, IMAX, ACX and ScreenX at Apple; 3D and IMAX at CinemaPlus, Mobile Moviegoing and Spotlight. Smitty's, the Maine Film Center and the Colonial don't mark formats.
 - `notes` - names the format of each premium time (`7:00 PM: IMAX; 9:30 PM: 3D`), and marks open-captioned times at the Maine Film Center (`1:55 PM: Open Captions`), shown when a visitor hovers or taps the time. Importing adds these to any note already saved for that date instead of replacing it.
 - `film_year` - Flagship and Regal (re-releases get the re-release year), and Apple and the Maine Film Center when the title ends in a year like `(2026)`
 - `film_tmdb_id` - Flagship only
@@ -110,6 +111,12 @@ Titles are used as listed and `film_year` and `film_tmdb_id` are left blank, sin
 
 Titles are the box office's event names, which are cleaner than the website's (`The Pervert's Guide to Ideology`, not `Cinema in Conversation: The Pervert's Guide to Ideology`). A trailing year (`Miracle on 34th Street (1947)`) becomes `film_year`, and curly apostrophes become straight ones. Met Opera and National Theatre Live screenings come through like films.
 
+**Colonial Theatre** (browser). The Belfast theatre's site (colonialtheatre.com, built on CineSync) loads its schedule from an API that only answers requests the page itself makes, so the scraper works through the page:
+1. Opens the Buy Tickets page and reads the list of dates with showings that the page loads.
+2. Clicks each date in the range in the date picker and reads the films and times the page loads for it.
+
+A film playing in both rooms (City and Star) at the same time is listed once. Special events and one-off screenings come through like films. `film_year` and `film_tmdb_id` are left blank, and every showing is Dolby Atmos, which isn't a premium format. To add another CineSync theatre, add its city, name (as saved in the admin panel) and Buy Tickets URL to `THEATRES` in `scrape-colonial.mjs`.
+
 Timing: a full 7-day `npm run scrape` takes a few minutes; Apple is the slowest, at about one request per film per day.
 
 ## Import to the app
@@ -132,4 +139,5 @@ Timing: a full 7-day `npm run scrape` takes a few minutes; Apple is the slowest,
 - **Mobile Moviegoing: "HTTP 403" on every request**: the API stopped accepting the request. Pick a date on the theatre's site with the Network tab open and compare the `getShowtimesByDayDisplay.php` request with `fetchDay` in `scrape-mobile-moviegoing.mjs`; the `eid` or location ID may have changed.
 - **Spotlight: "no showtimes found on the page"**: the site changed its markup. Compare a film card on the Skowhegan page with `parseDayPage` in `scrape-spotlight.mjs`.
 - **Maine Film Center: "No showtimes posted" when the website lists some**: the organization name may have changed. Look at `attribute_Organization` on a current film in `/events` and update `THEATRES` in `scrape-maine-film-center.mjs`.
+- **Colonial: "Timed out waiting for..."**: the site changed how it loads the schedule. Open the Buy Tickets page with the Network tab open, click a date, and compare the `cms_widget/index` request and the date buttons (`button.day_card`) with `scrape-colonial.mjs`.
 - **Apple: "request kept failing"**: the API changed. Open a film on applecinemas.com with the Network tab open and compare the `Kiosk/...` requests with the ones in `scrape-apple-cinema.mjs`.
