@@ -132,8 +132,86 @@
 
       <section class="group-card film-showtimes-box">
         <h2 class="film-showtimes-heading">Showtimes by Theatre</h2>
-        
+        <div class="film-location">
+          <p id="filmLocationSorted" class="film-location-sorted" hidden>
+            Nearest first from
+            <button id="filmLocationChip" class="location-chip film-location-chip" type="button" popovertarget="filmLocationPopover" aria-expanded="false">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              <span id="filmLocationChipLabel" class="location-chip-label"></span>
+            </button>
+          </p>
+          <div id="filmLocationPrompt" class="film-location-prompt">
+            <p class="film-location-prompt-copy">Where are you watching from? We'll put the nearest theatres first.</p>
+            <div class="location-picker">
+            <button class="location-device-btn" type="button" data-action="use-device-location">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              Use my location
+            </button>
+            <form class="location-zip-form" novalidate>
+              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
+              <button class="ghost-btn" type="submit">Go</button>
+            </form>
+            <p class="location-picker-message" role="status" aria-live="polite"></p>
+          </div>
+          </div>
+        </div>
+        <div id="filmLocationPopover" class="location-popover" popover role="dialog" aria-labelledby="filmLocationPopoverTitle">
+          <h2 id="filmLocationPopoverTitle" class="location-popover-title">Your location</h2>
+          <div class="location-picker">
+            <button class="location-device-btn" type="button" data-action="use-device-location">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              Use my location
+            </button>
+            <form class="location-zip-form" novalidate>
+              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
+              <button class="ghost-btn" type="submit">Go</button>
+            </form>
+            <p class="location-picker-message" role="status" aria-live="polite"></p>
+          </div>
+        </div>
         <div class="show-list"><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.5285596"
+            data-theatre-lng="-70.4242145"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Apple Cinemas
+                <span class="show-main-city">Saco<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.applecinemas.com/How-to-Rob-a-Bank/611fea26f74bab2423301ee4/6ada612abd16990ca8563c51" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Apple Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="13:30">1:30 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:20">7:20 PM</span><span class="show-time-chip" data-time="22:10">10:10 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="13:30">1:30 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:20">7:20 PM</span><span class="show-time-chip" data-time="22:10">10:10 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="13:30">1:30 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:20">7:20 PM</span><span class="show-time-chip" data-time="22:10">10:10 PM</span>
+                  
+                </div>
+              </article></div>
+            
+          </div>
+        </div>
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="43.6505461"
@@ -153,8 +231,562 @@
                   
                   <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="19:00" tabindex="0" data-note="ACX · ACX">Premium 7:00 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ACX · ACX)</span></span>
                 </div>
+              </article><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="21:00" tabindex="0" data-note="ACX">Premium 9:00 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ACX)</span></span>
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:35">3:35 PM</span>
+                  <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="21:50" tabindex="0" data-note="ACX">Premium 9:50 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ACX)</span></span>
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:35">3:35 PM</span>
+                  <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="21:50" tabindex="0" data-note="ACX">Premium 9:50 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ACX)</span></span>
+                </div>
               </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 1 more day</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:35">3:35 PM</span>
+                  <span class="show-time-chip show-time-chip-premium show-time-noted" data-time="21:50" tabindex="0" data-note="ACX">Premium 9:50 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: ACX)</span></span>
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.8277689"
+            data-theatre-lng="-68.7524346"
+          >
             
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Bangor Mall Cinemas
+                <span class="show-main-city">Bangor<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27835?date=2026-11-13" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Bangor Mall Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span><span class="show-time-chip" data-time="21:45">9:45 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span><span class="show-time-chip" data-time="21:45">9:45 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 2 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-16">
+                <h3 class="show-schedule-day">Mon, Nov 16</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-17">
+                <h3 class="show-schedule-day">Tue, Nov 17</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="15:45">3:45 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.6312987"
+            data-theatre-lng="-70.3244985"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Entertainment Luxury Cinemas
+                <span class="show-main-city">South Portland<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28112?date=2026-11-13" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Entertainment Luxury Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="10:45">10:45 AM</span><span class="show-time-chip" data-time="13:30">1:30 PM</span><span class="show-time-chip" data-time="16:15">4:15 PM</span><span class="show-time-chip" data-time="19:00">7:00 PM</span><span class="show-time-chip" data-time="21:30">9:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="10:45">10:45 AM</span><span class="show-time-chip" data-time="13:30">1:30 PM</span><span class="show-time-chip" data-time="16:15">4:15 PM</span><span class="show-time-chip" data-time="19:00">7:00 PM</span><span class="show-time-chip" data-time="21:30">9:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="11:15">11:15 AM</span><span class="show-time-chip" data-time="14:15">2:15 PM</span><span class="show-time-chip" data-time="17:15">5:15 PM</span><span class="show-time-chip" data-time="20:15">8:15 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-16">
+                <h3 class="show-schedule-day">Mon, Nov 16</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="11:15">11:15 AM</span><span class="show-time-chip" data-time="14:15">2:15 PM</span><span class="show-time-chip" data-time="17:15">5:15 PM</span><span class="show-time-chip" data-time="20:15">8:15 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 1 more day</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-17">
+                <h3 class="show-schedule-day">Tue, Nov 17</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="11:15">11:15 AM</span><span class="show-time-chip" data-time="14:15">2:15 PM</span><span class="show-time-chip" data-time="17:15">5:15 PM</span><span class="show-time-chip" data-time="20:15">8:15 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.127541"
+            data-theatre-lng="-70.2260427"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Auburn<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/auburn/movie/how-to-rob-a-bank/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span><span class="show-time-chip" data-time="21:25">9:25 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="10:00">10:00 AM</span><span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span><span class="show-time-chip" data-time="21:25">9:25 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="10:00">10:00 AM</span><span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span><span class="show-time-chip" data-time="21:25">9:25 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 2 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-16">
+                <h3 class="show-schedule-day">Mon, Nov 16</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-17">
+                <h3 class="show-schedule-day">Tue, Nov 17</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.7204846"
+            data-theatre-lng="-70.2352727"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Falmouth<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/falmouth/movie/how-to-rob-a-bank/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span><span class="show-time-chip" data-time="21:25">9:25 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span><span class="show-time-chip" data-time="21:25">9:25 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 2 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-16">
+                <h3 class="show-schedule-day">Mon, Nov 16</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-17">
+                <h3 class="show-schedule-day">Tue, Nov 17</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.0958045"
+            data-theatre-lng="-69.1374609"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Thomaston<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/thomaston/movie/how-to-rob-a-bank/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="10:00">10:00 AM</span><span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 2 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-16">
+                <h3 class="show-schedule-day">Mon, Nov 16</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-17">
+                <h3 class="show-schedule-day">Tue, Nov 17</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.5428402"
+            data-theatre-lng="-69.6614214"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Waterville<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/waterville/movie/how-to-rob-a-bank/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span><span class="show-time-chip" data-time="21:25">9:25 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="10:00">10:00 AM</span><span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span><span class="show-time-chip" data-time="21:25">9:25 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="10:00">10:00 AM</span><span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 2 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-16">
+                <h3 class="show-schedule-day">Mon, Nov 16</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-17">
+                <h3 class="show-schedule-day">Tue, Nov 17</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:40">12:40 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.3004064"
+            data-theatre-lng="-70.583234"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Wells<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/wells/movie/how-to-rob-a-bank/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="13:05">1:05 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="13:05">1:05 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="13:05">1:05 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 2 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-16">
+                <h3 class="show-schedule-day">Mon, Nov 16</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="13:05">1:05 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-17">
+                <h3 class="show-schedule-day">Tue, Nov 17</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="13:05">1:05 PM</span><span class="show-time-chip" data-time="15:40">3:40 PM</span><span class="show-time-chip" data-time="18:45">6:45 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.1490064"
+            data-theatre-lng="-70.6740573"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Regal Cinemas
+                <span class="show-main-city">Augusta<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.regmovies.com/movies/how-to-rob-a-bank-ho00022799?date=11-12-2026" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Regal Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="19:20">7:20 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:20">12:20 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:50">6:50 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:20">12:20 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:50">6:50 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:20">12:20 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:50">6:50 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 2 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-16">
+                <h3 class="show-schedule-day">Mon, Nov 16</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:20">12:20 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:50">6:50 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-17">
+                <h3 class="show-schedule-day">Tue, Nov 17</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:20">12:20 PM</span><span class="show-time-chip" data-time="15:30">3:30 PM</span><span class="show-time-chip" data-time="18:50">6:50 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.4143151"
+            data-theatre-lng="-70.7506676"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Smitty&#39;s Entertainment
+                <span class="show-main-city">Sanford<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.smittyscinema.com/movie/HOW-TO-ROB-A-BANK" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Smitty&#39;s Entertainment">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-12">
+                <h3 class="show-schedule-day">Thu, Nov 12</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:30">7:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-13">
+                <h3 class="show-schedule-day">Fri, Nov 13</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="16:15">4:15 PM</span><span class="show-time-chip" data-time="19:45">7:45 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-14">
+                <h3 class="show-schedule-day">Sat, Nov 14</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="16:15">4:15 PM</span><span class="show-time-chip" data-time="20:00">8:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-15">
+                <h3 class="show-schedule-day">Sun, Nov 15</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="12:45">12:45 PM</span><span class="show-time-chip" data-time="16:15">4:15 PM</span><span class="show-time-chip" data-time="19:45">7:45 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 2 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-16">
+                <h3 class="show-schedule-day">Mon, Nov 16</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-17">
+                <h3 class="show-schedule-day">Tue, Nov 17</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
           </div>
         </div>
       </article></div>
