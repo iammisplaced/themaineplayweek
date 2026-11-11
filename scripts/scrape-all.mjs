@@ -1,4 +1,4 @@
-// Runs every scraper (Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus, Mobile Moviegoing, Spotlight, Maine Film Center, Colonial) for all of its theatres and
+// Runs every scraper (Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus, Spotlight, Maine Film Center, Colonial) for all of its theatres and
 // combines the results into a single CSV, scraped-all-showtimes.csv, in the project folder.
 //
 // Usage: npm run scrape [-- --end=YYYY-MM-DD | -- --days=N]
@@ -19,7 +19,10 @@ const SCRAPERS = [
   { name: 'Regal', file: 'scrape-regal.mjs' },
   { name: 'Apple Cinemas', file: 'scrape-apple-cinema.mjs' },
   { name: 'CinemaPlus (Bangor, South Portland)', file: 'scrape-cinemaplus.mjs' },
-  { name: 'Mobile Moviegoing (Orono, Freeport, Portland)', file: 'scrape-mobile-moviegoing.mjs' },
+  // Mobile Moviegoing (Orono, Freeport, Portland) is left out since 2026-11-11: its servers now block
+  // scrapers with a 403, so those theatres are entered by hand. scrape-mobile-moviegoing.mjs is kept
+  // (npm run scrape:mobile-moviegoing); add this line back if access is restored:
+  // { name: 'Mobile Moviegoing (Orono, Freeport, Portland)', file: 'scrape-mobile-moviegoing.mjs' },
   { name: 'Spotlight Cinemas (Skowhegan)', file: 'scrape-spotlight.mjs' },
   { name: 'Maine Film Center (Waterville)', file: 'scrape-maine-film-center.mjs' },
   { name: 'Colonial Theatre (Belfast)', file: 'scrape-colonial.mjs' },

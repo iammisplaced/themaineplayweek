@@ -10,7 +10,7 @@ Run `npm install` once, then:
 npm run scrape
 ```
 
-It asks for an end date (leave it blank for the next 7 days), then scrapes every Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus, Mobile Moviegoing, Spotlight, Maine Film Center and Colonial theatre and saves everything to **one file, `scraped-all-showtimes.csv`**, in the project folder. Import that single file in the admin panel. You can skip the question:
+It asks for an end date (leave it blank for the next 7 days), then scrapes every Flagship, Smitty's, Regal, Apple Cinemas, CinemaPlus, Spotlight, Maine Film Center and Colonial theatre (Mobile Moviegoing's theatres are left out; see below) and saves everything to **one file, `scraped-all-showtimes.csv`**, in the project folder. Import that single file in the admin panel. You can skip the question:
 
 ```bash
 npm run scrape -- --end=2026-11-30   # through Nov 30, inclusive
@@ -88,7 +88,7 @@ To add an Apple theatre, add its city and location ID (the last part of its URL 
 
 To add another CinemaPlus theatre, add its city, name (as saved in the admin panel) and showtimes page URL to `THEATRES` in `scrape-cinemaplus.mjs`.
 
-**Mobile Moviegoing** (no browser). Black Bear Cinemas in Orono (blackbearcinemas.com) and Patriot Cinemas' Freeport and Nickelodeon (Portland) theatres (patriotcinemas.com, one site for both) load showtimes from Mobile Moviegoing's JSON API. The scraper:
+**Mobile Moviegoing** (no browser; not part of `npm run scrape` since 2026-11-11). Mobile Moviegoing's servers started blocking scrapers with a 403 in November 2026, so these theatres are entered by hand. We chose not to work around the block. The script is kept in case access is restored; to turn it back on, uncomment its line in `SCRAPERS` in `scripts/scrape-all.mjs`. Black Bear Cinemas in Orono (blackbearcinemas.com) and Patriot Cinemas' Freeport and Nickelodeon (Portland) theatres (patriotcinemas.com, one site for both) load showtimes from Mobile Moviegoing's JSON API. The scraper:
 1. POSTs `{ eid, pos_route: 1, date: YYYYMMDD, mode: 'byDay', location }` to `api-v3.mobilemoviegoing.cloud/include/app/getShowtimesByDayDisplay.php`, the request the site's date bar makes, with the theatre's site as the `origin` header (without it the API answers 403). The first reply's `validDates` says which dates have showings, and each of those dates in the range is fetched. The reply's `current_date` is checked against the date asked for, and a mismatch is skipped with a warning.
 2. Reads each film's `dispName` and its `screenings`. `startTime` is the theatre's local clock time written as a UTC timestamp, so it's read back in UTC.
 3. Showings with a `3D` or `IMAX` attribute (`PREMIUM_FORMATS`) go to `premium_show_times`; `Open Caption`, `Sensory Show` and the rest stay in `show_times`.
@@ -136,7 +136,7 @@ Timing: a full 7-day `npm run scrape` takes a few minutes; Apple is the slowest,
 - **Regal: "request kept failing"**: the `/api/getShowtimes` endpoint changed. Click a date on the theatre page with the Network tab open to see the new request.
 - **Apple: timeout loading applecinemas.com**: the Cloudflare check didn't clear. Run it again.
 - **CinemaPlus: "no showtimes found on the page"**: the site changed its markup. Compare a film card on the theatre page with `parseDayPage` in `scrape-cinemaplus.mjs`.
-- **Mobile Moviegoing: "HTTP 403" on every request**: the API stopped accepting the request. Pick a date on the theatre's site with the Network tab open and compare the `getShowtimesByDayDisplay.php` request with `fetchDay` in `scrape-mobile-moviegoing.mjs`; the `eid` or location ID may have changed.
+- **Mobile Moviegoing: "HTTP 403" on every request**: since November 2026 their load balancer blocks scrapers outright (a bare "403 Forbidden" page from `awselb`), which is why it's out of `npm run scrape`; don't work around that. If the reply is a 403 from the API itself instead, the request may have changed: Pick a date on the theatre's site with the Network tab open and compare the `getShowtimesByDayDisplay.php` request with `fetchDay` in `scrape-mobile-moviegoing.mjs`; the `eid` or location ID may have changed.
 - **Spotlight: "no showtimes found on the page"**: the site changed its markup. Compare a film card on the Skowhegan page with `parseDayPage` in `scrape-spotlight.mjs`.
 - **Maine Film Center: "No showtimes posted" when the website lists some**: the organization name may have changed. Look at `attribute_Organization` on a current film in `/events` and update `THEATRES` in `scrape-maine-film-center.mjs`.
 - **Colonial: "Timed out waiting for..."**: the site changed how it loads the schedule. Open the Buy Tickets page with the Network tab open, click a date, and compare the `cms_widget/index` request and the date buttons (`button.day_card`) with `scrape-colonial.mjs`.
