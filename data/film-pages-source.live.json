@@ -35054,11 +35054,14 @@
       "year": 2026,
       "tmdbId": "1795979",
       "description": "Across Bute Inlet, Haines, Japan, Finland, Andorra, Montana, Jay Peak, and Jackson Hole, the world's best skiers continue TGR's study of the fall line. Every mountain is a laboratory. Every descent is an experiment. Is it rocket science?",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
+      "posterUrl": "https://www.tetongravity.com/uploads/2026/08/1200x1860.jpg?auto=webp&auto=webp&optimize=high&quality=70&width=1440",
+      "director": "Steve Jones, Todd Jones",
+      "genres": [
+        "Documentary",
+        "Sports"
+      ],
       "stars": [],
-      "releaseDate": "",
+      "releaseDate": "2026-09-19",
       "runtime": 70,
       "certification": "",
       "originalLanguage": "en",
