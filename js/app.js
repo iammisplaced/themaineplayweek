@@ -38,7 +38,11 @@ import {
 
 const FILM_PAGES_LIVE_SOURCE_URL = "./data/film-pages-source.live.json";
 const FILM_PAGES_SOURCE_URL = "./data/film-pages-source.json";
-const THEME_STORAGE_KEY = "tmp-theme";
+const THEME_STORAGE_KEY = "tmp-theme"; // also read by the inline script in index.html
+// Loading screen timings.
+const SLOW_LOAD_MESSAGE_MS = 5000;
+const SUPABASE_LOAD_TIMEOUT_MS = 10000;
+const FONT_WAIT_MS = 300;
 const VIEW_STORAGE_KEY = "tmp-view";
 const NO_POSTER_IMAGE_URL = "./assets/images/noposter.webp";
 const PLAYWEEK_RECOMMENDS_STAMP_URL = "./assets/images/playweek%20recommends.png";
@@ -166,6 +170,7 @@ const state = {
 
 const elements = {
   appLoader: document.getElementById("appLoader"),
+  appLoaderText: document.getElementById("appLoaderText"),
   controls: document.querySelector(".controls"),
   themeColorMeta: document.querySelector('meta[name="theme-color"]'),
   brandLogo: document.getElementById("brandLogo"),
@@ -215,33 +220,33 @@ const elements = {
 let resizeRenderTimeout = null;
 let logoSpinResetTimeout = null;
 let lastViewportWidth = window.innerWidth;
-let appBootComplete = false;
-let pageLoadComplete = document.readyState === "complete";
-
 setLoadingState(true);
 
-if (!pageLoadComplete) {
-  window.addEventListener(
-    "load",
-    () => {
-      pageLoadComplete = true;
-      syncLoadingState();
-    },
-    { once: true }
-  );
-}
+// The loader comes down as soon as the listings are drawn. It doesn't wait for the window
+// "load" event: that also waits on analytics, the header images and posters, which can hold
+// it up for seconds on a slow phone connection after the showtimes are ready.
+const slowLoadTimer = setTimeout(() => {
+  if (elements.appLoaderText) elements.appLoaderText.textContent = "Still loading, almost there…";
+}, SLOW_LOAD_MESSAGE_MS);
 
 try {
   await init();
   await waitForNextPaint();
+  // Give the fonts a moment so the listings don't visibly change font right after appearing.
+  await Promise.race([document.fonts?.ready, delay(FONT_WAIT_MS)]);
+} catch (error) {
+  console.error(error);
+  if (elements.results) {
+    elements.results.innerHTML =
+      '<p class="no-results-message">Showtimes couldn’t be loaded right now. Please refresh the page to try again.</p>';
+  }
 } finally {
-  appBootComplete = true;
-  syncLoadingState();
+  clearTimeout(slowLoadTimer);
+  setLoadingState(false);
 }
 
-function syncLoadingState() {
-  const shouldShowLoader = !(appBootComplete && pageLoadComplete);
-  setLoadingState(shouldShowLoader);
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function setLoadingState(isLoading) {
@@ -847,7 +852,14 @@ async function loadData() {
 
   if (state.supabase) {
     try {
-      const fromDb = await loadActiveDataFromSupabase(state.supabase, toIsoDate(new Date()));
+      // If Supabase is very slow, stop waiting and use the film pages' copy of the data
+      // (rebuilt daily) rather than leave visitors on the loading screen.
+      const fromDb = await Promise.race([
+        loadActiveDataFromSupabase(state.supabase, toIsoDate(new Date())),
+        delay(SUPABASE_LOAD_TIMEOUT_MS).then(() => {
+          throw new Error(`No response after ${SUPABASE_LOAD_TIMEOUT_MS / 1000} seconds.`);
+        }),
+      ]);
       if (fromDb.theatreGroups.length) {
         validateData({ theatreGroups: fromDb.theatreGroups, festivals: fromDb.festivals || [] });
         state.data = { theatreGroups: fromDb.theatreGroups, festivals: fromDb.festivals || [] };

@@ -4,6 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>The Maine Playweek - Showtimes</title>
+    <!-- Set the theme before anything paints, so dark-mode visitors don't see a light loader first. -->
+    <script>
+      try {
+        var savedTheme = localStorage.getItem("tmp-theme");
+        var theme = savedTheme === "light" || savedTheme === "dark"
+          ? savedTheme
+          : (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {}
+    </script>
+    <!-- Showtimes come from Supabase; open that connection while the scripts download. -->
+    <link rel="preconnect" href="https://rjfsjoratsfqcyyjseqm.supabase.co" crossorigin />
+    <link rel="preconnect" href="https://esm.sh" crossorigin />
+    <link rel="modulepreload" href="js/shared.js" />
+    <link rel="modulepreload" href="js/data.js" />
+    <link rel="modulepreload" href="https://esm.sh/@supabase/supabase-js@2.118.0" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -31,9 +47,12 @@
   <body>
     <div id="appLoader" class="app-loader" role="status" aria-live="polite" aria-hidden="false">
       <div class="app-loader-mark">
+        <p class="app-loader-kicker">Popping the popcorn</p>
         <p class="app-loader-title">The Maine Playweek</p>
-        <span class="app-loader-spinner" aria-hidden="true"></span>
-        <p class="app-loader-text">Loading showtimes...</p>
+        <span class="app-loader-marquee" aria-hidden="true">
+          <i style="--i: 0"></i><i style="--i: 1"></i><i style="--i: 2"></i><i style="--i: 3"></i><i style="--i: 4"></i><i style="--i: 5"></i><i style="--i: 6"></i><i style="--i: 7"></i><i style="--i: 8"></i>
+        </span>
+        <p id="appLoaderText" class="app-loader-text">Loading showtimes…</p>
       </div>
     </div>
 
