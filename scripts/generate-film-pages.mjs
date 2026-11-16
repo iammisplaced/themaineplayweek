@@ -156,12 +156,13 @@ async function readPreviousLastmods() {
   return previous;
 }
 
-// The main page, the quiz and every film page. Only the main page links to the film pages
+// The main page, the quiz, the privacy policy and every film page. Only the main page links to the film pages
 // (from JS), so this is how search engines find them.
 function renderSitemap(entries, siteUrl) {
   const urls = [
     `  <url><loc>${escapeHtml(`${siteUrl}/`)}</loc></url>`,
     `  <url><loc>${escapeHtml(`${siteUrl}/quiz/`)}</loc></url>`,
+    `  <url><loc>${escapeHtml(`${siteUrl}/privacy/`)}</loc></url>`,
     ...entries.map(
       ({ slug, lastmod }) =>
         `  <url>\n    <loc>${escapeHtml(`${siteUrl}/films/${slug}/`)}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`
