@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy | The Maine Playweek</title>
+    <meta
+      name="description"
+      content="How The Maine Playweek's showtimes website and Playweek apps for iPhone and Android handle your information."
+    />
+    <link rel="canonical" href="https://showtimes.themaineplayweek.com/privacy/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png" />
+    <link rel="icon" href="/assets/icons/favicon.ico" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script>
+      // Set before the page draws, so dark mode doesn't flash light first.
+      (() => {
+        let theme = "";
+        try {
+          theme = localStorage.getItem("tmp-theme") || "";
+        } catch {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
+    <style>
+      .policy {
+        width: min(680px, 100%);
+        margin: 0 auto;
+        padding: 2rem 0 3rem;
+        line-height: 1.55;
+      }
+      .policy-logo {
+        display: block;
+        width: 56px;
+        height: 56px;
+        margin-bottom: 1.25rem;
+      }
+      .policy h1 {
+        margin: 0 0 0.35rem;
+        color: var(--accent-2);
+        font-size: 1.8rem;
+      }
+      .policy h2 {
+        margin: 2rem 0 0.5rem;
+        color: var(--accent-2);
+        font-size: 1.25rem;
+      }
+      .policy h3 {
+        margin: 1.4rem 0 0.4rem;
+        font-size: 1.05rem;
+      }
+      .policy p,
+      .policy li {
+        margin: 0 0 0.75rem;
+      }
+      .policy ul {
+        padding-left: 1.25rem;
+      }
+      .policy-updated {
+        color: var(--muted);
+      }
+      .policy a {
+        color: var(--accent-2);
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="policy">
+      <a href="/" aria-label="The Maine Playweek showtimes">
+        <img id="policyLogo" class="policy-logo" src="/assets/brand/TMP%20logo%20dark.png" alt="" />
+      </a>
+      <h1>Privacy Policy</h1>
+      <p class="policy-updated">Last updated November 16, 2026</p>
+
+      <p>
+        The Maine Playweek, LLC ("we") runs the showtimes website at showtimes.themaineplayweek.com and the Playweek
+        apps for iPhone and Android. They show what's playing at cinemas across Maine. This policy explains what
+        information they use, where it goes, and the choices you have.
+      </p>
+      <p>
+        The short version: you don't need an account, and the apps have no ads, analytics or tracking. Your location,
+        watchlist and settings stay on your device. We don't sell or share personal information. The website uses
+        Google Analytics to count visits.
+      </p>
+
+      <h2>The Playweek apps</h2>
+
+      <h3>Location</h3>
+      <p>
+        To show the theatres and showtimes nearest you, the apps can use your device's approximate location (never
+        your precise location), but only if you allow it. You can enter a ZIP code instead, or neither. Your location
+        is used on your device to sort theatres and work out distances. It is not sent to us.
+      </p>
+      <ul>
+        <li>
+          Your device's location service provides your approximate location: Apple's on iPhone, and Google Play
+          services on Android.
+        </li>
+        <li>
+          A ZIP code you enter is turned into a map position by Apple's geocoding service on iPhone, or by
+          <a href="https://www.zippopotam.us" rel="noopener">Zippopotam.us</a> on Android. Only the ZIP code is sent.
+        </li>
+        <li>
+          The map comes from Apple Maps on iPhone and Google Maps on Android. To draw the map, those services receive
+          the area being shown, which may be near you, along with your IP address.
+        </li>
+      </ul>
+      <p>You can turn off location access at any time in your device's settings.</p>
+
+      <h3>Your watchlist and settings</h3>
+      <p>
+        Films you star, films you mark as seen or hidden, your saved location or ZIP code, and your other settings are
+        stored only on your device. We never receive them. Deleting the app deletes them.
+      </p>
+
+      <h3>Film search</h3>
+      <p>
+        When you search for a film to add to your watchlist, what you type is sent to our server, which looks it up
+        with <a href="https://www.themoviedb.org" rel="noopener">The Movie Database (TMDb)</a>. We don't store your
+        searches or link them to you. Results for a search may be cached so that the same search loads faster for
+        everyone.
+      </p>
+
+      <h3>Notifications and widgets</h3>
+      <p>
+        If you allow notifications, the app checks for showtimes in the background and tells you when a starred film
+        starts playing in Maine. This happens on your device. We don't run a notification server, and we don't receive
+        a notification address for your device. Home-screen widgets use the same information already on your device.
+      </p>
+
+      <h3>Loading showtimes</h3>
+      <p>
+        The apps download showtimes, theatre details and film information from our database, which is hosted by
+        Supabase, and film posters from TMDb. Like any internet request, these services see your device's IP address,
+        and their standard server logs may record it. The apps don't send anything that identifies you.
+      </p>
+
+      <h3>Crash reports</h3>
+      <p>
+        If you have chosen to share diagnostics with app developers in your iPhone or Android settings, Apple or Google
+        may share crash reports and basic usage statistics with us. These don't identify you, and we use them only to
+        fix problems.
+      </p>
+
+      <h2>The website</h2>
+      <ul>
+        <li>
+          <strong>Analytics.</strong> We use Google Analytics to understand how many people visit and which pages they
+          use. It sets cookies and collects information such as the pages you view, your browser and device type, and
+          an approximate location based on your IP address. See
+          <a href="https://policies.google.com/technologies/partner-sites" rel="noopener">how Google uses this
+          information</a>. You can opt out with the
+          <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener">Google Analytics opt-out browser add-on</a>
+          or by blocking cookies.
+        </li>
+        <li>
+          <strong>Location.</strong> As in the apps, you can share your approximate location through your browser or
+          enter a ZIP code. Your location stays in your browser. Only a ZIP code is sent, to Zippopotam.us, to find
+          its position.
+        </li>
+        <li>
+          <strong>Saved preferences.</strong> Your location choice, search radius, view and light or dark theme are
+          saved in your browser's local storage, not on our servers. Clearing your browser's site data removes them.
+        </li>
+        <li>
+          <strong>Other services.</strong> Pages load fonts from Google Fonts, film images from TMDb and post images
+          from Substack. Those services receive your IP address. The site is hosted by Vercel, whose server logs may
+          record IP addresses.
+        </li>
+      </ul>
+
+      <h2>Sharing</h2>
+      <p>
+        We don't sell, rent or trade personal information, and we don't share it for advertising. The services named
+        above handle data only as needed to provide what you asked for.
+      </p>
+
+      <h2>Children</h2>
+      <p>
+        The website and apps are for a general audience and aren't directed at children under 13. We don't knowingly
+        collect personal information from children.
+      </p>
+
+      <h2>Changes</h2>
+      <p>
+        If we change this policy, we'll update it on this page and change the date at the top.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about privacy? Email
+        <a href="mailto:privacy-policy@themaineplayweek.com">privacy-policy@themaineplayweek.com</a>.
+      </p>
+      <p>The Maine Playweek, LLC</p>
+
+      <p><a href="/">&larr; See what's playing in Maine</a></p>
+    </main>
+    <script>
+      if (document.documentElement.getAttribute("data-theme") === "dark") {
+        document.getElementById("policyLogo").src = "/assets/brand/TMP%20logo%20light.png";
+      }
+    </script>
+  </body>
+</html>
