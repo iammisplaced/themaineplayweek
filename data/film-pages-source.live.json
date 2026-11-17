@@ -1071,9 +1071,38 @@
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "theatres": [
+        "Harbor Theater, Boothbay Harbor",
         "PMA Films, Portland"
       ],
       "showings": [
+        {
+          "date": "2026-11-20",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "boothbaycinema.org",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
+        {
+          "date": "2026-11-21",
+          "time": "2:00 PM",
+          "isPremium": false,
+          "festivalName": "",
+          "room": "",
+          "notes": "",
+          "theatre": "Harbor Theater",
+          "city": "Boothbay Harbor",
+          "theatreWebsite": "boothbaycinema.org",
+          "ticketLink": "boothbaycinema.org",
+          "latitude": 43.8613565,
+          "longitude": -69.6256982
+        },
         {
           "date": "2026-11-27",
           "time": "6:00 PM",
