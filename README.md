@@ -42,6 +42,7 @@ It's a plain static site (HTML, CSS and JavaScript, with no build step) that rea
 | `scripts/enrich-tmdb-supabase.mjs` | Fills film metadata in Supabase from TMDb (run by the daily Action) |
 | `.github/workflows/` | The two daily Actions |
 | `assets/`, `site.webmanifest` | Icons, logos and images |
+| `.well-known/apple-app-site-association`, `vercel.json` | Lets `/films/*` links open the film in the iOS app when it's installed (universal links). `vercel.json` serves the file as JSON. |
 
 ## Running it locally
 

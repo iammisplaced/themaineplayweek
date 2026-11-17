@@ -1,0 +1,18 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "5JPJRAA9U5.com.themaineplayweek.app",
+          "5JPJRAA9U5.com.themaineplayweek.app.dev"
+        ],
+        "components": [
+          {
+            "/": "/films/*",
+            "comment": "Film pages open the film in the Playweek iOS app when it's installed."
+          }
+        ]
+      }
+    ]
+  }
+}
