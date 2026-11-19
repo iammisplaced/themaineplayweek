@@ -23,9 +23,9 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 47.6984,
-      "voteAverage": 7.2,
-      "voteCount": 16,
+      "popularity": 66.1545,
+      "voteAverage": 6.881,
+      "voteCount": 21,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -34,20 +34,6 @@
         "Lincoln Theater, Damariscotta"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Lincoln Theater",
-          "city": "Damariscotta",
-          "theatreWebsite": "lincolntheatre.org",
-          "ticketLink": "https://www.lincolntheater.org/films-events/a-talent-for-murder-r",
-          "latitude": 44.032829284668,
-          "longitude": -69.5312042236328
-        },
         {
           "date": "2026-11-19",
           "time": "1:00 PM",
@@ -81,7 +67,7 @@
       "certification": "",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 0.6744,
+      "popularity": 0.8124,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -131,36 +117,19 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 74.4631,
-      "voteAverage": 7.4,
-      "voteCount": 455,
+      "popularity": 80.0254,
+      "voteAverage": 7.395,
+      "voteCount": 458,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "theatres": [
-        "Black Bear Cinemas, Orono",
         "Flagship Cinemas, Auburn",
         "Apple Cinemas, Westbrook",
-        "Apple Cinemas, Saco",
-        "Smitty's Entertainment, Sanford",
-        "Regal Cinemas, Augusta"
+        "Apple Cinemas, Saco"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/clayface",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-11-19",
           "time": "4:00 PM",
@@ -176,34 +145,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "notes": "ScreenX",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Clayface/611fe9edf74bab2423301ee0/6abeac60632d5dede5906e38",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Clayface/611fe9edf74bab2423301ee0/6abeac60632d5dede5906e38",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-11-19",
           "time": "12:05 PM",
           "isPremium": false,
@@ -216,34 +157,6 @@
           "ticketLink": "https://www.applecinemas.com/Clayface/611fe9edf74bab2423301ee0/6abeac60632d5dede5906e38",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Clayface/611fe9edf74bab2423301ee0/6abeac60632d5dede5906e38",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Clayface/611fe9edf74bab2423301ee0/6abeac60632d5dede5906e38",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-11-19",
@@ -300,76 +213,6 @@
           "ticketLink": "https://www.applecinemas.com/Clayface/611fe9edf74bab2423301ee0/6abeac60632d5dede5906e38",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/CLAYFACE",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/clayface-ho00021481",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        }
-      ]
-    },
-    {
-      "id": 579331,
-      "title": "Dirigo Docs",
-      "year": 2026,
-      "tmdbId": "",
-      "description": "",
-      "posterUrl": "",
-      "director": "",
-      "genres": [],
-      "stars": [],
-      "releaseDate": "",
-      "runtime": 0,
-      "certification": "",
-      "originalLanguage": "",
-      "originalLanguageName": "",
-      "popularity": 0,
-      "voteAverage": 0,
-      "voteCount": 0,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "theatres": [
-        "SPACE Gallery, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "CIFF Encore",
-          "theatre": "SPACE Gallery",
-          "city": "Portland",
-          "theatreWebsite": "space538.org",
-          "ticketLink": "https://space538.org/event/ciff-encore-dirigo-docs-2026/",
-          "latitude": 43.655603,
-          "longitude": -70.2613361
         }
       ]
     },
@@ -396,9 +239,9 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 12.2719,
+      "popularity": 11.8695,
       "voteAverage": 6.672,
-      "voteCount": 4789,
+      "voteCount": 4790,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -444,7 +287,7 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 3.8381,
+      "popularity": 3.9224,
       "voteAverage": 6.5,
       "voteCount": 4,
       "staffFavorite": false,
@@ -455,20 +298,6 @@
         "Apple Cinemas, Westbrook"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "5:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Everest--The-Other-Side/611fe9edf74bab2423301ee0/6ad90e66bd16990ca8563991",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
         {
           "date": "2026-11-19",
           "time": "12:30 PM",
@@ -730,9 +559,9 @@
       "certification": "R",
       "originalLanguage": "ro",
       "originalLanguageName": "Romanian",
-      "popularity": 40.1606,
-      "voteAverage": 7.229,
-      "voteCount": 109,
+      "popularity": 46.6739,
+      "voteAverage": 7.2,
+      "voteCount": 110,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -863,9 +692,9 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 507.5043,
-      "voteAverage": 7.717,
-      "voteCount": 988,
+      "popularity": 469.9037,
+      "voteAverage": 7.739,
+      "voteCount": 1021,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -912,7 +741,7 @@
       "certification": "",
       "originalLanguage": "el",
       "originalLanguageName": "Greek",
-      "popularity": 2.7369,
+      "popularity": 3.1874,
       "voteAverage": 6.924,
       "voteCount": 46,
       "staffFavorite": false,
@@ -960,7 +789,7 @@
       "certification": "NR",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 2.1067,
+      "popularity": 2.0942,
       "voteAverage": 7.645,
       "voteCount": 498,
       "staffFavorite": false,
@@ -971,20 +800,6 @@
         "Kinonik, Portland"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Kinonik",
-          "city": "Portland",
-          "theatreWebsite": "kinonik.org",
-          "ticketLink": "https://www.zeffy.com/en-US/ticketing/inherit-the-wind-2",
-          "latitude": 43.6425626,
-          "longitude": -70.2775744
-        },
         {
           "date": "2026-11-21",
           "time": "2:00 PM",
@@ -1038,9 +853,9 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 13.7572,
-      "voteAverage": 8.28,
-      "voteCount": 5172,
+      "popularity": 14.2851,
+      "voteAverage": 8.278,
+      "voteCount": 5175,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -1087,7 +902,7 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 34.5884,
+      "popularity": 42.4923,
       "voteAverage": 6.118,
       "voteCount": 34,
       "staffFavorite": false,
@@ -1136,9 +951,9 @@
       "certification": "NR",
       "originalLanguage": "fr",
       "originalLanguageName": "French",
-      "popularity": 2.2975,
-      "voteAverage": 8.05,
-      "voteCount": 477,
+      "popularity": 2.498,
+      "voteAverage": 8.054,
+      "voteCount": 478,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -1183,9 +998,9 @@
       "certification": "NR",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 10.5099,
-      "voteAverage": 7.96,
-      "voteCount": 150,
+      "popularity": 9.5968,
+      "voteAverage": 7.954,
+      "voteCount": 152,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -1224,20 +1039,6 @@
           "longitude": -69.5312042236328
         },
         {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "PMA Films",
-          "city": "Portland",
-          "theatreWebsite": "portlandmuseum.org",
-          "ticketLink": "https://www.portlandmuseum.org/event/pma-films-naza/",
-          "latitude": 43.6544005,
-          "longitude": -70.2633108
-        },
-        {
           "date": "2026-11-19",
           "time": "2:00 PM",
           "isPremium": false,
@@ -1274,7 +1075,7 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 2.7883,
+      "popularity": 2.4825,
       "voteAverage": 6,
       "voteCount": 2,
       "staffFavorite": false,
@@ -1359,56 +1160,6 @@
       ]
     },
     {
-      "id": 579774,
-      "title": "Resident Evil",
-      "year": 2026,
-      "tmdbId": "1423191",
-      "description": "Medical courier Bryan unwittingly finds himself fighting for survival as one fateful, horrifying night collapses around him in chaos.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/gAgWJhUSQWCgtKR8170nMkYlBda.jpg",
-      "director": "Zach Cregger",
-      "genres": [
-        "Horror",
-        "Science Fiction",
-        "Adventure"
-      ],
-      "stars": [
-        "Austin Abrams",
-        "Paul Walter Hauser",
-        "Kali Reis"
-      ],
-      "releaseDate": "2026-09-16",
-      "runtime": 94,
-      "certification": "R",
-      "originalLanguage": "en",
-      "originalLanguageName": "English",
-      "popularity": 400.9661,
-      "voteAverage": 7.5,
-      "voteCount": 2335,
-      "staffFavorite": true,
-      "staffFavoriteBy": "Kyle",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "theatres": [
-        "Apple Cinemas, Westbrook"
-      ],
-      "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "8:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/-Resident-Evil--2026-/611fe9edf74bab2423301ee0/6a5152a69716685e55df51ae",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        }
-      ]
-    },
-    {
       "id": 579812,
       "title": "Sense and Sensibility",
       "year": 2026,
@@ -1430,17 +1181,15 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 52.5894,
-      "voteAverage": 7.225,
-      "voteCount": 171,
+      "popularity": 59.3114,
+      "voteAverage": 7.235,
+      "voteCount": 172,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
       "featuredOnPlayweekUrl": "",
       "theatres": [
-        "Strand Theatre, Rockland",
-        "Apple Cinemas, Westbrook",
-        "Patriot Cinemas at Freeport Village, Freeport"
+        "Strand Theatre, Rockland"
       ],
       "showings": [
         {
@@ -1540,34 +1289,6 @@
           "ticketLink": "https://strandfilms.eventive.org/Program_Guide/6af4b28eeb1c8b592391c336",
           "latitude": 44.1031144,
           "longitude": -69.1088235
-        },
-        {
-          "date": "2026-11-18",
-          "time": "5:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Sense-and-Sensibility/611fe9edf74bab2423301ee0/6abbffad632d5dede5906355",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Patriot Cinemas at Freeport Village",
-          "city": "Freeport",
-          "theatreWebsite": "https://www.patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com",
-          "latitude": 43.8561096191406,
-          "longitude": -70.1030502319336
         }
       ]
     },
@@ -1593,7 +1314,7 @@
       "certification": "NR",
       "originalLanguage": "sv",
       "originalLanguageName": "Swedish",
-      "popularity": 1.7624,
+      "popularity": 1.4823,
       "voteAverage": 7.432,
       "voteCount": 285,
       "staffFavorite": false,
@@ -1642,7 +1363,7 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 1.6963,
+      "popularity": 2.1333,
       "voteAverage": 7.199,
       "voteCount": 563,
       "staffFavorite": false,
@@ -1719,9 +1440,9 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 10.9421,
+      "popularity": 12.3894,
       "voteAverage": 7.858,
-      "voteCount": 12848,
+      "voteCount": 12851,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -1764,12 +1485,12 @@
         "Piper Laurie"
       ],
       "releaseDate": "1961-09-25",
-      "runtime": 134,
+      "runtime": 135,
       "certification": "NR",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 2.2242,
-      "voteAverage": 7.665,
+      "popularity": 2.5452,
+      "voteAverage": 7.7,
       "voteCount": 1139,
       "staffFavorite": false,
       "staffFavoriteBy": "",
@@ -1845,7 +1566,7 @@
       "certification": "NR",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 2.1742,
+      "popularity": 1.869,
       "voteAverage": 7.474,
       "voteCount": 708,
       "staffFavorite": false,
@@ -1895,9 +1616,9 @@
       "certification": "NR",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 4.0608,
-      "voteAverage": 7.6,
-      "voteCount": 1796,
+      "popularity": 4.2296,
+      "voteAverage": 7.646,
+      "voteCount": 1798,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -1972,7 +1693,7 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 2.3713,
+      "popularity": 2.0796,
       "voteAverage": 7.673,
       "voteCount": 330,
       "staffFavorite": false,
@@ -2000,56 +1721,6 @@
       ]
     },
     {
-      "id": 580000,
-      "title": "The Lord of the Rings: The Return of the King",
-      "year": 2003,
-      "tmdbId": "122",
-      "description": "As armies mass for a final battle that will decide the fate of the world--and powerful, ancient forces of Light and Dark compete to determine the outcome--one member of the Fellowship of the Ring is revealed as the noble heir to the throne of the Kings of Men. Yet, the sole hope for triumph over evil lies with a brave hobbit, Frodo, who, accompanied by his loyal friend Sam and the hideous, wretched Gollum, ventures deep into the very dark heart of Mordor on his seemingly impossible quest to destroy the Ring of Power.​",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/rCzpDGLbOoPwLjy3OAm5NUPOTrC.jpg",
-      "director": "Peter Jackson",
-      "genres": [
-        "Adventure",
-        "Fantasy",
-        "Action"
-      ],
-      "stars": [
-        "Elijah Wood",
-        "Ian McKellen",
-        "Viggo Mortensen"
-      ],
-      "releaseDate": "2003-12-17",
-      "runtime": 201,
-      "certification": "PG-13",
-      "originalLanguage": "en",
-      "originalLanguageName": "English",
-      "popularity": 35.3503,
-      "voteAverage": 8.508,
-      "voteCount": 27854,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "theatres": [
-        "Nickelodeon Cinemas, Portland"
-      ],
-      "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/the-lord-of-the-rings-the-return-of-the-king-extended-edition",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        }
-      ]
-    },
-    {
       "id": 580036,
       "title": "The Philadelphia Story",
       "year": 1940,
@@ -2071,9 +1742,9 @@
       "certification": "NR",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 2.4176,
-      "voteAverage": 7.5,
-      "voteCount": 1046,
+      "popularity": 2.7381,
+      "voteAverage": 7.532,
+      "voteCount": 1047,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -2131,7 +1802,7 @@
       "certification": "",
       "originalLanguage": "en",
       "originalLanguageName": "",
-      "popularity": 0.5587,
+      "popularity": 0.4282,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -2180,9 +1851,9 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 27.4502,
+      "popularity": 28.6782,
       "voteAverage": 8.155,
-      "voteCount": 11928,
+      "voteCount": 11937,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -2230,7 +1901,7 @@
       "certification": "",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 1.735,
+      "popularity": 1.5871,
       "voteAverage": 7.4,
       "voteCount": 328,
       "staffFavorite": false,
@@ -2292,7 +1963,7 @@
       "tmdbId": "1195803",
       "description": "On the outskirts of a village by the sea, lives a Fisherwoman; smelly, single and perpetually ridiculed. One day, fed up with her stuffy, small-minded neighbours, she commissions herself a husband to be made from wicker. In an otherwise conservative town, this unconventional romance sparks outrage, jealousy and chaos.",
       "posterUrl": "https://image.tmdb.org/t/p/w342/6FcBZOKvyrLCKGCyBG0ySCR4okt.jpg",
-      "director": "Eleanor Wilson",
+      "director": "Alex Huston Fischer",
       "genres": [
         "Romance",
         "Fantasy",
@@ -2308,9 +1979,9 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 53.8619,
+      "popularity": 58.7663,
       "voteAverage": 7.472,
-      "voteCount": 54,
+      "voteCount": 55,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -2324,8 +1995,7 @@
         "Flagship Cinemas, Falmouth",
         "Flagship Cinemas, Wells",
         "Apple Cinemas, Westbrook",
-        "Apple Cinemas, Saco",
-        "Patriot Cinemas at Freeport Village, Freeport"
+        "Apple Cinemas, Saco"
       ],
       "showings": [
         {
@@ -2385,34 +2055,6 @@
           "longitude": -68.7969818115234
         },
         {
-          "date": "2026-11-18",
-          "time": "4:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "https://www.colonialtheatre.com/movies/wicker-2026",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "https://www.colonialtheatre.com/movies/wicker-2026",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
-        },
-        {
           "date": "2026-11-19",
           "time": "4:15 PM",
           "isPremium": false,
@@ -2677,20 +2319,6 @@
           "ticketLink": "https://www.watervillecreates.org/mainefilmcenter/",
           "latitude": 44.5498745,
           "longitude": -69.62965
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/wicker",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
         },
         {
           "date": "2026-11-19",
@@ -2959,20 +2587,6 @@
           "longitude": -69.1088235
         },
         {
-          "date": "2026-11-18",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/wicker/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-11-19",
           "time": "7:10 PM",
           "isPremium": false,
@@ -2985,20 +2599,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/wicker/",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:25 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://wells.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/wicker/",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
         },
         {
           "date": "2026-11-19",
@@ -3027,34 +2627,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/wicker/",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-11-18",
-          "time": "5:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Wicker/611fe9edf74bab2423301ee0/6a99eef08365510eba4f5c34",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Wicker/611fe9edf74bab2423301ee0/6a99eef08365510eba4f5c34",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-11-19",
@@ -3379,34 +2951,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Wicker/611fea26f74bab2423301ee4/6a99eef08365510eba4f5c34",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Wicker/611fea26f74bab2423301ee4/6a99eef08365510eba4f5c34",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-11-19",
           "time": "1:15 PM",
           "isPremium": false,
@@ -3587,20 +3131,6 @@
           "ticketLink": "https://www.applecinemas.com/Wicker/611fea26f74bab2423301ee4/6a99eef08365510eba4f5c34",
           "latitude": 43.5285596,
           "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Patriot Cinemas at Freeport Village",
-          "city": "Freeport",
-          "theatreWebsite": "https://www.patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com",
-          "latitude": 43.8561096191406,
-          "longitude": -70.1030502319336
         }
       ]
     },
@@ -3613,9 +3143,10 @@
       "posterUrl": "https://image.tmdb.org/t/p/w342/snFM00mpNAfUzUtkdEW0uDEvXA0.jpg",
       "director": "Travis Knight",
       "genres": [
+        "Adventure",
         "Animation",
-        "Fantasy",
-        "Adventure"
+        "Drama",
+        "Fantasy"
       ],
       "stars": [
         "Peyton Elizabeth Lee",
@@ -3627,9 +3158,9 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 79.9275,
-      "voteAverage": 8.5,
-      "voteCount": 293,
+      "popularity": 85.5951,
+      "voteAverage": 8.473,
+      "voteCount": 300,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -3652,20 +3183,6 @@
         "Patriot Cinemas at Freeport Village, Freeport"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "6:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/wildwood",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-11-19",
           "time": "12:40 PM",
@@ -3707,34 +3224,6 @@
           "ticketLink": "https://www.blackbearcinemas.com/movie/wildwood",
           "latitude": 44.9059551,
           "longitude": -68.6911612
-        },
-        {
-          "date": "2026-11-18",
-          "time": "5:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27582?date=2026-10-23",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27582?date=2026-10-23",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-11-19",
@@ -4185,20 +3674,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-11-18",
-          "time": "4:05 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/wildwood/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-11-19",
           "time": "1:05 PM",
           "isPremium": false,
@@ -4381,20 +3856,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-11-18",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://wells.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/wildwood/",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-11-19",
           "time": "1:15 PM",
           "isPremium": false,
@@ -4421,20 +3882,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/wildwood/",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Wildwood/611fe9edf74bab2423301ee0/6a907904313ab8d46fb1d2fa",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-11-19",
@@ -4661,20 +4108,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-11-18",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Wildwood/611fea26f74bab2423301ee4/6a907904313ab8d46fb1d2fa",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-11-19",
           "time": "12:30 PM",
           "isPremium": false,
@@ -4899,20 +4332,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-11-18",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/Sanford/WILDWOOD",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-11-20",
           "time": "4:00 PM",
           "isPremium": false,
@@ -5037,34 +4456,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Topsham/WILDWOOD",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/wildwood-ho00021657",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:35 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/wildwood-ho00021657",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-11-20",
@@ -5259,7 +4650,7 @@
       "certification": "G",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 8.5389,
+      "popularity": 7.3132,
       "voteAverage": 7.478,
       "voteCount": 4151,
       "staffFavorite": false,
@@ -5322,7 +4713,7 @@
       "certification": "NR",
       "originalLanguage": "ja",
       "originalLanguageName": "Japanese",
-      "popularity": 6.1106,
+      "popularity": 5.9957,
       "voteAverage": 8.076,
       "voteCount": 1792,
       "staffFavorite": false,
@@ -5383,7 +4774,7 @@
       "year": 2026,
       "tmdbId": "1765072",
       "description": "Thirty-four days before she's sent to prison, notorious Silicon Valley founder Elizabeth Holmes invites a skeptical film crew to document her every move. What begins as an intimate portrait of an enigmatic felon becomes a mind-bending three-year journey into the abyss.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/Ap8QwmKfSjYbWC4XIP8w9pdn72O.jpg",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/mVh3qkw2NUFxWWyF0G1hg2Wh0K5.jpg",
       "director": "Nathan Fielder",
       "genres": [
         "Documentary"
@@ -5398,9 +4789,9 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 70.5011,
+      "popularity": 78.5516,
       "voteAverage": 8.8,
-      "voteCount": 128,
+      "voteCount": 134,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -5421,8 +4812,6 @@
         "Flagship Cinemas, Wells",
         "Apple Cinemas, Westbrook",
         "Apple Cinemas, Saco",
-        "Smitty's Entertainment, Topsham",
-        "Regal Cinemas, Augusta",
         "Bangor Mall Cinemas, Bangor",
         "Patriot Cinemas at Freeport Village, Freeport"
       ],
@@ -5482,20 +4871,6 @@
           "ticketLink": "https://oldfilm.org/alamo-theatre/",
           "latitude": 44.572681427002,
           "longitude": -68.7969818115234
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/you-can-see-everything",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
         },
         {
           "date": "2026-11-19",
@@ -5636,20 +5011,6 @@
           "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/273096",
           "latitude": 45.183952,
           "longitude": -69.2292565
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27581?date=2026-10-23",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-11-19",
@@ -5876,20 +5237,6 @@
           "longitude": -69.5312042236328
         },
         {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/you-can-see-everything/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
           "date": "2026-11-19",
           "time": "3:40 PM",
           "isPremium": false,
@@ -6000,34 +5347,6 @@
           "ticketLink": "narrowgaugecinema.net",
           "latitude": 44.6694183349609,
           "longitude": -70.1528244018555
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/you-can-see-everything",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/you-can-see-everything",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
         },
         {
           "date": "2026-11-19",
@@ -6294,34 +5613,6 @@
           "ticketLink": "https://www.portlandmuseum.org/event/pma-films-you-can-see-everything/",
           "latitude": 43.6544005,
           "longitude": -70.2633108
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/you-can-see-everything",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/you-can-see-everything",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
         },
         {
           "date": "2026-11-19",
@@ -6688,20 +5979,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-11-18",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/you-can-see-everything/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-11-19",
           "time": "11:20 AM",
           "isPremium": false,
@@ -6744,20 +6021,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/you-can-see-everything/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-11-19",
           "time": "11:20 AM",
           "isPremium": false,
@@ -6966,20 +6229,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/you-can-see-everything/",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://wells.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/you-can-see-everything/",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
         },
         {
           "date": "2026-11-19",
@@ -7190,34 +6439,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/you-can-see-everything/",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/You-Can-See-Everything/611fe9edf74bab2423301ee0/6abc29a4632d5dede5906516",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/You-Can-See-Everything/611fe9edf74bab2423301ee0/6abc29a4632d5dede5906516",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-11-19",
@@ -7486,20 +6707,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-11-18",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/You-Can-See-Everything/611fea26f74bab2423301ee4/6abc29a4632d5dede5906516",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-11-19",
           "time": "12:10 PM",
           "isPremium": false,
@@ -7766,34 +6973,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-11-18",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/YOU-CAN-SEE-EVERYTHING",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/you-can-see-everything-ho00022769",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
           "date": "2026-11-19",
           "time": "12:00 PM",
           "isPremium": false,
@@ -7890,20 +7069,6 @@
           "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27495?date=2026-10-23",
           "latitude": 44.8277689,
           "longitude": -68.7524346
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Patriot Cinemas at Freeport Village",
-          "city": "Freeport",
-          "theatreWebsite": "https://www.patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com",
-          "latitude": 43.8561096191406,
-          "longitude": -70.1030502319336
         },
         {
           "date": "2026-11-19",
@@ -8182,7 +7347,7 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 41.8431,
+      "popularity": 48.1851,
       "voteAverage": 7.455,
       "voteCount": 22,
       "staffFavorite": false,
@@ -8198,48 +7363,6 @@
         "Apple Cinemas, Saco"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "4:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27834?date=2026-11-17",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27834?date=2026-11-17",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27834?date=2026-11-17",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
         {
           "date": "2026-11-19",
           "time": "11:00 AM",
@@ -8295,20 +7418,6 @@
           "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27834?date=2026-11-17",
           "latitude": 43.6312987,
           "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:05 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/the-only-living-pickpocket-in-new-york/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
         },
         {
           "date": "2026-11-19",
@@ -8507,20 +7616,6 @@
           "longitude": -70.2558618
         },
         {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Strand Theatre",
-          "city": "Rockland",
-          "theatreWebsite": "https://www.rocklandstrand.com/",
-          "ticketLink": "https://strandfilms.eventive.org/Program_Guide/6ae5012797bfeea2b7be7b03",
-          "latitude": 44.1031144,
-          "longitude": -69.1088235
-        },
-        {
           "date": "2026-11-19",
           "time": "1:00 PM",
           "isPremium": false,
@@ -8563,48 +7658,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-11-18",
-          "time": "4:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Only-Living-Pickpocket-in-New-York/611fea26f74bab2423301ee4/6adfc934a31b316cb098409b",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Only-Living-Pickpocket-in-New-York/611fea26f74bab2423301ee4/6adfc934a31b316cb098409b",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Only-Living-Pickpocket-in-New-York/611fea26f74bab2423301ee4/6adfc934a31b316cb098409b",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-11-19",
           "time": "12:15 PM",
           "isPremium": false,
@@ -8643,9 +7696,9 @@
       "certification": "R",
       "originalLanguage": "ja",
       "originalLanguageName": "Japanese",
-      "popularity": 137.676,
-      "voteAverage": 7.664,
-      "voteCount": 253,
+      "popularity": 136.0504,
+      "voteAverage": 7.7,
+      "voteCount": 263,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -8667,24 +7720,9 @@
         "Smitty's Entertainment, Sanford",
         "Smitty's Entertainment, Topsham",
         "Regal Cinemas, Augusta",
-        "Bangor Mall Cinemas, Bangor",
-        "Patriot Cinemas at Freeport Village, Freeport"
+        "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/godzilla-minus-zero",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-11-19",
           "time": "1:20 PM",
@@ -8924,20 +7962,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "bradentheater.com",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
           "date": "2026-11-19",
           "time": "7:00 PM",
           "isPremium": false,
@@ -8966,20 +7990,6 @@
           "longitude": -70.7082496
         },
         {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "narrowgaugecinema.net",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-11-19",
           "time": "6:45 PM",
           "isPremium": false,
@@ -9372,20 +8382,6 @@
           "longitude": -69.261877
         },
         {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/godzilla-minus-zero/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-11-19",
           "time": "11:10 AM",
           "isPremium": false,
@@ -9398,20 +8394,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/godzilla-minus-zero/",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/godzilla-minus-zero/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-11-19",
@@ -9638,20 +8620,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/godzilla-minus-zero/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-11-19",
           "time": "12:30 PM",
           "isPremium": false,
@@ -9664,20 +8632,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/godzilla-minus-zero/",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/godzilla-minus-zero/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-11-19",
@@ -9708,20 +8662,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-11-18",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://wells.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/godzilla-minus-zero/",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-11-19",
           "time": "6:50 PM",
           "isPremium": false,
@@ -9734,20 +8674,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/godzilla-minus-zero/",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/-Godzilla-Minus-Zero--2026-/611fea26f74bab2423301ee4/6ac70b9dbf3a97777157e1c6",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-11-19",
@@ -10070,34 +8996,6 @@
           "ticketLink": "https://www.applecinemas.com/-Godzilla-Minus-Zero--2026-/611fea26f74bab2423301ee4/6ac70b9dbf3a97777157e1c6",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "5:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/-Godzilla-Minus-Zero--2026-/611fea26f74bab2423301ee4/6ac70b9dbf3a97777157e1c6",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/-Godzilla-Minus-Zero--2026-/611fea26f74bab2423301ee4/6ac70b9dbf3a97777157e1c6",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-11-19",
@@ -10436,20 +9334,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/GODZILLA-MINUS-ZERO",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-11-19",
           "time": "6:45 PM",
           "isPremium": false,
@@ -10476,34 +9360,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/GODZILLA-MINUS-ZERO",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/godzilla-minus-zero-ho00022815?date=11-05-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/godzilla-minus-zero-ho00022815?date=11-05-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-11-19",
@@ -10632,20 +9488,6 @@
           "longitude": -70.6740573
         },
         {
-          "date": "2026-11-18",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27692?date=2026-11-05",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
           "date": "2026-11-20",
           "time": "12:30 PM",
           "isPremium": false,
@@ -10882,20 +9724,6 @@
           "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27692?date=2026-11-05",
           "latitude": 44.8277689,
           "longitude": -68.7524346
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Patriot Cinemas at Freeport Village",
-          "city": "Freeport",
-          "theatreWebsite": "https://www.patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/godzilla-minus-zero",
-          "latitude": 43.8561096191406,
-          "longitude": -70.1030502319336
         }
       ]
     },
@@ -10924,9 +9752,9 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 61.1401,
-      "voteAverage": 7,
-      "voteCount": 29,
+      "popularity": 66.6342,
+      "voteAverage": 6.817,
+      "voteCount": 30,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -10957,34 +9785,6 @@
         "Patriot Cinemas at Freeport Village, Freeport"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/the-cat-in-the-hat",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/the-cat-in-the-hat",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-11-19",
           "time": "1:00 PM",
@@ -11266,20 +10066,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "bradentheater.com",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
           "date": "2026-11-19",
           "time": "7:00 PM",
           "isPremium": false,
@@ -11392,20 +10178,6 @@
           "longitude": -68.0131988525391
         },
         {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Center Theatre for the Performing Arts",
-          "city": "Dover-Foxcroft",
-          "theatreWebsite": "centertheatre.org",
-          "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/272806",
-          "latitude": 45.183952,
-          "longitude": -69.2292565
-        },
-        {
           "date": "2026-11-19",
           "time": "6:30 PM",
           "isPremium": false,
@@ -11418,34 +10190,6 @@
           "ticketLink": "https://centertheatrefortheperformingarts.thundertix.com/events/272806",
           "latitude": 45.183952,
           "longitude": -69.2292565
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "https://www.colonialtheatre.com/movies/the-cat-in-the-hat-2026",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "https://www.colonialtheatre.com/movies/the-cat-in-the-hat-2026",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
         },
         {
           "date": "2026-11-19",
@@ -11474,34 +10218,6 @@
           "ticketLink": "https://www.colonialtheatre.com/movies/the-cat-in-the-hat-2026",
           "latitude": 44.4267641,
           "longitude": -69.0075715
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27864?date=2026-11-05",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/27864?date=2026-11-05",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-11-19",
@@ -11700,20 +10416,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-11-18",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Fort Kent Cinema",
-          "city": "Fort Kent",
-          "theatreWebsite": "https://www.fortkentcinema.com/",
-          "ticketLink": "https://www.fortkentcinema.com/",
-          "latitude": 47.248953,
-          "longitude": -68.5984425
-        },
-        {
           "date": "2026-11-19",
           "time": "7:30 PM",
           "isPremium": false,
@@ -11924,34 +10626,6 @@
           "longitude": -70.7082496
         },
         {
-          "date": "2026-11-18",
-          "time": "4:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "narrowgaugecinema.net",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "narrowgaugecinema.net",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-11-20",
           "time": "4:15 PM",
           "isPremium": false,
@@ -12146,20 +10820,6 @@
           "ticketLink": "narrowgaugecinema.net",
           "latitude": 44.6694183349609,
           "longitude": -70.1528244018555
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Temple Theatre",
-          "city": "Houlton",
-          "theatreWebsite": "templehoulton.com",
-          "ticketLink": "https://templehoulton.com/amy_movie/the-cat-in-the-hat/",
-          "latitude": 46.1259988,
-          "longitude": -67.8403909
         },
         {
           "date": "2026-11-19",
@@ -12288,34 +10948,6 @@
           "longitude": -70.7922593
         },
         {
-          "date": "2026-11-18",
-          "time": "4:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/the-cat-in-the-hat/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/the-cat-in-the-hat/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-11-19",
           "time": "11:30 AM",
           "isPremium": false,
@@ -12622,34 +11254,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/the-cat-in-the-hat/",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/the-cat-in-the-hat/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/the-cat-in-the-hat/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-11-19",
@@ -13000,34 +11604,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/the-cat-in-the-hat/",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/the-cat-in-the-hat/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/the-cat-in-the-hat/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-11-19",
@@ -13338,34 +11914,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-11-18",
-          "time": "4:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/the-cat-in-the-hat/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/the-cat-in-the-hat/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-11-19",
           "time": "11:30 AM",
           "isPremium": false,
@@ -13672,20 +12220,6 @@
           "ticketLink": "https://flagshipcinemas.com/waterville/movie/the-cat-in-the-hat/",
           "latitude": 44.5428402,
           "longitude": -69.6614214
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://wells.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/the-cat-in-the-hat/",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
         },
         {
           "date": "2026-11-19",
@@ -13896,34 +12430,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/the-cat-in-the-hat/",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Cat-In-The-Hat/611fea26f74bab2423301ee4/6ad13847d7412b6a1f5cbd60",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/The-Cat-In-The-Hat/611fea26f74bab2423301ee4/6ad13847d7412b6a1f5cbd60",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-11-19",
@@ -14330,34 +12836,6 @@
           "ticketLink": "https://www.applecinemas.com/The-Cat-In-The-Hat/611fea26f74bab2423301ee4/6ad13847d7412b6a1f5cbd60",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:05 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Cat-In-The-Hat/611fea26f74bab2423301ee4/6ad13847d7412b6a1f5cbd60",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/The-Cat-In-The-Hat/611fea26f74bab2423301ee4/6ad13847d7412b6a1f5cbd60",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-11-19",
@@ -14696,20 +13174,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-11-18",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/THE-CAT-IN-THE-HAT",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-11-19",
           "time": "6:15 PM",
           "isPremium": false,
@@ -14850,20 +13314,6 @@
           "longitude": -70.7506676
         },
         {
-          "date": "2026-11-18",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/THE-CAT-IN-THE-HAT",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
           "date": "2026-11-19",
           "time": "6:00 PM",
           "isPremium": false,
@@ -15002,20 +13452,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/THE-CAT-IN-THE-HAT",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/the-cat-in-the-hat-ho00021861?date=11-05-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-11-19",
@@ -15172,20 +13608,6 @@
           "longitude": -70.6740573
         },
         {
-          "date": "2026-11-18",
-          "time": "6:05 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27569",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
           "date": "2026-11-19",
           "time": "12:00 PM",
           "isPremium": false,
@@ -15464,20 +13886,6 @@
           "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27569",
           "latitude": 44.8277689,
           "longitude": -68.7524346
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Patriot Cinemas at Freeport Village",
-          "city": "Freeport",
-          "theatreWebsite": "https://www.patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/the-cat-in-the-hat",
-          "latitude": 43.8561096191406,
-          "longitude": -70.1030502319336
         },
         {
           "date": "2026-11-19",
@@ -15756,7 +14164,7 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 52.4519,
+      "popularity": 57.6733,
       "voteAverage": 7.8,
       "voteCount": 5,
       "staffFavorite": false,
@@ -15773,10 +14181,8 @@
         "Apple Cinemas, Westbrook",
         "Apple Cinemas, Saco",
         "Smitty's Entertainment, Sanford",
-        "Smitty's Entertainment, Topsham",
         "Regal Cinemas, Augusta",
-        "Bangor Mall Cinemas, Bangor",
-        "Patriot Cinemas at Freeport Village, Freeport"
+        "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
         {
@@ -15848,20 +14254,6 @@
           "ticketLink": "https://www.milbridgetheatre.org/movies/1000044057-drummer-boy/",
           "latitude": 44.53725,
           "longitude": -67.8807597
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "narrowgaugecinema.net",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
         },
         {
           "date": "2026-11-19",
@@ -16130,34 +14522,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-11-18",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Drummer-Boy/611fe9edf74bab2423301ee0/6ad8d939a31b316cb09834b0",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Drummer-Boy/611fe9edf74bab2423301ee0/6ad8d939a31b316cb09834b0",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-11-19",
           "time": "12:10 PM",
           "isPremium": false,
@@ -16424,20 +14788,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Drummer-Boy/611fe9edf74bab2423301ee0/6ad8d939a31b316cb09834b0",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-11-19",
           "time": "6:30 PM",
           "isPremium": false,
@@ -16578,20 +14928,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-11-18",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/DRUMMER-BOY",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-11-19",
           "time": "7:15 PM",
           "isPremium": false,
@@ -16730,48 +15066,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/DRUMMER-BOY",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/DRUMMER-BOY",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/drummer-boy-ho00022559?date=11-05-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/drummer-boy-ho00022559?date=11-05-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-11-19",
@@ -17012,20 +15306,6 @@
           "longitude": -70.6740573
         },
         {
-          "date": "2026-11-18",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27999?date=2026-11-06",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
           "date": "2026-11-19",
           "time": "12:30 PM",
           "isPremium": false,
@@ -17108,20 +15388,6 @@
           "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27999?date=2026-11-06",
           "latitude": 44.8277689,
           "longitude": -68.7524346
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Patriot Cinemas at Freeport Village",
-          "city": "Freeport",
-          "theatreWebsite": "https://www.patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/drummer-boy",
-          "latitude": 43.8561096191406,
-          "longitude": -70.1030502319336
         }
       ]
     },
@@ -17148,9 +15414,9 @@
       "certification": "PG-13",
       "originalLanguage": "hi",
       "originalLanguageName": "Hindi",
-      "popularity": 137.197,
-      "voteAverage": 7.5,
-      "voteCount": 57,
+      "popularity": 139.8158,
+      "voteAverage": 7.451,
+      "voteCount": 61,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -17159,20 +15425,6 @@
         "Apple Cinemas, Westbrook"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "notes": "ScreenX",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ramayana--Hindi-/611fe9edf74bab2423301ee0/6acfc916d7412b6a1f5cb779",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
         {
           "date": "2026-11-19",
           "time": "2:40 PM",
@@ -17268,9 +15520,9 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 67.7602,
-      "voteAverage": 7.962,
-      "voteCount": 250,
+      "popularity": 75.1792,
+      "voteAverage": 7.926,
+      "voteCount": 264,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -17402,34 +15654,6 @@
           "longitude": -69.9636894
         },
         {
-          "date": "2026-11-18",
-          "time": "4:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/wild-horse-nine/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Maine Film Center",
-          "city": "Waterville",
-          "theatreWebsite": "https://www.watervillecreates.org/mainefilmcenter/",
-          "ticketLink": "https://www.watervillecreates.org/shows/wild-horse-nine/",
-          "latitude": 44.5498745,
-          "longitude": -69.62965
-        },
-        {
           "date": "2026-11-19",
           "time": "2:30 PM",
           "isPremium": false,
@@ -17708,48 +15932,6 @@
           "ticketLink": "https://www.watervillecreates.org/shows/wild-horse-nine/",
           "latitude": 44.5498745,
           "longitude": -69.62965
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/victorian-psycho",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/victorian-psycho",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-11-18",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/victorian-psycho",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
         },
         {
           "date": "2026-11-19",
@@ -18242,34 +16424,6 @@
           "longitude": -70.7922593
         },
         {
-          "date": "2026-11-18",
-          "time": "4:25 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/wild-horse-nine/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/wild-horse-nine/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
           "date": "2026-11-19",
           "time": "11:15 AM",
           "isPremium": false,
@@ -18550,34 +16704,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-11-18",
-          "time": "4:25 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/wild-horse-nine/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/wild-horse-nine/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-11-19",
           "time": "11:15 AM",
           "isPremium": false,
@@ -18898,34 +17024,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/wild-horse-nine/",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/wild-horse-nine/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/wild-horse-nine/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-11-19",
@@ -19152,34 +17250,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-11-18",
-          "time": "4:25 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/wild-horse-nine/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/wild-horse-nine/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-11-19",
           "time": "11:15 AM",
           "isPremium": false,
@@ -19430,34 +17500,6 @@
           "ticketLink": "https://flagshipcinemas.com/waterville/movie/wild-horse-nine/",
           "latitude": 44.5428402,
           "longitude": -69.6614214
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Wild-Horse-Nine-/611fe9edf74bab2423301ee0/6ac6f6c7bf3a97777157e1be",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Wild-Horse-Nine-/611fe9edf74bab2423301ee0/6ac6f6c7bf3a97777157e1be",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-11-19",
@@ -19780,34 +17822,6 @@
           "ticketLink": "https://www.applecinemas.com/Wild-Horse-Nine-/611fe9edf74bab2423301ee0/6ac6f6c7bf3a97777157e1be",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Wild-Horse-Nine-/611fe9edf74bab2423301ee0/6ac6f6c7bf3a97777157e1be",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Wild-Horse-Nine-/611fe9edf74bab2423301ee0/6ac6f6c7bf3a97777157e1be",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-11-19",
@@ -20132,34 +18146,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/28099",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/28099",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
           "date": "2026-11-19",
           "time": "1:00 PM",
           "isPremium": false,
@@ -20390,7 +18376,7 @@
       "certification": "",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 0.3356,
+      "popularity": 0.3125,
       "voteAverage": 1,
       "voteCount": 1,
       "staffFavorite": false,
@@ -20439,9 +18425,9 @@
       "certification": "",
       "originalLanguage": "pl",
       "originalLanguageName": "Polish",
-      "popularity": 32.7656,
-      "voteAverage": 7.218,
-      "voteCount": 78,
+      "popularity": 41.3529,
+      "voteAverage": 7.2,
+      "voteCount": 79,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -20613,7 +18599,7 @@
       "certification": "",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 1.4037,
+      "popularity": 1.3203,
       "voteAverage": 8,
       "voteCount": 1,
       "staffFavorite": false,
@@ -20677,7 +18663,7 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 6.9408,
+      "popularity": 6.6757,
       "voteAverage": 7.33,
       "voteCount": 4857,
       "staffFavorite": false,
@@ -20721,7 +18707,7 @@
       "certification": "",
       "originalLanguage": "en",
       "originalLanguageName": "",
-      "popularity": 0.6688,
+      "popularity": 0.6082,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -20772,7 +18758,7 @@
       "certification": "",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 1.192,
+      "popularity": 1.2769,
       "voteAverage": 9,
       "voteCount": 2,
       "staffFavorite": false,
@@ -20818,7 +18804,7 @@
       "certification": "",
       "originalLanguage": "en",
       "originalLanguageName": "",
-      "popularity": 0.3304,
+      "popularity": 0.1792,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -20867,9 +18853,9 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 137.3574,
-      "voteAverage": 7.6,
-      "voteCount": 107,
+      "popularity": 137.5158,
+      "voteAverage": 7.56,
+      "voteCount": 116,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -20901,20 +18887,6 @@
         "Patriot Cinemas at Freeport Village, Freeport"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/ebenezer",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-11-19",
           "time": "1:10 PM",
@@ -21266,20 +19238,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Braden Theater",
-          "city": "Presque Isle",
-          "theatreWebsite": "bradentheater.com",
-          "ticketLink": "bradentheater.com",
-          "latitude": 46.6871109008789,
-          "longitude": -68.0131988525391
-        },
-        {
           "date": "2026-11-19",
           "time": "7:00 PM",
           "isPremium": false,
@@ -21392,20 +19350,6 @@
           "longitude": -68.0131988525391
         },
         {
-          "date": "2026-11-18",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Colonial Theatre",
-          "city": "Belfast",
-          "theatreWebsite": "colonialtheatre.com",
-          "ticketLink": "https://www.colonialtheatre.com/movies/ebenezer-2026",
-          "latitude": 44.4267641,
-          "longitude": -69.0075715
-        },
-        {
           "date": "2026-11-19",
           "time": "3:15 PM",
           "isPremium": false,
@@ -21432,62 +19376,6 @@
           "ticketLink": "https://www.colonialtheatre.com/movies/ebenezer-2026",
           "latitude": 44.4267641,
           "longitude": -69.0075715
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28113?date=2026-11-13",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "5:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28113?date=2026-11-13",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28113?date=2026-11-13",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28113?date=2026-11-13",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
         },
         {
           "date": "2026-11-19",
@@ -21852,20 +19740,6 @@
           "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28113?date=2026-11-13",
           "latitude": 43.6312987,
           "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Fort Kent Cinema",
-          "city": "Fort Kent",
-          "theatreWebsite": "https://www.fortkentcinema.com/",
-          "ticketLink": "https://www.fortkentcinema.com/",
-          "latitude": 47.248953,
-          "longitude": -68.5984425
         },
         {
           "date": "2026-11-19",
@@ -22148,20 +20022,6 @@
           "longitude": -70.7082496
         },
         {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "narrowgaugecinema.net",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-11-19",
           "time": "3:45 PM",
           "isPremium": false,
@@ -22412,48 +20272,6 @@
           "ticketLink": "narrowgaugecinema.net",
           "latitude": 44.6694183349609,
           "longitude": -70.1528244018555
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/ebenezer",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/ebenezer",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-11-18",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/ebenezer",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
         },
         {
           "date": "2026-11-19",
@@ -23030,20 +20848,6 @@
           "longitude": -69.261877
         },
         {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Temple Theatre",
-          "city": "Houlton",
-          "theatreWebsite": "templehoulton.com",
-          "ticketLink": "https://templehoulton.com/amy_movie/ebenezer/",
-          "latitude": 46.1259988,
-          "longitude": -67.8403909
-        },
-        {
           "date": "2026-11-19",
           "time": "7:00 PM",
           "isPremium": false,
@@ -23266,48 +21070,6 @@
           "ticketLink": "https://thegemtheater.com/movies/ebenezer/",
           "latitude": 44.4110853,
           "longitude": -70.7922593
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/ebenezer/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/ebenezer/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:55 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/ebenezer/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
         },
         {
           "date": "2026-11-19",
@@ -23630,48 +21392,6 @@
           "ticketLink": "https://flagshipcinemas.com/falmouth/movie/ebenezer/",
           "latitude": 43.7204846,
           "longitude": -70.2352727
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/ebenezer/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/ebenezer/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:55 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/ebenezer/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-11-19",
@@ -24066,48 +21786,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-11-18",
-          "time": "4:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/ebenezer/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/ebenezer/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:55 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/ebenezer/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
           "date": "2026-11-19",
           "time": "11:10 AM",
           "isPremium": false,
@@ -24430,48 +22108,6 @@
           "longitude": -69.1374609
         },
         {
-          "date": "2026-11-18",
-          "time": "4:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/ebenezer/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/ebenezer/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:55 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/ebenezer/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-11-19",
           "time": "11:10 AM",
           "isPremium": false,
@@ -24822,34 +22458,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-11-18",
-          "time": "4:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://wells.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/ebenezer/",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:55 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://wells.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/ebenezer/",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-11-19",
           "time": "1:45 PM",
           "isPremium": false,
@@ -25058,34 +22666,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/ebenezer/",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ebenezer/611fe9edf74bab2423301ee0/6ad9095abd16990ca8563968",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ebenezer/611fe9edf74bab2423301ee0/6ad9095abd16990ca8563968",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-11-19",
@@ -25438,34 +23018,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-11-18",
-          "time": "6:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Ebenezer/611fea26f74bab2423301ee4/6ad9095abd16990ca8563968",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Ebenezer/611fea26f74bab2423301ee4/6ad9095abd16990ca8563968",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-11-19",
           "time": "1:00 PM",
           "isPremium": false,
@@ -25802,20 +23354,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/EBENEZER",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-11-19",
           "time": "6:30 PM",
           "isPremium": false,
@@ -25954,20 +23492,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/EBENEZER",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/EBENEZER",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
         },
         {
           "date": "2026-11-19",
@@ -26122,20 +23646,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/EBENEZER",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/ebenezer-ho00022936?date=11-12-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-11-19",
@@ -26374,48 +23884,6 @@
           "ticketLink": "https://www.regmovies.com/movies/ebenezer-ho00022936?date=11-12-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27836",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27836",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27836",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-11-19",
@@ -26740,34 +24208,6 @@
           "longitude": -68.7524346
         },
         {
-          "date": "2026-11-18",
-          "time": "4:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Patriot Cinemas at Freeport Village",
-          "city": "Freeport",
-          "theatreWebsite": "https://www.patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/ebenezer",
-          "latitude": 43.8561096191406,
-          "longitude": -70.1030502319336
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Patriot Cinemas at Freeport Village",
-          "city": "Freeport",
-          "theatreWebsite": "https://www.patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/ebenezer",
-          "latitude": 43.8561096191406,
-          "longitude": -70.1030502319336
-        },
-        {
           "date": "2026-11-19",
           "time": "1:30 PM",
           "isPremium": false,
@@ -27044,9 +24484,9 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 10.4071,
+      "popularity": 9.8058,
       "voteAverage": 7.147,
-      "voteCount": 7279,
+      "voteCount": 7280,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -27094,7 +24534,7 @@
       "certification": "NR",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 1.7069,
+      "popularity": 1.6645,
       "voteAverage": 6.695,
       "voteCount": 208,
       "staffFavorite": false,
@@ -27160,9 +24600,9 @@
       "certification": "G",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 6.4786,
-      "voteAverage": 7.457,
-      "voteCount": 1237,
+      "popularity": 6.2053,
+      "voteAverage": 7.458,
+      "voteCount": 1238,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -27259,9 +24699,9 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 75.1014,
-      "voteAverage": 6.19,
-      "voteCount": 42,
+      "popularity": 80.5527,
+      "voteAverage": 6.196,
+      "voteCount": 46,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -27282,34 +24722,6 @@
         "Bangor Mall Cinemas, Bangor"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "4:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/how-to-rob-a-bank",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Black Bear Cinemas",
-          "city": "Orono",
-          "theatreWebsite": "blackbearcinemas.com",
-          "ticketLink": "https://www.blackbearcinemas.com/movie/how-to-rob-a-bank",
-          "latitude": 44.9059551,
-          "longitude": -68.6911612
-        },
         {
           "date": "2026-11-19",
           "time": "1:30 PM",
@@ -27563,34 +24975,6 @@
           "longitude": -68.6911612
         },
         {
-          "date": "2026-11-18",
-          "time": "5:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28112?date=2026-11-13",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28112?date=2026-11-13",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
           "date": "2026-11-19",
           "time": "11:15 AM",
           "isPremium": false,
@@ -27759,34 +25143,6 @@
           "longitude": -70.3244985
         },
         {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "narrowgaugecinema.net",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Narrow Gauge Cinema",
-          "city": "Farmington",
-          "theatreWebsite": "narrowgaugecinema.net",
-          "ticketLink": "narrowgaugecinema.net",
-          "latitude": 44.6694183349609,
-          "longitude": -70.1528244018555
-        },
-        {
           "date": "2026-11-19",
           "time": "4:00 PM",
           "isPremium": false,
@@ -27953,20 +25309,6 @@
           "ticketLink": "narrowgaugecinema.net",
           "latitude": 44.6694183349609,
           "longitude": -70.1528244018555
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/how-to-rob-a-bank/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
         },
         {
           "date": "2026-11-19",
@@ -28179,20 +25521,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-11-18",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/how-to-rob-a-bank/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-11-19",
           "time": "12:40 PM",
           "isPremium": false,
@@ -28303,20 +25631,6 @@
           "ticketLink": "https://flagshipcinemas.com/auburn/movie/how-to-rob-a-bank/",
           "latitude": 44.127541,
           "longitude": -70.2260427
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/how-to-rob-a-bank/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
         },
         {
           "date": "2026-11-19",
@@ -28499,20 +25813,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/how-to-rob-a-bank/",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/how-to-rob-a-bank/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
         },
         {
           "date": "2026-11-19",
@@ -28725,20 +26025,6 @@
           "longitude": -69.6614214
         },
         {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://wells.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/how-to-rob-a-bank/",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
-        },
-        {
           "date": "2026-11-19",
           "time": "1:05 PM",
           "isPremium": false,
@@ -28807,34 +26093,6 @@
           "ticketLink": "https://flagshipcinemas.com/wells/movie/how-to-rob-a-bank/",
           "latitude": 43.3004064,
           "longitude": -70.583234
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/How-to-Rob-a-Bank/611fea26f74bab2423301ee4/6ada612abd16990ca8563c51",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/How-to-Rob-a-Bank/611fea26f74bab2423301ee4/6ada612abd16990ca8563c51",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-11-19",
@@ -29157,34 +26415,6 @@
           "ticketLink": "https://www.applecinemas.com/How-to-Rob-a-Bank/611fea26f74bab2423301ee4/6ada612abd16990ca8563c51",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/How-to-Rob-a-Bank/611fea26f74bab2423301ee4/6ada612abd16990ca8563c51",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/How-to-Rob-a-Bank/611fea26f74bab2423301ee4/6ada612abd16990ca8563c51",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-11-19",
@@ -29523,20 +26753,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/HOW-TO-ROB-A-BANK",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-11-20",
           "time": "8:00 PM",
           "isPremium": false,
@@ -29591,20 +26807,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/HOW-TO-ROB-A-BANK",
           "latitude": 43.4143151,
           "longitude": -70.7506676
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/how-to-rob-a-bank-ho00022799?date=11-12-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-11-19",
@@ -29759,20 +26961,6 @@
           "ticketLink": "https://www.regmovies.com/movies/how-to-rob-a-bank-ho00022799?date=11-12-2026",
           "latitude": 43.1490064,
           "longitude": -70.6740573
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/27835?date=2026-11-13",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         },
         {
           "date": "2026-11-19",
@@ -30008,7 +27196,7 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 37.6232,
+      "popularity": 44.2248,
       "voteAverage": 9.3,
       "voteCount": 3,
       "staffFavorite": false,
@@ -30020,24 +27208,9 @@
         "Flagship Cinemas, Auburn",
         "Flagship Cinemas, Thomaston",
         "Flagship Cinemas, Wells",
-        "Apple Cinemas, Westbrook",
-        "Bangor Mall Cinemas, Bangor"
+        "Apple Cinemas, Westbrook"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/jimmy/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
         {
           "date": "2026-11-19",
           "time": "1:00 PM",
@@ -30067,20 +27240,6 @@
           "longitude": -70.2352727
         },
         {
-          "date": "2026-11-18",
-          "time": "7:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/jimmy/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
           "date": "2026-11-19",
           "time": "7:10 PM",
           "isPremium": false,
@@ -30107,20 +27266,6 @@
           "ticketLink": "https://flagshipcinemas.com/thomaston/movie/jimmy/",
           "latitude": 44.0958045,
           "longitude": -69.1374609
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Wells",
-          "theatreWebsite": "https://wells.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/wells/movie/jimmy/",
-          "latitude": 43.3004064,
-          "longitude": -70.583234
         },
         {
           "date": "2026-11-19",
@@ -30261,20 +27406,6 @@
           "ticketLink": "https://www.applecinemas.com/Jimmy/611fea26f74bab2423301ee4/6ae90e394476d6945185e00f",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/28000?date=2026-11-05",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
         }
       ]
     },
@@ -30300,9 +27431,9 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 133.4779,
-      "voteAverage": 9.077,
-      "voteCount": 26,
+      "popularity": 135.83,
+      "voteAverage": 9,
+      "voteCount": 28,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -30320,48 +27451,6 @@
         "Patriot Cinemas at Freeport Village, Freeport"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28020?date=2026-11-12",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28020?date=2026-11-12",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Entertainment Luxury Cinemas",
-          "city": "South Portland",
-          "theatreWebsite": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond",
-          "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28020?date=2026-11-12",
-          "latitude": 43.6312987,
-          "longitude": -70.3244985
-        },
         {
           "date": "2026-11-19",
           "time": "11:00 AM",
@@ -30585,34 +27674,6 @@
           "ticketLink": "https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28020?date=2026-11-12",
           "latitude": 43.6312987,
           "longitude": -70.3244985
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/ghost-soldier/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:05 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/ghost-soldier/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
         },
         {
           "date": "2026-11-19",
@@ -30881,34 +27942,6 @@
           "longitude": -70.2260427
         },
         {
-          "date": "2026-11-18",
-          "time": "4:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/ghost-soldier/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:45 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/ghost-soldier/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        },
-        {
           "date": "2026-11-19",
           "time": "11:40 AM",
           "isPremium": false,
@@ -31215,48 +28248,6 @@
           "ticketLink": "https://flagshipcinemas.com/waterville/movie/ghost-soldier/",
           "latitude": 44.5428402,
           "longitude": -69.6614214
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ghost-Soldier/611fea26f74bab2423301ee4/6ae2426ca31b316cb0985697",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ghost-Soldier/611fea26f74bab2423301ee4/6ae2426ca31b316cb0985697",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:55 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Ghost-Soldier/611fea26f74bab2423301ee4/6ae2426ca31b316cb0985697",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-11-19",
@@ -31651,48 +28642,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-11-18",
-          "time": "4:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Ghost-Soldier/611fea26f74bab2423301ee4/6ae2426ca31b316cb0985697",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Ghost-Soldier/611fea26f74bab2423301ee4/6ae2426ca31b316cb0985697",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "8:35 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Ghost-Soldier/611fea26f74bab2423301ee4/6ae2426ca31b316cb0985697",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
           "date": "2026-11-19",
           "time": "1:30 PM",
           "isPremium": false,
@@ -32029,20 +28978,6 @@
           "longitude": -70.4242145
         },
         {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Sanford",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/sanford",
-          "ticketLink": "https://www.smittyscinema.com/movie/GHOST-SOLDIER",
-          "latitude": 43.4143151,
-          "longitude": -70.7506676
-        },
-        {
           "date": "2026-11-19",
           "time": "7:30 PM",
           "isPremium": false,
@@ -32183,20 +29118,6 @@
           "longitude": -70.7506676
         },
         {
-          "date": "2026-11-18",
-          "time": "7:15 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Smitty's Entertainment",
-          "city": "Topsham",
-          "theatreWebsite": "https://www.smittyscinema.com/movie-theater/topsham",
-          "ticketLink": "https://www.smittyscinema.com/movie/Topsham/GHOST-SOLDIER?d=11/12/2026",
-          "latitude": 43.9381304,
-          "longitude": -69.9812435
-        },
-        {
           "date": "2026-11-19",
           "time": "7:15 PM",
           "isPremium": false,
@@ -32293,34 +29214,6 @@
           "ticketLink": "https://www.smittyscinema.com/movie/Topsham/GHOST-SOLDIER?d=11/12/2026",
           "latitude": 43.9381304,
           "longitude": -69.9812435
-        },
-        {
-          "date": "2026-11-18",
-          "time": "4:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/ghost-soldier-ho00023041?date=11-10-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/ghost-soldier-ho00023041?date=11-10-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
         },
         {
           "date": "2026-11-19",
@@ -32561,20 +29454,6 @@
           "longitude": -70.6740573
         },
         {
-          "date": "2026-11-18",
-          "time": "6:05 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Bangor Mall Cinemas",
-          "city": "Bangor",
-          "theatreWebsite": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10",
-          "ticketLink": "https://www.yourneighborhoodtheatre.com/bangor-mall-cinema-10/movie/28064",
-          "latitude": 44.8277689,
-          "longitude": -68.7524346
-        },
-        {
           "date": "2026-11-19",
           "time": "12:45 PM",
           "isPremium": false,
@@ -32855,34 +29734,6 @@
           "longitude": -68.7524346
         },
         {
-          "date": "2026-11-18",
-          "time": "4:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Patriot Cinemas at Freeport Village",
-          "city": "Freeport",
-          "theatreWebsite": "https://www.patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/ghost-soldier",
-          "latitude": 43.8561096191406,
-          "longitude": -70.1030502319336
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Patriot Cinemas at Freeport Village",
-          "city": "Freeport",
-          "theatreWebsite": "https://www.patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/ghost-soldier",
-          "latitude": 43.8561096191406,
-          "longitude": -70.1030502319336
-        },
-        {
           "date": "2026-11-19",
           "time": "1:10 PM",
           "isPremium": false,
@@ -33088,9 +29939,9 @@
       "certification": "R",
       "originalLanguage": "es",
       "originalLanguageName": "Spanish",
-      "popularity": 125.0889,
-      "voteAverage": 7.957,
-      "voteCount": 230,
+      "popularity": 128.4129,
+      "voteAverage": 8,
+      "voteCount": 231,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -33137,9 +29988,9 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 37.9282,
-      "voteAverage": 5.8,
-      "voteCount": 4,
+      "popularity": 45.18,
+      "voteAverage": 6,
+      "voteCount": 5,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -33151,48 +30002,6 @@
       ],
       "showings": [
         {
-          "date": "2026-11-18",
-          "time": "4:20 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/victorian-psycho",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:50 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/victorian-psycho",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
-          "date": "2026-11-18",
-          "time": "9:10 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Nickelodeon Cinemas",
-          "city": "Portland",
-          "theatreWebsite": "patriotcinemas.com",
-          "ticketLink": "https://www.patriotcinemas.com/movie/victorian-psycho",
-          "latitude": 43.6575821,
-          "longitude": -70.2558618
-        },
-        {
           "date": "2026-11-19",
           "time": "4:20 PM",
           "isPremium": false,
@@ -33359,34 +30168,6 @@
           "ticketLink": "https://www.patriotcinemas.com/movie/victorian-psycho",
           "latitude": 43.6575821,
           "longitude": -70.2558618
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:35 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/VICTORIAN-PSYCHO/611fe9edf74bab2423301ee0/6af2491e1a2432cc99ee4a90",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "9:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/VICTORIAN-PSYCHO/611fe9edf74bab2423301ee0/6af2491e1a2432cc99ee4a90",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
         },
         {
           "date": "2026-11-19",
@@ -33459,34 +30240,6 @@
           "longitude": -70.3465631
         },
         {
-          "date": "2026-11-18",
-          "time": "4:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/victorian-psycho-ho00022169?date=11-13-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
-          "date": "2026-11-18",
-          "time": "7:40 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Regal Cinemas",
-          "city": "Augusta",
-          "theatreWebsite": "https://www.regmovies.com/theatres/regal-augusta-1704",
-          "ticketLink": "https://www.regmovies.com/movies/victorian-psycho-ho00022169?date=11-13-2026",
-          "latitude": 43.1490064,
-          "longitude": -70.6740573
-        },
-        {
           "date": "2026-11-19",
           "time": "1:30 PM",
           "isPremium": false,
@@ -33531,107 +30284,12 @@
       ]
     },
     {
-      "id": 580287,
-      "title": "White Christmas",
-      "year": 1954,
-      "tmdbId": "13368",
-      "description": "Two talented song-and-dance men team up after the war to become one of the hottest acts in show business. In time they befriend and become romantically involved with the beautiful Haynes sisters who comprise a sister act.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/A5kBQsHKbIptxJyELEpHQJROCRj.jpg",
-      "director": "Michael Curtiz",
-      "genres": [
-        "Comedy",
-        "Music",
-        "Romance"
-      ],
-      "stars": [
-        "Bing Crosby",
-        "Danny Kaye",
-        "Rosemary Clooney"
-      ],
-      "releaseDate": "1954-10-14",
-      "runtime": 120,
-      "certification": "NR",
-      "originalLanguage": "en",
-      "originalLanguageName": "English",
-      "popularity": 3.7413,
-      "voteAverage": 7.176,
-      "voteCount": 609,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "theatres": [
-        "Flagship Cinemas, Falmouth",
-        "Flagship Cinemas, Auburn",
-        "Flagship Cinemas, Thomaston",
-        "Flagship Cinemas, Waterville"
-      ],
-      "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Falmouth",
-          "theatreWebsite": "https://falmouth.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/falmouth/movie/white-christmas/",
-          "latitude": 43.7204846,
-          "longitude": -70.2352727
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Auburn",
-          "theatreWebsite": "https://auburn.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/auburn/movie/white-christmas/",
-          "latitude": 44.127541,
-          "longitude": -70.2260427
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Thomaston",
-          "theatreWebsite": "https://thomaston.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/thomaston/movie/white-christmas/",
-          "latitude": 44.0958045,
-          "longitude": -69.1374609
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Flagship Cinemas",
-          "city": "Waterville",
-          "theatreWebsite": "https://waterville.flagshipcinemas.com/",
-          "ticketLink": "https://flagshipcinemas.com/waterville/movie/white-christmas/",
-          "latitude": 44.5428402,
-          "longitude": -69.6614214
-        }
-      ]
-    },
-    {
       "id": 580289,
       "title": "The Hunger Games: Sunrise on the Reaping",
       "year": 2026,
       "tmdbId": "1300968",
       "description": "Return to the world of Panem 24 years before the events of The Hunger Games, starting on the morning of the reaping of the 50th Hunger Games, also known as the Second Quarter Quell.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/j1MNyNNgNQL6f27cb3m3uKaPKd6.jpg",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/nzIXSQNgYZwFOMrmv0d0I3ulvkM.jpg",
       "director": "Francis Lawrence",
       "genres": [
         "Science Fiction",
@@ -33648,9 +30306,9 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 122.6519,
-      "voteAverage": 8.175,
-      "voteCount": 20,
+      "popularity": 172.8994,
+      "voteAverage": 7.475,
+      "voteCount": 40,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -39197,34 +35855,6 @@
           "longitude": -70.583234
         },
         {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "notes": "ACX",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Hunger-Games--Sunrise-on-the-Reaping-Early-Access/611fe9edf74bab2423301ee0/6adbd9bdbd16990ca8563eb9",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "10:00 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "notes": "ACX",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/Hunger-Games--Sunrise-on-the-Reaping-Early-Access/611fe9edf74bab2423301ee0/6adbd9bdbd16990ca8563eb9",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
-        {
           "date": "2026-11-19",
           "time": "12:00 PM",
           "isPremium": true,
@@ -40021,34 +36651,6 @@
           "ticketLink": "https://www.applecinemas.com/Hunger-Games--Sunrise-on-the-Reaping-Early-Access/611fe9edf74bab2423301ee0/6adbd9bdbd16990ca8563eb9",
           "latitude": 43.6505461,
           "longitude": -70.3465631
-        },
-        {
-          "date": "2026-11-18",
-          "time": "6:30 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "notes": "IMAX",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Hunger-Games--Sunrise-on-the-Reaping-Early-Access/611fea26f74bab2423301ee4/6adbd9bdbd16990ca8563eb9",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
-        },
-        {
-          "date": "2026-11-18",
-          "time": "10:00 PM",
-          "isPremium": true,
-          "festivalName": "",
-          "room": "",
-          "notes": "IMAX",
-          "theatre": "Apple Cinemas",
-          "city": "Saco",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fea26f74bab2423301ee4",
-          "ticketLink": "https://www.applecinemas.com/Hunger-Games--Sunrise-on-the-Reaping-Early-Access/611fea26f74bab2423301ee4/6adbd9bdbd16990ca8563eb9",
-          "latitude": 43.5285596,
-          "longitude": -70.4242145
         },
         {
           "date": "2026-11-19",
@@ -42972,9 +39574,9 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 2.1406,
-      "voteAverage": 7.471,
-      "voteCount": 13081,
+      "popularity": 2.1913,
+      "voteAverage": 7.472,
+      "voteCount": 13084,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -43021,7 +39623,7 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 19.233,
+      "popularity": 39.5827,
       "voteAverage": 4,
       "voteCount": 1,
       "staffFavorite": false,
@@ -43341,7 +39943,7 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 22.015,
+      "popularity": 42.8688,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -44550,7 +41152,7 @@
       "certification": "NR",
       "originalLanguage": "te",
       "originalLanguageName": "Telugu",
-      "popularity": 2.8823,
+      "popularity": 3.3294,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -44561,20 +41163,6 @@
         "Apple Cinemas, Westbrook"
       ],
       "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "8:30 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Apple Cinemas",
-          "city": "Westbrook",
-          "theatreWebsite": "https://www.applecinemas.com/home/611fe9edf74bab2423301ee0",
-          "ticketLink": "https://www.applecinemas.com/ENE-Repeat---Telugu-/611fe9edf74bab2423301ee0/6af88a9c1a2432cc99ee68f9",
-          "latitude": 43.6505461,
-          "longitude": -70.3465631
-        },
         {
           "date": "2026-11-19",
           "time": "8:00 PM",
@@ -44669,9 +41257,9 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 10.513,
+      "popularity": 31.6488,
       "voteAverage": 7.854,
-      "voteCount": 11587,
+      "voteCount": 11588,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -44834,7 +41422,7 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 4.3673,
+      "popularity": 25.9363,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -44981,9 +41569,9 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 35.8454,
-      "voteAverage": 8.487,
-      "voteCount": 38,
+      "popularity": 57.4512,
+      "voteAverage": 8.5,
+      "voteCount": 46,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -48390,9 +44978,9 @@
       "certification": "G",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 14.6662,
+      "popularity": 14.1635,
       "voteAverage": 6.726,
-      "voteCount": 7147,
+      "voteCount": 7149,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -48553,7 +45141,7 @@
       "year": 2026,
       "tmdbId": "1322273",
       "description": "A girl from a remote village dreams of becoming an astronaut and wishes to defy the odds and doubts from those around her.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/yJa9yFLUMpRmGF99yB5dkFz3CqC.jpg",
+      "posterUrl": "https://image.tmdb.org/t/p/w342/tN7NLrqxwhDsAgXuJSMg3CPmtTj.jpg",
       "director": "Pavan Sadineni",
       "genres": [
         "Drama",
@@ -48569,7 +45157,7 @@
       "certification": "",
       "originalLanguage": "te",
       "originalLanguageName": "Telugu",
-      "popularity": 2.2902,
+      "popularity": 2.3411,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -48675,7 +45263,7 @@
       "certification": "",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 1.4834,
+      "popularity": 1.6339,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -48755,7 +45343,7 @@
       "certification": "NR",
       "originalLanguage": "ta",
       "originalLanguageName": "Tamil",
-      "popularity": 8.2553,
+      "popularity": 29.5414,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -48839,54 +45427,6 @@
       ]
     },
     {
-      "id": 580301,
-      "title": "Craftswoman: Weaving Life Whole",
-      "year": 2026,
-      "tmdbId": "1815343",
-      "description": "Craftswoman: Weaving Life Whole is an intimate, \"embodied\" documentary offering a reprieve from our fast-paced and disconnected world. Directed by a filmmaker and textile artist exploring questions about what in our lives gives us a sense of wholeness, the film shifts the focus from the final product to the healing power of “process” itself. Filmed over six months under the pace of trust, the project follows four Finnish craftswomen finding meaning in the rhythm of ancestral craft. Letting go of the typical rush of film production, the filmmaker uses a slow, spacious approach to storytelling—inviting audiences to drop from their analytical minds into their felt senses, and to remember that we already have everything we need to feel whole.",
-      "posterUrl": "https://image.tmdb.org/t/p/w342/4Aobo4o275mfnLWInDMGjzTkkU6.jpg",
-      "director": "Madison McClintock",
-      "genres": [
-        "Documentary"
-      ],
-      "stars": [
-        "Mervi Pasanen",
-        "Hanna Nore",
-        "Hanna Piipponen"
-      ],
-      "releaseDate": "2026-10-23",
-      "runtime": 83,
-      "certification": "",
-      "originalLanguage": "en",
-      "originalLanguageName": "",
-      "popularity": 0.1849,
-      "voteAverage": 0,
-      "voteCount": 0,
-      "staffFavorite": false,
-      "staffFavoriteBy": "",
-      "featuredOnPlayweek": false,
-      "featuredOnPlayweekUrl": "",
-      "theatres": [
-        "Eveningstar Cinema, Brunswick"
-      ],
-      "showings": [
-        {
-          "date": "2026-11-18",
-          "time": "7:00 PM",
-          "isPremium": false,
-          "festivalName": "",
-          "room": "",
-          "notes": "",
-          "theatre": "Eveningstar Cinema",
-          "city": "Brunswick",
-          "theatreWebsite": "eveningstarcinema.com",
-          "ticketLink": "https://www.eveningstarcinema.com/movies/1000052937-craftswoman-weaving-life-whole/",
-          "latitude": 43.9148381,
-          "longitude": -69.9636894
-        }
-      ]
-    },
-    {
       "id": 580302,
       "title": "Dasher",
       "year": 2026,
@@ -48910,7 +45450,7 @@
       "certification": "",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 0.6952,
+      "popularity": 1.0304,
       "voteAverage": 0,
       "voteCount": 0,
       "staffFavorite": false,
@@ -48960,9 +45500,9 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 27.0753,
-      "voteAverage": 6.782,
-      "voteCount": 8594,
+      "popularity": 28.1997,
+      "voteAverage": 6.783,
+      "voteCount": 8596,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -49010,7 +45550,7 @@
       "certification": "R",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 10.6927,
+      "popularity": 11.1167,
       "voteAverage": 7.098,
       "voteCount": 7686,
       "staffFavorite": false,
@@ -49058,7 +45598,7 @@
       "certification": "PG-13",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 10.4979,
+      "popularity": 10.1066,
       "voteAverage": 7.225,
       "voteCount": 2853,
       "staffFavorite": false,
@@ -49108,7 +45648,7 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 2.3243,
+      "popularity": 2.5015,
       "voteAverage": 7.104,
       "voteCount": 944,
       "staffFavorite": false,
@@ -49157,9 +45697,9 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 7.573,
+      "popularity": 6.5258,
       "voteAverage": 6.71,
-      "voteCount": 3835,
+      "voteCount": 3836,
       "staffFavorite": false,
       "staffFavoriteBy": "",
       "featuredOnPlayweek": false,
@@ -49206,7 +45746,7 @@
       "certification": "PG",
       "originalLanguage": "en",
       "originalLanguageName": "English",
-      "popularity": 5.101,
+      "popularity": 5.2117,
       "voteAverage": 7.23,
       "voteCount": 1489,
       "staffFavorite": false,
