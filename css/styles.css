@@ -1800,6 +1800,20 @@ a.film-expand-toggle {
   margin: 0;
 }
 
+/* TMDb's API terms require its logo and this notice wherever its data appears. */
+.site-meta .tmdb-credit {
+  margin-top: 0.6rem;
+  font-size: 0.78rem;
+}
+
+.site-meta .tmdb-credit img {
+  display: inline-block;
+  height: 0.75rem;
+  width: auto;
+  margin-right: 0.35rem;
+  vertical-align: -0.05rem;
+}
+
 input,
 select,
 textarea {
