@@ -9,8 +9,8 @@ test('apple-app-site-association is valid JSON that links film pages to both app
   const aasa = readJson('.well-known/apple-app-site-association');
   const [details] = aasa.applinks.details;
   assert.deepEqual(details.appIDs.sort(), [
-    '5JPJRAA9U5.com.themaineplayweek.app',
-    '5JPJRAA9U5.com.themaineplayweek.app.dev',
+    '5JPJRAA9U5.com.themaineplayweek.ios',
+    '5JPJRAA9U5.com.themaineplayweek.ios.dev',
   ]);
   assert.deepEqual(details.components.map((c) => c['/']), ['/films/*']);
 });
