@@ -132,8 +132,104 @@
 
       <section class="group-card film-showtimes-box">
         <h2 class="film-showtimes-heading">Showtimes by Theatre</h2>
-        
+        <div class="film-location">
+          <p id="filmLocationSorted" class="film-location-sorted" hidden>
+            Nearest first from
+            <button id="filmLocationChip" class="location-chip film-location-chip" type="button" popovertarget="filmLocationPopover" aria-expanded="false">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              <span id="filmLocationChipLabel" class="location-chip-label"></span>
+            </button>
+          </p>
+          <div id="filmLocationPrompt" class="film-location-prompt">
+            <p class="film-location-prompt-copy">Where are you watching from? We'll put the nearest theatres first.</p>
+            <div class="location-picker">
+            <button class="location-device-btn" type="button" data-action="use-device-location">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              Use my location
+            </button>
+            <form class="location-zip-form" novalidate>
+              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
+              <button class="ghost-btn" type="submit">Go</button>
+            </form>
+            <p class="location-picker-message" role="status" aria-live="polite"></p>
+          </div>
+          </div>
+        </div>
+        <div id="filmLocationPopover" class="location-popover" popover role="dialog" aria-labelledby="filmLocationPopoverTitle">
+          <h2 id="filmLocationPopoverTitle" class="location-popover-title">Your location</h2>
+          <div class="location-picker">
+            <button class="location-device-btn" type="button" data-action="use-device-location">
+              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
+              Use my location
+            </button>
+            <form class="location-zip-form" novalidate>
+              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
+              <button class="ghost-btn" type="submit">Go</button>
+            </form>
+            <p class="location-picker-message" role="status" aria-live="polite"></p>
+          </div>
+        </div>
         <div class="show-list"><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.5285596"
+            data-theatre-lng="-70.4242145"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Apple Cinemas
+                <span class="show-main-city">Saco<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.applecinemas.com/Hershey/611fea26f74bab2423301ee4/6aeb71fc1a2432cc99ee3a3d" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Apple Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-25">
+                <h3 class="show-schedule-day">Wed, Nov 25</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="11:20">11:20 AM</span><span class="show-time-chip" data-time="14:10">2:10 PM</span><span class="show-time-chip" data-time="16:50">4:50 PM</span><span class="show-time-chip" data-time="19:25">7:25 PM</span><span class="show-time-chip" data-time="22:05">10:05 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-26">
+                <h3 class="show-schedule-day">Thu, Nov 26</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="14:10">2:10 PM</span><span class="show-time-chip" data-time="16:50">4:50 PM</span><span class="show-time-chip" data-time="19:25">7:25 PM</span><span class="show-time-chip" data-time="22:05">10:05 PM</span>
+                  
+                </div>
+              </article></div>
+            
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.6505461"
+            data-theatre-lng="-70.3465631"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Apple Cinemas
+                <span class="show-main-city">Westbrook<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.applecinemas.com/Hershey/611fe9edf74bab2423301ee0/6aeb71fc1a2432cc99ee3a3d" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Apple Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-25">
+                <h3 class="show-schedule-day">Wed, Nov 25</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="11:20">11:20 AM</span><span class="show-time-chip" data-time="14:00">2:00 PM</span><span class="show-time-chip" data-time="16:35">4:35 PM</span><span class="show-time-chip" data-time="19:05">7:05 PM</span><span class="show-time-chip" data-time="21:40">9:40 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-26">
+                <h3 class="show-schedule-day">Thu, Nov 26</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="14:00">2:00 PM</span><span class="show-time-chip" data-time="16:35">4:35 PM</span><span class="show-time-chip" data-time="19:05">7:05 PM</span><span class="show-time-chip" data-time="21:40">9:40 PM</span>
+                  
+                </div>
+              </article></div>
+            
+          </div>
+        </div>
+      </article><article class="show-item">
         <div class="show-row">
           <div
             data-theatre-lat="44.9059551"
@@ -167,6 +263,396 @@
                 </div>
               </article></div>
             
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.6312987"
+            data-theatre-lng="-70.3244985"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Entertainment Luxury Cinemas
+                <span class="show-main-city">South Portland<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://www.entertainmentcinemas.com/the-shops-at-clarks-pond/movie/28233?date=2026-11-25" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Entertainment Luxury Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-25">
+                <h3 class="show-schedule-day">Wed, Nov 25</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="14:30">2:30 PM</span><span class="show-time-chip" data-time="17:30">5:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-26">
+                <h3 class="show-schedule-day">Thu, Nov 26</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="14:30">2:30 PM</span><span class="show-time-chip" data-time="17:30">5:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-27">
+                <h3 class="show-schedule-day">Fri, Nov 27</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="14:00">2:00 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-28">
+                <h3 class="show-schedule-day">Sat, Nov 28</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="14:00">2:00 PM</span><span class="show-time-chip" data-time="16:30">4:30 PM</span><span class="show-time-chip" data-time="19:00">7:00 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 3 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-29">
+                <h3 class="show-schedule-day">Sun, Nov 29</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="14:30">2:30 PM</span><span class="show-time-chip" data-time="17:30">5:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-30">
+                <h3 class="show-schedule-day">Mon, Nov 30</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="14:30">2:30 PM</span><span class="show-time-chip" data-time="17:30">5:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-12-01">
+                <h3 class="show-schedule-day">Tue, Dec 1</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="14:30">2:30 PM</span><span class="show-time-chip" data-time="17:30">5:30 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.127541"
+            data-theatre-lng="-70.2260427"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Auburn<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/auburn/movie/hershey/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-25">
+                <h3 class="show-schedule-day">Wed, Nov 25</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:05">7:05 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-26">
+                <h3 class="show-schedule-day">Thu, Nov 26</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:05">7:05 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-27">
+                <h3 class="show-schedule-day">Fri, Nov 27</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:05">7:05 PM</span><span class="show-time-chip" data-time="21:35">9:35 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-28">
+                <h3 class="show-schedule-day">Sat, Nov 28</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:05">7:05 PM</span><span class="show-time-chip" data-time="21:35">9:35 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 3 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-29">
+                <h3 class="show-schedule-day">Sun, Nov 29</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:05">7:05 PM</span><span class="show-time-chip" data-time="21:35">9:35 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-30">
+                <h3 class="show-schedule-day">Mon, Nov 30</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:05">7:05 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-12-01">
+                <h3 class="show-schedule-day">Tue, Dec 1</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:05">7:05 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.7204846"
+            data-theatre-lng="-70.2352727"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Falmouth<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/falmouth/movie/hershey/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-25">
+                <h3 class="show-schedule-day">Wed, Nov 25</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-26">
+                <h3 class="show-schedule-day">Thu, Nov 26</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-27">
+                <h3 class="show-schedule-day">Fri, Nov 27</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-28">
+                <h3 class="show-schedule-day">Sat, Nov 28</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 3 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-29">
+                <h3 class="show-schedule-day">Sun, Nov 29</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-30">
+                <h3 class="show-schedule-day">Mon, Nov 30</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-12-01">
+                <h3 class="show-schedule-day">Tue, Dec 1</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.0958045"
+            data-theatre-lng="-69.1374609"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Thomaston<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/thomaston/movie/hershey/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-25">
+                <h3 class="show-schedule-day">Wed, Nov 25</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-26">
+                <h3 class="show-schedule-day">Thu, Nov 26</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-27">
+                <h3 class="show-schedule-day">Fri, Nov 27</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-28">
+                <h3 class="show-schedule-day">Sat, Nov 28</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 3 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-29">
+                <h3 class="show-schedule-day">Sun, Nov 29</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-30">
+                <h3 class="show-schedule-day">Mon, Nov 30</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-12-01">
+                <h3 class="show-schedule-day">Tue, Dec 1</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="44.5428402"
+            data-theatre-lng="-69.6614214"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Waterville<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/waterville/movie/hershey/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-25">
+                <h3 class="show-schedule-day">Wed, Nov 25</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-26">
+                <h3 class="show-schedule-day">Thu, Nov 26</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-27">
+                <h3 class="show-schedule-day">Fri, Nov 27</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span><span class="show-time-chip" data-time="21:50">9:50 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-28">
+                <h3 class="show-schedule-day">Sat, Nov 28</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span><span class="show-time-chip" data-time="21:50">9:50 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 3 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-29">
+                <h3 class="show-schedule-day">Sun, Nov 29</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-30">
+                <h3 class="show-schedule-day">Mon, Nov 30</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-12-01">
+                <h3 class="show-schedule-day">Tue, Dec 1</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="19:15">7:15 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
+          </div>
+        </div>
+      </article><article class="show-item">
+        <div class="show-row">
+          <div
+            data-theatre-lat="43.3004064"
+            data-theatre-lng="-70.583234"
+          >
+            
+            <div class="show-theatre-head">
+              <div class="show-main show-main-theatre">
+                Flagship Cinemas
+                <span class="show-main-city">Wells<span class="show-distance"></span></span>
+              </div>
+              <a class="show-link" href="https://flagshipcinemas.com/wells/movie/hershey/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Flagship Cinemas">Tickets</a>
+            </div>
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-25">
+                <h3 class="show-schedule-day">Wed, Nov 25</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-26">
+                <h3 class="show-schedule-day">Thu, Nov 26</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-27">
+                <h3 class="show-schedule-day">Fri, Nov 27</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-28">
+                <h3 class="show-schedule-day">Sat, Nov 28</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article></div>
+            <details class="show-more-days">
+            <summary class="show-more-days-toggle">Show 3 more days</summary>
+            <div class="show-schedule show-schedule-extra">
+              <article class="show-day-card" data-date="2026-11-29">
+                <h3 class="show-schedule-day">Sun, Nov 29</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-11-30">
+                <h3 class="show-schedule-day">Mon, Nov 30</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article><article class="show-day-card" data-date="2026-12-01">
+                <h3 class="show-schedule-day">Tue, Dec 1</h3>
+                <div class="show-times-grid">
+                  <span class="show-time-chip" data-time="18:30">6:30 PM</span>
+                  
+                </div>
+              </article>
+            </div>
+          </details>
           </div>
         </div>
       </article></div>
