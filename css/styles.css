@@ -1800,6 +1800,29 @@ a.film-expand-toggle {
   margin: 0;
 }
 
+.site-meta a {
+  color: var(--accent-2);
+}
+
+/* Google's badge has clear space built into the image; the negative margins take it back out, so
+   the two badges look the same height. */
+.site-meta .app-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.site-meta .app-badges a,
+.site-meta .app-badges img {
+  display: block;
+}
+
+.site-meta .app-badges .app-badge-google {
+  margin: -10px;
+}
+
 /* TMDb's API terms require its logo and this notice wherever its data appears. */
 .site-meta .tmdb-credit {
   margin-top: 0.6rem;
