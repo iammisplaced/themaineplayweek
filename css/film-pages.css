@@ -10,15 +10,21 @@
   gap: 1rem;
   margin: 0 0 0.5rem;
 }
+/* The wordmark gives way on narrow screens, so the logo beside it keeps its size and its margin. */
+.film-page-brandbar a {
+  min-width: 0;
+  max-width: 520px;
+}
 .film-page-wordmark {
   display: block;
   height: 72px;
   width: auto;
-  max-width: min(72vw, 520px);
+  max-width: 100%;
   object-fit: contain;
   object-position: left center;
 }
 .film-page-logo {
+  flex: none;
   width: 72px;
   height: 72px;
   object-fit: contain;
@@ -322,6 +328,13 @@
   display: none;
 }
 @media (max-width: 640px) {
+  .film-page-wordmark {
+    height: 56px;
+  }
+  .film-page-logo {
+    width: 56px;
+    height: 56px;
+  }
   html.js .film-page-more {
     display: inline-block;
     margin-top: 0.35rem;
