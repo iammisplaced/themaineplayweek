@@ -20,6 +20,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
     <link rel="icon" href="../../assets/icons/favicon.ico" />
     <link rel="manifest" href="../../site.webmanifest" />
+    <!-- Safari on iPhone shows its own banner for the app; app-argument opens this film in it. -->
+    <meta name="apple-itunes-app" content="app-id=6837351844, app-argument=https://showtimes.themaineplayweek.com/films/the-polar-express-2004/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -52,6 +54,7 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"The Polar Express 2004","description":"When a doubting young boy takes an extraordinary train ride to the North Pole, he embarks on a journey of self-discovery that shows him that the wonder of life never fades for those who believe.","image":"https://image.tmdb.org/t/p/w342/eOoCzH0MqeGr2taUZO4SwG416PF.jpg","datePublished":"2004-11-10","duration":"PT100M","contentRating":"G","director":[{"@type":"Person","name":"Robert Zemeckis"}],"actor":[{"@type":"Person","name":"Tom Hanks"},{"@type":"Person","name":"Leslie Zemeckis"},{"@type":"Person","name":"Eddie Deezen"}],"genre":["Adventure","Animation","Family","Fantasy"],"url":"https://showtimes.themaineplayweek.com/films/the-polar-express-2004/"}</script>
   </head>
   <body>
+    <script src="/js/app-banner.js"></script>
     <main class="film-page-shell">
       <div class="film-page-brandbar">
         <a href="../.." aria-label="The Maine Playweek showtimes">
@@ -576,6 +579,14 @@
         })();
       </script>
       <section class="site-meta" aria-label="Site information">
+        <p class="app-badges">
+          <a href="https://apps.apple.com/us/app/the-maine-playweek/id6837351844" rel="noopener"
+            ><img src="/assets/brand/app-store-badge.svg" alt="Download on the App Store" width="120" height="40" loading="lazy"
+          /></a>
+          <a href="https://play.google.com/store/apps/details?id=com.themaineplayweek.app&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dfooter" rel="noopener"
+            ><img class="app-badge-google" src="/assets/brand/google-play-badge.png" alt="Get it on Google Play" width="155" height="60" loading="lazy"
+          /></a>
+        </p>
         <p>&copy; 2026 The Maine Playweek, LLC.</p>
         <p>hello@themaineplayweek.com</p>
         <p class="tmdb-credit">

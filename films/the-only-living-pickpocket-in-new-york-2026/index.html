@@ -20,6 +20,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
     <link rel="icon" href="../../assets/icons/favicon.ico" />
     <link rel="manifest" href="../../site.webmanifest" />
+    <!-- Safari on iPhone shows its own banner for the app; app-argument opens this film in it. -->
+    <meta name="apple-itunes-app" content="app-id=6837351844, app-argument=https://showtimes.themaineplayweek.com/films/the-only-living-pickpocket-in-new-york-2026/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -52,6 +54,7 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"The Only Living Pickpocket in New York 2026","description":"Harry Lehman is an aging pickpocket who plies his trade with ever-diminishing returns in a drastically changed New York. Wallets stuffed with cash have been replaced by easily cancelled credit cards, and Harry struggles to make ends meet as he cares for his disabled wife, Rosie. When he unwittingly purloins and fences a valuable USB stick, Harry finds himself in a race against time to return the loot or face the rage of a vengeful crime family.","image":"https://image.tmdb.org/t/p/w342/pNdB9va2AEPQe9UfhKAdIt8nus9.jpg","datePublished":"2026-10-16","duration":"PT88M","contentRating":"R","director":[{"@type":"Person","name":"Noah Segan"}],"actor":[{"@type":"Person","name":"John Turturro"},{"@type":"Person","name":"Will Price"},{"@type":"Person","name":"Steve Buscemi"}],"genre":["Crime","Drama","Thriller"],"url":"https://showtimes.themaineplayweek.com/films/the-only-living-pickpocket-in-new-york-2026/"}</script>
   </head>
   <body>
+    <script src="/js/app-banner.js"></script>
     <main class="film-page-shell">
       <div class="film-page-brandbar">
         <a href="../.." aria-label="The Maine Playweek showtimes">
@@ -132,43 +135,7 @@
 
       <section class="group-card film-showtimes-box">
         <h2 class="film-showtimes-heading">Showtimes by Theatre</h2>
-        <div class="film-location">
-          <p id="filmLocationSorted" class="film-location-sorted" hidden>
-            Nearest first from
-            <button id="filmLocationChip" class="location-chip film-location-chip" type="button" popovertarget="filmLocationPopover" aria-expanded="false">
-              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
-              <span id="filmLocationChipLabel" class="location-chip-label"></span>
-            </button>
-          </p>
-          <div id="filmLocationPrompt" class="film-location-prompt">
-            <p class="film-location-prompt-copy">Where are you watching from? We'll put the nearest theatres first.</p>
-            <div class="location-picker">
-            <button class="location-device-btn" type="button" data-action="use-device-location">
-              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
-              Use my location
-            </button>
-            <form class="location-zip-form" novalidate>
-              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
-              <button class="ghost-btn" type="submit">Go</button>
-            </form>
-            <p class="location-picker-message" role="status" aria-live="polite"></p>
-          </div>
-          </div>
-        </div>
-        <div id="filmLocationPopover" class="location-popover" popover role="dialog" aria-labelledby="filmLocationPopoverTitle">
-          <h2 id="filmLocationPopoverTitle" class="location-popover-title">Your location</h2>
-          <div class="location-picker">
-            <button class="location-device-btn" type="button" data-action="use-device-location">
-              <svg class="location-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></svg>
-              Use my location
-            </button>
-            <form class="location-zip-form" novalidate>
-              <input name="zip" type="text" inputmode="numeric" autocomplete="postal-code" placeholder="or enter a ZIP code" aria-label="ZIP code" />
-              <button class="ghost-btn" type="submit">Go</button>
-            </form>
-            <p class="location-picker-message" role="status" aria-live="polite"></p>
-          </div>
-        </div>
+        
         <div class="show-list"><article class="show-item">
         <div class="show-row">
           <div
@@ -193,30 +160,6 @@
                 <h3 class="show-schedule-day">Sun, Dec 13</h3>
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="14:00">2:00 PM</span><span class="show-time-chip" data-time="18:00">6:00 PM</span>
-                  
-                </div>
-              </article></div>
-            
-          </div>
-        </div>
-      </article><article class="show-item">
-        <div class="show-row">
-          <div
-            data-theatre-lat="43.6575821"
-            data-theatre-lng="-70.2558618"
-          >
-            
-            <div class="show-theatre-head">
-              <div class="show-main show-main-theatre">
-                Nickelodeon Cinemas
-                <span class="show-main-city">Portland<span class="show-distance"></span></span>
-              </div>
-              <a class="show-link" href="https://www.patriotcinemas.com/movie/the-only-living-pickpocket-in-new-york" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Nickelodeon Cinemas">Tickets</a>
-            </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-24">
-                <h3 class="show-schedule-day">Tue, Nov 24</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="18:20">6:20 PM</span>
                   
                 </div>
               </article></div>
@@ -641,6 +584,14 @@
         })();
       </script>
       <section class="site-meta" aria-label="Site information">
+        <p class="app-badges">
+          <a href="https://apps.apple.com/us/app/the-maine-playweek/id6837351844" rel="noopener"
+            ><img src="/assets/brand/app-store-badge.svg" alt="Download on the App Store" width="120" height="40" loading="lazy"
+          /></a>
+          <a href="https://play.google.com/store/apps/details?id=com.themaineplayweek.app&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dfooter" rel="noopener"
+            ><img class="app-badge-google" src="/assets/brand/google-play-badge.png" alt="Get it on Google Play" width="155" height="60" loading="lazy"
+          /></a>
+        </p>
         <p>&copy; 2026 The Maine Playweek, LLC.</p>
         <p>hello@themaineplayweek.com</p>
         <p class="tmdb-credit">

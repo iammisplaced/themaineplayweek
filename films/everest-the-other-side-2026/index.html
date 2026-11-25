@@ -20,6 +20,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
     <link rel="icon" href="../../assets/icons/favicon.ico" />
     <link rel="manifest" href="../../site.webmanifest" />
+    <!-- Safari on iPhone shows its own banner for the app; app-argument opens this film in it. -->
+    <meta name="apple-itunes-app" content="app-id=6837351844, app-argument=https://showtimes.themaineplayweek.com/films/everest-the-other-side-2026/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -52,6 +54,7 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Everest: The Other Side 2026","description":"An intimate portrait of two people bound by love, ambition, and the pursuit of the impossible. Elite ski mountaineers Jim Morrison and Hilaree Nelson fell deeply in love while reaching the pinnacle of their sport. Their drive sharpened into a shared dream: to climb and ski the direct North Face of Mount Everest—the most difficult and dangerous climb on the mountain and the most coveted ski line on Earth—something only a handful have ever achieved, and no one has successfully skied down.","image":"https://image.tmdb.org/t/p/w342/2m9ts8LfjG8d4xcUtx66aApngJL.jpg","datePublished":"2026-10-29","duration":"PT115M","contentRating":"PG-13","director":[{"@type":"Person","name":"Jimmy Chin"}],"actor":[{"@type":"Person","name":"Hilaree Nelson"},{"@type":"Person","name":"Jim Morrison"},{"@type":"Person","name":"Jimmy Chin"}],"genre":["Documentary"],"url":"https://showtimes.themaineplayweek.com/films/everest-the-other-side-2026/"}</script>
   </head>
   <body>
+    <script src="/js/app-banner.js"></script>
     <main class="film-page-shell">
       <div class="film-page-brandbar">
         <a href="../.." aria-label="The Maine Playweek showtimes">
@@ -147,16 +150,10 @@
               </div>
               <a class="show-link" href="https://www.applecinemas.com/Everest--The-Other-Side/611fe9edf74bab2423301ee0/6ad90e66bd16990ca8563991" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Apple Cinemas">Tickets</a>
             </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-24">
-                <h3 class="show-schedule-day">Tue, Nov 24</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="16:00">4:00 PM</span><span class="show-time-chip" data-time="18:40">6:40 PM</span>
-                  
-                </div>
-              </article><article class="show-day-card" data-date="2026-11-25">
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-25">
                 <h3 class="show-schedule-day">Wed, Nov 25</h3>
                 <div class="show-times-grid">
-                  <span class="show-time-chip" data-time="10:25">10:25 AM</span><span class="show-time-chip" data-time="16:00">4:00 PM</span>
+                  <span class="show-time-chip" data-time="16:00">4:00 PM</span>
                   
                 </div>
               </article><article class="show-day-card" data-date="2026-11-26">
@@ -587,6 +584,14 @@
         })();
       </script>
       <section class="site-meta" aria-label="Site information">
+        <p class="app-badges">
+          <a href="https://apps.apple.com/us/app/the-maine-playweek/id6837351844" rel="noopener"
+            ><img src="/assets/brand/app-store-badge.svg" alt="Download on the App Store" width="120" height="40" loading="lazy"
+          /></a>
+          <a href="https://play.google.com/store/apps/details?id=com.themaineplayweek.app&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dfooter" rel="noopener"
+            ><img class="app-badge-google" src="/assets/brand/google-play-badge.png" alt="Get it on Google Play" width="155" height="60" loading="lazy"
+          /></a>
+        </p>
         <p>&copy; 2026 The Maine Playweek, LLC.</p>
         <p>hello@themaineplayweek.com</p>
         <p class="tmdb-credit">

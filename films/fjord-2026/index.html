@@ -20,6 +20,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
     <link rel="icon" href="../../assets/icons/favicon.ico" />
     <link rel="manifest" href="../../site.webmanifest" />
+    <!-- Safari on iPhone shows its own banner for the app; app-argument opens this film in it. -->
+    <meta name="apple-itunes-app" content="app-id=6837351844, app-argument=https://showtimes.themaineplayweek.com/films/fjord-2026/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -52,6 +54,7 @@
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"Movie","name":"Fjord 2026","description":"Following the deaths of Mihai's parents, Mihai and Lisbet Gheorghiu leave their life behind in Romania and move with their children to a remote village in Norway, hoping to rebuild their lives near Lisbet's family. There, they grow close to their neighbors, the Halbergs, whose warmth gives them hope for a fresh start. But the fragile peace begins to unravel when the Gheorghiu family’s young daughter, Elia, arrives at school covered in bruises.","image":"https://image.tmdb.org/t/p/w342/3PPPIeSdeivjUn3O9RahGiaJ9b8.jpg","datePublished":"2026-06-13","duration":"PT147M","contentRating":"R","director":[{"@type":"Person","name":"Cristian Mungiu"}],"actor":[{"@type":"Person","name":"Sebastian Stan"},{"@type":"Person","name":"Renate Reinsve"},{"@type":"Person","name":"Lisa Carlehed"}],"genre":["Drama"],"url":"https://showtimes.themaineplayweek.com/films/fjord-2026/"}</script>
   </head>
   <body>
+    <script src="/js/app-banner.js"></script>
     <main class="film-page-shell">
       <div class="film-page-brandbar">
         <a href="../.." aria-label="The Maine Playweek showtimes">
@@ -147,13 +150,7 @@
               </div>
               <a class="show-link" href="https://www.watervillecreates.org/shows/fjord/" target="_blank" rel="noopener noreferrer" aria-label="Tickets at Maine Film Center">Tickets</a>
             </div>
-            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-24">
-                <h3 class="show-schedule-day">Tue, Nov 24</h3>
-                <div class="show-times-grid">
-                  <span class="show-time-chip show-time-noted" data-time="19:00" tabindex="0" data-note="Open Captions · Open Captions">7:00 PM<span class="show-note-icon" aria-hidden="true">i</span><span class="visually-hidden"> (Note: Open Captions · Open Captions)</span></span>
-                  
-                </div>
-              </article><article class="show-day-card" data-date="2026-11-25">
+            <div class="show-schedule"><article class="show-day-card" data-date="2026-11-25">
                 <h3 class="show-schedule-day">Wed, Nov 25</h3>
                 <div class="show-times-grid">
                   <span class="show-time-chip" data-time="19:00">7:00 PM</span>
@@ -581,6 +578,14 @@
         })();
       </script>
       <section class="site-meta" aria-label="Site information">
+        <p class="app-badges">
+          <a href="https://apps.apple.com/us/app/the-maine-playweek/id6837351844" rel="noopener"
+            ><img src="/assets/brand/app-store-badge.svg" alt="Download on the App Store" width="120" height="40" loading="lazy"
+          /></a>
+          <a href="https://play.google.com/store/apps/details?id=com.themaineplayweek.app&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dfooter" rel="noopener"
+            ><img class="app-badge-google" src="/assets/brand/google-play-badge.png" alt="Get it on Google Play" width="155" height="60" loading="lazy"
+          /></a>
+        </p>
         <p>&copy; 2026 The Maine Playweek, LLC.</p>
         <p>hello@themaineplayweek.com</p>
         <p class="tmdb-credit">
