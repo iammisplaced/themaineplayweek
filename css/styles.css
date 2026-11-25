@@ -1788,6 +1788,94 @@ a.film-expand-toggle {
   flex-wrap: wrap;
 }
 
+/* "Get the app" banner (js/app-banner.js) */
+.app-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 1024px;
+  margin: 0 auto 1rem;
+  padding: 0.35rem 0.1rem 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+@media (max-width: 640px) {
+  .app-banner {
+    margin-bottom: 0.75rem;
+  }
+
+  /* Room for the text: the button just says "Get" here, though screen readers still hear it all. */
+  .app-banner-get-more {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+@media (max-width: 340px) {
+  .app-banner-icon {
+    display: none;
+  }
+}
+
+.app-banner-icon {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+}
+
+.app-banner-text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.app-banner-text strong,
+.app-banner-text span {
+  display: block;
+}
+
+.app-banner-text strong {
+  font-size: 0.86rem;
+  white-space: nowrap;
+}
+
+.app-banner-text span {
+  color: var(--muted);
+}
+
+.app-banner-get {
+  flex: none;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: var(--accent-2);
+  color: var(--on-accent-2);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.app-banner-close {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin-left: -0.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
 .site-meta {
   margin-top: 1.4rem;
   color: var(--muted);
