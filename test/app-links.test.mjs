@@ -19,7 +19,7 @@ test('the main page and film pages link to both stores', () => {
   for (const path of ['index.html', 'scripts/generate-film-pages.mjs']) {
     const html = read(path);
     assert.ok(html.includes(`href="${APP_STORE_URL}"`), path);
-    assert.ok(html.includes(`href="${PLAY_URL}"`), path);
+    assert.ok(html.includes(`href="${PLAY_URL}&amp;referrer=`), path);
   }
 });
 

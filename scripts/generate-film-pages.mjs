@@ -754,6 +754,7 @@ function renderFilmPage(film, slug, siteUrl) {
     <script type="application/ld+json">${jsonForScript(pruneUndefined(ldJson))}</script>
   </head>
   <body>
+    <script src="/js/app-banner.js"></script>
     <main class="film-page-shell">
       <div class="film-page-brandbar">
         <a href="${escapeHtml(mainAppUrl)}" aria-label="${BRAND_NAME} showtimes">
@@ -1258,7 +1259,7 @@ function renderFilmPage(film, slug, siteUrl) {
           <a href="https://apps.apple.com/us/app/the-maine-playweek/id6837351844" rel="noopener"
             ><img src="/assets/brand/app-store-badge.svg" alt="Download on the App Store" width="120" height="40" loading="lazy"
           /></a>
-          <a href="https://play.google.com/store/apps/details?id=com.themaineplayweek.app" rel="noopener"
+          <a href="https://play.google.com/store/apps/details?id=com.themaineplayweek.app&amp;referrer=utm_source%3Dwebsite%26utm_medium%3Dfooter" rel="noopener"
             ><img class="app-badge-google" src="/assets/brand/google-play-badge.png" alt="Get it on Google Play" width="155" height="60" loading="lazy"
           /></a>
         </p>
