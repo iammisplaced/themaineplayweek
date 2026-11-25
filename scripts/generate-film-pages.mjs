@@ -720,6 +720,8 @@ function renderFilmPage(film, slug, siteUrl) {
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/icons/favicon-16x16.png" />
     <link rel="icon" href="../../assets/icons/favicon.ico" />
     <link rel="manifest" href="../../site.webmanifest" />
+    <!-- Safari on iPhone shows its own banner for the app; app-argument opens this film in it. -->
+    <meta name="apple-itunes-app" content="app-id=6837351844${siteUrl ? `, app-argument=${escapeHtml(canonicalUrl)}` : ""}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -1252,6 +1254,14 @@ function renderFilmPage(film, slug, siteUrl) {
         })();
       </script>
       <section class="site-meta" aria-label="Site information">
+        <p class="app-badges">
+          <a href="https://apps.apple.com/us/app/the-maine-playweek/id6837351844" rel="noopener"
+            ><img src="/assets/brand/app-store-badge.svg" alt="Download on the App Store" width="120" height="40" loading="lazy"
+          /></a>
+          <a href="https://play.google.com/store/apps/details?id=com.themaineplayweek.app" rel="noopener"
+            ><img class="app-badge-google" src="/assets/brand/google-play-badge.png" alt="Get it on Google Play" width="155" height="60" loading="lazy"
+          /></a>
+        </p>
         <p>&copy; 2026 The Maine Playweek, LLC.</p>
         <p>hello@themaineplayweek.com</p>
         <p class="tmdb-credit">

@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.themaineplayweek.app",
+      "sha256_cert_fingerprints": [
+        "A4:57:D0:11:42:FC:F7:E3:D5:CE:0D:92:B6:2C:45:93:61:41:FE:87:77:F8:CE:72:D0:97:0E:5B:4C:B8:BF:05"
+      ]
+    }
+  }
+]
